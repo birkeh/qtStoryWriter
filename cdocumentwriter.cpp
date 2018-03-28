@@ -1,12 +1,18 @@
 #include "cdocumentwriter.h"
 #include "ctextdocument.h"
 
+#include <QFileInfo>
+
 #include <QDebug>
 
 
-cDocumentWriter::cDocumentWriter(const QString &szFileName) :
-	m_szFileName(szFileName)
+cDocumentWriter::cDocumentWriter(const QString &szFileName, bool bZip) :
+	m_bZip(bZip),
+	m_szFileName(szFileName),
+	m_lpDocument(0)
 {
+	QFileInfo	fileInfo(szFileName);
+	m_szPath	= fileInfo.absolutePath();
 }
 
 cDocumentWriter::~cDocumentWriter()
@@ -19,11 +25,31 @@ bool cDocumentWriter::open()
 	if(m_szFileName.isEmpty())
 		return(false);
 
-	m_file.setFileName(m_szFileName);
-	if(!m_file.open(QFile::WriteOnly | QFile::Text))
-		return(false);
+	if(m_bZip)
+	{
+		m_zip.setZipName(m_szFileName);
+		m_zip.open(QuaZip::mdCreate);
 
-	setDevice(&m_file);
+		QuaZipNewInfo	info("document.xml");
+		m_zipFile.setZip(&m_zip);
+
+		if(!m_zipFile.open(QIODevice::WriteOnly, info))
+		{
+			m_zip.close();
+			return(false);
+		}
+
+		setDevice(&m_zipFile);
+	}
+	else
+	{
+		m_file.setFileName(m_szFileName);
+		if(!m_file.open(QIODevice::WriteOnly | QFile::Text))
+			return(false);
+
+		setDevice(&m_file);
+	}
+
 	setAutoFormatting(true);
 	setAutoFormattingIndent(-1);
 	writeStartDocument();
@@ -34,11 +60,23 @@ bool cDocumentWriter::open()
 
 bool cDocumentWriter::close()
 {
-	if(m_file.isOpen())
+	if(m_bZip)
 	{
-		writeEndElement();
-		writeEndDocument();
-		m_file.close();
+		if(m_zipFile.isOpen())
+		{
+			writeEndElement();
+			writeEndDocument();
+			m_zipFile.close();
+		}
+	}
+	else
+	{
+		if(m_file.isOpen())
+		{
+			writeEndElement();
+			writeEndDocument();
+			m_file.close();
+		}
 	}
 
 	return(true);
@@ -46,6 +84,8 @@ bool cDocumentWriter::close()
 
 bool cDocumentWriter::writeDocument(cTextDocument *lpDocument)
 {
+	m_lpDocument	= lpDocument;
+
 	QList<QPair<int, QTextBlockFormat>>	textBlockFormats;
 	QTextBlock							textBlock				= lpDocument->firstBlock();
 
@@ -362,6 +402,7 @@ void cDocumentWriter::writeTextFormat(QTextFormat* lpTextFormat, int /*id*/, Wri
 				while(property.hasNext())
 				{
 					property.next();
+
 					writeStartElement("property");
 						writeAttribute("key", QString::number(property.key()));
 						writeAttribute("type", QString::number(property.value().type()));
@@ -528,6 +569,27 @@ void cDocumentWriter::writeTextImageFormat(QTextImageFormat* lpTextImageFormat, 
 			writeAttribute("name", lpTextImageFormat->name());
 			writeAttribute("height", QString::number(lpTextImageFormat->height()));
 			writeAttribute("width", QString::number(lpTextImageFormat->width()));
+		}
+
+		if(m_lpDocument)
+		{
+			QPixmap		pixmap		= m_lpDocument->resource(2, lpTextImageFormat->name()).value<QPixmap>();
+			if(!pixmap.isNull())
+			{
+				QString	name		= lpTextImageFormat->name();
+				if(name.left(1) == ':')
+					name	= name.mid(1);
+				if(name.left(1) == '/')
+					name	= name.mid(1);
+
+				name	= m_szPath + "/" + name;
+				QString	path	= name.left(name.lastIndexOf("/"));
+
+				QDir	dir;
+				dir.mkpath(path);
+				pixmap.save(name);
+			}
+
 		}
 	}
 }

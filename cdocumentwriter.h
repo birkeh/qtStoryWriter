@@ -19,6 +19,8 @@
 #include <QTextCharFormat>
 #include <QTextFormat>
 
+#include <JlCompress.h>
+
 
 class cTextDocument;
 
@@ -33,7 +35,7 @@ public:
 		WriteElements	= 2,
 	};
 
-	cDocumentWriter(const QString& szFileName);
+	cDocumentWriter(const QString& szFileName, bool bZip = true);
 	~cDocumentWriter();
 
 	bool			open();
@@ -42,8 +44,13 @@ public:
 	bool			writeDocument(cTextDocument* lpDocument);
 
 private:
+	bool			m_bZip;
 	QString			m_szFileName;
+	QString			m_szPath;
 	QFile			m_file;
+	QuaZip			m_zip;
+	QuaZipFile		m_zipFile;
+	cTextDocument*	m_lpDocument;
 
 	void			writeTextBlockFormats(const QList<QPair<int, QTextBlockFormat>> textBlockFormats);
 	void			writeTextBlocks(QTextBlock& textBlock);

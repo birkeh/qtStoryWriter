@@ -79,22 +79,22 @@ void cTextDocument::init()
 */
 }
 
-bool cTextDocument::save()
+bool cTextDocument::save(bool bZip)
 {
 	if(!m_szFileName.isEmpty())
-		return(saveDocument());
+		return(saveDocument(bZip));
 	return(false);
 }
 
-bool cTextDocument::saveAs(const QString& szFileName)
+bool cTextDocument::saveAs(const QString& szFileName, bool bZip)
 {
 	m_szFileName	= szFileName;
-	return(saveDocument());
+	return(saveDocument(bZip));
 }
 
-bool cTextDocument::saveDocument()
+bool cTextDocument::saveDocument(bool bZip)
 {
-	cDocumentWriter	docWriter(m_szFileName);
+	cDocumentWriter	docWriter(m_szFileName, bZip);
 	if(!docWriter.open())
 		return(false);
 

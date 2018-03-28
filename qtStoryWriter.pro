@@ -47,3 +47,8 @@ DISTFILES += \
 
 RESOURCES += \
     qtstorywriter.qrc
+
+INCLUDEPATH += C:/dev/3rdParty/zlib
+LIBS += -LC:/dev/3rdParty/zlib -lz
+INCLUDEPATH += C:/dev/3rdParty/quazip
+LIBS += -LC:/dev/3rdParty/quazip/release -lquazip

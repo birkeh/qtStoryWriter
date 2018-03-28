@@ -26,6 +26,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#include <JlCompress.h>
+
 
 class cTextDocument;
 
@@ -166,7 +168,7 @@ public:
 class cDocumentReader : public QXmlStreamReader
 {
 public:
-	cDocumentReader(const QString& szFileName);
+	cDocumentReader(const QString& szFileName, bool bZip = true);
 	~cDocumentReader();
 
 	bool								open();
@@ -175,8 +177,11 @@ public:
 	cTextDocument*						readDocument();
 private:
 	bool								m_bFirstBlock;
+	bool								m_bZip;
 	QString								m_szFileName;
 	QFile								m_file;
+	QuaZip								m_zip;
+	QuaZipFile							m_zipFile;
 
 	QMap<int, QTextList*>				m_textLists;
 

@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#include <JlCompress.h>
+
 #include <QString>
 #include <QUrl>
 
@@ -11,8 +13,9 @@
 #include <QDomNode>
 #include <QDomNamedNodeMap>
 
-cDocumentReader::cDocumentReader(const QString &szFileName) :
+cDocumentReader::cDocumentReader(const QString &szFileName, bool bZip) :
 	m_bFirstBlock(true),
+	m_bZip(bZip),
 	m_szFileName(szFileName)
 {
 }
@@ -24,25 +27,56 @@ cDocumentReader::~cDocumentReader()
 
 bool cDocumentReader::open()
 {
-	m_file.setFileName(m_szFileName);
+	if(m_bZip)
+	{
+		m_zip.setZipName(m_szFileName);
 
-	if(!m_file.open(QFile::ReadOnly | QFile::Text))
-		return(false);
+		if(!m_zip.open(QuaZip::mdUnzip))
+			return(false);
+
+		m_zip.setCurrentFile("document.xml");
+		m_zipFile.setZip(&m_zip);
+
+		if(!m_zipFile.open(QIODevice::ReadOnly))
+		{
+			m_zip.close();
+			return(false);
+		}
+	}
+	else
+	{
+		m_file.setFileName(m_szFileName);
+
+		if(!m_file.open(QIODevice::ReadOnly))
+			return(false);
+	}
 
 	return(true);
 }
 
 bool cDocumentReader::close()
 {
-	if(m_file.isOpen())
-		m_file.close();;
+	if(m_bZip)
+	{
+		if(m_zip.isOpen())
+		{
+			if(m_zipFile.isOpen())
+				m_zipFile.close();
+			m_zip.close();
+		}
+	}
+	else
+	{
+		if(m_file.isOpen())
+			m_file.close();
+	}
 
 	return(true);
 }
 
 cTextDocument* cDocumentReader::readDocument()
 {
-	if(!m_file.isOpen())
+	if(!open())
 		return(0);
 
 	cTextDocument*		lpDocument;
@@ -50,10 +84,19 @@ cTextDocument* cDocumentReader::readDocument()
 	QString				errorStr;
 	int					errorLine;
 	int					errorColumn;
-	if(!doc.setContent(&m_file, false, &errorStr, &errorLine, &errorColumn))
-		return(0);
 
-	QDomElement			root	= doc.documentElement();
+	if(m_bZip)
+	{
+		if(!doc.setContent(&m_zipFile, false, &errorStr, &errorLine, &errorColumn))
+			return(0);
+	}
+	else
+	{
+		if(!doc.setContent(&m_file, false, &errorStr, &errorLine, &errorColumn))
+			return(0);
+	}
+
+	QDomElement				root	= doc.documentElement();
 	if(root.tagName().compare("document", Qt::CaseInsensitive))
 		return(0);
 
@@ -95,7 +138,7 @@ cTextDocument* cDocumentReader::readDocument()
 		child	= child.nextSibling();
 	}
 
-	m_file.close();
+	close();
 
 	return(lpDocument);
 }
@@ -1710,7 +1753,12 @@ void cDocumentReader::parseTextBlock(const QDomElement& element, QTextCursor* lp
 	int								indent;
 
 	if(m_bFirstBlock)
+	{
 		m_bFirstBlock	= false;
+		lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
+		lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
+		lpCursor->setBlockCharFormat(allFormats[charFormatIndex].charFormat);
+	}
 	else
 	{
 		if(listFormatIndex != -1)
