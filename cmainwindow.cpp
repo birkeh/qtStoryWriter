@@ -267,13 +267,13 @@ void cMainWindow::on_actionTest1_triggered()
 
 void cMainWindow::on_actionSave_triggered()
 {
-//	g_lpInputDocument->saveAs("C:/Temp/documentText.zip");
-//	cDocumentReader	reader("C:/Temp/documentText.zip");
+//	g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.zip");
+//	cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.zip");
 //	g_lpOutputDocument	= reader.readDocument();
 //	ui->m_lpOutput->setDocument(g_lpOutputDocument);
 
-	g_lpInputDocument->saveAs("C:/Temp/documentText.xml", false);
-	cDocumentReader	reader("C:/Temp/documentText.xml", false);
+	g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.xml", false);
+	cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.xml", false);
 	g_lpOutputDocument	= reader.readDocument();
-	ui->m_lpOutput->setDocument(g_lpOutputDocument);
+//	ui->m_lpOutput->setDocument(g_lpOutputDocument);
 }
