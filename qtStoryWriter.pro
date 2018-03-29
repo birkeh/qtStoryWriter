@@ -23,6 +23,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+win32-msvc* {
+    contains(QT_ARCH, i386) {
+        message("msvc 32-bit")
+    } else {
+        message("msvc 64-bit")
+        INCLUDEPATH += C:/dev/3rdParty/quazip/include
+        DEPENDPATH += C:/dev/3rdParty/quazip/include
+        LIBS += C:/dev/3rdParty/quazip/msc/lib/quazip.lib
+        INCLUDEPATH += C:/dev/3rdParty/zlib/include
+        DEPENDPATH += C:/dev/3rdParty/zlib/include
+        LIBS += C:/dev/3rdParty/zlib/msc/lib/zlib.lib
+    }
+}
+
+win32-g++ {
+    message("mingw")
+    INCLUDEPATH += C:/dev/3rdParty/quazip/include
+    DEPENDPATH += C:/dev/3rdParty/quazip/include
+    #LIBS += -LC:/dev/3rdParty/quazip/gcc/lib -lquazip.a
+    LIBS += -LC:/dev/3rdParty/quazip/gcc/lib -lquazip
+    INCLUDEPATH += C:/dev/3rdParty/zlib/include
+    DEPENDPATH += C:/dev/3rdParty/zlib/include
+    LIBS += -LC:/dev/3rdParty/zlib/gcc/lib -lz
+}
+
+unix {
+    LIBS	+= -lquazip
+}
+
 
 SOURCES += \
         main.cpp \
@@ -47,8 +76,3 @@ DISTFILES += \
 
 RESOURCES += \
     qtstorywriter.qrc
-
-INCLUDEPATH += C:/dev/3rdParty/zlib
-LIBS += -LC:/dev/3rdParty/zlib -lz
-INCLUDEPATH += C:/dev/3rdParty/quazip
-LIBS += -LC:/dev/3rdParty/quazip/release -lquazip
