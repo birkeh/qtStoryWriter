@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="m_lpTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="m_lpInputTab">
        <attribute name="title">
@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QTextEdit" name="m_lpInput"/>
+         <widget class="cTextEdit" name="m_lpInput"/>
         </item>
        </layout>
       </widget>
@@ -36,7 +36,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QTextEdit" name="m_lpOutput"/>
+         <widget class="cTextEdit" name="m_lpOutput"/>
         </item>
        </layout>
       </widget>
@@ -83,6 +83,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>cTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ctextedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

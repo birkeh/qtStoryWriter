@@ -14,6 +14,9 @@
 #include <QFile>
 
 
+//#define WITH_ZIP
+
+
 cTextDocument*	g_lpInputDocument	= 0;
 cTextDocument*	g_lpOutputDocument	= 0;
 
@@ -267,13 +270,23 @@ void cMainWindow::on_actionTest1_triggered()
 
 void cMainWindow::on_actionSave_triggered()
 {
-//	g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.zip");
-//	cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.zip");
-//	g_lpOutputDocument	= reader.readDocument();
-//	ui->m_lpOutput->setDocument(g_lpOutputDocument);
-
-	g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.xml", false);
-	cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.xml", false);
+#ifdef __linux__
+	#ifdef WITH_ZIP
+		g_lpInputDocument->saveAs("/tmp/qtStoryWriter/documentText.zip", false);
+		cDocumentReader	reader("/tmp/qtStoryWriter/documentText.zip", false);
+	#else
+		g_lpInputDocument->saveAs("/tmp/qtStoryWriter/documentText.xml", false);
+		cDocumentReader	reader("/tmp/qtStoryWriter/documentText.xml", false);
+	#endif
+#elif _WIN32
+	#ifdef WITH_ZIP
+		g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.zip", false);
+		cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.zip", false);
+	#else
+		g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.xml", false);
+		cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.xml", false);
+	#endif
 	g_lpOutputDocument	= reader.readDocument();
-//	ui->m_lpOutput->setDocument(g_lpOutputDocument);
+	ui->m_lpOutput->setDocument(g_lpOutputDocument);
+#endif
 }

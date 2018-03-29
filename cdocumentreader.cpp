@@ -1719,6 +1719,7 @@ void cDocumentReader::parseTextBlock(const QDomElement& element, QTextCursor* lp
 	QVector<QTextLayout::FormatRange>	textFormats;
 	QString								text;
 
+	qDebug() << "***** parseTextBlock start *****";
 	QDomNamedNodeMap		attributes	= element.attributes();
 	for(int x = 0;x < attributes.count();x++)
 	{
@@ -1750,10 +1751,9 @@ void cDocumentReader::parseTextBlock(const QDomElement& element, QTextCursor* lp
 		child	= child.nextSibling();
 	}
 
-	int								indent;
-
 	if(m_bFirstBlock)
 	{
+		qDebug() << "block #1";
 		m_bFirstBlock	= false;
 		lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
 		lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
@@ -1761,28 +1761,46 @@ void cDocumentReader::parseTextBlock(const QDomElement& element, QTextCursor* lp
 	}
 	else
 	{
+		qDebug() << "block #n";
 		if(listFormatIndex != -1)
 		{
+			int			indent	= allFormats[listFormatIndex].listFormat.indent();
+			qDebug() << "listFormat";
+			qDebug() << "--> " << text;
 			indent	= allFormats[listFormatIndex].listFormat.indent();
 
-			if(!m_textLists.value(indent))
+			if(!m_textLists.contains(indent))
 			{
-				m_textLists.insert(allFormats[listFormatIndex].listFormat.indent(), lpCursor->insertList(allFormats[listFormatIndex].listFormat));
-				lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
-				lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
-				lpCursor->setBlockCharFormat(allFormats[charFormatIndex].charFormat);
+				qDebug() << "list does not exist";
+				qDebug() << "     indent: " << indent;
+				QTextListFormat	format	= allFormats[listFormatIndex].listFormat;
+				QTextList*		lpList	= lpCursor->insertList(format);
+				qDebug() << "     list:   " << (int)lpList;
+				m_textLists.insert(indent, lpList);
+DO MUASS I UMMANANDATUAN ... INDEX FOISCH?
+//				lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
+//				lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
+//				lpCursor->setBlockCharFormat(allFormats[charFormatIndex].charFormat);
 			}
 			else
 			{
+				qDebug() << "list already exists";
+				qDebug() << "     indent: " << indent;
 				lpCursor->insertBlock();
-				lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
-				lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
-				lpCursor->setBlockCharFormat(allFormats[charFormatIndex].charFormat);
+//				lpCursor->setBlockFormat(allFormats[blockFormatIndex].blockFormat);
+//				lpCursor->setCharFormat(allFormats[charFormatIndex].charFormat);
+//				lpCursor->setBlockCharFormat(allFormats[charFormatIndex].charFormat);
+				QTextList*	list	= m_textLists.value(indent);
+				qDebug() << "     list:   " << (int)list;
+				list->add(lpCursor->block());
 			}
 
-			QTextBlock	block	= lpCursor->block();
-			QTextList*	list	= m_textLists.value(indent);
-			list->add(block);
+//			qDebug() << "process further";
+//			QTextBlock	block	= lpCursor->block();
+//			qDebug() << "     indent: " << indent;
+//			QTextList*	list	= m_textLists.value(indent);
+//			qDebug() << "     list:   " << (int)list;
+//			list->add(block);
 		}
 //		else if(tableFormatIndex != -1)
 //			lpCursor->insertTable(allFormats[tableFormatIndex].tableFormat);
@@ -1805,6 +1823,7 @@ void cDocumentReader::parseTextBlock(const QDomElement& element, QTextCursor* lp
 		QString						textPart	= text.mid(start, length);
 		lpCursor->insertText(textPart, format);
 	}
+	qDebug() << "****** parseTextBlock end ******";
 }
 
 QVector<QTextLayout::FormatRange> cDocumentReader::parseTextFormats(const QDomElement& element)

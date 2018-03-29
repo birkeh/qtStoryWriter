@@ -585,9 +585,15 @@ void cDocumentWriter::writeTextImageFormat(QTextImageFormat* lpTextImageFormat, 
 				name	= m_szPath + "/" + name;
 				QString	path	= name.left(name.lastIndexOf("/"));
 
-				QDir	dir;
+				QFileInfo	fileInfo(name);
+				if(fileInfo.suffix().isEmpty())
+					name.append(".png");
+
+				QDir		dir;
 				dir.mkpath(path);
-				pixmap.save(name);
+				bool		ret	= pixmap.save(name);
+				if(!ret)
+					return;
 			}
 
 		}

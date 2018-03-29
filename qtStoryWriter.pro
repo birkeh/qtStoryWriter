@@ -41,7 +41,6 @@ win32-g++ {
     message("mingw")
     INCLUDEPATH += C:/dev/3rdParty/quazip/include
     DEPENDPATH += C:/dev/3rdParty/quazip/include
-    #LIBS += -LC:/dev/3rdParty/quazip/gcc/lib -lquazip.a
     LIBS += -LC:/dev/3rdParty/quazip/gcc/lib -lquazip
     INCLUDEPATH += C:/dev/3rdParty/zlib/include
     DEPENDPATH += C:/dev/3rdParty/zlib/include
@@ -59,14 +58,16 @@ SOURCES += \
     cdocumentreader.cpp \
     cdocumentwriter.cpp \
     ctextdocument.cpp \
-    common.cpp
+    common.cpp \
+    ctextedit.cpp
 
 HEADERS += \
         cmainwindow.h \
     cdocumentreader.h \
     cdocumentwriter.h \
     ctextdocument.h \
-    common.h
+    common.h \
+    ctextedit.h
 
 FORMS += \
         cmainwindow.ui
