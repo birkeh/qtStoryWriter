@@ -722,7 +722,7 @@ QTextTableCellFormat cDocumentReader::parseTextTableCellFormat(const QDomElement
 	QString								anchorHref;
 	bool								isAnchor;
 	QString								toolTip;
-	QTextImageFormat::VerticalAlignment	verticalAlignment;
+	QTextCharFormat::VerticalAlignment	verticalAlignment;
 
 	QBrush								background;
 	QBrush								foreground;
@@ -755,7 +755,7 @@ QTextTableCellFormat cDocumentReader::parseTextTableCellFormat(const QDomElement
 		else if(!node.toAttr().name().compare("toolTip", Qt::CaseInsensitive))
 			toolTip					= node.toAttr().nodeValue();
 		else if(!node.toAttr().name().compare("verticalAlignment", Qt::CaseInsensitive))
-			verticalAlignment		= (QTextImageFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
+			verticalAlignment		= (QTextCharFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
 		else if(!node.toAttr().name().compare("leftPadding", Qt::CaseInsensitive))
 			leftPadding		= node.toAttr().nodeValue().toInt();
 		else if(!node.toAttr().name().compare("topPadding", Qt::CaseInsensitive))
@@ -1060,7 +1060,7 @@ QTextImageFormat cDocumentReader::parseTextImageFormat(const QDomElement& elemen
 	QString								anchorHref;
 	bool								isAnchor;
 	QString								toolTip;
-	QTextImageFormat::VerticalAlignment	verticalAlignment;
+	QTextCharFormat::VerticalAlignment	verticalAlignment;
 	QBrush								background;
 	QBrush								foreground;
 	QPen								textOutline;
@@ -1099,7 +1099,7 @@ QTextImageFormat cDocumentReader::parseTextImageFormat(const QDomElement& elemen
 		else if(!node.toAttr().name().compare("toolTip", Qt::CaseInsensitive))
 			toolTip					= node.toAttr().nodeValue();
 		else if(!node.toAttr().name().compare("verticalAlignment", Qt::CaseInsensitive))
-			verticalAlignment		= (QTextImageFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
+			verticalAlignment		= (QTextCharFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
 		else if(!node.toAttr().name().compare("layoutDirection", Qt::CaseInsensitive))
 			layoutDirection			= (Qt::LayoutDirection)node.toAttr().nodeValue().toInt();
 		else
@@ -1581,7 +1581,7 @@ QTextCharFormat cDocumentReader::parseTextCharFormat(const QDomElement& element)
 	QString								anchorHref;
 	bool								isAnchor;
 	QString								toolTip;
-	QTextImageFormat::VerticalAlignment	verticalAlignment;
+	QTextCharFormat::VerticalAlignment	verticalAlignment;
 	QPen								textOutline;
 	QStringList							anchorNames;
 	QFont								font;
@@ -1616,7 +1616,7 @@ QTextCharFormat cDocumentReader::parseTextCharFormat(const QDomElement& element)
 		else if(!node.toAttr().name().compare("toolTip", Qt::CaseInsensitive))
 			toolTip					= node.toAttr().nodeValue();
 		else if(!node.toAttr().name().compare("verticalAlignment", Qt::CaseInsensitive))
-			verticalAlignment		= (QTextImageFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
+			verticalAlignment		= (QTextCharFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
 		else if(!node.toAttr().name().compare("layoutDirection", Qt::CaseInsensitive))
 			layoutDirection		= (Qt::LayoutDirection)node.toAttr().nodeValue().toInt();
 		else
@@ -1837,7 +1837,7 @@ QTextLayout::FormatRange cDocumentReader::parseRange(const QDomElement& element)
 	QString								anchorHref;
 	bool								isAnchor;
 	QString								toolTip;
-	QTextImageFormat::VerticalAlignment	verticalAlignment;
+	QTextCharFormat::VerticalAlignment	verticalAlignment;
 	Qt::LayoutDirection					layoutDirection;
 
 	QBrush								background;
@@ -1864,7 +1864,7 @@ QTextLayout::FormatRange cDocumentReader::parseRange(const QDomElement& element)
 		else if(!node.toAttr().name().compare("toolTip", Qt::CaseInsensitive))
 			toolTip					= node.toAttr().nodeValue();
 		else if(!node.toAttr().name().compare("verticalAlignment", Qt::CaseInsensitive))
-			verticalAlignment		= (QTextImageFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
+			verticalAlignment		= (QTextCharFormat::VerticalAlignment)node.toAttr().nodeValue().toInt();
 		else if(!node.toAttr().name().compare("layoutDirection", Qt::CaseInsensitive))
 			layoutDirection	= (Qt::LayoutDirection)node.toAttr().nodeValue().toInt();
 		else
