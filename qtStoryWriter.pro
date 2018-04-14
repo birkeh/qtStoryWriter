@@ -59,7 +59,9 @@ SOURCES += \
     cdocumentwriter.cpp \
     ctextdocument.cpp \
     common.cpp \
-    ctextedit.cpp
+    ctextedit.cpp \
+    cstructurewindow.cpp \
+    cwidget.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -67,13 +69,15 @@ HEADERS += \
     cdocumentwriter.h \
     ctextdocument.h \
     common.h \
-    ctextedit.h
+    ctextedit.h \
+    cstructurewindow.h \
+    cwidget.h
 
 FORMS += \
-        cmainwindow.ui
+        cmainwindow.ui \
+    cstructurewindow.ui
 
-DISTFILES += \
-    example.html
+DISTFILES +=
 
 RESOURCES += \
     qtstorywriter.qrc

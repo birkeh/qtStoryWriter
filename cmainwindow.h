@@ -2,6 +2,8 @@
 #define CMAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMdiSubWindow>
+
 
 namespace Ui {
 class cMainWindow;
@@ -16,12 +18,14 @@ public:
 	~cMainWindow();
 
 private slots:
-	void on_actionTest1_triggered();
 
-	void on_actionSave_triggered();
+	void on_m_lpMainTab_currentChanged(int index);
+	void on_m_lpMdiArea_subWindowActivated(QMdiSubWindow *arg1);
 
 private:
-	Ui::cMainWindow *ui;
+	Ui::cMainWindow*	ui;
+
+	bool				m_bUpdatingTab;
 };
 
 #endif // CMAINWINDOW_H

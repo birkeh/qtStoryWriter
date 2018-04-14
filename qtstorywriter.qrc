@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>example.html</file>
-        <file>images/logo32.png</file>
         <file>images/mac/editcopy.png</file>
         <file>images/mac/editcut.png</file>
         <file>images/mac/editpaste.png</file>
