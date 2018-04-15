@@ -61,7 +61,8 @@ SOURCES += \
     common.cpp \
     ctextedit.cpp \
     cstructurewindow.cpp \
-    cwidget.cpp
+    cwidget.cpp \
+    cstorybook.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -71,7 +72,8 @@ HEADERS += \
     common.h \
     ctextedit.h \
     cstructurewindow.h \
-    cwidget.h
+    cwidget.h \
+    cstorybook.h
 
 FORMS += \
         cmainwindow.ui \
