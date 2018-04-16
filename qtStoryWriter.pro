@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
+QT       += core gui xml sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -62,7 +62,8 @@ SOURCES += \
     ctextedit.cpp \
     cstructurewindow.cpp \
     cwidget.cpp \
-    cstorybook.cpp
+    cstorybook.cpp \
+    cbook.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -73,13 +74,16 @@ HEADERS += \
     ctextedit.h \
     cstructurewindow.h \
     cwidget.h \
-    cstorybook.h
+    cstorybook.h \
+    common.h \
+    cbook.h
 
 FORMS += \
         cmainwindow.ui \
     cstructurewindow.ui
 
-DISTFILES +=
+DISTFILES += \
+    storyBook.project
 
 RESOURCES += \
     qtstorywriter.qrc

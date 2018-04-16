@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>460</height>
+    <width>869</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,50 +15,115 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,99999">
-      <item>
-       <widget class="QTabWidget" name="m_lpMainTab">
-        <property name="currentIndex">
-         <number>-1</number>
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QToolBox" name="m_lpMainToolBox">
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
+       <widget class="QWidget" name="m_lpMainToolBoxOutline">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>69</width>
+          <height>481</height>
+         </rect>
         </property>
-        <property name="documentMode">
-         <bool>true</bool>
-        </property>
-        <property name="tabsClosable">
-         <bool>true</bool>
-        </property>
-        <property name="movable">
-         <bool>true</bool>
-        </property>
+        <attribute name="label">
+         <string>Outline</string>
+        </attribute>
        </widget>
-      </item>
-      <item>
-       <widget class="QMdiArea" name="m_lpMdiArea">
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
+       <widget class="QWidget" name="m_lpMainToolBoxCharacter">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>69</width>
+          <height>481</height>
+         </rect>
         </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAsNeeded</enum>
-        </property>
-        <property name="viewMode">
-         <enum>QMdiArea::SubWindowView</enum>
-        </property>
-        <property name="documentMode">
-         <bool>true</bool>
-        </property>
-        <property name="tabsClosable">
-         <bool>true</bool>
-        </property>
-        <property name="tabsMovable">
-         <bool>true</bool>
-        </property>
-        <property name="tabPosition">
-         <enum>QTabWidget::South</enum>
-        </property>
+        <attribute name="label">
+         <string>Character</string>
+        </attribute>
        </widget>
-      </item>
-     </layout>
+       <widget class="QWidget" name="m_lpMainToolBoxPlace">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>69</width>
+          <height>481</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Place</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="m_lpMainToolBoxObject">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>69</width>
+          <height>481</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Object</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2"/>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,99999">
+        <item>
+         <widget class="QTabWidget" name="m_lpMainTab">
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="documentMode">
+           <bool>true</bool>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QMdiArea" name="m_lpMdiArea">
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="viewMode">
+           <enum>QMdiArea::SubWindowView</enum>
+          </property>
+          <property name="documentMode">
+           <bool>true</bool>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="tabsMovable">
+           <bool>true</bool>
+          </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::South</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -67,7 +132,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>569</width>
+     <width>869</width>
      <height>21</height>
     </rect>
    </property>

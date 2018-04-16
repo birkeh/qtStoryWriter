@@ -1,6 +1,9 @@
 #ifndef CMAINWINDOW_H
 #define CMAINWINDOW_H
 
+
+#include "cstorybook.h"
+
 #include <QMainWindow>
 #include <QMdiSubWindow>
 
@@ -18,14 +21,17 @@ public:
 	~cMainWindow();
 
 private slots:
-
-	void on_m_lpMainTab_currentChanged(int index);
-	void on_m_lpMdiArea_subWindowActivated(QMdiSubWindow *arg1);
+	void				onMainTabCurrentChanged(int index);
+	void				onMainTabTabCloseRequested(int index);
+	void				onMdiAreaSubWindowActivated(QMdiSubWindow *arg1);
 
 private:
 	Ui::cMainWindow*	ui;
-
 	bool				m_bUpdatingTab;
+	cStoryBook*			m_lpStoryBook;
+
+	void				initUI();
+	void				createActions();
 };
 
 #endif // CMAINWINDOW_H

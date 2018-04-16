@@ -15,9 +15,13 @@
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
-	m_bUpdatingTab(false)
+	m_bUpdatingTab(false),
+	m_lpStoryBook(0)
 {
-	ui->setupUi(this);
+	initUI();
+	createActions();
+
+	m_lpStoryBook	= new cStoryBook("c:/temp/qtStoryWriter/DerAdler");
 
 	cStructureWindow*	lpStructureWindow	= new cStructureWindow(this);
 	cWidget*	lpWidget1	= new cWidget(lpStructureWindow);
@@ -30,42 +34,31 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, "Structure");
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget2, "Bla");
-
-//	g_lpInputDocument		= new cTextDocument(ui->m_lpInput);
-//	g_lpOutputDocument		= new cTextDocument(ui->m_lpOutput);
-
-//	ui->m_lpInput->setDocument(g_lpInputDocument);
 }
 
 cMainWindow::~cMainWindow()
 {
+	if(m_lpStoryBook)
+		delete m_lpStoryBook;
+
 	delete ui;
 }
 
-//void cMainWindow::on_actionSave_triggered()
-//{
-//#ifdef __linux__
-//	#ifdef WITH_ZIP
-//		g_lpInputDocument->saveAs("/tmp/qtStoryWriter/documentText.zip", false);
-//		cDocumentReader	reader("/tmp/qtStoryWriter/documentText.zip", false);
-//	#else
-//		g_lpInputDocument->saveAs("/tmp/qtStoryWriter/documentText.xml", false);
-//		cDocumentReader	reader("/tmp/qtStoryWriter/documentText.xml", false);
-//	#endif
-//#elif _WIN32
-//	#ifdef WITH_ZIP
-//		g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.zip", false);
-//		cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.zip", false);
-//	#else
-//		g_lpInputDocument->saveAs("C:/Temp/qtStoryWriter/documentText.xml", false);
-//		cDocumentReader	reader("C:/Temp/qtStoryWriter/documentText.xml", false);
-//	#endif
-//	g_lpOutputDocument	= reader.readDocument();
-//	ui->m_lpOutput->setDocument(g_lpOutputDocument);
-//#endif
-//}
+void cMainWindow::initUI()
+{
+	ui->setupUi(this);
 
-void cMainWindow::on_m_lpMainTab_currentChanged(int index)
+	ui->m_lpMainToolBox->setCurrentIndex(0);
+}
+
+void cMainWindow::createActions()
+{
+	connect(ui->m_lpMainTab, SIGNAL(currentChanged(int)), this, SLOT(onMainTabCurrentChanged(int)));
+	connect(ui->m_lpMainTab, SIGNAL(tabCloseRequested(int)), this,SLOT(onMainTabTabCloseRequested(int)));
+	connect(ui->m_lpMdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onMdiAreaSubWindowActivated(QMdiSubWindow*)));
+}
+
+void cMainWindow::onMainTabCurrentChanged(int index)
 {
 	if(m_bUpdatingTab)
 		return;
@@ -77,7 +70,21 @@ void cMainWindow::on_m_lpMainTab_currentChanged(int index)
 	m_bUpdatingTab	= false;
 }
 
-void cMainWindow::on_m_lpMdiArea_subWindowActivated(QMdiSubWindow *arg1)
+void cMainWindow::onMainTabTabCloseRequested(int index)
+{
+	if(m_bUpdatingTab)
+		return;
+
+	m_bUpdatingTab	= true;
+	cWidget*		lpWidget	= (cWidget*)ui->m_lpMainTab->currentWidget();
+	QMdiSubWindow*	lpWindow	= lpWidget->window();
+	ui->m_lpMainTab->removeTab(index);
+	ui->m_lpMdiArea->removeSubWindow(lpWindow);
+	delete(lpWidget);
+	m_bUpdatingTab	= false;
+}
+
+void cMainWindow::onMdiAreaSubWindowActivated(QMdiSubWindow *arg1)
 {
 	if(m_bUpdatingTab)
 		return;
