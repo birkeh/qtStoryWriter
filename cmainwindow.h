@@ -7,6 +7,10 @@
 #include <QMainWindow>
 #include <QMdiSubWindow>
 
+#include <QStandardItemModel>
+
+#include <QCloseEvent>
+
 
 namespace Ui {
 class cMainWindow;
@@ -20,6 +24,8 @@ public:
 	explicit cMainWindow(QWidget *parent = 0);
 	~cMainWindow();
 
+	void				updateWindowTitle();
+
 private slots:
 	void				onMainTabCurrentChanged(int index);
 	void				onMainTabTabCloseRequested(int index);
@@ -27,11 +33,15 @@ private slots:
 
 private:
 	Ui::cMainWindow*	ui;
+	QStandardItemModel*	m_lpOutlineModel;
 	bool				m_bUpdatingTab;
 	cStoryBook*			m_lpStoryBook;
 
 	void				initUI();
 	void				createActions();
+
+protected:
+	void				closeEvent(QCloseEvent *event);
 };
 
 #endif // CMAINWINDOW_H

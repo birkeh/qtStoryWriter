@@ -3,13 +3,16 @@
 
 
 #include <QString>
-#include <QDate>
+#include <QDateTime>
 
 
 class cBook
 {
 public:
 	cBook(const QString& szTitle = "");
+
+	bool		load();
+	bool		save();
 
 	void		setTitle(const QString& szTitle);
 	QString		title();
@@ -26,23 +29,23 @@ public:
 	void		setAuthor(const QString& szAuthor);
 	QString		author();
 
-	void		setStartedAt(const QDate& startedAt);
-	QDate		startedAt();
+	void		setStartedAt(const QDateTime& startedAt);
+	QDateTime	startedAt();
 
-	void		setFinishedAt(const QDate& finishedAt);
-	QDate		finishedAt();
+	void		setFinishedAt(const QDateTime& finishedAt);
+	QDateTime	finishedAt();
 
-	void		setTargetDate(const QDate& targetDate);
-	QDate		targetDate();
+	void		setTargetDate(const QDateTime& targetDate);
+	QDateTime	targetDate();
 private:
 	QString		m_szTitle;
 	QString		m_szSubtitle;
 	QString		m_szShortDescription;
 	QString		m_szDescription;
 	QString		m_szAuthor;
-	QDate		m_startedAt;
-	QDate		m_finishedAt;
-	QDate		m_targetDate;
+	QDateTime	m_startedAt;
+	QDateTime	m_finishedAt;
+	QDateTime	m_targetDate;
 };
 
 #endif // CBOOK_H

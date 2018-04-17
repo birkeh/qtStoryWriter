@@ -63,7 +63,10 @@ SOURCES += \
     cstructurewindow.cpp \
     cwidget.cpp \
     cstorybook.cpp \
-    cbook.cpp
+    cbook.cpp \
+    cpart.cpp \
+    cchapter.cpp \
+    cscene.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -76,7 +79,10 @@ HEADERS += \
     cwidget.h \
     cstorybook.h \
     common.h \
-    cbook.h
+    cbook.h \
+    cpart.h \
+    cchapter.h \
+    cscene.h
 
 FORMS += \
         cmainwindow.ui \

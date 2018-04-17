@@ -6,6 +6,10 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include <QStandardItem>
+
+#include <QMap>
+
 #include <QDir>
 
 
@@ -17,6 +21,15 @@ cStoryBook::cStoryBook(const QString &szProjectPath) :
 		return;
 
 	if(!loadBook())
+		return;
+
+	if(!loadPartList())
+		return;
+
+	if(!loadChapterList())
+		return;
+
+	if(!loadSceneList())
 		return;
 
 	m_bIsOpen	= true;
@@ -101,9 +114,9 @@ bool cStoryBook::createDatabase()
 					"    shortDescription TEXT, "
 					"    description      TEXT, "
 					"    author           TEXT, "
-					"    startedAt        DATE, "
-					"    finishedAt       DATE, "
-					"    targetDate       DATE "
+					"    startedAt        DATETIME, "
+					"    finishedAt       DATETIME, "
+					"    targetDate       DATETIME "
 					");"))
 		return(false);
 
@@ -244,9 +257,9 @@ bool cStoryBook::createDatabase()
 					"	[order]     INTEGER, "
 					"	description TEXT, "
 					"	state       INTEGER, "
-					"	startedAt   DATE, "
-					"	finishedAt  DATE, "
-					"	targetDate  DATE, "
+					"	startedAt   DATETIME, "
+					"	finishedAt  DATETIME, "
+					"	targetDate  DATETIME, "
 					"	file        TEXT "
 					");"))
 		return(false);
@@ -287,25 +300,82 @@ bool cStoryBook::verify()
 
 bool cStoryBook::loadBook()
 {
-	QSqlQuery	query;
+	return(m_book.load());
+}
 
-	query.prepare("SELECT title, subTitle, shortDescription, description, author, startedAt, finishedAt, targetDate FROM book;");
-	if(!query.exec())
+bool cStoryBook::loadPartList()
+{
+	return(m_partList.load());
+}
+
+bool cStoryBook::loadChapterList()
+{
+	return(m_chapterList.load(&m_partList));
+}
+
+bool cStoryBook::loadSceneList()
+{
+	return(m_sceneList.load(&m_chapterList));
+}
+
+QString cStoryBook::title()
+{
+	if(!m_bIsOpen)
+		return("Untitled");
+	else
+		return(m_book.title());
+}
+
+QString cStoryBook::author()
+{
+	if(!m_bIsOpen)
+		return("");
+	else
+		return(m_book.author());
+}
+
+bool cStoryBook::fillOutlineList(QStandardItemModel* lpModel)
+{
+	QMap<qint32, QStandardItem*>	part;
+	QMap<qint32, QStandardItem*>	chapter;
+
+	lpModel->clear();
+
+	for(int x = 0;x < m_partList.count();x++)
 	{
-		myDebug << query.lastError().text();
-		return(false);
+		cPart*			lpPart	= m_partList.at(x);
+		QStandardItem*	lpItem	= new QStandardItem(lpPart->name());
+		lpItem->setData(QVariant::fromValue(lpPart));
+		part.insert(lpPart->id(), lpItem);
+		lpModel->appendRow(lpItem);
 	}
 
-	query.first();
+	for(int x = 0;x < m_chapterList.count();x++)
+	{
+		cChapter*		lpChapter	= m_chapterList.at(x);
+		QStandardItem*	lpRoot		= part.value(lpChapter->part()->id());
 
-	m_book.setTitle(query.value("title").toString());
-	m_book.setSubTitle(query.value("subtitle").toString());
-	m_book.setShortDescription(query.value("shortDescription").toString());
-	m_book.setDescription(query.value("description").toString());
-	m_book.setAuthor(query.value("author").toString());
-	m_book.setStartedAt(query.value("startedAt").toDate());
-	m_book.setFinishedAt(query.value("finishedAt").toDate());
-	m_book.setTargetDate(query.value("targetDate").toDate());
+		if(lpRoot)
+		{
+			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
+			lpItem->setData(QVariant::fromValue(lpChapter));
+			chapter.insert(lpChapter->id(), lpItem);
+			lpRoot->appendRow(lpItem);
+		}
+	}
+
+	for(int x = 0;x < m_sceneList.count();x++)
+	{
+		cScene*			lpScene	= m_sceneList.at(x);
+		QStandardItem*	lpRoot	= chapter.value(lpScene->chapter()->id());
+
+		if(lpRoot)
+		{
+			QStandardItem*	lpItem		= new QStandardItem(lpScene->name());
+			lpItem->setData(QVariant::fromValue(lpScene));
+			lpRoot->appendRow(lpItem);
+		}
+	}
 
 	return(true);
 }
