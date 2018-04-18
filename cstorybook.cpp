@@ -8,11 +8,14 @@
 
 #include <QStandardItem>
 #include <QListView>
+#include <QHeaderView>
 
 #include <QMap>
 
 #include <QFile>
 #include <QDir>
+
+#include <QThread>
 
 
 cStoryBook::cStoryBook(const QString &szProjectPath) :
@@ -358,8 +361,12 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 
 	lpModel->clear();
 
-	QStringList						headerLabels	= QStringList() << tr("") << tr("");
+	QStringList						headerLabels	= QStringList() << tr("name") << tr("state");
 	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	lpView->header()->setStretchLastSection(false);
+	lpView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+	lpView->header()->setSectionResizeMode(1, QHeaderView::Interactive);
 
 	fontPart.setBold(true);
 	fontChapter.setItalic(true);
@@ -371,10 +378,11 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		lpItem->setData(QVariant::fromValue(lpPart));
 		lpItem->setFont(fontPart);
 		lpItem->setBackground(QBrush(background));
+		lpItem->setToolTip(lpPart->description());
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
-		qint16 z = lpRootItem->rowCount();
 		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpRootItem->index(), true);
+		QThread::msleep(50);
 	}
 
 	for(int x = 0;x < m_chapterList.count();x++)
@@ -389,32 +397,39 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItem->setFont(fontChapter);
 			lpItem->setForeground(QBrush(Qt::darkBlue));
 			lpItem->setBackground(QBrush(background));
+			lpItem->setToolTip(lpChapter->description());
 			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
 			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
+			QThread::msleep(50);
 		}
 	}
 
 	for(int x = 0;x < m_sceneList.count();x++)
 	{
-		cScene*			lpScene	= m_sceneList.at(x);
-		QStandardItem*	lpRoot	= chapter.value(lpScene->chapter()->id());
+		cScene*			lpScene		= m_sceneList.at(x);
+		QStandardItem*	lpChapterItem	= chapter.value(lpScene->chapter()->id());
 
-		if(lpRoot)
+		if(lpChapterItem)
 		{
 			QList<QStandardItem*>	lpItems;
 
 			lpItems << new QStandardItem(lpScene->name());
+			lpItems << new QStandardItem(lpScene->stateText());
+
 			lpItems[0]->setData(QVariant::fromValue(lpScene));
 			lpItems[0]->setFont(fontScene);
 			lpItems[0]->setForeground(QBrush(Qt::blue));
+			lpItems[0]->setToolTip(lpScene->description());
 
-			lpItems << new QStandardItem(lpScene->stateText());
 			lpItems[1]->setData(QVariant::fromValue(lpScene));
 			lpItems[1]->setBackground(QBrush(lpScene->stateColor()));
 			lpItems[1]->setTextAlignment(Qt::AlignCenter);
-			lpRoot->appendRow(lpItems);
+			lpItems[1]->setToolTip(lpScene->description());
+
+			lpChapterItem->appendRow(lpItems);
 		}
+		QThread::msleep(50);
 	}
 
 	return(true);
