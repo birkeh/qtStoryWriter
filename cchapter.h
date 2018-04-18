@@ -7,6 +7,7 @@
 #include <QMetaType>
 #include <QList>
 #include <QString>
+#include <QObject>
 
 
 class cChapter

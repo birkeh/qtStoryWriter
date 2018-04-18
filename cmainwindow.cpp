@@ -13,19 +13,25 @@
 
 #include <QSettings>
 
+#include <QDir>
+
 
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	m_lpOutlineModel(0),
 	ui(new Ui::cMainWindow),
+	m_lpOutlineModel(0),
 	m_bUpdatingTab(false),
 	m_lpStoryBook(0)
 {
 	initUI();
 	createActions();
 
-	m_lpStoryBook		= new cStoryBook("c:/temp/qtStoryWriter/DerAdler");
-	m_lpStoryBook->fillOutlineList(m_lpOutlineModel);
+	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "DerAdler";
+	m_lpStoryBook		= new cStoryBook(szPath);
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutline);
+	ui->m_lpOutline->expandAll();
+	ui->m_lpOutline->resizeColumnToContents(0);
+	ui->m_lpOutline->resizeColumnToContents(1);
 
 	updateWindowTitle();
 

@@ -2,12 +2,15 @@
 #define CBOOK_H
 
 
+#include <QMetaType>
 #include <QString>
 #include <QDateTime>
+#include <QObject>
 
 
-class cBook
+class cBook : public QObject
 {
+	Q_OBJECT
 public:
 	cBook(const QString& szTitle = "");
 
@@ -47,5 +50,7 @@ private:
 	QDateTime	m_finishedAt;
 	QDateTime	m_targetDate;
 };
+
+Q_DECLARE_METATYPE(cBook*)
 
 #endif // CBOOK_H

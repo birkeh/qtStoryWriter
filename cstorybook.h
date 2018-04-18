@@ -8,14 +8,17 @@
 #include "cscene.h"
 
 #include <QString>
+#include <QObject>
 
+#include <QTreeView>
 #include <QStandardItemModel>
 
 #include <QSqlDatabase>
 
 
-class cStoryBook
+class cStoryBook : public QObject
 {
+	Q_OBJECT
 public:
 	cStoryBook(const QString& szProjectPath);
 	~cStoryBook();
@@ -26,7 +29,7 @@ public:
 	QString			title();
 	QString			author();
 
-	bool			fillOutlineList(QStandardItemModel* lpModel);
+	bool			fillOutlineList(QTreeView* lpView);
 private:
 	QString			m_szProjectPath;
 	bool			m_bIsOpen;

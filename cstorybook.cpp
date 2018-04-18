@@ -7,9 +7,11 @@
 #include <QSqlError>
 
 #include <QStandardItem>
+#include <QListView>
 
 #include <QMap>
 
+#include <QFile>
 #include <QDir>
 
 
@@ -43,9 +45,18 @@ cStoryBook::~cStoryBook()
 
 bool cStoryBook::openDatabase()
 {
+	QString		szDatabase	= QString("%1%2storyBook.project").arg(m_szProjectPath).arg(QDir::separator());
+	QFile		file(szDatabase);
+
+	if(!file.exists())
+	{
+		myDebug << QObject::tr("project does not exist");
+		return(false);
+
+	}
 	m_db	= QSqlDatabase::addDatabase("QSQLITE");
 	m_db.setHostName("localhost");
-	m_db.setDatabaseName(QString("%1%2storyBook.project").arg(m_szProjectPath).arg(QDir::separator()));
+	m_db.setDatabaseName(szDatabase);
 
 	if(!m_db.open())
 	{
@@ -334,20 +345,36 @@ QString cStoryBook::author()
 		return(m_book.author());
 }
 
-bool cStoryBook::fillOutlineList(QStandardItemModel* lpModel)
+bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
 	QMap<qint32, QStandardItem*>	chapter;
+	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
+	QStandardItem*					lpRootItem		= lpModel->invisibleRootItem();
+	QFont							fontPart		= lpRootItem->font();
+	QFont							fontChapter		= lpRootItem->font();
+	QFont							fontScene		= lpRootItem->font();
+	QColor							background(241, 241, 241);
 
 	lpModel->clear();
+
+	QStringList						headerLabels	= QStringList() << tr("") << tr("");
+	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	fontPart.setBold(true);
+	fontChapter.setItalic(true);
 
 	for(int x = 0;x < m_partList.count();x++)
 	{
 		cPart*			lpPart	= m_partList.at(x);
-		QStandardItem*	lpItem	= new QStandardItem(lpPart->name());
+		QStandardItem*	lpItem		= new QStandardItem(lpPart->name());
 		lpItem->setData(QVariant::fromValue(lpPart));
+		lpItem->setFont(fontPart);
+		lpItem->setBackground(QBrush(background));
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
+		qint16 z = lpRootItem->rowCount();
+		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpRootItem->index(), true);
 	}
 
 	for(int x = 0;x < m_chapterList.count();x++)
@@ -359,8 +386,12 @@ bool cStoryBook::fillOutlineList(QStandardItemModel* lpModel)
 		{
 			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
 			lpItem->setData(QVariant::fromValue(lpChapter));
+			lpItem->setFont(fontChapter);
+			lpItem->setForeground(QBrush(Qt::darkBlue));
+			lpItem->setBackground(QBrush(background));
 			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
+			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
 		}
 	}
 
@@ -371,9 +402,18 @@ bool cStoryBook::fillOutlineList(QStandardItemModel* lpModel)
 
 		if(lpRoot)
 		{
-			QStandardItem*	lpItem		= new QStandardItem(lpScene->name());
-			lpItem->setData(QVariant::fromValue(lpScene));
-			lpRoot->appendRow(lpItem);
+			QList<QStandardItem*>	lpItems;
+
+			lpItems << new QStandardItem(lpScene->name());
+			lpItems[0]->setData(QVariant::fromValue(lpScene));
+			lpItems[0]->setFont(fontScene);
+			lpItems[0]->setForeground(QBrush(Qt::blue));
+
+			lpItems << new QStandardItem(lpScene->stateText());
+			lpItems[1]->setData(QVariant::fromValue(lpScene));
+			lpItems[1]->setBackground(QBrush(lpScene->stateColor()));
+			lpItems[1]->setTextAlignment(Qt::AlignCenter);
+			lpRoot->appendRow(lpItems);
 		}
 	}
 

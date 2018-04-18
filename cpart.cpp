@@ -93,7 +93,7 @@ bool cPartList::load()
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, name, sortOrder, description, file FROM part;");
+	query.prepare("SELECT id, name, sortOrder, description, file FROM part ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();

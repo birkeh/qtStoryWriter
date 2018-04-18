@@ -117,6 +117,52 @@ QString cScene::file()
 	return(m_szFile);
 }
 
+QString cScene::stateText()
+{
+	return(stateText(m_state));
+}
+
+QString cScene::stateText(STATE state) const
+{
+	switch(state)
+	{
+	case cScene::STATE::STATE_unknown:
+		return(tr("unknown"));
+	case cScene::STATE::STATE_init:
+		return(tr("initialized"));
+	case cScene::STATE::STATE_progress:
+		return(tr("progress"));
+	case cScene::STATE::STATE_delayed:
+		return(tr("delayed"));
+	case cScene::STATE::STATE_finished:
+		return(tr("finished"));
+	}
+	return("unknown");
+}
+
+QColor cScene::stateColor()
+{
+	return(stateColor(m_state));
+}
+
+QColor cScene::stateColor(STATE state) const
+{
+	switch(state)
+	{
+	case cScene::STATE::STATE_unknown:
+		return(Qt::red);
+	case cScene::STATE::STATE_init:
+		return(QColor(127, 127, 255));
+	case cScene::STATE::STATE_progress:
+		return(QColor(127, 255, 127));
+	case cScene::STATE::STATE_delayed:
+		return(Qt::yellow);
+	case cScene::STATE::STATE_finished:
+		return(Qt::green);
+	}
+	return(Qt::darkRed);
+}
+
 cScene* cSceneList::add(const qint32& iID)
 {
 	cScene*	lpScene	= find(iID);
@@ -145,7 +191,7 @@ bool cSceneList::load(cChapterList* lpChapterList)
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, file FROM scene;");
+	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, file FROM scene ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();

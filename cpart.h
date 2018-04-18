@@ -5,10 +5,12 @@
 #include <QMetaType>
 #include <QList>
 #include <QString>
+#include <QObject>
 
 
-class cPart
+class cPart : public QObject
 {
+	Q_OBJECT
 public:
 	cPart(qint32 iID = -1);
 

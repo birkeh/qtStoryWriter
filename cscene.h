@@ -8,10 +8,14 @@
 #include <QList>
 #include <QString>
 #include <QDateTime>
+#include <QColor>
+#include <QObject>
 
 
-class cScene
+class cScene : public QObject
 {
+	Q_OBJECT
+
 public:
 	enum STATE
 	{
@@ -54,6 +58,10 @@ public:
 	void			setFile(const QString& szFile);
 	QString			file();
 
+	QString			stateText();
+	QString			stateText(STATE state) const;
+	QColor			stateColor();
+	QColor			stateColor(STATE state) const;
 private:
 	qint32			m_iID;
 	cChapter*		m_lpChapter;

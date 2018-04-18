@@ -104,7 +104,7 @@ bool cChapterList::load(cPartList* lpPartList)
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, partID, name, sortOrder, description, file FROM chapter;");
+	query.prepare("SELECT id, partID, name, sortOrder, description, file FROM chapter ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
