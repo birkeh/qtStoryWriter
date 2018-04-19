@@ -13,9 +13,10 @@
 #include <QSettings>
 
 #include <QDir>
-
+#include <QThread>
 
 #include <QTextEdit>
+
 
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -30,9 +31,6 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "DerAdler";
 	m_lpStoryBook		= new cStoryBook(szPath);
 	m_lpStoryBook->fillOutlineList(ui->m_lpOutline);
-	ui->m_lpOutline->expandAll();
-	ui->m_lpOutline->resizeColumnToContents(0);
-	ui->m_lpOutline->resizeColumnToContents(1);
 
 	updateWindowTitle();
 
@@ -125,7 +123,7 @@ void cMainWindow::updateWindowTitle()
 		setWindowTitle(QString("%1 by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor));
 }
 
-void cMainWindow::onMainTabCurrentChanged(int index)
+void cMainWindow::onMainTabCurrentChanged(int /*index*/)
 {
 	if(m_bUpdatingTab)
 		return;

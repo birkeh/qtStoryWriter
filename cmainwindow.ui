@@ -35,7 +35,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>194</width>
+          <width>147</width>
           <height>477</height>
          </rect>
         </property>
@@ -49,13 +49,16 @@
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="rootIsDecorated">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="animated">
             <bool>true</bool>
            </property>
            <attribute name="headerVisible">
             <bool>false</bool>
+           </attribute>
+           <attribute name="headerStretchLastSection">
+            <bool>true</bool>
            </attribute>
           </widget>
          </item>
@@ -66,7 +69,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>194</width>
+          <width>147</width>
           <height>477</height>
          </rect>
         </property>
@@ -79,7 +82,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>194</width>
+          <width>147</width>
           <height>477</height>
          </rect>
         </property>
@@ -92,7 +95,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>194</width>
+          <width>147</width>
           <height>477</height>
          </rect>
         </property>

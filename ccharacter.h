@@ -60,13 +60,13 @@ public:
 	qreal			age();
 
 	void			setDateOfBirth(const QDate& dateOfBirth);
-	QDateTime		dateOfBirth();
+	QDate			dateOfBirth();
 
 	void			setPlaceOfBirth(const QString& szPlaceOfBirth);
 	QString			placeOfBirth();
 
 	void			setDateOfDeath(const QDate& dateOfDeath);
-	QDateTime		dateOfDeath();
+	QDate			dateOfDeath();
 
 	void			setPlaceOfDeath(const QString& szPlaceOfDeath);
 	QString			placeOfDeath();

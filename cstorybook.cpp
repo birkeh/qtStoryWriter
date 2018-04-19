@@ -367,10 +367,6 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	QStringList						headerLabels	= QStringList() << tr("name") << tr("state");
 	lpModel->setHorizontalHeaderLabels(headerLabels);
 
-	lpView->header()->setStretchLastSection(false);
-	lpView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
-	lpView->header()->setSectionResizeMode(1, QHeaderView::Interactive);
-
 	fontPart.setBold(true);
 	fontChapter.setItalic(true);
 
@@ -385,7 +381,6 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
 		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpRootItem->index(), true);
-		QThread::msleep(50);
 	}
 
 	for(int x = 0;x < m_chapterList.count();x++)
@@ -404,7 +399,6 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
 			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
-			QThread::msleep(50);
 		}
 	}
 
@@ -432,8 +426,15 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 
 			lpChapterItem->appendRow(lpItems);
 		}
-		QThread::msleep(50);
 	}
+
+	lpView->header()->setStretchLastSection(false);
+	lpView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+	lpView->header()->setSectionResizeMode(1, QHeaderView::Interactive);
+
+	lpView->expandAll();
+	lpView->resizeColumnToContents(0);
+	lpView->resizeColumnToContents(1);
 
 	return(true);
 }

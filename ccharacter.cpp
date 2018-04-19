@@ -2,8 +2,8 @@
 
 
 cCharacter::cCharacter(qint32 iID, QObject *parent) :
-	m_id(id),
 	QObject(parent),
+	m_id(iID),
 	m_bMainCharacter(false),
 	m_szCreature(QString("")),
 	m_gender(GENDER::GENDER_undefined),
@@ -34,7 +34,7 @@ cCharacter::cCharacter(qint32 iID, QObject *parent) :
 
 void cCharacter::setID(const qint32& iID)
 {
-	m_id	= id;
+	m_id	= iID;
 }
 
 qint32 cCharacter::id()
@@ -67,9 +67,9 @@ void cCharacter::setGender(GENDER gender)
 	m_gender	= gender;
 }
 
-GENDER cCharacter::gender()
+cCharacter::GENDER cCharacter::gender()
 {
-	return(gender);
+	return(m_gender);
 }
 
 void cCharacter::setTitle(const QString& szTitle)
@@ -157,7 +157,7 @@ void cCharacter::setDateOfBirth(const QDate& dateOfBirth)
 	m_dateOfBirth	= dateOfBirth;
 }
 
-QDateTime cCharacter::dateOfBirth()
+QDate cCharacter::dateOfBirth()
 {
 	return(m_dateOfBirth);
 }
@@ -177,7 +177,7 @@ void cCharacter::setDateOfDeath(const QDate& dateOfDeath)
 	m_dateOfDeath	= dateOfDeath;
 }
 
-QDateTime cCharacter::dateOfDeath()
+QDate cCharacter::dateOfDeath()
 {
 	return(m_dateOfDeath);
 }
@@ -292,19 +292,36 @@ QString cCharacter::description()
 	return(m_szDescription);
 }
 
-bool cCharacterList::load()
+cCharacter* cCharacterList::add(const qint32& iID)
 {
-	cScene*	lpScene	= find(iID);
+	cCharacter*	lpCharacter	= find(iID);
 
-	if(!lpScene)
+	if(!lpCharacter)
 	{
-		lpScene	= new cScene(iID);
-		append(lpScene);
+		lpCharacter	= new cCharacter(iID);
+		append(lpCharacter);
 	}
 
-	return(lpScene);
+	return(lpCharacter);
 }
 
-bool cCharacterList::save();
-cCharacter* cCharacterList::add(const qint32& iID);
-cCharacter* cCharacterList::find(const qint32& iID);
+cCharacter* cCharacterList::find(const qint32& iID)
+{
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->id() == iID)
+			return(at(x));
+	}
+
+	return(0);
+}
+
+bool cCharacterList::load()
+{
+	return(true);
+}
+
+bool cCharacterList::save()
+{
+	return(true);
+}
