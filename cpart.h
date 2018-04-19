@@ -12,7 +12,7 @@ class cPart : public QObject
 {
 	Q_OBJECT
 public:
-	cPart(qint32 iID = -1);
+	explicit cPart(qint32 iID = -1, QObject *parent = nullptr);
 
 	void			setID(const qint32& iID);
 	qint32			id();

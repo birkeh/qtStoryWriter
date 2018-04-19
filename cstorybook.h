@@ -20,7 +20,7 @@ class cStoryBook : public QObject
 {
 	Q_OBJECT
 public:
-	cStoryBook(const QString& szProjectPath);
+	explicit cStoryBook(const QString& szProjectPath, QObject *parent = nullptr);
 	~cStoryBook();
 
 	bool			openDatabase();

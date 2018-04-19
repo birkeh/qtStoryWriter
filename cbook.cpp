@@ -8,7 +8,8 @@
 #include <QVariant>
 
 
-cBook::cBook(const QString &szTitle) :
+cBook::cBook(const QString &szTitle, QObject *parent) :
+	QObject(parent),
 	m_szTitle(szTitle),
 	m_szSubtitle(""),
 	m_szShortDescription(""),

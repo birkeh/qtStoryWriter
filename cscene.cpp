@@ -6,7 +6,8 @@
 #include <QSqlError>
 
 
-cScene::cScene(qint32 iID) :
+cScene::cScene(qint32 iID, QObject *parent) :
+	QObject(parent),
 	m_iID(iID),
 	m_lpChapter(0),
 	m_szName(""),

@@ -10,10 +10,11 @@
 #include <QObject>
 
 
-class cChapter
+class cChapter : public QObject
 {
+	Q_OBJECT
 public:
-	cChapter(qint32 iID = -1);
+	explicit cChapter(qint32 iID = -1, QObject *parent = nullptr);
 
 	void			setID(const qint32& iID);
 	qint32			id();

@@ -2,7 +2,6 @@
 #include "ui_cmainwindow.h"
 
 #include "ctextdocument.h"
-#include "cdocumentreader.h"
 
 #include "cstructurewindow.h"
 #include "cwidget.h"
@@ -15,6 +14,8 @@
 
 #include <QDir>
 
+
+#include <QTextEdit>
 
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -41,6 +42,7 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	QMainWindow*		lpMainWindow		= new QMainWindow(this);
 	lpMainWindow->setWindowTitle("Bla");
+
 	cWidget*	lpWidget2	= new cWidget(lpMainWindow);
 	lpWidget2->setWindow(ui->m_lpMdiArea->addSubWindow(lpMainWindow));
 

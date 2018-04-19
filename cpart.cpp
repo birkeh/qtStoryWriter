@@ -6,7 +6,8 @@
 #include <QSqlError>
 
 
-cPart::cPart(qint32 iID) :
+cPart::cPart(qint32 iID, QObject *parent) :
+	QObject(parent),
 	m_iID(iID),
 	m_szName(""),
 	m_iSortOrder(-1),

@@ -6,7 +6,8 @@
 #include <QSqlError>
 
 
-cChapter::cChapter(qint32 iID) :
+cChapter::cChapter(qint32 iID, QObject *parent) :
+	QObject(parent),
 	m_iID(iID),
 	m_lpPart(0),
 	m_szName(""),

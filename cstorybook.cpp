@@ -18,7 +18,8 @@
 #include <QThread>
 
 
-cStoryBook::cStoryBook(const QString &szProjectPath) :
+cStoryBook::cStoryBook(const QString &szProjectPath, QObject *parent) :
+	QObject(parent),
 	m_szProjectPath(szProjectPath),
 	m_bIsOpen(false)
 {
@@ -149,13 +150,15 @@ bool cStoryBook::createDatabase()
 					"	id              INTEGER PRIMARY KEY AUTOINCREMENT "
 					"							UNIQUE, "
 					"	mainCharacter   BOOLEAN, "
-					"	gender          BOOLEAN, "
+					"	gender          INTEGER, "
 					"	title           TEXT, "
 					"	firstName       TEXT, "
 					"	middleName      TEXT, "
 					"	lastName        TEXT, "
+					"   nickName        TEXT, "
 					"	height          DOUBLE, "
 					"	weight          DOUBLE, "
+					"   age             DOUBLE, "
 					"	dateOfBirth     DATE, "
 					"	placeOfBirth    TEXT, "
 					"	dateOfDeath     DATE, "

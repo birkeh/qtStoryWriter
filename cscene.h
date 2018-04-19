@@ -26,7 +26,7 @@ public:
 		STATE_finished	= 4,
 	};
 
-	cScene(qint32 iID = -1);
+	explicit cScene(qint32 iID = -1, QObject *parent = nullptr);
 
 	void			setID(const qint32& iID);
 	qint32			id();

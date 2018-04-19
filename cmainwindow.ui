@@ -35,7 +35,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
+          <width>194</width>
           <height>477</height>
          </rect>
         </property>
@@ -45,6 +45,15 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QTreeView" name="m_lpOutline">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
            <attribute name="headerVisible">
             <bool>false</bool>
            </attribute>
@@ -57,7 +66,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
+          <width>194</width>
           <height>477</height>
          </rect>
         </property>
@@ -70,7 +79,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
+          <width>194</width>
           <height>477</height>
          </rect>
         </property>
@@ -83,7 +92,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
+          <width>194</width>
           <height>477</height>
          </rect>
         </property>

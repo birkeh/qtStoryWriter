@@ -12,7 +12,7 @@ class cBook : public QObject
 {
 	Q_OBJECT
 public:
-	cBook(const QString& szTitle = "");
+	explicit cBook(const QString& szTitle = "", QObject *parent = nullptr);
 
 	bool		load();
 	bool		save();

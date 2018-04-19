@@ -28,35 +28,21 @@ win32-msvc* {
         message("msvc 32-bit")
     } else {
         message("msvc 64-bit")
-        INCLUDEPATH += C:/dev/3rdParty/quazip/include
-        DEPENDPATH += C:/dev/3rdParty/quazip/include
-        LIBS += C:/dev/3rdParty/quazip/msc/lib/quazip.lib
-        INCLUDEPATH += C:/dev/3rdParty/zlib/include
-        DEPENDPATH += C:/dev/3rdParty/zlib/include
-        LIBS += C:/dev/3rdParty/zlib/msc/lib/zlib.lib
     }
 }
 
 win32-g++ {
     message("mingw")
-    INCLUDEPATH += C:/dev/3rdParty/quazip/include
-    DEPENDPATH += C:/dev/3rdParty/quazip/include
-    LIBS += -LC:/dev/3rdParty/quazip/gcc/lib -lquazip
-    INCLUDEPATH += C:/dev/3rdParty/zlib/include
-    DEPENDPATH += C:/dev/3rdParty/zlib/include
-    LIBS += -LC:/dev/3rdParty/zlib/gcc/lib -lz
 }
 
 unix {
-    LIBS	+= -lquazip
+    message("*nix")
 }
 
 
 SOURCES += \
         main.cpp \
         cmainwindow.cpp \
-    cdocumentreader.cpp \
-    cdocumentwriter.cpp \
     ctextdocument.cpp \
     common.cpp \
     ctextedit.cpp \
@@ -66,12 +52,11 @@ SOURCES += \
     cbook.cpp \
     cpart.cpp \
     cchapter.cpp \
-    cscene.cpp
+    cscene.cpp \
+    ccharacter.cpp
 
 HEADERS += \
         cmainwindow.h \
-    cdocumentreader.h \
-    cdocumentwriter.h \
     ctextdocument.h \
     common.h \
     ctextedit.h \
@@ -82,7 +67,8 @@ HEADERS += \
     cbook.h \
     cpart.h \
     cchapter.h \
-    cscene.h
+    cscene.h \
+    ccharacter.h
 
 FORMS += \
         cmainwindow.ui \

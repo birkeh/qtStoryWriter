@@ -22,15 +22,15 @@ public:
 	cTextDocument(QObject *parent = Q_NULLPTR);
 	cTextDocument(const QString &text, QObject *parent = Q_NULLPTR);
 
-	bool			save(bool bZip = true);
-	bool			saveAs(const QString& szFileName, bool bZip = true);
+	bool			save();
+	bool			saveAs(const QString& szFileName);
 
 	void			printPreview(QPrinter* lpPrinter);
 private:
 	QString			m_szFileName;
 
 	void			init();
-	bool			saveDocument(bool bZip = true);
+	bool			saveDocument();
 private slots:
 };
 

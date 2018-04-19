@@ -1,5 +1,4 @@
 #include "ctextdocument.h"
-#include "cdocumentwriter.h"
 
 #include <QVector>
 
@@ -52,55 +51,36 @@ cTextDocument::cTextDocument(const QString &text, QObject *parent) :
 void cTextDocument::init()
 {
 	setPageSize((QSizeF(210, 297)));
-/*
-	QTextCursor* myCursor = new QTextCursor(this);
-
-	QTextBlockFormat format;
-	format.setBackground(Qt::red);
-	myCursor->setBlockFormat(format);
-
-	myCursor->insertText("the ");
-
-	format.setBackground(Qt::green);
-	myCursor->insertBlock(format);
-	myCursor->insertText("fish ");
-
-	format.setBackground(Qt::yellow);
-	myCursor->insertBlock(format);
-	myCursor->insertText("are ");
-
-	format.setBackground(Qt::red);
-	myCursor->insertBlock(format);
-	myCursor->insertText("coming!");
-
-	format.setBackground(Qt::green);
-	myCursor->insertBlock(format);
-	myCursor->insertText(QString("%1 blocks").arg(this->blockCount()));
-*/
 }
 
-bool cTextDocument::save(bool bZip)
+bool cTextDocument::save()
 {
 	if(!m_szFileName.isEmpty())
-		return(saveDocument(bZip));
+		return(saveDocument());
 	return(false);
 }
 
-bool cTextDocument::saveAs(const QString& szFileName, bool bZip)
+bool cTextDocument::saveAs(const QString& szFileName)
 {
 	m_szFileName	= szFileName;
-	return(saveDocument(bZip));
+	return(saveDocument());
 }
 
-bool cTextDocument::saveDocument(bool bZip)
+#include <QByteArray>
+
+bool cTextDocument::saveDocument()
 {
-	cDocumentWriter	docWriter(m_szFileName, bZip);
-	if(!docWriter.open())
+	QFile		file(m_szFileName);
+	QByteArray	data	= this->toHtml().toUtf8();
+
+	if(!file.open(QFile::WriteOnly | QFile::Truncate))
 		return(false);
 
-	docWriter.writeDocument(this);
+	QByteArray	zipped	= qCompress(data);
+	file.write(zipped);
 
-	docWriter.close();
+	file.close();
+
 	return(true);
 }
 
