@@ -13,7 +13,7 @@ cChapter::cChapter(qint32 iID, QObject *parent) :
 	m_szName(""),
 	m_iSortOrder(-1),
 	m_szDescription(""),
-	m_szFile("")
+	m_lpText(0)
 {
 }
 
@@ -67,14 +67,14 @@ QString cChapter::description()
 	return(m_szDescription);
 }
 
-void cChapter::setFile(const QString& szFile)
+void cChapter::setText(cTextDocument* lpText)
 {
-	m_szFile	= szFile;
+	m_lpText	= lpText;
 }
 
-QString cChapter::file()
+cTextDocument* cChapter::text()
 {
-	return(m_szFile);
+	return(m_lpText);
 }
 
 cChapter* cChapterList::add(const qint32& iID)
@@ -105,7 +105,7 @@ bool cChapterList::load(cPartList* lpPartList)
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, partID, name, sortOrder, description, file FROM chapter ORDER BY sortOrder;");
+	query.prepare("SELECT id, partID, name, sortOrder, description, text FROM chapter ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -120,7 +120,10 @@ bool cChapterList::load(cPartList* lpPartList)
 		lpChapter->setName(query.value("name").toString());
 		lpChapter->setSortOrder(query.value("sortOrder").toInt());
 		lpChapter->setDescription(query.value("description").toString());
-		lpChapter->setFile(query.value("file").toString());
+
+		cTextDocument*	lpText	= new cTextDocument;
+		lpText->setHtml(uncompressText(query.value("text").toByteArray()));
+		lpChapter->setText(lpText);
 	}
 
 	return(true);

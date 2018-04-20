@@ -3,6 +3,7 @@
 
 
 #include "cchapter.h"
+#include "ctextdocument.h"
 
 #include <QMetaType>
 #include <QList>
@@ -55,8 +56,8 @@ public:
 	void			setTargetDate(const QDateTime& targetDate);
 	QDateTime		targetDate();
 
-	void			setFile(const QString& szFile);
-	QString			file();
+	void			setText(cTextDocument* lpText);
+	cTextDocument*	text();
 
 	QString			stateText();
 	QString			stateText(STATE state) const;
@@ -72,7 +73,7 @@ private:
 	QDateTime		m_startedAt;
 	QDateTime		m_finishedAt;
 	QDateTime		m_targetDate;
-	QString			m_szFile;
+	cTextDocument*	m_lpText;
 };
 
 Q_DECLARE_METATYPE(cScene*)

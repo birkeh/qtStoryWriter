@@ -3,6 +3,8 @@
 
 
 #include "cpart.h"
+#include "ctextdocument.h"
+				  
 
 #include <QMetaType>
 #include <QList>
@@ -31,8 +33,8 @@ public:
 	void			setDescription(const QString& szDescription);
 	QString			description();
 
-	void			setFile(const QString& szFile);
-	QString			file();
+	void			setText(cTextDocument* lpText);
+	cTextDocument*	text();
 
 private:
 	qint32			m_iID;
@@ -40,7 +42,7 @@ private:
 	QString			m_szName;
 	qint32			m_iSortOrder;
 	QString			m_szDescription;
-	QString			m_szFile;
+	cTextDocument*	m_lpText;
 };
 
 Q_DECLARE_METATYPE(cChapter*)

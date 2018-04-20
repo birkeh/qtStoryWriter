@@ -14,7 +14,7 @@ cScene::cScene(qint32 iID, QObject *parent) :
 	m_iSortOrder(-1),
 	m_szDescription(""),
 	m_state(STATE::STATE_unknown),
-	m_szFile("")
+	m_lpText(0)
 {
 }
 
@@ -108,14 +108,14 @@ QDateTime cScene::targetDate()
 	return(m_targetDate);
 }
 
-void cScene::setFile(const QString& szFile)
+void cScene::setText(cTextDocument* lpText)
 {
-	m_szFile	= szFile;
+	m_lpText	= lpText;
 }
 
-QString cScene::file()
+cTextDocument* cScene::text()
 {
-	return(m_szFile);
+	return(m_lpText);
 }
 
 QString cScene::stateText()
@@ -192,7 +192,7 @@ bool cSceneList::load(cChapterList* lpChapterList)
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, file FROM scene ORDER BY sortOrder;");
+	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, text FROM scene ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -211,7 +211,11 @@ bool cSceneList::load(cChapterList* lpChapterList)
 		lpScene->setStartedAt(query.value("startedAt").toDateTime());
 		lpScene->setFinishedAt(query.value("finishedAt").toDateTime());
 		lpScene->setTargetDate(query.value("targetDate").toDateTime());
-		lpScene->setFile(query.value("file").toString());
+
+		QByteArray		ba		= query.value("text").toByteArray();
+		cTextDocument*	lpText	= new cTextDocument;
+		if(!ba.isEmpty())
+			lpText->setHtml(qUncompress(ba));
 	}
 
 	return(true);

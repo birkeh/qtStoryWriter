@@ -2,6 +2,8 @@
 #define CCHARACTER_H
 
 
+#include "ctextdocument.h"
+
 #include <QMetaType>
 #include <QList>
 #include <QString>
@@ -100,8 +102,8 @@ public:
 	void			setJob(const QString& szJob);
 	QString			job();
 
-	void			setDescription(const QString& szDescription);
-	QString			description();
+	void			setDescription(cTextDocument* lpDescription);
+	cTextDocument*	description();
 private:
 	qint32			m_id;
 	bool			m_bMainCharacter;
@@ -128,7 +130,7 @@ private:
 	QString			m_szSkin;
 	QString			m_szSchool;
 	QString			m_szJob;
-	QString			m_szDescription;
+	cTextDocument*	m_lpDescription;
 signals:
 
 public slots:

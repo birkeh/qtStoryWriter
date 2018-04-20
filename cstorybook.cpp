@@ -129,8 +129,8 @@ bool cStoryBook::createDatabase()
 	if(!createTable("CREATE TABLE book ( "
 					"    title            TEXT, "
 					"    subTitle         TEXT, "
-					"    shortDescription TEXT, "
-					"    description      TEXT, "
+					"    shortDescription BLOB, "
+					"    description      BLOB, "
 					"    author           TEXT, "
 					"    startedAt        DATETIME, "
 					"    finishedAt       DATETIME, "
@@ -143,9 +143,9 @@ bool cStoryBook::createDatabase()
 					"						UNIQUE, "
 					"	partID      INTEGER REFERENCES part (id), "
 					"	name        TEXT, "
-					"	[order]     INTEGER, "
+					"	sortOrder   INTEGER, "
 					"	description TEXT, "
-					"	file        TEXT "
+					"	text        BLOB "
 					");"))
 		return(false);
 
@@ -175,7 +175,7 @@ bool cStoryBook::createDatabase()
 					"	skin            TEXT, "
 					"	school          TEXT, "
 					"	job             TEXT, "
-					"	description     TEXT "
+					"	description     BLOB "
 					");"))
 		return(false);
 
@@ -191,7 +191,7 @@ bool cStoryBook::createDatabase()
 					"	type        TEXT, "
 					"	name        TEXT, "
 					"	description TEXT, "
-					"	file        TEXT "
+					"	image       BLOB "
 					");"))
 		return(false);
 
@@ -216,7 +216,7 @@ bool cStoryBook::createDatabase()
 					"	name        TEXT, "
 					"	[order]     INTEGER, "
 					"	description TEXT, "
-					"	file        TEXT "
+					"	text        BLOB "
 					");"))
 		return(false);
 
@@ -226,7 +226,7 @@ bool cStoryBook::createDatabase()
 					"	name        TEXT, "
 					"	location    TEXT, "
 					"	type        TEXT, "
-					"	description TEXT "
+					"	description BLOB "
 					");"))
 		return(false);
 
@@ -280,7 +280,7 @@ bool cStoryBook::createDatabase()
 					"	startedAt   DATETIME, "
 					"	finishedAt  DATETIME, "
 					"	targetDate  DATETIME, "
-					"	file        TEXT "
+					"	text        BLOB "
 					");"))
 		return(false);
 
@@ -294,14 +294,14 @@ bool cStoryBook::createDatabase()
 	if(!createTable("CREATE TABLE sceneObject ( "
 					"	sceneID     INTEGER REFERENCES scene (id), "
 					"	objectID    INTEGER REFERENCES object (id), "
-					"	description TEXT "
+					"	description BLOB "
 					");"))
 		return(false);
 
 	if(!createTable("CREATE TABLE scenePlace ( "
 					"	sceneID     INTEGER REFERENCES scene (id), "
 					"	placeID     INTEGER REFERENCES place (id), "
-					"	description TEXT "
+					"	description BLOB "
 					");"))
 		return(false);
 

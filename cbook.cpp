@@ -12,8 +12,8 @@ cBook::cBook(const QString &szTitle, QObject *parent) :
 	QObject(parent),
 	m_szTitle(szTitle),
 	m_szSubtitle(""),
-	m_szShortDescription(""),
-	m_szDescription(""),
+	m_lpShortDescription(0),
+	m_lpDescription(0),
 	m_szAuthor(""),
 	m_startedAt(QDateTime(QDate(1, 1, 1))),
 	m_finishedAt(QDateTime(QDate(1, 1, 1))),
@@ -36,8 +36,15 @@ bool cBook::load()
 
 	setTitle(query.value("title").toString());
 	setSubTitle(query.value("subtitle").toString());
-	setShortDescription(query.value("shortDescription").toString());
-	setDescription(query.value("description").toString());
+
+	cTextDocument*	lpShortDescription	= new cTextDocument;
+	lpShortDescription->setHtml(uncompressText(query.value("shortDescription").toByteArray()));
+	setShortDescription(lpShortDescription);
+
+	cTextDocument*	lpDescription		= new cTextDocument;
+	lpDescription->setHtml(uncompressText(query.value("description").toByteArray()));
+	setDescription(lpDescription);
+
 	setAuthor(query.value("author").toString());
 	setStartedAt(query.value("startedAt").toDateTime());
 	setFinishedAt(query.value("finishedAt").toDateTime());
@@ -66,8 +73,15 @@ bool cBook::save()
 
 	query.bindValue(":title", title());
 	query.bindValue(":subTitle", subTitle());
-	query.bindValue(":shortDescription", shortDescription());
-	query.bindValue(":description", description());
+
+	QByteArray	ba;
+
+	ba	= description()->toHtml().toUtf8();
+	query.bindValue(":shortDescription", qCompress(ba));
+
+	ba	= shortDescription()->toHtml().toUtf8();
+	query.bindValue(":description", qCompress(ba));
+
 	query.bindValue(":author", author());
 	query.bindValue(":startedAt", startedAt());
 	query.bindValue(":finishedAt", finishedAt());
@@ -102,24 +116,24 @@ QString cBook::subTitle()
 	return(m_szSubtitle);
 }
 
-void cBook::setShortDescription(const QString& szShortDescription)
+void cBook::setShortDescription(cTextDocument *lpShortDescription)
 {
-	m_szShortDescription	= szShortDescription;
+	m_lpShortDescription	= lpShortDescription;
 }
 
-QString cBook::shortDescription()
+cTextDocument* cBook::shortDescription()
 {
-	return(m_szShortDescription);
+	return(m_lpShortDescription);
 }
 
-void cBook::setDescription(const QString& szDescription)
+void cBook::setDescription(cTextDocument* lpDescription)
 {
-	m_szDescription	= szDescription;
+	m_lpDescription	= lpDescription;
 }
 
-QString cBook::description()
+cTextDocument* cBook::description()
 {
-	return(m_szDescription);
+	return(m_lpDescription);
 }
 
 void cBook::setAuthor(const QString& szAuthor)

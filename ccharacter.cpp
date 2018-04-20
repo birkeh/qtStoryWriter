@@ -33,7 +33,7 @@ cCharacter::cCharacter(qint32 iID, QObject *parent) :
 	m_szSkin(QString("")),
 	m_szSchool(QString("")),
 	m_szJob(QString("")),
-	m_szDescription(QString(""))
+	m_lpDescription(0)
 {
 }
 
@@ -310,14 +310,14 @@ QString cCharacter::job()
 	return(m_szJob);
 }
 
-void cCharacter::setDescription(const QString& szDescription)
+void cCharacter::setDescription(cTextDocument* lpDescription)
 {
-	m_szDescription	= szDescription;
+	m_lpDescription	= lpDescription;
 }
 
-QString cCharacter::description()
+cTextDocument* cCharacter::description()
 {
-	return(m_szDescription);
+	return(m_lpDescription);
 }
 
 cCharacter* cCharacterList::add(const qint32& iID)
@@ -380,7 +380,10 @@ bool cCharacterList::load()
 		lpCharacter->setSkin(query.value("skin").toString());
 		lpCharacter->setSchool(query.value("school").toString());
 		lpCharacter->setJob(query.value("job").toString());
-		lpCharacter->setDescription(query.value("description").toString());
+
+		cTextDocument*	lpText	= new cTextDocument;
+		lpText->setHtml(uncompressText(query.value("description").toByteArray()));
+		lpCharacter->setDescription(lpText);
 	}
 
 	return(true);
