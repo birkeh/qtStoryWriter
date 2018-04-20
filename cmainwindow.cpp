@@ -30,7 +30,8 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "DerAdler";
 	m_lpStoryBook		= new cStoryBook(szPath);
-	m_lpStoryBook->fillOutlineList(ui->m_lpOutline);
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
 
 	updateWindowTitle();
 
@@ -78,7 +79,10 @@ void cMainWindow::initUI()
 	ui->setupUi(this);
 
 	m_lpOutlineModel	= new QStandardItemModel(0, 1);
-	ui->m_lpOutline->setModel(m_lpOutlineModel);
+	ui->m_lpOutlineList->setModel(m_lpOutlineModel);
+
+	m_lpCharacterModel	= new QStandardItemModel(0, 1);
+	ui->m_lpCharacterList->setModel(m_lpCharacterModel);
 
 	QSettings	settings;
 	qint16		iX			= settings.value("main/x", QVariant::fromValue(-1)).toInt();

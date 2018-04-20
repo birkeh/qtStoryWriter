@@ -6,6 +6,7 @@
 #include "cpart.h"
 #include "cchapter.h"
 #include "cscene.h"
+#include "ccharacter.h"
 
 #include <QString>
 #include <QObject>
@@ -30,6 +31,7 @@ public:
 	QString			author();
 
 	bool			fillOutlineList(QTreeView* lpView);
+	bool			fillCharacterList(QTreeView* lpView);
 private:
 	QString			m_szProjectPath;
 	bool			m_bIsOpen;
@@ -38,6 +40,7 @@ private:
 	cPartList		m_partList;
 	cChapterList	m_chapterList;
 	cSceneList		m_sceneList;
+	cCharacterList	m_characterList;
 
 	bool			createDatabase();
 	bool			updateDatabase();
@@ -47,6 +50,7 @@ private:
 	bool			loadPartList();
 	bool			loadChapterList();
 	bool			loadSceneList();
+	bool			loadCharacterList();
 };
 
 #endif // CSTORYBOOK_H

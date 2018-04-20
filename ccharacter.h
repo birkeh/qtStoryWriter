@@ -47,6 +47,8 @@ public:
 	void			setLastName(const QString& szLastName);
 	QString			lastName();
 
+	QString			name();
+
 	void			setNickName(const QString& szNickName);
 	QString			nickName();
 

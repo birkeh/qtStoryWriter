@@ -38,6 +38,9 @@ cStoryBook::cStoryBook(const QString &szProjectPath, QObject *parent) :
 	if(!loadSceneList())
 		return;
 
+	if(!loadCharacterList())
+		return;
+
 	m_bIsOpen	= true;
 }
 
@@ -335,6 +338,11 @@ bool cStoryBook::loadSceneList()
 	return(m_sceneList.load(&m_chapterList));
 }
 
+bool cStoryBook::loadCharacterList()
+{
+	return(m_characterList.load());
+}
+
 QString cStoryBook::title()
 {
 	if(!m_bIsOpen)
@@ -435,6 +443,44 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	lpView->expandAll();
 	lpView->resizeColumnToContents(0);
 	lpView->resizeColumnToContents(1);
+
+	return(true);
+}
+
+bool cStoryBook::fillCharacterList(QTreeView* lpView)
+{
+	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+	QStandardItem*					lpRootItem				= lpModel->invisibleRootItem();
+	QFont							fontMainCharacter		= lpRootItem->font();
+	QFont							fontNonMainCharacter	= lpRootItem->font();
+
+	lpModel->clear();
+
+	QStringList						headerLabels	= QStringList() << tr("name");
+	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	fontMainCharacter.setBold(true);
+	fontNonMainCharacter.setItalic(true);
+
+	for(int x = 0;x < m_characterList.count();x++)
+	{
+		cCharacter*		lpCharacter	= m_characterList.at(x);
+		QStandardItem*	lpItem		= new QStandardItem(lpCharacter->name());
+		lpItem->setData(QVariant::fromValue(lpCharacter));
+
+		if(lpCharacter->mainCharacter())
+			lpItem->setFont(fontMainCharacter);
+		else
+			lpItem->setFont(fontNonMainCharacter);
+
+//		lpItem->setToolTip(lpPart->description());
+		lpModel->appendRow(lpItem);
+	}
+
+	lpView->header()->setStretchLastSection(true);
+
+	lpView->expandAll();
+	lpView->resizeColumnToContents(0);
 
 	return(true);
 }

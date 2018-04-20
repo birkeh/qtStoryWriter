@@ -34,6 +34,7 @@ private slots:
 private:
 	Ui::cMainWindow*	ui;
 	QStandardItemModel*	m_lpOutlineModel;
+	QStandardItemModel*	m_lpCharacterModel;
 	bool				m_bUpdatingTab;
 	cStoryBook*			m_lpStoryBook;
 

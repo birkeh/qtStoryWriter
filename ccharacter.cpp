@@ -1,5 +1,10 @@
 #include "ccharacter.h"
 
+#include "common.h"
+
+#include <QSqlQuery>
+#include <QSqlError>
+
 
 cCharacter::cCharacter(qint32 iID, QObject *parent) :
 	QObject(parent),
@@ -120,6 +125,29 @@ void cCharacter::setNickName(const QString& szNickName)
 QString cCharacter::nickName()
 {
 	return(m_szNickName);
+}
+
+QString cCharacter::name()
+{
+	QString	szName("");
+
+	if(!m_szFirstName.isEmpty())
+		szName.append(m_szFirstName);
+
+	if(!m_szMiddleName.isEmpty())
+	{
+		if(!szName.isEmpty())
+			szName.append(" ");
+		szName.append(m_szMiddleName);
+	}
+
+	if(!m_szLastName.isEmpty())
+	{
+		if(!szName.isEmpty())
+			szName.append(" ");
+		szName.append(m_szLastName);
+	}
+	return(szName);
 }
 
 void cCharacter::setHeight(qreal dHeight)
@@ -318,6 +346,43 @@ cCharacter* cCharacterList::find(const qint32& iID)
 
 bool cCharacterList::load()
 {
+	QSqlQuery	query;
+
+	query.prepare("SELECT id, mainCharacter, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description FROM character ORDER BY mainCharacter DESC, lastName, middleName, firstName;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cCharacter*	lpCharacter	= add(query.value("id").toInt());
+
+		lpCharacter->setMainCharacter(query.value("mainCharacter").toBool());
+		lpCharacter->setGender((cCharacter::GENDER)query.value("gender").toInt());
+		lpCharacter->setTitle(query.value("title").toString());
+		lpCharacter->setFirstName(query.value("firstName").toString());
+		lpCharacter->setMiddleName(query.value("middleName").toString());
+		lpCharacter->setLastName(query.value("lastName").toString());
+		lpCharacter->setHeight(query.value("height").toDouble());
+		lpCharacter->setWeight(query.value("weight").toDouble());
+		lpCharacter->setDateOfBirth(query.value("dateOfBirth").toDate());
+		lpCharacter->setPlaceOfBirth(query.value("placeOfBirth").toString());
+		lpCharacter->setDateOfDeath(query.value("dateOfDeath").toDate());
+		lpCharacter->setPlaceOfDeath(query.value("placeOfBirth").toString());
+		lpCharacter->setHairColor(query.value("hairColor").toString());
+		lpCharacter->setHairCut(query.value("hairCut").toString());
+		lpCharacter->setHairLength(query.value("hairLength").toString());
+		lpCharacter->setFigure(query.value("figure").toString());
+		lpCharacter->setNature(query.value("nature").toString());
+		lpCharacter->setSpokenLanguages(query.value("spokenLanguages").toString());
+		lpCharacter->setSkin(query.value("skin").toString());
+		lpCharacter->setSchool(query.value("school").toString());
+		lpCharacter->setJob(query.value("job").toString());
+		lpCharacter->setDescription(query.value("description").toString());
+	}
+
 	return(true);
 }
 
