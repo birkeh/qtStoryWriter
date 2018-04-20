@@ -3,6 +3,7 @@
 
 #include "ctextdocument.h"
 
+#include "cpartwindow.h"
 #include "cstructurewindow.h"
 #include "cwidget.h"
 
@@ -35,18 +36,28 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	updateWindowTitle();
 
-	cStructureWindow*	lpStructureWindow	= new cStructureWindow(this);
-	cWidget*	lpWidget1	= new cWidget(lpStructureWindow);
-	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpStructureWindow));
+	cPartWindow*		lpPartWindow		= new cPartWindow(this);
 
-	QMainWindow*		lpMainWindow		= new QMainWindow(this);
-	lpMainWindow->setWindowTitle("Bla");
+	QStandardItem*		lpItem				= m_lpOutlineModel->item(0, 0);
+	cPart*				lpPart				= qvariant_cast<cPart*>(lpItem->data());
 
-	cWidget*	lpWidget2	= new cWidget(lpMainWindow);
-	lpWidget2->setWindow(ui->m_lpMdiArea->addSubWindow(lpMainWindow));
+	lpPartWindow->setPart(lpPart);
+	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, "Structure");
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget2, "Bla");
+//	cStructureWindow*	lpStructureWindow	= new cStructureWindow(this);
+//	cWidget*	lpWidget1	= new cWidget(lpStructureWindow);
+//	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpStructureWindow));
+
+//	QMainWindow*		lpMainWindow		= new QMainWindow(this);
+//	lpMainWindow->setWindowTitle("Bla");
+
+//	cWidget*	lpWidget2	= new cWidget(lpMainWindow);
+//	lpWidget2->setWindow(ui->m_lpMdiArea->addSubWindow(lpMainWindow));
+
+//	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, "Structure");
+//	ui->m_lpMainTab->addTab((QWidget*)lpWidget2, "Bla");
 }
 
 cMainWindow::~cMainWindow()

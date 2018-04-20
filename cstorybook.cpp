@@ -388,7 +388,8 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		lpItem->setToolTip(lpPart->description());
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
-		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpRootItem->index(), true);
+
+		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpModel->invisibleRootItem()->index(), true);
 	}
 
 	for(int x = 0;x < m_chapterList.count();x++)

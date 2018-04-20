@@ -53,7 +53,8 @@ SOURCES += \
     cpart.cpp \
     cchapter.cpp \
     cscene.cpp \
-    ccharacter.cpp
+    ccharacter.cpp \
+    cpartwindow.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -68,11 +69,14 @@ HEADERS += \
     cpart.h \
     cchapter.h \
     cscene.h \
-    ccharacter.h
+    ccharacter.h \
+    cpartwindow.h
 
 FORMS += \
         cmainwindow.ui \
-    cstructurewindow.ui
+    cstructurewindow.ui \
+    cpartwindow1.ui \
+    cpartwindow.ui
 
 DISTFILES += \
     storyBook.project

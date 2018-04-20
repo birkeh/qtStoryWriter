@@ -112,6 +112,7 @@ bool cPartList::load()
 		cTextDocument*	lpText	= new cTextDocument;
 		if(!ba.isEmpty())
 			lpText->setHtml(qUncompress(ba));
+		lpPart->setText(lpText);
 	}
 
 	return(true);
