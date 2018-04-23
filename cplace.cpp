@@ -66,6 +66,13 @@ cTextDocument* cPlace::description()
 	return(m_lpDescription);
 }
 
+void cPlace::addImage(cImage* lpImage)
+{
+	if(m_imageList.contains(lpImage))
+		return;
+	m_imageList.append(lpImage);
+}
+
 cPlace* cPlaceList::add(const qint32& iID)
 {
 	cPlace*	lpPlace	= find(iID);
@@ -90,7 +97,7 @@ cPlace* cPlaceList::find(const qint32& iID)
 	return(0);
 }
 
-bool cPlaceList::load()
+bool cPlaceList::load(cImageList *lpImageList)
 {
 	QSqlQuery	query;
 
@@ -109,6 +116,24 @@ bool cPlaceList::load()
 		lpPlace->setLocation(query.value("location").toString());
 		lpPlace->setType(query.value("type").toString());
 		lpPlace->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+	}
+
+	query.prepare("SELECT placeID, imageID FROM placeImage;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cPlace*	lpPlace	= find(query.value("placeID").toInt());
+		if(lpPlace)
+		{
+			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
+			if(lpImage)
+				lpPlace->addImage(lpImage);
+		}
 	}
 
 	return(true);

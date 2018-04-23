@@ -55,6 +55,13 @@ cTextDocument* cRecherche::description()
 	return(m_lpDescription);
 }
 
+void cRecherche::addImage(cImage* lpImage)
+{
+	if(m_imageList.contains(lpImage))
+		return;
+	m_imageList.append(lpImage);
+}
+
 cRecherche* cRechercheList::add(const qint32& iID)
 {
 	cRecherche*	lpRecherche	= find(iID);
@@ -79,7 +86,7 @@ cRecherche* cRechercheList::find(const qint32& iID)
 	return(0);
 }
 
-bool cRechercheList::load()
+bool cRechercheList::load(cImageList *lpImageList)
 {
 	QSqlQuery	query;
 
@@ -97,6 +104,24 @@ bool cRechercheList::load()
 		lpObject->setName(query.value("name").toString());
 		lpObject->setLink(query.value("link").toString());
 		lpObject->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+	}
+
+	query.prepare("SELECT rechercheID, imageID FROM rechercheImage;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cRecherche*	lpRecherche	= find(query.value("rechercheID").toInt());
+		if(lpRecherche)
+		{
+			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
+			if(lpImage)
+				lpRecherche->addImage(lpImage);
+		}
 	}
 
 	return(true);

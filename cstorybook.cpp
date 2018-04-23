@@ -18,12 +18,23 @@
 #include <QThread>
 
 
+//rechercheCharacter
+//rechercheObject
+//recherchePlace
+//sceneCharacter
+//sceneObject
+//scenePlace
+//config
+
 cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	QObject(parent),
 	m_szProject(szProject),
 	m_bIsOpen(false)
 {
 	if(!openDatabase())
+		return;
+
+	if(!loadImageList())
 		return;
 
 	if(!loadBook())
@@ -187,12 +198,6 @@ bool cStoryBook::createDatabase()
 					");"))
 		return(false);
 
-	if(!createTable("CREATE TABLE characterImage ( "
-					"	characterID INTEGER REFERENCES character (id), "
-					"	imageID     INTEGER REFERENCES image (id)  "
-					");"))
-		return(false);
-
 	if(!createTable("CREATE TABLE image ( "
 					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
 					"						UNIQUE, "
@@ -200,6 +205,12 @@ bool cStoryBook::createDatabase()
 					"	name        TEXT, "
 					"	description BLOB, "
 					"	image       BLOB "
+					");"))
+		return(false);
+
+	if(!createTable("CREATE TABLE characterImage ( "
+					"	characterID INTEGER REFERENCES character (id), "
+					"	imageID     INTEGER REFERENCES image (id)  "
 					");"))
 		return(false);
 
@@ -348,22 +359,27 @@ bool cStoryBook::loadSceneList()
 
 bool cStoryBook::loadCharacterList()
 {
-	return(m_characterList.load());
+	return(m_characterList.load(&m_imageList));
 }
 
 bool cStoryBook::loadPlaceList()
 {
-	return(m_placeList.load());
+	return(m_placeList.load(&m_imageList));
 }
 
 bool cStoryBook::loadObjectList()
 {
-	return(m_objectList.load());
+	return(m_objectList.load(&m_imageList));
 }
 
 bool cStoryBook::loadRechercheList()
 {
-	return(m_rechercheList.load());
+	return(m_rechercheList.load(&m_imageList));
+}
+
+bool cStoryBook::loadImageList()
+{
+	return(m_imageList.load());
 }
 
 QString cStoryBook::title()

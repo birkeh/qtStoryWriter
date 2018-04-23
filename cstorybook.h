@@ -10,6 +10,7 @@
 #include "cplace.h"
 #include "cobject.h"
 #include "crecherche.h"
+#include "cimage.h"
 
 #include <QString>
 #include <QObject>
@@ -51,6 +52,7 @@ private:
 	cPlaceList		m_placeList;
 	cObjectList		m_objectList;
 	cRechercheList	m_rechercheList;
+	cImageList		m_imageList;
 
 	bool			createDatabase();
 	bool			updateDatabase();
@@ -64,6 +66,7 @@ private:
 	bool			loadPlaceList();
 	bool			loadObjectList();
 	bool			loadRechercheList();
+	bool			loadImageList();
 };
 
 #endif // CSTORYBOOK_H

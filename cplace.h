@@ -3,6 +3,7 @@
 
 
 #include "ctextdocument.h"
+#include "cimage.h"
 
 #include <QMetaType>
 #include <QList>
@@ -31,12 +32,15 @@ public:
 	void			setDescription(cTextDocument* lpDescription);
 	cTextDocument*	description();
 
+	void			addImage(cImage* lpImage);
+
 private:
 	qint32			m_iID;
 	QString			m_szName;
 	QString			m_szLocation;
 	QString			m_szType;
 	cTextDocument*	m_lpDescription;
+	QList<cImage*>	m_imageList;
 
 signals:
 
@@ -48,7 +52,7 @@ Q_DECLARE_METATYPE(cPlace*)
 class cPlaceList : public QList<cPlace*>
 {
 public:
-	bool			load();
+	bool			load(cImageList* lpImageList);
 	bool			save();
 
 	cPlace*			add(const qint32& iID);

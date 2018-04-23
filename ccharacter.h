@@ -3,6 +3,7 @@
 
 
 #include "ctextdocument.h"
+#include "cimage.h"
 
 #include <QMetaType>
 #include <QList>
@@ -106,6 +107,9 @@ public:
 
 	void			setDescription(cTextDocument* lpDescription);
 	cTextDocument*	description();
+
+	void			addImage(cImage* lpImage);
+
 private:
 	qint32			m_id;
 	bool			m_bMainCharacter;
@@ -133,6 +137,7 @@ private:
 	QString			m_szSchool;
 	QString			m_szJob;
 	cTextDocument*	m_lpDescription;
+	QList<cImage*>	m_imageList;
 signals:
 
 public slots:
@@ -143,7 +148,7 @@ Q_DECLARE_METATYPE(cCharacter*)
 class cCharacterList : public QList<cCharacter*>
 {
 public:
-	bool			load();
+	bool			load(cImageList* lpImageList);
 	bool			save();
 
 	cCharacter*		add(const qint32& iID);

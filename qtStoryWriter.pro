@@ -57,7 +57,8 @@ SOURCES += \
     cpartwindow.cpp \
     cplace.cpp \
     cobject.cpp \
-    crecherche.cpp
+    crecherche.cpp \
+    cimage.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -76,7 +77,8 @@ HEADERS += \
     cpartwindow.h \
     cplace.h \
     cobject.h \
-    crecherche.h
+    crecherche.h \
+    cimage.h
 
 FORMS += \
         cmainwindow.ui \

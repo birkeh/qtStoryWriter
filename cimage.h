@@ -1,21 +1,20 @@
-#ifndef COBJECT_H
-#define COBJECT_H
+#ifndef CIMAGE_H
+#define CIMAGE_H
 
 
 #include "ctextdocument.h"
-#include "cimage.h"
 
 #include <QMetaType>
 #include <QList>
 #include <QString>
-#include <QObject>
+#include <QPixmap>
 
 
-class cObject : public QObject
+class cImage : public QObject
 {
 	Q_OBJECT
 public:
-	explicit cObject(qint32 iID = -1, QObject *parent = nullptr);
+	cImage(qint32 iID = -1, QObject* parent = nullptr);
 
 	void			setID(const qint32& iID);
 	qint32			id();
@@ -29,30 +28,25 @@ public:
 	void			setDescription(cTextDocument* lpDescription);
 	cTextDocument*	description();
 
-	void			addImage(cImage* lpImage);
+	QPixmap			load();
 
 private:
 	qint32			m_iID;
 	QString			m_szName;
 	QString			m_szType;
 	cTextDocument*	m_lpDescription;
-	QList<cImage*>	m_imageList;
-
-signals:
-
-public slots:
 };
 
-Q_DECLARE_METATYPE(cObject*)
+Q_DECLARE_METATYPE(cImage*)
 
-class cObjectList : public QList<cObject*>
+class cImageList : public QList<cImage*>
 {
 public:
-	bool			load(cImageList* lpImageList);
+	bool			load();
 	bool			save();
 
-	cObject*		add(const qint32& iID);
-	cObject*		find(const qint32& iID);
+	cImage*			add(const qint32& iID);
+	cImage*			find(const qint32& iID);
 };
 
-#endif // COBJECT_H
+#endif // CIMAGE_H

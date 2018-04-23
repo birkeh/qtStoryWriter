@@ -339,6 +339,13 @@ cTextDocument* cCharacter::description()
 	return(m_lpDescription);
 }
 
+void cCharacter::addImage(cImage* lpImage)
+{
+	if(m_imageList.contains(lpImage))
+		return;
+	m_imageList.append(lpImage);
+}
+
 cCharacter* cCharacterList::add(const qint32& iID)
 {
 	cCharacter*	lpCharacter	= find(iID);
@@ -363,7 +370,7 @@ cCharacter* cCharacterList::find(const qint32& iID)
 	return(0);
 }
 
-bool cCharacterList::load()
+bool cCharacterList::load(cImageList *lpImageList)
 {
 	QSqlQuery	query;
 
@@ -401,6 +408,24 @@ bool cCharacterList::load()
 		lpCharacter->setSchool(query.value("school").toString());
 		lpCharacter->setJob(query.value("job").toString());
 		lpCharacter->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+	}
+
+	query.prepare("SELECT characterID, imageID FROM characterImage;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cCharacter*	lpCharacter	= find(query.value("characterID").toInt());
+		if(lpCharacter)
+		{
+			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
+			if(lpImage)
+				lpCharacter->addImage(lpImage);
+		}
 	}
 
 	return(true);
