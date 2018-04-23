@@ -28,15 +28,15 @@
         <enum>QFrame::Sunken</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="m_lpMainToolBoxOutline">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
-          <height>450</height>
+          <width>89</width>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
@@ -72,8 +72,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
-          <height>450</height>
+          <width>89</width>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
@@ -94,9 +94,6 @@
            <property name="expandsOnDoubleClick">
             <bool>false</bool>
            </property>
-           <attribute name="headerVisible">
-            <bool>false</bool>
-           </attribute>
            <attribute name="headerStretchLastSection">
             <bool>true</bool>
            </attribute>
@@ -109,40 +106,102 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
-          <height>450</height>
+          <width>89</width>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
          <string>Place</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QTreeView" name="m_lpPlaceList">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
+           <property name="expandsOnDoubleClick">
+            <bool>false</bool>
+           </property>
+           <attribute name="headerStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="m_lpMainToolBoxObject">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
-          <height>450</height>
+          <width>89</width>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
          <string>Object</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_2"/>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QTreeView" name="m_lpObjectList">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
+           <property name="expandsOnDoubleClick">
+            <bool>false</bool>
+           </property>
+           <attribute name="headerStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="m_lpMainToolBoxRecherche">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>147</width>
-          <height>450</height>
+          <width>89</width>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
          <string>Recherche</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QTreeView" name="m_lpRechercheList">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
+           <property name="expandsOnDoubleClick">
+            <bool>false</bool>
+           </property>
+           <attribute name="headerStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="layoutWidget">

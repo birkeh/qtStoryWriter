@@ -18,9 +18,9 @@
 #include <QThread>
 
 
-cStoryBook::cStoryBook(const QString &szProjectPath, QObject *parent) :
+cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	QObject(parent),
-	m_szProjectPath(szProjectPath),
+	m_szProject(szProject),
 	m_bIsOpen(false)
 {
 	if(!openDatabase())
@@ -41,6 +41,15 @@ cStoryBook::cStoryBook(const QString &szProjectPath, QObject *parent) :
 	if(!loadCharacterList())
 		return;
 
+	if(!loadPlaceList())
+		return;
+
+	if(!loadObjectList())
+		return;
+
+	if(!loadRechercheList())
+		return;
+
 	m_bIsOpen	= true;
 }
 
@@ -52,8 +61,7 @@ cStoryBook::~cStoryBook()
 
 bool cStoryBook::openDatabase()
 {
-	QString		szDatabase	= QString("%1%2storyBook.project").arg(m_szProjectPath).arg(QDir::separator());
-	QFile		file(szDatabase);
+	QFile		file(m_szProject);
 
 	if(!file.exists())
 	{
@@ -63,7 +71,7 @@ bool cStoryBook::openDatabase()
 	}
 	m_db	= QSqlDatabase::addDatabase("QSQLITE");
 	m_db.setHostName("localhost");
-	m_db.setDatabaseName(szDatabase);
+	m_db.setDatabaseName(m_szProject);
 
 	if(!m_db.open())
 	{
@@ -144,7 +152,7 @@ bool cStoryBook::createDatabase()
 					"	partID      INTEGER REFERENCES part (id), "
 					"	name        TEXT, "
 					"	sortOrder   INTEGER, "
-					"	description TEXT, "
+					"	description BLOB, "
 					"	text        BLOB "
 					");"))
 		return(false);
@@ -190,7 +198,7 @@ bool cStoryBook::createDatabase()
 					"						UNIQUE, "
 					"	type        TEXT, "
 					"	name        TEXT, "
-					"	description TEXT, "
+					"	description BLOB, "
 					"	image       BLOB "
 					");"))
 		return(false);
@@ -200,7 +208,7 @@ bool cStoryBook::createDatabase()
 					"						UNIQUE, "
 					"	name        TEXT, "
 					"	type        TEXT, "
-					"	description TEXT "
+					"	description BLOB "
 					");"))
 		return(false);
 
@@ -215,7 +223,7 @@ bool cStoryBook::createDatabase()
 					"						UNIQUE, "
 					"	name        TEXT, "
 					"	[order]     INTEGER, "
-					"	description TEXT, "
+					"	description BLOB, "
 					"	text        BLOB "
 					");"))
 		return(false);
@@ -240,7 +248,7 @@ bool cStoryBook::createDatabase()
 					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
 					"						UNIQUE, "
 					"	name        TEXT, "
-					"	description TEXT, "
+					"	description BLOB, "
 					"	link        TEXT "
 					");"))
 		return(false);
@@ -287,7 +295,7 @@ bool cStoryBook::createDatabase()
 	if(!createTable("CREATE TABLE sceneCharacter ( "
 					"	sceneID     INTEGER REFERENCES scene (id), "
 					"	characterID INTEGER REFERENCES character (id), "
-					"	description TEXT "
+					"	description BLOB "
 					");"))
 		return(false);
 
@@ -343,6 +351,21 @@ bool cStoryBook::loadCharacterList()
 	return(m_characterList.load());
 }
 
+bool cStoryBook::loadPlaceList()
+{
+	return(m_placeList.load());
+}
+
+bool cStoryBook::loadObjectList()
+{
+	return(m_objectList.load());
+}
+
+bool cStoryBook::loadRechercheList()
+{
+	return(m_rechercheList.load());
+}
+
 QString cStoryBook::title()
 {
 	if(!m_bIsOpen)
@@ -385,7 +408,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		lpItem->setData(QVariant::fromValue(lpPart));
 		lpItem->setFont(fontPart);
 		lpItem->setBackground(QBrush(background));
-		lpItem->setToolTip(lpPart->description());
+		lpItem->setToolTip(lpPart->description()->toPlainText());
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
 
@@ -404,7 +427,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItem->setFont(fontChapter);
 			lpItem->setForeground(QBrush(Qt::darkBlue));
 			lpItem->setBackground(QBrush(background));
-			lpItem->setToolTip(lpChapter->description());
+			lpItem->setToolTip(lpChapter->description()->toPlainText());
 			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
 			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
@@ -442,8 +465,10 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	lpView->header()->setSectionResizeMode(1, QHeaderView::Interactive);
 
 	lpView->expandAll();
-	lpView->resizeColumnToContents(0);
-	lpView->resizeColumnToContents(1);
+
+
+	for(int i = 0;i < headerLabels.count();i++)
+		lpView->resizeColumnToContents(i);
 
 	return(true);
 }
@@ -457,7 +482,7 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 
 	lpModel->clear();
 
-	QStringList						headerLabels	= QStringList() << tr("name");
+	QStringList						headerLabels	= QStringList() << tr("name") << tr("creature") << tr("gender");
 	lpModel->setHorizontalHeaderLabels(headerLabels);
 
 	fontMainCharacter.setBold(true);
@@ -465,23 +490,142 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 
 	for(int x = 0;x < m_characterList.count();x++)
 	{
-		cCharacter*		lpCharacter	= m_characterList.at(x);
-		QStandardItem*	lpItem		= new QStandardItem(lpCharacter->name());
-		lpItem->setData(QVariant::fromValue(lpCharacter));
+		cCharacter*				lpCharacter	= m_characterList.at(x);
+		QList<QStandardItem*>	lpItems;
 
-		if(lpCharacter->mainCharacter())
-			lpItem->setFont(fontMainCharacter);
-		else
-			lpItem->setFont(fontNonMainCharacter);
+		lpItems.append(new QStandardItem(lpCharacter->name()));
+		lpItems.append(new QStandardItem(lpCharacter->creature()));
+		lpItems.append(new QStandardItem(lpCharacter->genderText()));
 
-//		lpItem->setToolTip(lpPart->description());
-		lpModel->appendRow(lpItem);
+		for(int i = 0;i < headerLabels.count();i++)
+		{
+			lpItems[i]->setData(QVariant::fromValue(lpCharacter));
+			if(lpCharacter->mainCharacter())
+				lpItems[i]->setFont(fontMainCharacter);
+			else
+				lpItems[i]->setFont(fontNonMainCharacter);
+
+			lpItems[i]->setToolTip(lpCharacter->description()->toPlainText());
+		}
+
+		lpModel->appendRow(lpItems);
 	}
 
 	lpView->header()->setStretchLastSection(true);
 
 	lpView->expandAll();
-	lpView->resizeColumnToContents(0);
+
+	for(int i = 0;i < headerLabels.count();i++)
+		lpView->resizeColumnToContents(i);
+
+	return(true);
+}
+
+bool cStoryBook::fillPlaceList(QTreeView* lpView)
+{
+	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+
+	lpModel->clear();
+
+	QStringList						headerLabels	= QStringList() << tr("name") << tr("location") << tr("type");
+	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	for(int x = 0;x < m_placeList.count();x++)
+	{
+		cPlace*					lpPlace		= m_placeList.at(x);
+		QList<QStandardItem*>	lpItems;
+
+		lpItems.append(new QStandardItem(lpPlace->name()));
+		lpItems.append(new QStandardItem(lpPlace->location()));
+		lpItems.append(new QStandardItem(lpPlace->type()));
+
+		for(int i = 0;i < headerLabels.count();i++)
+		{
+			lpItems[i]->setData(QVariant::fromValue(lpPlace));
+			lpItems[i]->setToolTip(lpPlace->description()->toPlainText());
+		}
+
+		lpModel->appendRow(lpItems);
+	}
+
+	lpView->header()->setStretchLastSection(true);
+
+	lpView->expandAll();
+
+	for(int i = 0;i < headerLabels.count();i++)
+		lpView->resizeColumnToContents(i);
+
+	return(true);
+}
+
+bool cStoryBook::fillObjectList(QTreeView* lpView)
+{
+	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+
+	lpModel->clear();
+
+	QStringList						headerLabels	= QStringList() << tr("name") << tr("type");
+	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	for(int x = 0;x < m_objectList.count();x++)
+	{
+		cObject*				lpObject		= m_objectList.at(x);
+		QList<QStandardItem*>	lpItems;
+
+		lpItems.append(new QStandardItem(lpObject->name()));
+		lpItems.append(new QStandardItem(lpObject->type()));
+
+		for(int i = 0;i < headerLabels.count();i++)
+		{
+			lpItems[i]->setData(QVariant::fromValue(lpObject));
+			lpItems[i]->setToolTip(lpObject->description()->toPlainText());
+		}
+
+		lpModel->appendRow(lpItems);
+	}
+
+	lpView->header()->setStretchLastSection(true);
+
+	lpView->expandAll();
+
+	for(int i = 0;i < headerLabels.count();i++)
+		lpView->resizeColumnToContents(i);
+
+	return(true);
+}
+
+bool cStoryBook::fillRechercheList(QTreeView* lpView)
+{
+	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+
+	lpModel->clear();
+
+	QStringList						headerLabels	= QStringList() << tr("name") << tr("link");
+	lpModel->setHorizontalHeaderLabels(headerLabels);
+
+	for(int x = 0;x < m_rechercheList.count();x++)
+	{
+		cRecherche*				lpRecherche		= m_rechercheList.at(x);
+		QList<QStandardItem*>	lpItems;
+
+		lpItems.append(new QStandardItem(lpRecherche->name()));
+		lpItems.append(new QStandardItem(lpRecherche->link()));
+
+		for(int i = 0;i < headerLabels.count();i++)
+		{
+			lpItems[i]->setData(QVariant::fromValue(lpRecherche));
+			lpItems[i]->setToolTip(lpRecherche->description()->toPlainText());
+		}
+
+		lpModel->appendRow(lpItems);
+	}
+
+	lpView->header()->setStretchLastSection(true);
+
+	lpView->expandAll();
+
+	for(int i = 0;i < headerLabels.count();i++)
+		lpView->resizeColumnToContents(i);
 
 	return(true);
 }

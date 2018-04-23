@@ -36,6 +36,8 @@ public:
 
 	void			setGender(GENDER gender);
 	GENDER			gender();
+	QString			genderText();
+	QString			genderText(GENDER gender) const;
 
 	void			setTitle(const QString& szTitle);
 	QString			title();

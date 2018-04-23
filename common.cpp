@@ -13,3 +13,13 @@ QByteArray compressText(const QString& uncompressed)
 		return(QByteArray());
 	return(qCompress(uncompressed.toUtf8()));
 }
+
+cTextDocument*	blob2TextDocument(const QByteArray& ba)
+{
+	cTextDocument*	lpTextDocument	= new cTextDocument;
+	if(ba.isEmpty())
+		return(lpTextDocument);
+
+	lpTextDocument->setHtml(uncompressText(ba));
+	return(lpTextDocument);
+}

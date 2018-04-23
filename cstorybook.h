@@ -7,6 +7,9 @@
 #include "cchapter.h"
 #include "cscene.h"
 #include "ccharacter.h"
+#include "cplace.h"
+#include "cobject.h"
+#include "crecherche.h"
 
 #include <QString>
 #include <QObject>
@@ -21,7 +24,7 @@ class cStoryBook : public QObject
 {
 	Q_OBJECT
 public:
-	explicit cStoryBook(const QString& szProjectPath, QObject *parent = nullptr);
+	explicit cStoryBook(const QString& szProject, QObject *parent = nullptr);
 	~cStoryBook();
 
 	bool			openDatabase();
@@ -32,8 +35,12 @@ public:
 
 	bool			fillOutlineList(QTreeView* lpView);
 	bool			fillCharacterList(QTreeView* lpView);
+	bool			fillPlaceList(QTreeView* lpView);
+	bool			fillObjectList(QTreeView* lpView);
+	bool			fillRechercheList(QTreeView* lpView);
+
 private:
-	QString			m_szProjectPath;
+	QString			m_szProject;
 	bool			m_bIsOpen;
 	QSqlDatabase	m_db;
 	cBook			m_book;
@@ -41,6 +48,9 @@ private:
 	cChapterList	m_chapterList;
 	cSceneList		m_sceneList;
 	cCharacterList	m_characterList;
+	cPlaceList		m_placeList;
+	cObjectList		m_objectList;
+	cRechercheList	m_rechercheList;
 
 	bool			createDatabase();
 	bool			updateDatabase();
@@ -51,6 +61,9 @@ private:
 	bool			loadChapterList();
 	bool			loadSceneList();
 	bool			loadCharacterList();
+	bool			loadPlaceList();
+	bool			loadObjectList();
+	bool			loadRechercheList();
 };
 
 #endif // CSTORYBOOK_H

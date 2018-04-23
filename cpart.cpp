@@ -11,7 +11,7 @@ cPart::cPart(qint32 iID, QObject *parent) :
 	m_iID(iID),
 	m_szName(""),
 	m_iSortOrder(-1),
-	m_szDescription(""),
+	m_lpDescription(0),
 	m_lpText(0)
 {
 }
@@ -46,14 +46,14 @@ qint32 cPart::sortOrder()
 	return(m_iSortOrder);
 }
 
-void cPart::setDescription(const QString& szDescription)
+void cPart::setDescription(cTextDocument* lpDescription)
 {
-	m_szDescription	= szDescription;
+	m_lpDescription	= lpDescription;
 }
 
-QString cPart::description()
+cTextDocument* cPart::description()
 {
-	return(m_szDescription);
+	return(m_lpDescription);
 }
 
 void cPart::setText(cTextDocument* lpText)
@@ -106,13 +106,8 @@ bool cPartList::load()
 		cPart*	lpPart	= add(query.value("id").toInt());
 		lpPart->setName(query.value("name").toString());
 		lpPart->setSortOrder(query.value("sortOrder").toInt());
-		lpPart->setDescription(query.value("description").toString());
-
-		QByteArray		ba		= query.value("text").toByteArray();
-		cTextDocument*	lpText	= new cTextDocument;
-		if(!ba.isEmpty())
-			lpText->setHtml(qUncompress(ba));
-		lpPart->setText(lpText);
+		lpPart->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+		lpPart->setText(blob2TextDocument(query.value("text").toByteArray()));
 	}
 
 	return(true);

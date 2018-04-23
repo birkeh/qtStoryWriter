@@ -2,6 +2,8 @@
 #define COMMON_H
 
 
+#include "ctextdocument.h"
+
 #include <QString>
 #include <QByteArray>
 
@@ -17,5 +19,6 @@
 
 QString			uncompressText(const QByteArray& compressed);
 QByteArray		compressText(const QString& uncompressed);
+cTextDocument*	blob2TextDocument(const QByteArray& ba);
 
 #endif // COMMON_H

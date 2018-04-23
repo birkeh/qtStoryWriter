@@ -19,7 +19,7 @@ void cPartWindow::setPart(cPart* lpPart)
 {
 	m_lpPart			= lpPart;
 	ui->m_lpName->setText(lpPart->name());
-	ui->m_lpDescription->document()->setPlainText(lpPart->description());
+	ui->m_lpDescription->setDocument(lpPart->description());
 	ui->m_lpText->setDocument(lpPart->text());
 
 	setWindowTitle(tr("[part] - ") + lpPart->name());

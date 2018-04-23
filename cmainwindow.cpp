@@ -23,28 +23,34 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
 	m_lpOutlineModel(0),
+	m_lpCharacterModel(0),
+	m_lpPlaceModel(0),
+	m_lpObjectModel(0),
 	m_bUpdatingTab(false),
 	m_lpStoryBook(0)
 {
 	initUI();
 	createActions();
 
-	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "DerAdler";
+	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
 	m_lpStoryBook		= new cStoryBook(szPath);
 	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
 	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
 
 	updateWindowTitle();
 
-	cPartWindow*		lpPartWindow		= new cPartWindow(this);
+//	cPartWindow*		lpPartWindow		= new cPartWindow(this);
 
-	QStandardItem*		lpItem				= m_lpOutlineModel->item(0, 0);
-	cPart*				lpPart				= qvariant_cast<cPart*>(lpItem->data());
+//	QStandardItem*		lpItem				= m_lpOutlineModel->item(0, 0);
+//	cPart*				lpPart				= qvariant_cast<cPart*>(lpItem->data());
 
-	lpPartWindow->setPart(lpPart);
-	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
-	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
+//	lpPartWindow->setPart(lpPart);
+//	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
+//	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
+//	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
 //	cStructureWindow*	lpStructureWindow	= new cStructureWindow(this);
 //	cWidget*	lpWidget1	= new cWidget(lpStructureWindow);
@@ -94,6 +100,15 @@ void cMainWindow::initUI()
 
 	m_lpCharacterModel	= new QStandardItemModel(0, 1);
 	ui->m_lpCharacterList->setModel(m_lpCharacterModel);
+
+	m_lpPlaceModel	= new QStandardItemModel(0, 1);
+	ui->m_lpPlaceList->setModel(m_lpPlaceModel);
+
+	m_lpObjectModel	= new QStandardItemModel(0, 1);
+	ui->m_lpObjectList->setModel(m_lpObjectModel);
+
+	m_lpRechercheModel	= new QStandardItemModel(0, 1);
+	ui->m_lpRechercheList->setModel(m_lpRechercheModel);
 
 	QSettings	settings;
 	qint16		iX			= settings.value("main/x", QVariant::fromValue(-1)).toInt();

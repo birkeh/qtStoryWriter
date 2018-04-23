@@ -12,7 +12,7 @@ cChapter::cChapter(qint32 iID, QObject *parent) :
 	m_lpPart(0),
 	m_szName(""),
 	m_iSortOrder(-1),
-	m_szDescription(""),
+	m_lpDescription(0),
 	m_lpText(0)
 {
 }
@@ -57,14 +57,14 @@ qint32 cChapter::sortOrder()
 	return(m_iSortOrder);
 }
 
-void cChapter::setDescription(const QString& szDescription)
+void cChapter::setDescription(cTextDocument* lpDescription)
 {
-	m_szDescription	= szDescription;
+	m_lpDescription	= lpDescription;
 }
 
-QString cChapter::description()
+cTextDocument* cChapter::description()
 {
-	return(m_szDescription);
+	return(m_lpDescription);
 }
 
 void cChapter::setText(cTextDocument* lpText)
@@ -119,11 +119,8 @@ bool cChapterList::load(cPartList* lpPartList)
 		lpChapter->setPart(lpPartList->find(query.value("partID").toInt()));
 		lpChapter->setName(query.value("name").toString());
 		lpChapter->setSortOrder(query.value("sortOrder").toInt());
-		lpChapter->setDescription(query.value("description").toString());
-
-		cTextDocument*	lpText	= new cTextDocument;
-		lpText->setHtml(uncompressText(query.value("text").toByteArray()));
-		lpChapter->setText(lpText);
+		lpChapter->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+		lpChapter->setText(blob2TextDocument(query.value("text").toByteArray()));
 	}
 
 	return(true);

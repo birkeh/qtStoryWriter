@@ -35,6 +35,9 @@ private:
 	Ui::cMainWindow*	ui;
 	QStandardItemModel*	m_lpOutlineModel;
 	QStandardItemModel*	m_lpCharacterModel;
+	QStandardItemModel*	m_lpPlaceModel;
+	QStandardItemModel*	m_lpObjectModel;
+	QStandardItemModel*	m_lpRechercheModel;
 	bool				m_bUpdatingTab;
 	cStoryBook*			m_lpStoryBook;
 

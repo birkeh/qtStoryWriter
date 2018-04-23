@@ -54,7 +54,10 @@ SOURCES += \
     cchapter.cpp \
     cscene.cpp \
     ccharacter.cpp \
-    cpartwindow.cpp
+    cpartwindow.cpp \
+    cplace.cpp \
+    cobject.cpp \
+    crecherche.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -70,12 +73,14 @@ HEADERS += \
     cchapter.h \
     cscene.h \
     ccharacter.h \
-    cpartwindow.h
+    cpartwindow.h \
+    cplace.h \
+    cobject.h \
+    crecherche.h
 
 FORMS += \
         cmainwindow.ui \
     cstructurewindow.ui \
-    cpartwindow1.ui \
     cpartwindow.ui
 
 DISTFILES += \

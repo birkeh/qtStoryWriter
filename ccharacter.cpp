@@ -77,6 +77,25 @@ cCharacter::GENDER cCharacter::gender()
 	return(m_gender);
 }
 
+QString cCharacter::genderText()
+{
+	return(genderText(m_gender));
+}
+
+QString cCharacter::genderText(GENDER gender) const
+{
+	switch(gender)
+	{
+	case GENDER::GENDER_female:
+		return(tr("female"));
+	case GENDER::GENDER_male:
+		return(tr("male"));
+	case GENDER::GENDER_undefined:
+		return(tr("undefined"));
+	}
+	return(tr("undefined"));
+}
+
 void cCharacter::setTitle(const QString& szTitle)
 {
 	m_szTitle	= szTitle;
@@ -348,7 +367,7 @@ bool cCharacterList::load()
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, mainCharacter, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description FROM character ORDER BY mainCharacter DESC, lastName, middleName, firstName;");
+	query.prepare("SELECT id, mainCharacter, creature, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description FROM character ORDER BY mainCharacter DESC, lastName, middleName, firstName;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -360,6 +379,7 @@ bool cCharacterList::load()
 		cCharacter*	lpCharacter	= add(query.value("id").toInt());
 
 		lpCharacter->setMainCharacter(query.value("mainCharacter").toBool());
+		lpCharacter->setCreature(query.value("creature").toString());
 		lpCharacter->setGender((cCharacter::GENDER)query.value("gender").toInt());
 		lpCharacter->setTitle(query.value("title").toString());
 		lpCharacter->setFirstName(query.value("firstName").toString());
@@ -380,10 +400,7 @@ bool cCharacterList::load()
 		lpCharacter->setSkin(query.value("skin").toString());
 		lpCharacter->setSchool(query.value("school").toString());
 		lpCharacter->setJob(query.value("job").toString());
-
-		cTextDocument*	lpText	= new cTextDocument;
-		lpText->setHtml(uncompressText(query.value("description").toByteArray()));
-		lpCharacter->setDescription(lpText);
+		lpCharacter->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 	}
 
 	return(true);

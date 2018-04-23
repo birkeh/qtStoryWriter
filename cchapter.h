@@ -30,8 +30,8 @@ public:
 	void			setSortOrder(const qint32& iSortOrder);
 	qint32			sortOrder();
 
-	void			setDescription(const QString& szDescription);
-	QString			description();
+	void			setDescription(cTextDocument* lpDescription);
+	cTextDocument*	description();
 
 	void			setText(cTextDocument* lpText);
 	cTextDocument*	text();
@@ -41,7 +41,7 @@ private:
 	cPart*			m_lpPart;
 	QString			m_szName;
 	qint32			m_iSortOrder;
-	QString			m_szDescription;
+	cTextDocument*	m_lpDescription;
 	cTextDocument*	m_lpText;
 };
 
