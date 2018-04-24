@@ -4,7 +4,6 @@
 #include "ctextdocument.h"
 
 #include "cpartwindow.h"
-#include "cstructurewindow.h"
 #include "cwidget.h"
 
 #include <QTextDocument>
@@ -17,6 +16,8 @@
 #include <QThread>
 
 #include <QTextEdit>
+
+#include <QMessageBox>
 
 
 cMainWindow::cMainWindow(QWidget *parent) :
@@ -134,6 +135,8 @@ void cMainWindow::createActions()
 	connect(ui->m_lpMainTab, SIGNAL(currentChanged(int)), this, SLOT(onMainTabCurrentChanged(int)));
 	connect(ui->m_lpMainTab, SIGNAL(tabCloseRequested(int)), this,SLOT(onMainTabTabCloseRequested(int)));
 	connect(ui->m_lpMdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onMdiAreaSubWindowActivated(QMdiSubWindow*)));
+
+	connect(ui->m_lpOutlineList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onOutlineDoubleClicked(QModelIndex)));
 }
 
 void cMainWindow::updateWindowTitle()
@@ -148,9 +151,9 @@ void cMainWindow::updateWindowTitle()
 	QString	szAuthor	= m_lpStoryBook->author();
 
 	if(szAuthor.isEmpty())
-		setWindowTitle(QString("%1 - qtStoryWriter").arg(szTitle));
+		setWindowTitle(QString("\"%1\" - qtStoryWriter").arg(szTitle));
 	else
-		setWindowTitle(QString("%1 by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor));
+		setWindowTitle(QString("\"%1\" by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor));
 }
 
 void cMainWindow::onMainTabCurrentChanged(int /*index*/)
@@ -197,4 +200,58 @@ void cMainWindow::onMdiAreaSubWindowActivated(QMdiSubWindow *arg1)
 		}
 	}
 	m_bUpdatingTab	= false;
+}
+
+void cMainWindow::onOutlineDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(index);
+	cPart*			lpPart		= qvariant_cast<cPart*>(lpItem->data());
+	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+	cScene*			lpScene		= qvariant_cast<cScene*>(lpItem->data());
+
+	if(lpPart)
+		showPartWindow(lpPart);
+	else if(lpChapter)
+		showChapterWindow(lpChapter);
+	else if(lpScene)
+		showSceneWindow(lpScene);
+	else
+		QMessageBox::information(this, "DoubleClicked", "outline");
+}
+
+void cMainWindow::showPartWindow(cPart* lpPart)
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_part)
+		{
+			cPartWindow*	lpPartWindow	= (cPartWindow*)lpWidget->widget();
+			if(lpPartWindow->part() == lpPart)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cPartWindow*		lpPartWindow		= new cPartWindow(this);
+	lpPartWindow->setPart(lpPart, m_lpStoryBook->chapterList());
+	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
+
+	lpPartWindow->show();
+}
+
+void cMainWindow::showChapterWindow(cChapter* lpChapter)
+{
+	QMessageBox::information(this, "CHAPTER", lpChapter->name());
+}
+
+void cMainWindow::showSceneWindow(cScene* lpScene)
+{
+	QMessageBox::information(this, "SCENE", lpScene->name());
 }

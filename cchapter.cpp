@@ -101,6 +101,18 @@ cChapter* cChapterList::find(const qint32& iID)
 	return(0);
 }
 
+QList<cChapter*> cChapterList::find(cPart* lpPart)
+{
+	QList<cChapter*>	chapterList;
+
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->part() == lpPart)
+			chapterList.append(at(x));
+	}
+	return(chapterList);
+}
+
 bool cChapterList::load(cPartList* lpPartList)
 {
 	QSqlQuery	query;

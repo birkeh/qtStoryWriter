@@ -118,6 +118,27 @@ cTextDocument* cScene::text()
 	return(m_lpText);
 }
 
+void cScene::addCharacter(cCharacter* lpCharacter)
+{
+	if(m_characterList.contains(lpCharacter))
+		return;
+	m_characterList.append(lpCharacter);
+}
+
+void cScene::addObject(cObject* lpObject)
+{
+	if(m_objectList.contains(lpObject))
+		return;
+	m_objectList.append(lpObject);
+}
+
+void cScene::addPlace(cPlace* lpPlace)
+{
+	if(m_placeList.contains(lpPlace))
+		return;
+	m_placeList.append(lpPlace);
+}
+
 QString cScene::stateText()
 {
 	return(stateText(m_state));
@@ -188,7 +209,7 @@ cScene* cSceneList::find(const qint32& iID)
 	return(0);
 }
 
-bool cSceneList::load(cChapterList* lpChapterList)
+bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
 {
 	QSqlQuery	query;
 
@@ -216,6 +237,60 @@ bool cSceneList::load(cChapterList* lpChapterList)
 		cTextDocument*	lpText	= new cTextDocument;
 		if(!ba.isEmpty())
 			lpText->setHtml(qUncompress(ba));
+	}
+
+	query.prepare("SELECT sceneID, characterID FROM sceneCharacter;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cScene*	lpScene	= find(query.value("sceneID").toInt());
+		if(lpScene)
+		{
+			cCharacter*	lpCharacter		= lpCharacterList->find(query.value("characterID").toInt());
+			if(lpCharacter)
+				lpScene->addCharacter(lpCharacter);
+		}
+	}
+
+	query.prepare("SELECT sceneID, objectID FROM sceneObject;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cScene*	lpScene	= find(query.value("sceneID").toInt());
+		if(lpScene)
+		{
+			cObject*	lpObject		= lpObjectList->find(query.value("objectID").toInt());
+			if(lpObject)
+				lpScene->addObject(lpObject);
+		}
+	}
+
+	query.prepare("SELECT sceneID, placeID FROM scenePlace;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	while(query.next())
+	{
+		cScene*	lpScene	= find(query.value("sceneID").toInt());
+		if(lpScene)
+		{
+			cPlace*	lpPlace		= lpPlaceList->find(query.value("placeID").toInt());
+			if(lpPlace)
+				lpScene->addPlace(lpPlace);
+		}
 	}
 
 	return(true);

@@ -18,9 +18,6 @@
 #include <QThread>
 
 
-//rechercheCharacter
-//rechercheObject
-//recherchePlace
 //sceneCharacter
 //sceneObject
 //scenePlace
@@ -354,7 +351,7 @@ bool cStoryBook::loadChapterList()
 
 bool cStoryBook::loadSceneList()
 {
-	return(m_sceneList.load(&m_chapterList));
+	return(m_sceneList.load(&m_chapterList, &m_characterList, &m_objectList, &m_placeList));
 }
 
 bool cStoryBook::loadCharacterList()
@@ -374,7 +371,7 @@ bool cStoryBook::loadObjectList()
 
 bool cStoryBook::loadRechercheList()
 {
-	return(m_rechercheList.load(&m_imageList));
+	return(m_rechercheList.load(&m_imageList, &m_characterList, &m_objectList, &m_placeList));
 }
 
 bool cStoryBook::loadImageList()
@@ -396,6 +393,11 @@ QString cStoryBook::author()
 		return("");
 	else
 		return(m_book.author());
+}
+
+cChapterList* cStoryBook::chapterList()
+{
+	return(&m_chapterList);
 }
 
 bool cStoryBook::fillOutlineList(QTreeView* lpView)

@@ -4,6 +4,9 @@
 
 #include "cchapter.h"
 #include "ctextdocument.h"
+#include "ccharacter.h"
+#include "cobject.h"
+#include "cplace.h"
 
 #include <QMetaType>
 #include <QList>
@@ -29,51 +32,58 @@ public:
 
 	explicit cScene(qint32 iID = -1, QObject *parent = nullptr);
 
-	void			setID(const qint32& iID);
-	qint32			id();
+	void				setID(const qint32& iID);
+	qint32				id();
 
-	void			setChapter(cChapter *lpChapter);
-	cChapter*		chapter();
+	void				setChapter(cChapter *lpChapter);
+	cChapter*			chapter();
 
-	void			setName(const QString& szName);
-	QString			name();
+	void				setName(const QString& szName);
+	QString				name();
 
-	void			setSortOrder(const qint32& iSortOrder);
-	qint32			sortOrder();
+	void				setSortOrder(const qint32& iSortOrder);
+	qint32				sortOrder();
 
-	void			setDescription(const QString& szDescription);
-	QString			description();
+	void				setDescription(const QString& szDescription);
+	QString				description();
 
-	void			setState(const STATE state);
-	STATE			state();
+	void				setState(const STATE state);
+	STATE				state();
 
-	void			setStartedAt(const QDateTime& startedAt);
-	QDateTime		startedAt();
+	void				setStartedAt(const QDateTime& startedAt);
+	QDateTime			startedAt();
 
-	void			setFinishedAt(const QDateTime& finishedAt);
-	QDateTime		finishedAt();
+	void				setFinishedAt(const QDateTime& finishedAt);
+	QDateTime			finishedAt();
 
-	void			setTargetDate(const QDateTime& targetDate);
-	QDateTime		targetDate();
+	void				setTargetDate(const QDateTime& targetDate);
+	QDateTime			targetDate();
 
-	void			setText(cTextDocument* lpText);
-	cTextDocument*	text();
+	void				setText(cTextDocument* lpText);
+	cTextDocument*		text();
 
-	QString			stateText();
-	QString			stateText(STATE state) const;
-	QColor			stateColor();
-	QColor			stateColor(STATE state) const;
+	void				addCharacter(cCharacter* lpCharacter);
+	void				addObject(cObject* lpObject);
+	void				addPlace(cPlace* lpPlace);
+
+	QString				stateText();
+	QString				stateText(STATE state) const;
+	QColor				stateColor();
+	QColor				stateColor(STATE state) const;
 private:
-	qint32			m_iID;
-	cChapter*		m_lpChapter;
-	QString			m_szName;
-	qint32			m_iSortOrder;
-	QString			m_szDescription;
-	STATE			m_state;
-	QDateTime		m_startedAt;
-	QDateTime		m_finishedAt;
-	QDateTime		m_targetDate;
-	cTextDocument*	m_lpText;
+	qint32				m_iID;
+	cChapter*			m_lpChapter;
+	QString				m_szName;
+	qint32				m_iSortOrder;
+	QString				m_szDescription;
+	STATE				m_state;
+	QDateTime			m_startedAt;
+	QDateTime			m_finishedAt;
+	QDateTime			m_targetDate;
+	cTextDocument*		m_lpText;
+	QList<cCharacter*>	m_characterList;
+	QList<cObject*>		m_objectList;
+	QList<cPlace*>		m_placeList;
 };
 
 Q_DECLARE_METATYPE(cScene*)
@@ -81,11 +91,11 @@ Q_DECLARE_METATYPE(cScene*)
 class cSceneList : public QList<cScene*>
 {
 public:
-	bool			load(cChapterList *lpChapterList);
-	bool			save();
+	bool				load(cChapterList *lpChapterList, cCharacterList* lpCharacterList, cObjectList* lpObjectList, cPlaceList* lpPlaceList);
+	bool				save();
 
-	cScene*			add(const qint32& iID);
-	cScene*			find(const qint32& iID);
+	cScene*				add(const qint32& iID);
+	cScene*				find(const qint32& iID);
 };
 
 #endif // CSCENE_H

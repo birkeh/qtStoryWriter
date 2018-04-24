@@ -31,6 +31,7 @@ private slots:
 	void				onMainTabTabCloseRequested(int index);
 	void				onMdiAreaSubWindowActivated(QMdiSubWindow *arg1);
 
+	void				onOutlineDoubleClicked(const QModelIndex& index);
 private:
 	Ui::cMainWindow*	ui;
 	QStandardItemModel*	m_lpOutlineModel;
@@ -44,6 +45,9 @@ private:
 	void				initUI();
 	void				createActions();
 
+	void				showPartWindow(cPart* lpPart);
+	void				showChapterWindow(cChapter* lpChapter);
+	void				showSceneWindow(cScene* lpScene);
 protected:
 	void				closeEvent(QCloseEvent *event);
 };

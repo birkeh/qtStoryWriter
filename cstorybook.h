@@ -40,6 +40,7 @@ public:
 	bool			fillObjectList(QTreeView* lpView);
 	bool			fillRechercheList(QTreeView* lpView);
 
+	cChapterList*	chapterList();
 private:
 	QString			m_szProject;
 	bool			m_bIsOpen;

@@ -46,7 +46,6 @@ SOURCES += \
     ctextdocument.cpp \
     common.cpp \
     ctextedit.cpp \
-    cstructurewindow.cpp \
     cwidget.cpp \
     cstorybook.cpp \
     cbook.cpp \
@@ -65,7 +64,6 @@ HEADERS += \
     ctextdocument.h \
     common.h \
     ctextedit.h \
-    cstructurewindow.h \
     cwidget.h \
     cstorybook.h \
     common.h \
@@ -82,7 +80,6 @@ HEADERS += \
 
 FORMS += \
         cmainwindow.ui \
-    cstructurewindow.ui \
     cpartwindow.ui
 
 DISTFILES += \
