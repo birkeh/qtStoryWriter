@@ -9,6 +9,9 @@
 
 #include <QStandardItemModel>
 
+#include <QComboBox>
+#include <QFontComboBox>
+
 #include <QCloseEvent>
 
 
@@ -32,6 +35,32 @@ private slots:
 	void				onMdiAreaSubWindowActivated(QMdiSubWindow *arg1);
 
 	void				onOutlineDoubleClicked(const QModelIndex& index);
+
+	void				onFileNew();
+	void				onFileOpen();
+	bool				onFileSave();
+	bool				onFileSaveAs();
+	void				onFilePrint();
+	void				onFilePrintPreview();
+	void				onFilePrintPdf();
+
+	void				onTextBold();
+	void				onTextItalic();
+	void				onTextUnderline();
+
+	void				onTextFamily(const QString &f);
+	void				onTextSize(const QString &p);
+	void				onTextStyle(int styleIndex);
+	void				onTextColor();
+
+	void				onTextAlign(QAction *a);
+
+	void				onSpecialUndo();
+	void				onSpecialRedo();
+	void				onSpecialCut();
+	void				onSpecialCopy();
+	void				onSpecialPaste();
+
 private:
 	Ui::cMainWindow*	ui;
 	QStandardItemModel*	m_lpOutlineModel;
@@ -42,8 +71,35 @@ private:
 	bool				m_bUpdatingTab;
 	cStoryBook*			m_lpStoryBook;
 
+	QAction*			m_lpActionSave;
+	QAction*			m_lpActionUndo;
+	QAction*			m_lpActionRedo;
+
+	QAction*			m_lpActionTextBold;
+	QAction*			m_lpActionTextItalic;
+	QAction*			m_lpActionTextUnderline;
+
+	QAction*			m_lpActionAlignLeft;
+	QAction*			m_lpActionAlignCenter;
+	QAction*			m_lpActionAlignRight;
+	QAction*			m_lpActionAlignJustify;
+
+	QAction*			m_lpActionTextColor;
+
+	QAction*			m_lpActionCut;
+	QAction*			m_lpActionCopy;
+	QAction*			m_lpActionPaste;
+
+	QComboBox*			m_lpComboStyle;
+	QFontComboBox*		m_lpComboFont;
+	QComboBox*			m_lpComboSize;
+
 	void				initUI();
 	void				createActions();
+
+	void				createFileActions();
+	void				createEditActions();
+	void				createTextActions();
 
 	void				showPartWindow(cPart* lpPart);
 	void				showChapterWindow(cChapter* lpChapter);
