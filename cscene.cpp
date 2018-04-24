@@ -12,7 +12,7 @@ cScene::cScene(qint32 iID, QObject *parent) :
 	m_lpChapter(0),
 	m_szName(""),
 	m_iSortOrder(-1),
-	m_szDescription(""),
+	m_lpDescription(0),
 	m_state(STATE::STATE_unknown),
 	m_lpText(0)
 {
@@ -58,14 +58,14 @@ qint32 cScene::sortOrder()
 	return(m_iSortOrder);
 }
 
-void cScene::setDescription(const QString& szDescription)
+void cScene::setDescription(cTextDocument* lpDescription)
 {
-	m_szDescription	= szDescription;
+	m_lpDescription	= lpDescription;
 }
 
-QString cScene::description()
+cTextDocument* cScene::description()
 {
-	return(m_szDescription);
+	return(m_lpDescription);
 }
 
 void cScene::setState(const cScene::STATE state)
@@ -125,11 +125,21 @@ void cScene::addCharacter(cCharacter* lpCharacter)
 	m_characterList.append(lpCharacter);
 }
 
+QList<cCharacter*> cScene::characterList()
+{
+	return(m_characterList);
+}
+
 void cScene::addObject(cObject* lpObject)
 {
 	if(m_objectList.contains(lpObject))
 		return;
 	m_objectList.append(lpObject);
+}
+
+QList<cObject*> cScene::objectList()
+{
+	return(m_objectList);
 }
 
 void cScene::addPlace(cPlace* lpPlace)
@@ -139,12 +149,17 @@ void cScene::addPlace(cPlace* lpPlace)
 	m_placeList.append(lpPlace);
 }
 
+QList<cPlace*> cScene::placeList()
+{
+	return(m_placeList);
+}
+
 QString cScene::stateText()
 {
 	return(stateText(m_state));
 }
 
-QString cScene::stateText(STATE state) const
+QString cScene::stateText(STATE state)
 {
 	switch(state)
 	{
@@ -167,7 +182,7 @@ QColor cScene::stateColor()
 	return(stateColor(m_state));
 }
 
-QColor cScene::stateColor(STATE state) const
+QColor cScene::stateColor(STATE state)
 {
 	switch(state)
 	{
@@ -209,6 +224,18 @@ cScene* cSceneList::find(const qint32& iID)
 	return(0);
 }
 
+QList<cScene*> cSceneList::find(cChapter* lpChapter)
+{
+	QList<cScene*>	sceneList;
+
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->chapter() == lpChapter)
+			sceneList.append(at(x));
+	}
+	return(sceneList);
+}
+
 bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
 {
 	QSqlQuery	query;
@@ -227,7 +254,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		lpScene->setChapter(lpChapterList->find(query.value("chapterID").toInt()));
 		lpScene->setName(query.value("name").toString());
 		lpScene->setSortOrder(query.value("sortOrder").toInt());
-		lpScene->setDescription(query.value("description").toString());
+		lpScene->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 		lpScene->setState((cScene::STATE)query.value("state").toInt());
 		lpScene->setStartedAt(query.value("startedAt").toDateTime());
 		lpScene->setFinishedAt(query.value("finishedAt").toDateTime());

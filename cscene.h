@@ -44,8 +44,8 @@ public:
 	void				setSortOrder(const qint32& iSortOrder);
 	qint32				sortOrder();
 
-	void				setDescription(const QString& szDescription);
-	QString				description();
+	void				setDescription(cTextDocument* lpDescription);
+	cTextDocument*		description();
 
 	void				setState(const STATE state);
 	STATE				state();
@@ -63,19 +63,24 @@ public:
 	cTextDocument*		text();
 
 	void				addCharacter(cCharacter* lpCharacter);
+	QList<cCharacter*>	characterList();
+
 	void				addObject(cObject* lpObject);
+	QList<cObject*>		objectList();
+
 	void				addPlace(cPlace* lpPlace);
+	QList<cPlace*>		placeList();
 
 	QString				stateText();
-	QString				stateText(STATE state) const;
+	static QString		stateText(STATE state);
 	QColor				stateColor();
-	QColor				stateColor(STATE state) const;
+	static QColor		stateColor(STATE state);
 private:
 	qint32				m_iID;
 	cChapter*			m_lpChapter;
 	QString				m_szName;
 	qint32				m_iSortOrder;
-	QString				m_szDescription;
+	cTextDocument*		m_lpDescription;
 	STATE				m_state;
 	QDateTime			m_startedAt;
 	QDateTime			m_finishedAt;
@@ -96,6 +101,8 @@ public:
 
 	cScene*				add(const qint32& iID);
 	cScene*				find(const qint32& iID);
+
+	QList<cScene*>		find(cChapter* lpChapter);
 };
 
 #endif // CSCENE_H

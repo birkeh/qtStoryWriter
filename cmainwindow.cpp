@@ -4,6 +4,9 @@
 #include "ctextdocument.h"
 
 #include "cpartwindow.h"
+#include "cchapterwindow.h"
+#include "cscenewindow.h"
+
 #include "cwidget.h"
 
 #include <QTextDocument>
@@ -42,29 +45,6 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
 
 	updateWindowTitle();
-
-//	cPartWindow*		lpPartWindow		= new cPartWindow(this);
-
-//	QStandardItem*		lpItem				= m_lpOutlineModel->item(0, 0);
-//	cPart*				lpPart				= qvariant_cast<cPart*>(lpItem->data());
-
-//	lpPartWindow->setPart(lpPart);
-//	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
-//	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
-//	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
-
-//	cStructureWindow*	lpStructureWindow	= new cStructureWindow(this);
-//	cWidget*	lpWidget1	= new cWidget(lpStructureWindow);
-//	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpStructureWindow));
-
-//	QMainWindow*		lpMainWindow		= new QMainWindow(this);
-//	lpMainWindow->setWindowTitle("Bla");
-
-//	cWidget*	lpWidget2	= new cWidget(lpMainWindow);
-//	lpWidget2->setWindow(ui->m_lpMdiArea->addSubWindow(lpMainWindow));
-
-//	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, "Structure");
-//	ui->m_lpMainTab->addTab((QWidget*)lpWidget2, "Bla");
 }
 
 cMainWindow::~cMainWindow()
@@ -248,10 +228,54 @@ void cMainWindow::showPartWindow(cPart* lpPart)
 
 void cMainWindow::showChapterWindow(cChapter* lpChapter)
 {
-	QMessageBox::information(this, "CHAPTER", lpChapter->name());
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_chapter)
+		{
+			cChapterWindow*	lpChapterWindow	= (cChapterWindow*)lpWidget->widget();
+			if(lpChapterWindow->chapter() == lpChapter)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cChapterWindow*		lpChapterWindow		= new cChapterWindow(this);
+	lpChapterWindow->setChapter(lpChapter, m_lpStoryBook->sceneList());
+	cWidget*			lpWidget1			= new cWidget(lpChapterWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpChapterWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
+
+	lpChapterWindow->show();
 }
 
 void cMainWindow::showSceneWindow(cScene* lpScene)
 {
-	QMessageBox::information(this, "SCENE", lpScene->name());
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_scene)
+		{
+			cSceneWindow*	lpSceneWindow	= (cSceneWindow*)lpWidget->widget();
+			if(lpSceneWindow->scene() == lpScene)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cSceneWindow*		lpSceneWindow		= new cSceneWindow(this);
+	lpSceneWindow->setScene(lpScene);
+	cWidget*			lpWidget1			= new cWidget(lpSceneWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpSceneWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());
+
+	lpSceneWindow->show();
 }

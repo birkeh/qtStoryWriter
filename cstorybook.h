@@ -41,6 +41,7 @@ public:
 	bool			fillRechercheList(QTreeView* lpView);
 
 	cChapterList*	chapterList();
+	cSceneList*		sceneList();
 private:
 	QString			m_szProject;
 	bool			m_bIsOpen;

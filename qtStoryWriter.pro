@@ -57,7 +57,9 @@ SOURCES += \
     cplace.cpp \
     cobject.cpp \
     crecherche.cpp \
-    cimage.cpp
+    cimage.cpp \
+    cchapterwindow.cpp \
+    cscenewindow.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -76,11 +78,15 @@ HEADERS += \
     cplace.h \
     cobject.h \
     crecherche.h \
-    cimage.h
+    cimage.h \
+    cchapterwindow.h \
+    cscenewindow.h
 
 FORMS += \
         cmainwindow.ui \
-    cpartwindow.ui
+    cpartwindow.ui \
+    cchapterwindow.ui \
+    cscenewindow.ui
 
 DISTFILES += \
     storyBook.project

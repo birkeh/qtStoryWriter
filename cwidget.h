@@ -3,6 +3,8 @@
 
 
 #include "cpartwindow.h"
+#include "cchapterwindow.h"
+#include "cscenewindow.h"
 
 #include <QWidget>
 #include <QMdiSubWindow>
@@ -16,9 +18,13 @@ public:
 	{
 		TYPE_unknown	= 0,
 		TYPE_part		= 1,
+		TYPE_chapter	= 2,
+		TYPE_scene		= 3,
 	};
 
 	explicit			cWidget(cPartWindow* parent);
+	explicit			cWidget(cChapterWindow* parent);
+	explicit			cWidget(cSceneWindow* parent);
 	explicit			cWidget(QWidget* parent);
 
 	QWidget*			widget();

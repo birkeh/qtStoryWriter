@@ -34,6 +34,15 @@ cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	if(!loadImageList())
 		return;
 
+	if(!loadCharacterList())
+		return;
+
+	if(!loadPlaceList())
+		return;
+
+	if(!loadObjectList())
+		return;
+
 	if(!loadBook())
 		return;
 
@@ -44,15 +53,6 @@ cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 		return;
 
 	if(!loadSceneList())
-		return;
-
-	if(!loadCharacterList())
-		return;
-
-	if(!loadPlaceList())
-		return;
-
-	if(!loadObjectList())
 		return;
 
 	if(!loadRechercheList())
@@ -400,6 +400,11 @@ cChapterList* cStoryBook::chapterList()
 	return(&m_chapterList);
 }
 
+cSceneList* cStoryBook::sceneList()
+{
+	return(&m_sceneList);
+}
+
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
@@ -467,12 +472,12 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItems[0]->setData(QVariant::fromValue(lpScene));
 			lpItems[0]->setFont(fontScene);
 			lpItems[0]->setForeground(QBrush(Qt::blue));
-			lpItems[0]->setToolTip(lpScene->description());
+			lpItems[0]->setToolTip(lpScene->description()->toPlainText());
 
 			lpItems[1]->setData(QVariant::fromValue(lpScene));
 			lpItems[1]->setBackground(QBrush(lpScene->stateColor()));
 			lpItems[1]->setTextAlignment(Qt::AlignCenter);
-			lpItems[1]->setToolTip(lpScene->description());
+			lpItems[1]->setToolTip(lpScene->description()->toPlainText());
 
 			lpChapterItem->appendRow(lpItems);
 		}

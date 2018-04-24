@@ -9,6 +9,22 @@ cWidget::cWidget(cPartWindow* parent) :
 {
 }
 
+cWidget::cWidget(cChapterWindow* parent) :
+	QWidget(parent),
+	m_type(TYPE_chapter),
+	m_lpWidget(parent),
+	m_lpWindow(0)
+{
+}
+
+cWidget::cWidget(cSceneWindow* parent) :
+	QWidget(parent),
+	m_type(TYPE_scene),
+	m_lpWidget(parent),
+	m_lpWindow(0)
+{
+}
+
 cWidget::cWidget(QWidget* parent) :
 	QWidget(parent),
 	m_type(TYPE_unknown),
