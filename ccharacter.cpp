@@ -346,6 +346,11 @@ void cCharacter::addImage(cImage* lpImage)
 	m_imageList.append(lpImage);
 }
 
+QList<cImage*> cCharacter::images()
+{
+	return(m_imageList);
+}
+
 cCharacter* cCharacterList::add(const qint32& iID)
 {
 	cCharacter*	lpCharacter	= find(iID);

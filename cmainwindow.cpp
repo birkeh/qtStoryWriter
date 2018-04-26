@@ -6,6 +6,7 @@
 #include "cpartwindow.h"
 #include "cchapterwindow.h"
 #include "cscenewindow.h"
+#include "ccharacterwindow.h"
 
 #include "cwidget.h"
 
@@ -125,6 +126,7 @@ void cMainWindow::createActions()
 	connect(ui->m_lpMdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onMdiAreaSubWindowActivated(QMdiSubWindow*)));
 
 	connect(ui->m_lpOutlineList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onOutlineDoubleClicked(QModelIndex)));
+	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
 }
 
 void cMainWindow::createFileActions()
@@ -426,6 +428,14 @@ void cMainWindow::onOutlineDoubleClicked(const QModelIndex& index)
 		QMessageBox::information(this, "DoubleClicked", "outline");
 }
 
+void cMainWindow::onCharacterDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(index);
+	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
+
+	showCharacterWindow(lpCharacter);
+}
+
 void cMainWindow::showPartWindow(cPart* lpPart)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
@@ -505,6 +515,33 @@ void cMainWindow::showSceneWindow(cScene* lpScene)
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());
 
 	lpSceneWindow->show();
+}
+
+void cMainWindow::showCharacterWindow(cCharacter* lpCharacter)
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_character)
+		{
+			cCharacterWindow*	lpCharacterWindow	= (cCharacterWindow*)lpWidget->widget();
+			if(lpCharacterWindow->character() == lpCharacter)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cCharacterWindow*		lpCharacterWindow		= new cCharacterWindow(this);
+	lpCharacterWindow->setCharacter(lpCharacter);
+	cWidget*			lpWidget1			= new cWidget(lpCharacterWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpCharacterWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpCharacterWindow->windowTitle());
+
+	lpCharacterWindow->show();
 }
 
 void cMainWindow::onFileNew()

@@ -84,7 +84,6 @@ QPixmap cImage::load()
 		}
 	}
 
-	myDebug << "image load error.";
 	return(image);
 }
 

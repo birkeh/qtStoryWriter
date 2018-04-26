@@ -25,6 +25,14 @@ cWidget::cWidget(cSceneWindow* parent) :
 {
 }
 
+cWidget::cWidget(cCharacterWindow* parent) :
+	QWidget(parent),
+	m_type(TYPE_character),
+	m_lpWidget(parent),
+	m_lpWindow(0)
+{
+}
+
 cWidget::cWidget(QWidget* parent) :
 	QWidget(parent),
 	m_type(TYPE_unknown),

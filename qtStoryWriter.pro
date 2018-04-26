@@ -60,7 +60,8 @@ SOURCES += \
     cimage.cpp \
     cchapterwindow.cpp \
     cscenewindow.cpp \
-    ccharacterwindow.cpp
+    ccharacterwindow.cpp \
+    cimagewidget.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -82,14 +83,16 @@ HEADERS += \
     cimage.h \
     cchapterwindow.h \
     cscenewindow.h \
-    ccharacterwindow.h
+    ccharacterwindow.h \
+    cimagewidget.h
 
 FORMS += \
         cmainwindow.ui \
     cpartwindow.ui \
     cchapterwindow.ui \
     cscenewindow.ui \
-    ccharacterwindow.ui
+    ccharacterwindow.ui \
+    cimagewidget.ui
 
 DISTFILES += \
     storyBook.project

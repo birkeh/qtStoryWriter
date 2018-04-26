@@ -35,6 +35,7 @@ private slots:
 	void				onMdiAreaSubWindowActivated(QMdiSubWindow *arg1);
 
 	void				onOutlineDoubleClicked(const QModelIndex& index);
+	void				onCharacterDoubleClicked(const QModelIndex& index);
 
 	void				onFileNew();
 	void				onFileOpen();
@@ -104,6 +105,8 @@ private:
 	void				showPartWindow(cPart* lpPart);
 	void				showChapterWindow(cChapter* lpChapter);
 	void				showSceneWindow(cScene* lpScene);
+	void				showCharacterWindow(cCharacter* lpCharacter);
+
 protected:
 	void				closeEvent(QCloseEvent *event);
 };
