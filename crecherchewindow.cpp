@@ -1,17 +1,20 @@
-#include "cscenewindow.h"
-#include "ui_cscenewindow.h"
+#include "crecherchewindow.h"
+#include "ui_crecherchewindow.h"
+
+#include "cimagewidget.h"
 
 #include <QStandardItem>
 
 
-cSceneWindow::cSceneWindow(QWidget *parent) :
+
+cRechercheWindow::cRechercheWindow(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::cSceneWindow),
-	m_lpScene(0)
+	ui(new Ui::cRechercheWindow),
+	m_lpRecherche(0)
 {
 	ui->setupUi(this);
 
-	ui->m_lpTabs->setCurrentIndex(0);
+	ui->m_lpTab->setCurrentIndex(0);
 
 	m_lpCharacterModel	= new QStandardItemModel(0, 1);
 	ui->m_lpCharacterList->setModel(m_lpCharacterModel);
@@ -22,62 +25,41 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	m_lpObjectModel		= new QStandardItemModel(0, 1);
 	ui->m_lpObjectList->setModel(m_lpObjectModel);
 
-	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_init), cScene::STATE_init);
-	ui->m_lpState->setItemData(0, QBrush(cScene::stateColor(cScene::STATE_init)), Qt::TextColorRole);
-
-	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_progress), cScene::STATE_progress);
-	ui->m_lpState->setItemData(1, QBrush(cScene::stateColor(cScene::STATE_progress)), Qt::BackgroundColorRole);
-
-	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_delayed), cScene::STATE_delayed);
-	ui->m_lpState->setItemData(2, QBrush(cScene::stateColor(cScene::STATE_delayed)), Qt::BackgroundColorRole);
-
-	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_finished), cScene::STATE_finished);
-	ui->m_lpState->setItemData(3, QBrush(cScene::stateColor(cScene::STATE_finished)), Qt::BackgroundColorRole);
-
-	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_unknown), cScene::STATE_unknown);
-	ui->m_lpState->setItemData(4, QBrush(cScene::stateColor(cScene::STATE_unknown)), Qt::BackgroundColorRole);
-
-	connect(ui->m_lpState, SIGNAL(currentIndexChanged(int)), this, SLOT(onStateCurrentIndexChanged(int)));
-
 	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
 	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
 	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
 }
 
-cSceneWindow::~cSceneWindow()
+cRechercheWindow::~cRechercheWindow()
 {
 	delete ui;
 }
 
-void cSceneWindow::setScene(cScene* lpScene)
+void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 {
-	m_lpScene			= lpScene;
+	m_lpRecherche	= lpRecherche;
 
-	ui->m_lpPart->setText(lpScene->chapter()->part()->name());
-	ui->m_lpChapter->setText(lpScene->chapter()->name());
-	ui->m_lpName->setText(lpScene->name());
-	ui->m_lpDescription->setDocument(lpScene->description());
-	ui->m_lpState->setCurrentText(lpScene->stateText());
-	if(lpScene->startedAt().isValid())
-		ui->m_lpStartedAt->setDateTime(lpScene->startedAt());
-	else
-	{
-		ui->m_lpStartedLabel->setVisible(false);
-		ui->m_lpStartedAt->setVisible(false);
-	}
-	if(lpScene->finishedAt().isValid())
-		ui->m_lpFinishedAt->setDateTime(lpScene->finishedAt());
-	else
-	{
-		ui->m_lpFinishedLabel->setVisible(false);
-		ui->m_lpFinishedAt->setVisible(false);
-	}
-	ui->m_lpTargetDate->setDateTime(lpScene->targetDate());
-	ui->m_lpText->setDocument(lpScene->text());
+	ui->m_lpName->setText(lpRecherche->name());
+	ui->m_lpLink->setText(lpRecherche->link());
+	ui->m_lpDescription->setDocument(lpRecherche->description());
 
-	QList<cCharacter*>	characterList	= lpScene->characterList();
-	QList<cPlace*>		placeList		= lpScene->placeList();
-	QList<cObject*>		objectList		= lpScene->objectList();
+	QList<cImage*>	images	= lpRecherche->images();
+	for(int x = 0;x < images.count();x++)
+	{
+		cImage*			lpImage			= images[x];
+		QPixmap			pixmap			= lpImage->load();
+		cImageWidget*	lpImageWidget	= new cImageWidget;
+
+		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);
+		ui->m_lpLayout->addWidget(lpImageWidget);
+	}
+
+	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	ui->m_lpLayout->addItem(lpSpacer);
+
+	QList<cCharacter*>	characterList	= lpRecherche->characterList();
+	QList<cPlace*>		placeList		= lpRecherche->placeList();
+	QList<cObject*>		objectList		= lpRecherche->objectList();
 
 	QStringList			headerLabels;
 
@@ -165,23 +147,15 @@ void cSceneWindow::setScene(cScene* lpScene)
 	for(int i = 0;i < headerLabels.count();i++)
 		ui->m_lpObjectList->resizeColumnToContents(i);
 
-	setWindowTitle(tr("[scene] - ") + lpScene->name());
+	setWindowTitle(tr("[recherche] - ") + lpRecherche->name());
 }
 
-cScene* cSceneWindow::scene()
+cRecherche* cRechercheWindow::recherche()
 {
-	return(m_lpScene);
+	return(m_lpRecherche);
 }
 
-void cSceneWindow::onStateCurrentIndexChanged(int /*index*/)
-{
-	QBrush	brush	= qvariant_cast<QBrush>(ui->m_lpState->currentData(Qt::BackgroundColorRole));
-	QColor	color	= brush.color();
-
-	ui->m_lpState->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue()));
-}
-
-void cSceneWindow::onCharacterDoubleClicked(const QModelIndex& index)
+void cRechercheWindow::onCharacterDoubleClicked(const QModelIndex& index)
 {
 	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(index);
 	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
@@ -189,7 +163,7 @@ void cSceneWindow::onCharacterDoubleClicked(const QModelIndex& index)
 		showCharacterWindow(lpCharacter);
 }
 
-void cSceneWindow::onPlaceDoubleClicked(const QModelIndex& index)
+void cRechercheWindow::onPlaceDoubleClicked(const QModelIndex& index)
 {
 	QStandardItem*	lpItem		= m_lpPlaceModel->itemFromIndex(index);
 	cPlace*			lpPlace		= qvariant_cast<cPlace*>(lpItem->data());
@@ -197,7 +171,7 @@ void cSceneWindow::onPlaceDoubleClicked(const QModelIndex& index)
 		showPlaceWindow(lpPlace);
 }
 
-void cSceneWindow::onObjectDoubleClicked(const QModelIndex& index)
+void cRechercheWindow::onObjectDoubleClicked(const QModelIndex& index)
 {
 	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(index);
 	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());

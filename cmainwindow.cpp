@@ -4,9 +4,9 @@
 #include "ctextdocument.h"
 
 #include "cpartwindow.h"
-#include "cchapterwindow.h"
-#include "cscenewindow.h"
-#include "ccharacterwindow.h"
+//#include "cchapterwindow.h"
+//#include "cscenewindow.h"
+//#include "ccharacterwindow.h"
 
 #include "cwidget.h"
 
@@ -127,6 +127,9 @@ void cMainWindow::createActions()
 
 	connect(ui->m_lpOutlineList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onOutlineDoubleClicked(QModelIndex)));
 	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
+	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
+	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
+	connect(ui->m_lpRechercheList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onRechercheDoubleClicked(QModelIndex)));
 }
 
 void cMainWindow::createFileActions()
@@ -419,11 +422,11 @@ void cMainWindow::onOutlineDoubleClicked(const QModelIndex& index)
 	cScene*			lpScene		= qvariant_cast<cScene*>(lpItem->data());
 
 	if(lpPart)
-		showPartWindow(lpPart);
+		onShowPartWindow(lpPart);
 	else if(lpChapter)
-		showChapterWindow(lpChapter);
+		onShowChapterWindow(lpChapter);
 	else if(lpScene)
-		showSceneWindow(lpScene);
+		onShowSceneWindow(lpScene);
 	else
 		QMessageBox::information(this, "DoubleClicked", "outline");
 }
@@ -433,10 +436,34 @@ void cMainWindow::onCharacterDoubleClicked(const QModelIndex& index)
 	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(index);
 	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
 
-	showCharacterWindow(lpCharacter);
+	onShowCharacterWindow(lpCharacter);
 }
 
-void cMainWindow::showPartWindow(cPart* lpPart)
+void cMainWindow::onPlaceDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpPlaceModel->itemFromIndex(index);
+	cPlace*			lpPlace		= qvariant_cast<cPlace*>(lpItem->data());
+
+	onShowPlaceWindow(lpPlace);
+}
+
+void cMainWindow::onObjectDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(index);
+	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
+
+	onShowObjectWindow(lpObject);
+}
+
+void cMainWindow::onRechercheDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpRechercheModel->itemFromIndex(index);
+	cRecherche*		lpRecherche	= qvariant_cast<cRecherche*>(lpItem->data());
+
+	onShowRechercheWindow(lpRecherche);
+}
+
+void cMainWindow::onShowPartWindow(cPart* lpPart)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
@@ -463,7 +490,7 @@ void cMainWindow::showPartWindow(cPart* lpPart)
 	lpPartWindow->show();
 }
 
-void cMainWindow::showChapterWindow(cChapter* lpChapter)
+void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
@@ -490,7 +517,7 @@ void cMainWindow::showChapterWindow(cChapter* lpChapter)
 	lpChapterWindow->show();
 }
 
-void cMainWindow::showSceneWindow(cScene* lpScene)
+void cMainWindow::onShowSceneWindow(cScene* lpScene)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
@@ -514,10 +541,14 @@ void cMainWindow::showSceneWindow(cScene* lpScene)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpSceneWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());
 
+	connect(lpSceneWindow, SIGNAL(showCharacterWindow(cCharacter*)), this, SLOT(onShowCharacterWindow(cCharacter*)));
+	connect(lpSceneWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
+	connect(lpSceneWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
+
 	lpSceneWindow->show();
 }
 
-void cMainWindow::showCharacterWindow(cCharacter* lpCharacter)
+void cMainWindow::onShowCharacterWindow(cCharacter* lpCharacter)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
@@ -542,6 +573,91 @@ void cMainWindow::showCharacterWindow(cCharacter* lpCharacter)
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpCharacterWindow->windowTitle());
 
 	lpCharacterWindow->show();
+}
+
+void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_place)
+		{
+			cPlaceWindow*	lpPlaceWindow	= (cPlaceWindow*)lpWidget->widget();
+			if(lpPlaceWindow->place() == lpPlace)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cPlaceWindow*		lpPlaceWindow		= new cPlaceWindow(this);
+	lpPlaceWindow->setPlace(lpPlace);
+	cWidget*			lpWidget1			= new cWidget(lpPlaceWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPlaceWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPlaceWindow->windowTitle());
+
+	lpPlaceWindow->show();
+}
+
+void cMainWindow::onShowObjectWindow(cObject* lpObject)
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_object)
+		{
+			cObjectWindow*	lpObjectWindow	= (cObjectWindow*)lpWidget->widget();
+			if(lpObjectWindow->object() == lpObject)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cObjectWindow*		lpObjectWindow		= new cObjectWindow(this);
+	lpObjectWindow->setObject(lpObject);
+	cWidget*			lpWidget1			= new cWidget(lpObjectWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpObjectWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpObjectWindow->windowTitle());
+
+	lpObjectWindow->show();
+}
+
+void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_recherche)
+		{
+			cRechercheWindow*	lpRechercheWindow	= (cRechercheWindow*)lpWidget->widget();
+			if(lpRechercheWindow->recherche() == lpRecherche)
+			{
+				ui->m_lpMainTab->setCurrentIndex(x);
+				ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+				m_bUpdatingTab	= false;
+				return;
+			}
+		}
+	}
+
+	cRechercheWindow*		lpRechercheWindow		= new cRechercheWindow(this);
+	lpRechercheWindow->setRecherche(lpRecherche);
+	cWidget*			lpWidget1			= new cWidget(lpRechercheWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpRechercheWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpRechercheWindow->windowTitle());
+
+	connect(lpRechercheWindow, SIGNAL(showCharacterWindow(cCharacter*)), this, SLOT(onShowCharacterWindow(cCharacter*)));
+	connect(lpRechercheWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
+	connect(lpRechercheWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
+
+	lpRechercheWindow->show();
 }
 
 void cMainWindow::onFileNew()

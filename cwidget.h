@@ -6,6 +6,9 @@
 #include "cchapterwindow.h"
 #include "cscenewindow.h"
 #include "ccharacterwindow.h"
+#include "cobjectwindow.h"
+#include "cplacewindow.h"
+#include "crecherchewindow.h"
 
 #include <QWidget>
 #include <QMdiSubWindow>
@@ -22,12 +25,18 @@ public:
 		TYPE_chapter	= 2,
 		TYPE_scene		= 3,
 		TYPE_character	= 4,
+		TYPE_object		= 5,
+		TYPE_place		= 6,
+		TYPE_recherche	= 7,
 	};
 
 	explicit			cWidget(cPartWindow* parent);
 	explicit			cWidget(cChapterWindow* parent);
 	explicit			cWidget(cSceneWindow* parent);
 	explicit			cWidget(cCharacterWindow* parent);
+	explicit			cWidget(cObjectWindow* parent);
+	explicit			cWidget(cPlaceWindow* parent);
+	explicit			cWidget(cRechercheWindow* parent);
 	explicit			cWidget(QWidget* parent);
 
 	QWidget*			widget();

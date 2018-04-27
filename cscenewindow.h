@@ -26,7 +26,15 @@ public:
 	cScene*				scene();
 
 private slots:
-	void				on_m_lpState_currentIndexChanged(int index);
+	void				onStateCurrentIndexChanged(int index);
+	void				onCharacterDoubleClicked(const QModelIndex& index);
+	void				onPlaceDoubleClicked(const QModelIndex& index);
+	void				onObjectDoubleClicked(const QModelIndex& index);
+
+signals:
+	void				showCharacterWindow(cCharacter* lpCharacter);
+	void				showPlaceWindow(cPlace* lpPlace);
+	void				showObjectWindow(cObject* lpObject);
 
 private:
 	Ui::cSceneWindow*	ui;

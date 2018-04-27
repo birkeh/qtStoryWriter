@@ -62,6 +62,11 @@ void cObject::addImage(cImage* lpImage)
 	m_imageList.append(lpImage);
 }
 
+QList<cImage*> cObject::images()
+{
+	return(m_imageList);
+}
+
 cObject* cObjectList::add(const qint32& iID)
 {
 	cObject*	lpObject	= find(iID);

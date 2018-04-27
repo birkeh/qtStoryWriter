@@ -37,6 +37,11 @@ public:
 	void				addObject(cObject* lpObject);
 	void				addPlace(cPlace* lpPlace);
 
+	QList<cImage*>		images();
+	QList<cCharacter*>	characterList();
+	QList<cObject*>		objectList();
+	QList<cPlace*>		placeList();
+
 private:
 	qint32				m_iID;
 	QString				m_szName;

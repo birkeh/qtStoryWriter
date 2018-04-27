@@ -36,6 +36,17 @@ private slots:
 
 	void				onOutlineDoubleClicked(const QModelIndex& index);
 	void				onCharacterDoubleClicked(const QModelIndex& index);
+	void				onPlaceDoubleClicked(const QModelIndex& index);
+	void				onObjectDoubleClicked(const QModelIndex& index);
+	void				onRechercheDoubleClicked(const QModelIndex& index);
+
+	void				onShowPartWindow(cPart* lpPart);
+	void				onShowChapterWindow(cChapter* lpChapter);
+	void				onShowSceneWindow(cScene* lpScene);
+	void				onShowCharacterWindow(cCharacter* lpCharacter);
+	void				onShowPlaceWindow(cPlace* lpPlace);
+	void				onShowObjectWindow(cObject* lpObject);
+	void				onShowRechercheWindow(cRecherche* lpRecherche);
 
 	void				onFileNew();
 	void				onFileOpen();
@@ -101,11 +112,6 @@ private:
 	void				createFileActions();
 	void				createEditActions();
 	void				createTextActions();
-
-	void				showPartWindow(cPart* lpPart);
-	void				showChapterWindow(cChapter* lpChapter);
-	void				showSceneWindow(cScene* lpScene);
-	void				showCharacterWindow(cCharacter* lpCharacter);
 
 protected:
 	void				closeEvent(QCloseEvent *event);

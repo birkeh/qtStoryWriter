@@ -83,6 +83,26 @@ void cRecherche::addPlace(cPlace* lpPlace)
 	m_placeList.append(lpPlace);
 }
 
+QList<cImage*> cRecherche::images()
+{
+	return(m_imageList);
+}
+
+QList<cCharacter*> cRecherche::characterList()
+{
+	return(m_characterList);
+}
+
+QList<cObject*> cRecherche::objectList()
+{
+	return(m_objectList);
+}
+
+QList<cPlace*> cRecherche::placeList()
+{
+	return(m_placeList);
+}
+
 cRecherche* cRechercheList::add(const qint32& iID)
 {
 	cRecherche*	lpRecherche	= find(iID);

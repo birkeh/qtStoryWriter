@@ -73,6 +73,11 @@ void cPlace::addImage(cImage* lpImage)
 	m_imageList.append(lpImage);
 }
 
+QList<cImage*> cPlace::images()
+{
+	return(m_imageList);
+}
+
 cPlace* cPlaceList::add(const qint32& iID)
 {
 	cPlace*	lpPlace	= find(iID);

@@ -33,6 +33,7 @@ public:
 	cTextDocument*	description();
 
 	void			addImage(cImage* lpImage);
+	QList<cImage*>	images();
 
 private:
 	qint32			m_iID;
