@@ -7,7 +7,7 @@
 
 
 cObjectWindow::cObjectWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cObjectWindow),
 	m_lpObject(0)
 {

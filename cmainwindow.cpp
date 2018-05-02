@@ -4,9 +4,6 @@
 #include "ctextdocument.h"
 
 #include "cpartwindow.h"
-//#include "cchapterwindow.h"
-//#include "cscenewindow.h"
-//#include "ccharacterwindow.h"
 
 #include "cwidget.h"
 
@@ -414,6 +411,26 @@ void cMainWindow::onMdiAreaSubWindowActivated(QMdiSubWindow *arg1)
 	m_bUpdatingTab	= false;
 }
 
+void cMainWindow::onSubWindowClosed(QWidget* lpSubWindow)
+{
+	if(m_bUpdatingTab)
+		return;
+
+	m_bUpdatingTab	= true;
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->widget() == lpSubWindow)
+		{
+			ui->m_lpMainTab->removeTab(x);
+			m_bUpdatingTab	= false;
+			return;
+		}
+	}
+	m_bUpdatingTab	= false;
+}
+
 void cMainWindow::onOutlineDoubleClicked(const QModelIndex& index)
 {
 	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(index);
@@ -487,6 +504,8 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
+	connect(lpPartWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+
 	lpPartWindow->show();
 }
 
@@ -513,6 +532,8 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 	cWidget*			lpWidget1			= new cWidget(lpChapterWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpChapterWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
+
+	connect(lpChapterWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
 
 	lpChapterWindow->show();
 }
@@ -545,6 +566,8 @@ void cMainWindow::onShowSceneWindow(cScene* lpScene)
 	connect(lpSceneWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
 	connect(lpSceneWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
 
+	connect(lpSceneWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+
 	lpSceneWindow->show();
 }
 
@@ -571,6 +594,8 @@ void cMainWindow::onShowCharacterWindow(cCharacter* lpCharacter)
 	cWidget*			lpWidget1			= new cWidget(lpCharacterWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpCharacterWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpCharacterWindow->windowTitle());
+
+	connect(lpCharacterWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
 
 	lpCharacterWindow->show();
 }
@@ -599,6 +624,8 @@ void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPlaceWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPlaceWindow->windowTitle());
 
+	connect(lpPlaceWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+
 	lpPlaceWindow->show();
 }
 
@@ -625,6 +652,8 @@ void cMainWindow::onShowObjectWindow(cObject* lpObject)
 	cWidget*			lpWidget1			= new cWidget(lpObjectWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpObjectWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpObjectWindow->windowTitle());
+
+	connect(lpObjectWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
 
 	lpObjectWindow->show();
 }
@@ -656,6 +685,8 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 	connect(lpRechercheWindow, SIGNAL(showCharacterWindow(cCharacter*)), this, SLOT(onShowCharacterWindow(cCharacter*)));
 	connect(lpRechercheWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
 	connect(lpRechercheWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
+
+	connect(lpRechercheWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
 
 	lpRechercheWindow->show();
 }

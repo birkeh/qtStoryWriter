@@ -8,7 +8,7 @@
 
 
 cRechercheWindow::cRechercheWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cRechercheWindow),
 	m_lpRecherche(0)
 {

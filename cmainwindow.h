@@ -34,6 +34,8 @@ private slots:
 	void				onMainTabTabCloseRequested(int index);
 	void				onMdiAreaSubWindowActivated(QMdiSubWindow *arg1);
 
+	void				onSubWindowClosed(QWidget* lpSubWindow);
+
 	void				onOutlineDoubleClicked(const QModelIndex& index);
 	void				onCharacterDoubleClicked(const QModelIndex& index);
 	void				onPlaceDoubleClicked(const QModelIndex& index);

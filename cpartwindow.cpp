@@ -5,7 +5,7 @@
 
 
 cPartWindow::cPartWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cPartWindow),
 	m_lpPart(0),
 	m_lpChapterList(0)

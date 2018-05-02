@@ -64,7 +64,8 @@ SOURCES += \
     cimagewidget.cpp \
     cobjectwindow.cpp \
     cplacewindow.cpp \
-    crecherchewindow.cpp
+    crecherchewindow.cpp \
+    cmdisubwindow.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -90,7 +91,8 @@ HEADERS += \
     cimagewidget.h \
     cobjectwindow.h \
     cplacewindow.h \
-    crecherchewindow.h
+    crecherchewindow.h \
+    cmdisubwindow.h
 
 FORMS += \
         cmainwindow.ui \

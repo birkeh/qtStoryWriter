@@ -5,7 +5,7 @@
 
 
 cSceneWindow::cSceneWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cSceneWindow),
 	m_lpScene(0)
 {

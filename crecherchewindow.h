@@ -4,6 +4,8 @@
 
 #include "crecherche.h"
 
+#include "cmdisubwindow.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -12,7 +14,7 @@ namespace Ui {
 class cRechercheWindow;
 }
 
-class cRechercheWindow : public QWidget
+class cRechercheWindow : public cMDISubWindow
 {
 	Q_OBJECT
 

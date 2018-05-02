@@ -5,7 +5,7 @@
 
 
 cChapterWindow::cChapterWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cChapterWindow),
 	m_lpChapter(0),
 	m_lpSceneList(0)

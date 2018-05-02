@@ -7,7 +7,7 @@
 
 
 cCharacterWindow::cCharacterWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cCharacterWindow),
 	m_lpCharacter(0)
 {

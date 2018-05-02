@@ -5,6 +5,8 @@
 #include "cpart.h"
 #include "cchapter.h"
 
+#include "cmdisubwindow.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -13,7 +15,7 @@ namespace Ui {
 class cPartWindow;
 }
 
-class cPartWindow : public QWidget
+class cPartWindow : public cMDISubWindow
 {
 	Q_OBJECT
 

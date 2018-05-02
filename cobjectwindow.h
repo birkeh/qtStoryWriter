@@ -4,6 +4,8 @@
 
 #include "cobject.h"
 
+#include "cmdisubwindow.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -12,7 +14,7 @@ namespace Ui {
 class cObjectWindow;
 }
 
-class cObjectWindow : public QWidget
+class cObjectWindow : public cMDISubWindow
 {
 	Q_OBJECT
 

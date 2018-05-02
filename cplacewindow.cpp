@@ -7,7 +7,7 @@
 
 
 cPlaceWindow::cPlaceWindow(QWidget *parent) :
-	QWidget(parent),
+	cMDISubWindow(parent),
 	ui(new Ui::cPlaceWindow),
 	m_lpPlace(0)
 {

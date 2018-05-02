@@ -4,6 +4,8 @@
 
 #include "cplace.h"
 
+#include "cmdisubwindow.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -12,7 +14,7 @@ namespace Ui {
 class cPlaceWindow;
 }
 
-class cPlaceWindow : public QWidget
+class cPlaceWindow : public cMDISubWindow
 {
 	Q_OBJECT
 
