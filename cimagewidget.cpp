@@ -1,12 +1,17 @@
 #include "cimagewidget.h"
 #include "ui_cimagewidget.h"
 
+#include "cmainwindow.h"
+
 
 cImageWidget::cImageWidget(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::cImageWidget)
 {
 	ui->setupUi(this);
+
+	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
 }
 
 cImageWidget::~cImageWidget()

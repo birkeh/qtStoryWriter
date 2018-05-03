@@ -1,6 +1,8 @@
 #include "cscenewindow.h"
 #include "ui_cscenewindow.h"
 
+#include "cmainwindow.h"
+
 #include <QStandardItem>
 
 
@@ -42,6 +44,42 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
 	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
 	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
+
+	connect(ui->m_lpPart, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpPart, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpChapter, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpChapter, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+
+	connect(ui->m_lpCharacterList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
+	connect(ui->m_lpCharacterList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+
+	connect(ui->m_lpObjectList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
+	connect(ui->m_lpObjectList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+
+	connect(ui->m_lpPlaceList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
+	connect(ui->m_lpPlaceList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+
+	connect(ui->m_lpState, SIGNAL(gotFocus(cComboBox*)), (cMainWindow*)parent, SLOT(onComboBoxGotFocus(cComboBox*)));
+	connect(ui->m_lpState, SIGNAL(lostFocus(cComboBox*)), (cMainWindow*)parent, SLOT(onComboBoxLostFocus(cComboBox*)));
+
+	connect(ui->m_lpStartedAt, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
+	connect(ui->m_lpStartedAt, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+
+	connect(ui->m_lpFinishedAt, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
+	connect(ui->m_lpFinishedAt, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+
+	connect(ui->m_lpTargetDate, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
+	connect(ui->m_lpTargetDate, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+
+	connect(ui->m_lpText, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpText, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
 }
 
 cSceneWindow::~cSceneWindow()

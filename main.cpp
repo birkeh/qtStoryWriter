@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	QSettings	settings;
 
 	cMainWindow w;
+
 	if(settings.value("main/maximized").toBool())
 		w.showMaximized();
 	else

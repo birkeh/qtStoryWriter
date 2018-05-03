@@ -19,7 +19,7 @@
      <item row="3" column="0" colspan="8">
       <widget class="QTabWidget" name="m_lpTabs">
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="m_lpTabDescription">
         <attribute name="title">
@@ -27,7 +27,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QTextEdit" name="m_lpDescription"/>
+          <widget class="cTextEdit" name="m_lpDescription"/>
          </item>
         </layout>
        </widget>
@@ -37,7 +37,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0">
-          <widget class="QTreeView" name="m_lpCharacterList">
+          <widget class="cTreeView" name="m_lpCharacterList">
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -57,7 +57,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QTreeView" name="m_lpPlaceList">
+          <widget class="cTreeView" name="m_lpPlaceList">
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -77,7 +77,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0">
-          <widget class="QTreeView" name="m_lpObjectList">
+          <widget class="cTreeView" name="m_lpObjectList">
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
@@ -94,7 +94,7 @@
       </widget>
      </item>
      <item row="5" column="5">
-      <widget class="QDateTimeEdit" name="m_lpFinishedAt">
+      <widget class="cDateTimeEdit" name="m_lpFinishedAt">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -121,7 +121,7 @@
       </widget>
      </item>
      <item row="2" column="1" colspan="7">
-      <widget class="QLineEdit" name="m_lpName"/>
+      <widget class="cLineEdit" name="m_lpName"/>
      </item>
      <item row="6" column="0" colspan="8">
       <widget class="cTextEdit" name="m_lpText"/>
@@ -157,10 +157,10 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QComboBox" name="m_lpState"/>
+      <widget class="cComboBox" name="m_lpState"/>
      </item>
      <item row="5" column="3">
-      <widget class="QDateTimeEdit" name="m_lpStartedAt">
+      <widget class="cDateTimeEdit" name="m_lpStartedAt">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -177,7 +177,7 @@
       </widget>
      </item>
      <item row="5" column="7">
-      <widget class="QDateTimeEdit" name="m_lpTargetDate"/>
+      <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_5">
@@ -190,14 +190,14 @@
       </widget>
      </item>
      <item row="0" column="1" colspan="7">
-      <widget class="QLineEdit" name="m_lpPart">
+      <widget class="cLineEdit" name="m_lpPart">
        <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="1" column="1" colspan="7">
-      <widget class="QLineEdit" name="m_lpChapter">
+      <widget class="cLineEdit" name="m_lpChapter">
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -212,6 +212,26 @@
    <class>cTextEdit</class>
    <extends>QTextEdit</extends>
    <header>ctextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>clineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cTreeView</class>
+   <extends>QTreeView</extends>
+   <header>ctreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ccombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>cdatetimeedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_lpTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="m_lpBasic">
       <attribute name="title">
@@ -27,7 +27,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0,0,0,0,0">
          <item row="9" column="1" colspan="5">
-          <widget class="QTextEdit" name="m_lpDescription"/>
+          <widget class="cTextEdit" name="m_lpDescription"/>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_9">
@@ -40,17 +40,17 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QDoubleSpinBox" name="m_lpHeight">
+          <widget class="cDoubleSpinBox" name="m_lpHeight">
            <property name="maximum">
             <double>999999.000000000000000</double>
            </property>
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QLineEdit" name="m_lpCreature"/>
+          <widget class="cLineEdit" name="m_lpCreature"/>
          </item>
          <item row="3" column="3">
-          <widget class="QLineEdit" name="m_lpPlaceOfBirth"/>
+          <widget class="cLineEdit" name="m_lpPlaceOfBirth"/>
          </item>
          <item row="4" column="2">
           <widget class="QLabel" name="label_11">
@@ -93,10 +93,10 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QDateEdit" name="m_lpDayOfDeath"/>
+          <widget class="cDateEdit" name="m_lpDayOfDeath"/>
          </item>
          <item row="3" column="1">
-          <widget class="QDateEdit" name="m_lpDayOfBirth"/>
+          <widget class="cDateEdit" name="m_lpDayOfBirth"/>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_8">
@@ -109,10 +109,10 @@
           </widget>
          </item>
          <item row="4" column="3">
-          <widget class="QLineEdit" name="m_lpPlaceOfDeath"/>
+          <widget class="cLineEdit" name="m_lpPlaceOfDeath"/>
          </item>
          <item row="1" column="1">
-          <widget class="QCheckBox" name="m_lpMainCharacter">
+          <widget class="cCheckBox" name="m_lpMainCharacter">
            <property name="text">
             <string>Main Character</string>
            </property>
@@ -129,7 +129,7 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QDoubleSpinBox" name="m_lpWeight">
+          <widget class="cDoubleSpinBox" name="m_lpWeight">
            <property name="maximum">
             <double>999999.000000000000000</double>
            </property>
@@ -166,7 +166,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="m_lpFirstName"/>
+          <widget class="cLineEdit" name="m_lpFirstName"/>
          </item>
          <item row="9" column="0">
           <widget class="QLabel" name="label_2">
@@ -179,7 +179,7 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QLineEdit" name="m_lpMiddleName"/>
+          <widget class="cLineEdit" name="m_lpMiddleName"/>
          </item>
          <item row="0" column="4">
           <widget class="QLabel" name="label_5">
@@ -192,10 +192,10 @@
           </widget>
          </item>
          <item row="0" column="5">
-          <widget class="QLineEdit" name="m_lpLastName"/>
+          <widget class="cLineEdit" name="m_lpLastName"/>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="m_lpTitle"/>
+          <widget class="cLineEdit" name="m_lpTitle"/>
          </item>
          <item row="5" column="4">
           <widget class="QLabel" name="label_3">
@@ -228,13 +228,13 @@
           </widget>
          </item>
          <item row="5" column="5">
-          <widget class="QLineEdit" name="m_lpHairColor"/>
+          <widget class="cLineEdit" name="m_lpHairColor"/>
          </item>
          <item row="6" column="5">
-          <widget class="QLineEdit" name="m_lpHairCut"/>
+          <widget class="cLineEdit" name="m_lpHairCut"/>
          </item>
          <item row="7" column="5">
-          <widget class="QLineEdit" name="m_lpHairLength"/>
+          <widget class="cLineEdit" name="m_lpHairLength"/>
          </item>
          <item row="5" column="2">
           <widget class="QLabel" name="label_16">
@@ -247,7 +247,7 @@
           </widget>
          </item>
          <item row="5" column="3">
-          <widget class="QLineEdit" name="m_lpFigure"/>
+          <widget class="cLineEdit" name="m_lpFigure"/>
          </item>
          <item row="8" column="4">
           <widget class="QLabel" name="label_21">
@@ -270,7 +270,7 @@
           </widget>
          </item>
          <item row="6" column="3">
-          <widget class="QLineEdit" name="m_lpSkin"/>
+          <widget class="cLineEdit" name="m_lpSkin"/>
          </item>
          <item row="8" column="0">
           <widget class="QLabel" name="label_20">
@@ -303,16 +303,16 @@
           </widget>
          </item>
          <item row="7" column="3">
-          <widget class="QLineEdit" name="m_lpNature"/>
+          <widget class="cLineEdit" name="m_lpNature"/>
          </item>
          <item row="8" column="1">
-          <widget class="QTextEdit" name="m_lpSchool"/>
+          <widget class="cTextEdit" name="m_lpSchool"/>
          </item>
          <item row="8" column="3">
-          <widget class="QTextEdit" name="m_lpspokenLanguages"/>
+          <widget class="cTextEdit" name="m_lpSpokenLanguages"/>
          </item>
          <item row="8" column="5">
-          <widget class="QTextEdit" name="m_lpJob"/>
+          <widget class="cTextEdit" name="m_lpJob"/>
          </item>
          <item row="1" column="5" rowspan="4">
           <widget class="QGroupBox" name="groupBox">
@@ -321,21 +321,21 @@
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="0" column="0">
-             <widget class="QRadioButton" name="m_lpMale">
+             <widget class="cRadioButton" name="m_lpMale">
               <property name="text">
                <string>Male</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QRadioButton" name="m_lpFemale">
+             <widget class="cRadioButton" name="m_lpFemale">
               <property name="text">
                <string>Female</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QRadioButton" name="m_lpOther">
+             <widget class="cRadioButton" name="m_lpOther">
               <property name="text">
                <string>Other</string>
               </property>
@@ -394,6 +394,38 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>cTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ctextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>clineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>ccheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cRadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>cradiobutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cDateEdit</class>
+   <extends>QDateEdit</extends>
+   <header>cdateedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>cdoublespinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>m_lpFirstName</tabstop>
   <tabstop>m_lpDescription</tabstop>

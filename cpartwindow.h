@@ -25,6 +25,7 @@ public:
 
 	void				setPart(cPart* lpPart, cChapterList* lpChapterList);
 	cPart*				part();
+
 private:
 	Ui::cPartWindow*	ui;
 	cPart*				m_lpPart;

@@ -1,7 +1,10 @@
+#include "common.h"
+
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
 
 #include "ctextdocument.h"
+#include "ctextedit.h"
 
 #include "cpartwindow.h"
 
@@ -32,10 +35,19 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	m_lpPlaceModel(0),
 	m_lpObjectModel(0),
 	m_bUpdatingTab(false),
-	m_lpStoryBook(0)
+	m_lpStoryBook(0),
+	m_lpFileMenu(0),
+	m_lpEditMenu(0),
+	m_lpTextMenu(0),
+	m_lpFileToolBar(0),
+	m_lpEditToolBar(0),
+	m_lpTextToolBar(0),
+	m_lpFormatToolBar(0)
 {
 	initUI();
 	createActions();
+
+	//disableTextEdit();
 
 	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
 	m_lpStoryBook		= new cStoryBook(szPath);
@@ -54,6 +66,26 @@ cMainWindow::~cMainWindow()
 		delete m_lpStoryBook;
 
 	delete ui;
+}
+
+QAction* cMainWindow::actionAlignLeft()
+{
+	return(m_lpActionAlignLeft);
+}
+
+QAction* cMainWindow::actionAlignCenter()
+{
+	return(m_lpActionAlignCenter);
+}
+
+QAction* cMainWindow::actionAlignRight()
+{
+	return(m_lpActionAlignRight);
+}
+
+QAction* cMainWindow::actionAlignJustify()
+{
+	return(m_lpActionAlignJustify);
 }
 
 void cMainWindow::closeEvent(QCloseEvent *event)
@@ -132,95 +164,91 @@ void cMainWindow::createActions()
 void cMainWindow::createFileActions()
 {
 	QAction*	lpAction;
-	QToolBar*	lpToolBar		= addToolBar(tr("File Actions"));
-	QMenu*		lpMenu			= menuBar()->addMenu(tr("&File"));
+
+	m_lpFileMenu		= menuBar()->addMenu(tr("&File"));
+	m_lpFileToolBar		= addToolBar(tr("File Actions"));
 
 	const QIcon	newIcon			= QIcon::fromTheme("document-new", QIcon(":/images/mac/filenew.png"));
-	lpAction					= lpMenu->addAction(newIcon, tr("&New"), this, &cMainWindow::onFileNew);
-	lpToolBar->addAction(lpAction);
+	lpAction					= m_lpFileMenu->addAction(newIcon, tr("&New"), this, &cMainWindow::onFileNew);
+	m_lpFileToolBar->addAction(lpAction);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::New);
 
 	const QIcon	openIcon		= QIcon::fromTheme("document-open", QIcon(":/images/mac/fileopen.png"));
-	lpAction					= lpMenu->addAction(openIcon, tr("&Open..."), this, &cMainWindow::onFileOpen);
+	lpAction					= m_lpFileMenu->addAction(openIcon, tr("&Open..."), this, &cMainWindow::onFileOpen);
 	lpAction->setShortcut(QKeySequence::Open);
-	lpToolBar->addAction(lpAction);
+	m_lpFileToolBar->addAction(lpAction);
 
-	lpMenu->addSeparator();
+	m_lpFileMenu->addSeparator();
 
 	const QIcon	saveIcon		= QIcon::fromTheme("document-save", QIcon(":/images/mac/filesave.png"));
-	m_lpActionSave				= lpMenu->addAction(saveIcon, tr("&Save"), this, &cMainWindow::onFileSave);
+	m_lpActionSave				= m_lpFileMenu->addAction(saveIcon, tr("&Save"), this, &cMainWindow::onFileSave);
 	m_lpActionSave->setShortcut(QKeySequence::Save);
 	m_lpActionSave->setEnabled(false);
-	lpToolBar->addAction(m_lpActionSave);
+	m_lpFileToolBar->addAction(m_lpActionSave);
 
-	lpAction					= lpMenu->addAction(tr("Save &As..."), this, &cMainWindow::onFileSaveAs);
+	lpAction					= m_lpFileMenu->addAction(tr("Save &As..."), this, &cMainWindow::onFileSaveAs);
 	lpAction->setPriority(QAction::LowPriority);
-	lpMenu->addSeparator();
+	m_lpFileMenu->addSeparator();
 
 #ifndef QT_NO_PRINTER
 	const QIcon	printIcon		= QIcon::fromTheme("document-print", QIcon(":/images/mac/fileprint.png"));
-	lpAction					= lpMenu->addAction(printIcon, tr("&Print..."), this, &cMainWindow::onFilePrint);
+	lpAction					= m_lpFileMenu->addAction(printIcon, tr("&Print..."), this, &cMainWindow::onFilePrint);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::Print);
-	lpToolBar->addAction(lpAction);
+	m_lpFileToolBar->addAction(lpAction);
 
 	const QIcon	filePrintIcon	= QIcon::fromTheme("fileprint", QIcon(":/images/mac/fileprint.png"));
-	lpMenu->addAction(filePrintIcon, tr("Print Preview..."), this, &cMainWindow::onFilePrintPreview);
+	m_lpFileMenu->addAction(filePrintIcon, tr("Print Preview..."), this, &cMainWindow::onFilePrintPreview);
 
 	const QIcon	exportPdfIcon	= QIcon::fromTheme("exportpdf", QIcon(":/images/mac/exportpdf.png"));
-	lpAction					= lpMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
+	lpAction					= m_lpFileMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(Qt::CTRL + Qt::Key_D);
-	lpToolBar->addAction(lpAction);
+	m_lpFileToolBar->addAction(lpAction);
 
-	lpMenu->addSeparator();
+	m_lpFileMenu->addSeparator();
 #endif
 
-	lpAction					= lpMenu->addAction(tr("&Quit"), this, &QWidget::close);
+	lpAction					= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
 	lpAction->setShortcut(Qt::CTRL + Qt::Key_Q);
 }
 
 void cMainWindow::createEditActions()
 {
-	QToolBar*	lpToolBar	= addToolBar(tr("Edit Actions"));
-	QMenu*		lpMenu		= menuBar()->addMenu(tr("&Edit"));
+	m_lpEditMenu	= menuBar()->addMenu(tr("&Edit"));
+	m_lpEditToolBar	= addToolBar(tr("Edit Actions"));
 
 	const QIcon	undoIcon	= QIcon::fromTheme("edit-undo", QIcon(":/images/mac/editundo.png"));
-//	m_lpActionUndo			= lpMenu->addAction(undoIcon, tr("&Undo"), textEdit, &QTextEdit::undo);
-	m_lpActionUndo			= lpMenu->addAction(undoIcon, tr("&Undo"), this, &cMainWindow::onSpecialUndo);
+	m_lpActionUndo			= m_lpEditMenu->addAction(undoIcon, tr("&Undo"));
 	m_lpActionUndo->setShortcut(QKeySequence::Undo);
-	lpToolBar->addAction(m_lpActionUndo);
+	m_lpEditToolBar->addAction(m_lpActionUndo);
 
 	const QIcon redoIcon	= QIcon::fromTheme("edit-redo", QIcon(":/images/mac/editredo.png"));
-//	m_lpActionRedo			= lpMenu->addAction(redoIcon, tr("&Redo"), textEdit, &QTextEdit::redo);
-	m_lpActionRedo			= lpMenu->addAction(redoIcon, tr("&Redo"), this, &cMainWindow::onSpecialRedo);
+	m_lpActionRedo			= m_lpEditMenu->addAction(redoIcon, tr("&Redo"));
 	m_lpActionRedo->setPriority(QAction::LowPriority);
 	m_lpActionRedo->setShortcut(QKeySequence::Redo);
-	lpToolBar->addAction(m_lpActionRedo);
-	lpMenu->addSeparator();
+	m_lpEditToolBar->addAction(m_lpActionRedo);
+	m_lpEditMenu->addSeparator();
 
 #ifndef QT_NO_CLIPBOARD
 	const QIcon	cutIcon		= QIcon::fromTheme("edit-cut", QIcon(":/images/mac/editcut.png"));
-//	m_lpActionCut			= lpMenu->addAction(cutIcon, tr("Cu&t"), textEdit, &QTextEdit::cut);
-	m_lpActionCut			= lpMenu->addAction(cutIcon, tr("Cu&t"), this, &cMainWindow::onSpecialCut);
+	m_lpActionCut			= m_lpEditMenu->addAction(cutIcon, tr("Cu&t"));
 	m_lpActionCut->setPriority(QAction::LowPriority);
 	m_lpActionCut->setShortcut(QKeySequence::Cut);
-	lpToolBar->addAction(m_lpActionCut);
+	m_lpEditToolBar->addAction(m_lpActionCut);
 
 	const QIcon	copyIcon	= QIcon::fromTheme("edit-copy", QIcon(":/images/mac/editcopy.png"));
-//	m_lpActionCopy			= lpMenu->addAction(copyIcon, tr("&Copy"), textEdit, &QTextEdit::copy);
-	m_lpActionCopy			= lpMenu->addAction(copyIcon, tr("&Copy"), this, &cMainWindow::onSpecialCopy);
+	m_lpActionCopy			= m_lpEditMenu->addAction(copyIcon, tr("&Copy"));
 	m_lpActionCopy->setPriority(QAction::LowPriority);
 	m_lpActionCopy->setShortcut(QKeySequence::Copy);
-	lpToolBar->addAction(m_lpActionCopy);
+	m_lpEditToolBar->addAction(m_lpActionCopy);
 
 	const QIcon	pasteIcon	= QIcon::fromTheme("edit-paste", QIcon(":/images/mac/editpaste.png"));
-//	m_lpActionPaste			= lpMenu->addAction(pasteIcon, tr("&Paste"), textEdit, &QTextEdit::paste);
-	m_lpActionPaste			= lpMenu->addAction(pasteIcon, tr("&Paste"), this, &cMainWindow::onSpecialPaste);
+	m_lpActionPaste			= m_lpEditMenu->addAction(pasteIcon, tr("&Paste"));
 	m_lpActionPaste->setPriority(QAction::LowPriority);
 	m_lpActionPaste->setShortcut(QKeySequence::Paste);
-	lpToolBar->addAction(m_lpActionPaste);
+	m_lpEditToolBar->addAction(m_lpActionPaste);
 	if(const QMimeData*	md	= QApplication::clipboard()->mimeData())
 		m_lpActionPaste->setEnabled(md->hasText());
 #endif
@@ -228,40 +256,40 @@ void cMainWindow::createEditActions()
 
 void cMainWindow::createTextActions()
 {
-	QToolBar*	lpToolBar	= addToolBar(tr("Format Actions"));
-	QMenu*		lpMenu		= menuBar()->addMenu(tr("F&ormat"));
+	m_lpTextMenu	= menuBar()->addMenu(tr("F&ormat"));
+	m_lpTextToolBar	= addToolBar(tr("Format Actions"));
 
 	const QIcon boldIcon	= QIcon::fromTheme("format-text-bold", QIcon(":/images/mac/textbold.png"));
-	m_lpActionTextBold		= lpMenu->addAction(boldIcon, tr("&Bold"), this, &cMainWindow::onTextBold);
+	m_lpActionTextBold		= m_lpTextMenu->addAction(boldIcon, tr("&Bold"));
 	m_lpActionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
 	m_lpActionTextBold->setPriority(QAction::LowPriority);
 	QFont	bold;
 	bold.setBold(true);
 	m_lpActionTextBold->setFont(bold);
-	lpToolBar->addAction(m_lpActionTextBold);
+	m_lpTextToolBar->addAction(m_lpActionTextBold);
 	m_lpActionTextBold->setCheckable(true);
 
 	const QIcon	italicIcon	= QIcon::fromTheme("format-text-italic", QIcon(":/images/mac/textitalic.png"));
-	m_lpActionTextItalic	= lpMenu->addAction(italicIcon, tr("&Italic"), this, &cMainWindow::onTextItalic);
+	m_lpActionTextItalic	= m_lpTextMenu->addAction(italicIcon, tr("&Italic"));
 	m_lpActionTextItalic->setPriority(QAction::LowPriority);
 	m_lpActionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
 	QFont	italic;
 	italic.setItalic(true);
 	m_lpActionTextItalic->setFont(italic);
-	lpToolBar->addAction(m_lpActionTextItalic);
+	m_lpTextToolBar->addAction(m_lpActionTextItalic);
 	m_lpActionTextItalic->setCheckable(true);
 
 	const QIcon	underlineIcon	= QIcon::fromTheme("format-text-underline", QIcon(":/images/mac/textunder.png"));
-	m_lpActionTextUnderline = lpMenu->addAction(underlineIcon, tr("&Underline"), this, &cMainWindow::onTextUnderline);
+	m_lpActionTextUnderline = m_lpTextMenu->addAction(underlineIcon, tr("&Underline"));
 	m_lpActionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
 	m_lpActionTextUnderline->setPriority(QAction::LowPriority);
 	QFont underline;
 	underline.setUnderline(true);
 	m_lpActionTextUnderline->setFont(underline);
-	lpToolBar->addAction(m_lpActionTextUnderline);
+	m_lpTextToolBar->addAction(m_lpActionTextUnderline);
 	m_lpActionTextUnderline->setCheckable(true);
 
-	lpMenu->addSeparator();
+	m_lpTextMenu->addSeparator();
 
 	const QIcon	leftIcon	= QIcon::fromTheme("format-justify-left", QIcon(":/images/mac/textleft.png"));
 	m_lpActionAlignLeft = new QAction(leftIcon, tr("&Left"), this);
@@ -285,67 +313,107 @@ void cMainWindow::createTextActions()
 	m_lpActionAlignJustify->setPriority(QAction::LowPriority);
 
 	// Make sure the alignLeft  is always left of the alignRight
-	QActionGroup*	alignGroup	= new QActionGroup(this);
-	connect(alignGroup, &QActionGroup::triggered, this, &cMainWindow::onTextAlign);
+	m_lpAlignGroup	= new QActionGroup(this);
 
 	if(QApplication::isLeftToRight())
 	{
-		alignGroup->addAction(m_lpActionAlignLeft);
-		alignGroup->addAction(m_lpActionAlignCenter);
-		alignGroup->addAction(m_lpActionAlignRight);
+		m_lpAlignGroup->addAction(m_lpActionAlignLeft);
+		m_lpAlignGroup->addAction(m_lpActionAlignCenter);
+		m_lpAlignGroup->addAction(m_lpActionAlignRight);
 	}
 	else
 	{
-		alignGroup->addAction(m_lpActionAlignRight);
-		alignGroup->addAction(m_lpActionAlignCenter);
-		alignGroup->addAction(m_lpActionAlignLeft);
+		m_lpAlignGroup->addAction(m_lpActionAlignRight);
+		m_lpAlignGroup->addAction(m_lpActionAlignCenter);
+		m_lpAlignGroup->addAction(m_lpActionAlignLeft);
 	}
-	alignGroup->addAction(m_lpActionAlignJustify);
+	m_lpAlignGroup->addAction(m_lpActionAlignJustify);
 
-	lpToolBar->addActions(alignGroup->actions());
-	lpMenu->addActions(alignGroup->actions());
+	m_lpTextToolBar->addActions(m_lpAlignGroup->actions());
+	m_lpTextMenu->addActions(m_lpAlignGroup->actions());
 
-	lpMenu->addSeparator();
+	m_lpTextMenu->addSeparator();
 
 	QPixmap pix(16, 16);
 	pix.fill(Qt::black);
-	m_lpActionTextColor = lpMenu->addAction(pix, tr("&Color..."), this, &cMainWindow::onTextColor);
-	lpToolBar->addAction(m_lpActionTextColor);
+	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
+	m_lpTextToolBar->addAction(m_lpActionTextColor);
 
-	lpToolBar = addToolBar(tr("Format Actions"));
-	lpToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+	m_lpFormatToolBar = addToolBar(tr("Format Actions"));
+	m_lpFormatToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
 	addToolBarBreak(Qt::TopToolBarArea);
-	addToolBar(lpToolBar);
+	addToolBar(m_lpFormatToolBar);
 
-	m_lpComboStyle	= new QComboBox(lpToolBar);
-	lpToolBar->addWidget(m_lpComboStyle);
-	m_lpComboStyle->addItem("Standard");
-	m_lpComboStyle->addItem("Bullet List (Disc)");
-	m_lpComboStyle->addItem("Bullet List (Circle)");
-	m_lpComboStyle->addItem("Bullet List (Square)");
-	m_lpComboStyle->addItem("Ordered List (Decimal)");
-	m_lpComboStyle->addItem("Ordered List (Alpha lower)");
-	m_lpComboStyle->addItem("Ordered List (Alpha upper)");
-	m_lpComboStyle->addItem("Ordered List (Roman lower)");
-	m_lpComboStyle->addItem("Ordered List (Roman upper)");
+	m_lpComboFont	= new QFontComboBox(m_lpFormatToolBar);
+	m_lpFormatToolBar->addWidget(m_lpComboFont);
+	m_focusException.append(m_lpComboFont);
 
-	connect(m_lpComboStyle, QOverload<int>::of(&QComboBox::activated), this, &cMainWindow::onTextStyle);
-
-	m_lpComboFont	= new QFontComboBox(lpToolBar);
-	lpToolBar->addWidget(m_lpComboFont);
-	connect(m_lpComboFont, QOverload<const QString &>::of(&QComboBox::activated), this, &cMainWindow::onTextFamily);
-
-	m_lpComboSize	= new QComboBox(lpToolBar);
+	m_lpComboSize	= new QComboBox(m_lpFormatToolBar);
 	m_lpComboSize->setObjectName("comboSize");
-	lpToolBar->addWidget(m_lpComboSize);
+	m_lpFormatToolBar->addWidget(m_lpComboSize);
 	m_lpComboSize->setEditable(true);
 
 	const QList<int> standardSizes	= QFontDatabase::standardSizes();
 	foreach(int size, standardSizes)
 		m_lpComboSize->addItem(QString::number(size));
 	m_lpComboSize->setCurrentIndex(standardSizes.indexOf(QApplication::font().pointSize()));
+	m_focusException.append(m_lpComboSize);
+}
 
-	connect(m_lpComboSize, QOverload<const QString &>::of(&QComboBox::activated), this, &cMainWindow::onTextSize);
+void cMainWindow::disableTextEdit()
+{
+	m_lpEditMenu->setEnabled(false);
+	m_lpEditToolBar->setEnabled(false);
+	m_lpTextMenu->setEnabled(false);
+	m_lpTextToolBar->setEnabled(false);
+	m_lpFormatToolBar->setEnabled(false);
+}
+
+void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
+{
+	m_lpEditMenu->setEnabled(true);
+	m_lpEditToolBar->setEnabled(true);
+	m_lpTextMenu->setEnabled(true);
+	m_lpTextToolBar->setEnabled(true);
+	m_lpFormatToolBar->setEnabled(true);
+
+	connect(m_lpActionTextBold, &QAction::triggered, lpTextEdit, &cTextEdit::onTextBold);
+	connect(m_lpActionTextItalic, &QAction::triggered, lpTextEdit, &cTextEdit::onTextItalic);
+	connect(m_lpActionTextUnderline, &QAction::triggered, lpTextEdit, &cTextEdit::onTextUnderline);
+
+	connect(m_lpActionTextColor, &QAction::triggered, lpTextEdit, &cTextEdit::onTextColor);
+
+	connect(lpTextEdit->document(), &cTextDocument::undoAvailable, m_lpActionUndo, &QAction::setEnabled);
+	connect(lpTextEdit->document(), &cTextDocument::redoAvailable, m_lpActionRedo, &QAction::setEnabled);
+	m_lpActionUndo->setEnabled(lpTextEdit->document()->isUndoAvailable());
+	m_lpActionRedo->setEnabled(lpTextEdit->document()->isRedoAvailable());
+
+	connect(m_lpActionUndo, &QAction::triggered, lpTextEdit, &cTextEdit::undo);
+	connect(m_lpActionRedo, &QAction::triggered, lpTextEdit, &cTextEdit::redo);
+
+#ifndef QT_NO_CLIPBOARD
+	m_lpActionCut->setEnabled(false);
+	m_lpActionCopy->setEnabled(false);
+
+	disconnect(m_lpActionCut, SIGNAL(triggered(bool)));
+	disconnect(m_lpActionCopy, SIGNAL(triggered(bool)));
+	disconnect(m_lpActionPaste, SIGNAL(triggered(bool)));
+
+	connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &cMainWindow::onClipboardDataChanged);
+
+	connect(m_lpActionCut, SIGNAL(triggered(bool)), lpTextEdit, SLOT(cut()));
+	connect(m_lpActionCopy, SIGNAL(triggered(bool)), lpTextEdit, SLOT(copy()));
+	connect(m_lpActionPaste, SIGNAL(triggered(bool)), lpTextEdit, SLOT(paste()));
+#endif
+
+	connect(m_lpAlignGroup, &QActionGroup::triggered, lpTextEdit, &cTextEdit::onTextAlign);
+
+	connect(m_lpComboFont, QOverload<const QString &>::of(&QComboBox::activated), lpTextEdit, &cTextEdit::onTextFamily);
+	connect(m_lpComboSize, QOverload<const QString &>::of(&QComboBox::activated), lpTextEdit, &cTextEdit::onTextSize);
+
+	connect(lpTextEdit, &cTextEdit::fontChanged, this, &cMainWindow::onFontChanged);
+	connect(lpTextEdit, &cTextEdit::colorChanged, this, &cMainWindow::onColorChanged);
+	connect(lpTextEdit, &cTextEdit::alignmentChanged, this, &cMainWindow::onAlignmentChanged);
 }
 
 void cMainWindow::updateWindowTitle()
@@ -363,6 +431,87 @@ void cMainWindow::updateWindowTitle()
 		setWindowTitle(QString("\"%1\" - qtStoryWriter").arg(szTitle));
 	else
 		setWindowTitle(QString("\"%1\" by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor));
+}
+
+void cMainWindow::onTextEditGotFocus(cTextEdit* lpTextEdit)
+{
+	prepareTextEdit(lpTextEdit);
+}
+
+void cMainWindow::onTextEditLostFocus(cTextEdit* /*lpTextEdit*/)
+{
+}
+
+void cMainWindow::onLineEditGotFocus(cLineEdit* /*lpLineEdit*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onLineEditLostFocus(cLineEdit* /*lpLineEdit*/)
+{
+}
+
+void cMainWindow::onTreeViewGotFocus(cTreeView* /*lpTreeView*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onTreeViewLostFocus(cTreeView * /*lpTreeView*/)
+{
+}
+
+void cMainWindow::onCheckBoxGotFocus(cCheckBox* /*lpCheckBox*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onCheckBoxLostFocus(cCheckBox* /*lpCheckBox*/)
+{
+}
+
+void cMainWindow::onRadioButtonGotFocus(cRadioButton* /*lpRadioButton*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onRadioButtonLostFocus(cRadioButton* /*lpRadioButton*/)
+{
+}
+
+void cMainWindow::onDateEditGotFocus(cDateEdit* /*lpDateEdit*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onDateEditLostFocus(cDateEdit* /*lpDateEdit*/)
+{
+}
+
+void cMainWindow::onDoubleSpinBoxGotFocus(cDoubleSpinBox* /*lpDoubleSpinBox*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onDoubleSpinBoxLostFocus(cDoubleSpinBox* /*lpDoubleSpinBox*/)
+{
+}
+
+void cMainWindow::onDateTimeEditGotFocus(cDateTimeEdit* /*lpDateTimeEdit*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onDateTimeEditLostFocus(cDateTimeEdit* /*lpDateTimeEdit*/)
+{
+}
+
+void cMainWindow::onComboBoxGotFocus(cComboBox* /*lpComboBox*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onComboBoxLostFocus(cComboBox* /*lpComboBox*/)
+{
 }
 
 void cMainWindow::onMainTabCurrentChanged(int /*index*/)
@@ -721,54 +870,38 @@ void cMainWindow::onFilePrintPdf()
 {
 }
 
-void cMainWindow::onTextBold()
+void cMainWindow::onClipboardDataChanged()
 {
+#ifndef QT_NO_CLIPBOARD
+	if(const QMimeData *md = QApplication::clipboard()->mimeData())
+		m_lpActionPaste->setEnabled(md->hasText());
+#endif
 }
 
-void cMainWindow::onTextItalic()
+void cMainWindow::onFontChanged(const QFont& font)
 {
+	m_lpComboFont->setCurrentIndex(m_lpComboFont->findText(QFontInfo(font).family()));
+	m_lpComboSize->setCurrentIndex(m_lpComboSize->findText(QString::number(font.pointSize())));
+	m_lpActionTextBold->setChecked(font.bold());
+	m_lpActionTextItalic->setChecked(font.italic());
+	m_lpActionTextUnderline->setChecked(font.underline());
 }
 
-void cMainWindow::onTextUnderline()
+void cMainWindow::onColorChanged(const QColor& color)
 {
+	QPixmap pix(16, 16);
+	pix.fill(color);
+	m_lpActionTextColor->setIcon(pix);
 }
 
-void cMainWindow::onTextAlign(QAction *a)
+void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 {
-}
-
-void cMainWindow::onTextFamily(const QString &f)
-{
-}
-
-void cMainWindow::onTextSize(const QString &p)
-{
-}
-
-void cMainWindow::onTextStyle(int styleIndex)
-{
-}
-
-void cMainWindow::onTextColor()
-{
-}
-
-void cMainWindow::onSpecialUndo()
-{
-}
-
-void cMainWindow::onSpecialRedo()
-{
-}
-
-void cMainWindow::onSpecialCut()
-{
-}
-
-void cMainWindow::onSpecialCopy()
-{
-}
-
-void cMainWindow::onSpecialPaste()
-{
+	if(alignment & Qt::AlignLeft)
+		m_lpActionAlignLeft->setChecked(true);
+	else if(alignment & Qt::AlignHCenter)
+		m_lpActionAlignCenter->setChecked(true);
+	else if(alignment & Qt::AlignRight)
+		m_lpActionAlignRight->setChecked(true);
+	else if(alignment & Qt::AlignJustify)
+		m_lpActionAlignJustify->setChecked(true);
 }

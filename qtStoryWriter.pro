@@ -65,7 +65,15 @@ SOURCES += \
     cobjectwindow.cpp \
     cplacewindow.cpp \
     crecherchewindow.cpp \
-    cmdisubwindow.cpp
+    cmdisubwindow.cpp \
+    clineedit.cpp \
+    ctreeview.cpp \
+    ccheckbox.cpp \
+    cradiobutton.cpp \
+    cdateedit.cpp \
+    cdoublespinbox.cpp \
+    ccombobox.cpp \
+    cdatetimeedit.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -92,7 +100,15 @@ HEADERS += \
     cobjectwindow.h \
     cplacewindow.h \
     crecherchewindow.h \
-    cmdisubwindow.h
+    cmdisubwindow.h \
+    clineedit.h \
+    ctreeview.h \
+    ccheckbox.h \
+    cradiobutton.h \
+    cdateedit.h \
+    cdoublespinbox.h \
+    ccombobox.h \
+    cdatetimeedit.h
 
 FORMS += \
         cmainwindow.ui \

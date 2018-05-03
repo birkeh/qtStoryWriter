@@ -3,6 +3,8 @@
 
 #include "cimagewidget.h"
 
+#include "cmainwindow.h"
+
 #include <QStandardItem>
 
 
@@ -13,6 +15,81 @@ cCharacterWindow::cCharacterWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	ui->m_lpTab->setCurrentIndex(0);
+
+	connect(ui->m_lpFirstName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpFirstName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpMiddleName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpMiddleName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpLastName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpLastName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpMainCharacter, SIGNAL(gotFocus(cCheckBox*)), (cMainWindow*)parent, SLOT(onCheckBoxGotFocus(cCheckBox*)));
+	connect(ui->m_lpMainCharacter, SIGNAL(lostFocus(cCheckBox*)), (cMainWindow*)parent, SLOT(onCheckBoxLostFocus(cCheckBox*)));
+
+	connect(ui->m_lpCreature, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpCreature, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpTitle, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpTitle, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpMale, SIGNAL(gotFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonGotFocus(cRadioButton*)));
+	connect(ui->m_lpMale, SIGNAL(lostFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonLostFocus(cRadioButton*)));
+
+	connect(ui->m_lpFemale, SIGNAL(gotFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonGotFocus(cRadioButton*)));
+	connect(ui->m_lpFemale, SIGNAL(lostFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonLostFocus(cRadioButton*)));
+
+	connect(ui->m_lpOther, SIGNAL(gotFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonGotFocus(cRadioButton*)));
+	connect(ui->m_lpOther, SIGNAL(lostFocus(cRadioButton*)), (cMainWindow*)parent, SLOT(onRadioButtonLostFocus(cRadioButton*)));
+
+	connect(ui->m_lpDayOfBirth, SIGNAL(gotFocus(cDateEdit*)), (cMainWindow*)parent, SLOT(onDateEditGotFocus(cDateEdit*)));
+	connect(ui->m_lpDayOfBirth, SIGNAL(lostFocus(cDateEdit*)), (cMainWindow*)parent, SLOT(onDateEditLostFocus(cDateEdit*)));
+
+	connect(ui->m_lpDayOfDeath, SIGNAL(gotFocus(cDateEdit*)), (cMainWindow*)parent, SLOT(onDateEditGotFocus(cDateEdit*)));
+	connect(ui->m_lpDayOfDeath, SIGNAL(lostFocus(cDateEdit*)), (cMainWindow*)parent, SLOT(onDateEditLostFocus(cDateEdit*)));
+
+	connect(ui->m_lpPlaceOfBirth, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpPlaceOfBirth, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpPlaceOfDeath, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpPlaceOfDeath, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpHeight, SIGNAL(gotFocus(cDoubleSpinBox*)), (cMainWindow*)parent, SLOT(onDoubleSpinBoxGotFocus(cDoubleSpinBox*)));
+	connect(ui->m_lpHeight, SIGNAL(lostFocus(cDoubleSpinBox*)), (cMainWindow*)parent, SLOT(onDoubleSpinBoxLostFocus(cDoubleSpinBox*)));
+
+	connect(ui->m_lpWeight, SIGNAL(gotFocus(cDoubleSpinBox*)), (cMainWindow*)parent, SLOT(onDoubleSpinBoxGotFocus(cDoubleSpinBox*)));
+	connect(ui->m_lpWeight, SIGNAL(lostFocus(cDoubleSpinBox*)), (cMainWindow*)parent, SLOT(onDoubleSpinBoxLostFocus(cDoubleSpinBox*)));
+
+	connect(ui->m_lpFigure, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpFigure, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpSkin, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpSkin, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpNature, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpNature, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpHairColor, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpHairColor, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpHairCut, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpHairCut, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpHairLength, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
+	connect(ui->m_lpHairLength, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+
+	connect(ui->m_lpSchool, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpSchool, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+
+	connect(ui->m_lpSpokenLanguages, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpSpokenLanguages, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+
+	connect(ui->m_lpJob, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpJob, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+
+	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
+	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
 }
 
 cCharacterWindow::~cCharacterWindow()
@@ -55,7 +132,7 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 	ui->m_lpHairCut->setText(lpCharacter->hairCut());
 	ui->m_lpHairLength->setText(lpCharacter->hairLength());
 	ui->m_lpSchool->setText(lpCharacter->school());
-	ui->m_lpspokenLanguages->setText(lpCharacter->spokenLanguages());
+	ui->m_lpSpokenLanguages->setText(lpCharacter->spokenLanguages());
 	ui->m_lpJob->setHtml(lpCharacter->job());
 	ui->m_lpDescription->setDocument(lpCharacter->description());
 
