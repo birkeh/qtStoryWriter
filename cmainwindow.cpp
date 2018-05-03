@@ -150,15 +150,15 @@ void cMainWindow::createActions()
 	createEditActions();
 	createTextActions();
 
-	connect(ui->m_lpMainTab, SIGNAL(currentChanged(int)), this, SLOT(onMainTabCurrentChanged(int)));
-	connect(ui->m_lpMainTab, SIGNAL(tabCloseRequested(int)), this,SLOT(onMainTabTabCloseRequested(int)));
-	connect(ui->m_lpMdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onMdiAreaSubWindowActivated(QMdiSubWindow*)));
+	connect(ui->m_lpMainTab,		&QTabWidget::currentChanged,	this,	&cMainWindow::onMainTabCurrentChanged);
+	connect(ui->m_lpMainTab,		&QTabWidget::tabCloseRequested,	this,	&cMainWindow::onMainTabTabCloseRequested);
+	connect(ui->m_lpMdiArea,		&QMdiArea::subWindowActivated,	this,	&cMainWindow::onMdiAreaSubWindowActivated);
 
-	connect(ui->m_lpOutlineList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onOutlineDoubleClicked(QModelIndex)));
-	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
-	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
-	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
-	connect(ui->m_lpRechercheList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onRechercheDoubleClicked(QModelIndex)));
+	connect(ui->m_lpOutlineList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onOutlineDoubleClicked);
+	connect(ui->m_lpCharacterList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onCharacterDoubleClicked);
+	connect(ui->m_lpPlaceList,		&QTreeView::doubleClicked,		this,	&cMainWindow::onPlaceDoubleClicked);
+	connect(ui->m_lpObjectList,		&QTreeView::doubleClicked,		this,	&cMainWindow::onObjectDoubleClicked);
+	connect(ui->m_lpRechercheList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onRechercheDoubleClicked);
 }
 
 void cMainWindow::createFileActions()
@@ -334,10 +334,10 @@ void cMainWindow::createTextActions()
 
 	m_lpTextMenu->addSeparator();
 
-	QPixmap pix(16, 16);
-	pix.fill(Qt::black);
-	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
-	m_lpTextToolBar->addAction(m_lpActionTextColor);
+//	QPixmap pix(16, 16);
+//	pix.fill(Qt::black);
+//	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
+//	m_lpTextToolBar->addAction(m_lpActionTextColor);
 
 	m_lpFormatToolBar = addToolBar(tr("Format Actions"));
 	m_lpFormatToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
@@ -377,43 +377,39 @@ void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
 	m_lpTextToolBar->setEnabled(true);
 	m_lpFormatToolBar->setEnabled(true);
 
-	connect(m_lpActionTextBold, &QAction::triggered, lpTextEdit, &cTextEdit::onTextBold);
-	connect(m_lpActionTextItalic, &QAction::triggered, lpTextEdit, &cTextEdit::onTextItalic);
-	connect(m_lpActionTextUnderline, &QAction::triggered, lpTextEdit, &cTextEdit::onTextUnderline);
+	connect(m_lpActionTextBold,			&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextBold);
+	connect(m_lpActionTextItalic,		&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextItalic);
+	connect(m_lpActionTextUnderline,	&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextUnderline);
 
-	connect(m_lpActionTextColor, &QAction::triggered, lpTextEdit, &cTextEdit::onTextColor);
+//	connect(m_lpActionTextColor,		&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextColor);
 
-	connect(lpTextEdit->document(), &cTextDocument::undoAvailable, m_lpActionUndo, &QAction::setEnabled);
-	connect(lpTextEdit->document(), &cTextDocument::redoAvailable, m_lpActionRedo, &QAction::setEnabled);
+	connect(lpTextEdit->document(),		&cTextDocument::undoAvailable,	m_lpActionUndo,	&QAction::setEnabled);
+	connect(lpTextEdit->document(),		&cTextDocument::redoAvailable,	m_lpActionRedo,	&QAction::setEnabled);
 	m_lpActionUndo->setEnabled(lpTextEdit->document()->isUndoAvailable());
 	m_lpActionRedo->setEnabled(lpTextEdit->document()->isRedoAvailable());
 
-	connect(m_lpActionUndo, &QAction::triggered, lpTextEdit, &cTextEdit::undo);
-	connect(m_lpActionRedo, &QAction::triggered, lpTextEdit, &cTextEdit::redo);
+	connect(m_lpActionUndo,				&QAction::triggered,			lpTextEdit,		&cTextEdit::undo);
+	connect(m_lpActionRedo,				&QAction::triggered,			lpTextEdit,		&cTextEdit::redo);
 
 #ifndef QT_NO_CLIPBOARD
 	m_lpActionCut->setEnabled(false);
 	m_lpActionCopy->setEnabled(false);
 
-	disconnect(m_lpActionCut, SIGNAL(triggered(bool)));
-	disconnect(m_lpActionCopy, SIGNAL(triggered(bool)));
-	disconnect(m_lpActionPaste, SIGNAL(triggered(bool)));
+	connect(QApplication::clipboard(),	&QClipboard::dataChanged,		this,			&cMainWindow::onClipboardDataChanged);
 
-	connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &cMainWindow::onClipboardDataChanged);
-
-	connect(m_lpActionCut, SIGNAL(triggered(bool)), lpTextEdit, SLOT(cut()));
-	connect(m_lpActionCopy, SIGNAL(triggered(bool)), lpTextEdit, SLOT(copy()));
-	connect(m_lpActionPaste, SIGNAL(triggered(bool)), lpTextEdit, SLOT(paste()));
+	connect(m_lpActionCut,				&QAction::triggered,			lpTextEdit,		&cTextEdit::cut);
+	connect(m_lpActionCopy,				&QAction::triggered,			lpTextEdit,		&cTextEdit::copy);
+	connect(m_lpActionPaste,			&QAction::triggered,			lpTextEdit,		&cTextEdit::paste);
 #endif
 
-	connect(m_lpAlignGroup, &QActionGroup::triggered, lpTextEdit, &cTextEdit::onTextAlign);
+	connect(m_lpAlignGroup,				&QActionGroup::triggered,		lpTextEdit,		&cTextEdit::onTextAlign);
 
-	connect(m_lpComboFont, QOverload<const QString &>::of(&QComboBox::activated), lpTextEdit, &cTextEdit::onTextFamily);
-	connect(m_lpComboSize, QOverload<const QString &>::of(&QComboBox::activated), lpTextEdit, &cTextEdit::onTextSize);
+	connect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextFamily);
+	connect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextSize);
 
-	connect(lpTextEdit, &cTextEdit::fontChanged, this, &cMainWindow::onFontChanged);
-	connect(lpTextEdit, &cTextEdit::colorChanged, this, &cMainWindow::onColorChanged);
-	connect(lpTextEdit, &cTextEdit::alignmentChanged, this, &cMainWindow::onAlignmentChanged);
+	connect(lpTextEdit,					&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
+//	connect(lpTextEdit,					&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
+	connect(lpTextEdit,					&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
 }
 
 void cMainWindow::updateWindowTitle()
@@ -653,7 +649,7 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
-	connect(lpPartWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpPartWindow,	&cPartWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
 
 	lpPartWindow->show();
 }
@@ -682,7 +678,7 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpChapterWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
 
-	connect(lpChapterWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpChapterWindow,	&cChapterWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
 
 	lpChapterWindow->show();
 }
@@ -711,11 +707,11 @@ void cMainWindow::onShowSceneWindow(cScene* lpScene)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpSceneWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());
 
-	connect(lpSceneWindow, SIGNAL(showCharacterWindow(cCharacter*)), this, SLOT(onShowCharacterWindow(cCharacter*)));
-	connect(lpSceneWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
-	connect(lpSceneWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
+	connect(lpSceneWindow,	&cSceneWindow::showCharacterWindow,	this,	&cMainWindow::onShowCharacterWindow);
+	connect(lpSceneWindow,	&cSceneWindow::showPlaceWindow,		this,	&cMainWindow::onShowPlaceWindow);
+	connect(lpSceneWindow,	&cSceneWindow::showObjectWindow,	this,	&cMainWindow::onShowObjectWindow);
 
-	connect(lpSceneWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpSceneWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpSceneWindow->show();
 }
@@ -744,7 +740,7 @@ void cMainWindow::onShowCharacterWindow(cCharacter* lpCharacter)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpCharacterWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpCharacterWindow->windowTitle());
 
-	connect(lpCharacterWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpCharacterWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpCharacterWindow->show();
 }
@@ -773,7 +769,7 @@ void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPlaceWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPlaceWindow->windowTitle());
 
-	connect(lpPlaceWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpPlaceWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpPlaceWindow->show();
 }
@@ -802,7 +798,7 @@ void cMainWindow::onShowObjectWindow(cObject* lpObject)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpObjectWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpObjectWindow->windowTitle());
 
-	connect(lpObjectWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpObjectWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpObjectWindow->show();
 }
@@ -831,11 +827,11 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpRechercheWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpRechercheWindow->windowTitle());
 
-	connect(lpRechercheWindow, SIGNAL(showCharacterWindow(cCharacter*)), this, SLOT(onShowCharacterWindow(cCharacter*)));
-	connect(lpRechercheWindow, SIGNAL(showPlaceWindow(cPlace*)), this, SLOT(onShowPlaceWindow(cPlace*)));
-	connect(lpRechercheWindow, SIGNAL(showObjectWindow(cObject*)), this, SLOT(onShowObjectWindow(cObject*)));
+	connect(lpRechercheWindow,	&cRechercheWindow::showCharacterWindow,	this,	&cMainWindow::onShowCharacterWindow);
+	connect(lpRechercheWindow,	&cRechercheWindow::showPlaceWindow,		this,	&cMainWindow::onShowPlaceWindow);
+	connect(lpRechercheWindow,	&cRechercheWindow::showObjectWindow,	this,	&cMainWindow::onShowObjectWindow);
 
-	connect(lpRechercheWindow, SIGNAL(subWindowClosed(QWidget*)), this, SLOT(onSubWindowClosed(QWidget*)));
+	connect(lpRechercheWindow,	&cSceneWindow::subWindowClosed,			this,	&cMainWindow::onSubWindowClosed);
 
 	lpRechercheWindow->show();
 }
@@ -887,12 +883,12 @@ void cMainWindow::onFontChanged(const QFont& font)
 	m_lpActionTextUnderline->setChecked(font.underline());
 }
 
-void cMainWindow::onColorChanged(const QColor& color)
-{
-	QPixmap pix(16, 16);
-	pix.fill(color);
-	m_lpActionTextColor->setIcon(pix);
-}
+//void cMainWindow::onColorChanged(const QColor& color)
+//{
+//	QPixmap pix(16, 16);
+//	pix.fill(color);
+//	m_lpActionTextColor->setIcon(pix);
+//}
 
 void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 {

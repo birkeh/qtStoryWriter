@@ -96,7 +96,7 @@ private slots:
 	void				onClipboardDataChanged();
 
 	void				onFontChanged(const QFont& font);
-	void				onColorChanged(const QColor& color);
+//	void				onColorChanged(const QColor& color);
 	void				onAlignmentChanged(const Qt::Alignment& alignment);
 
 private:
@@ -132,7 +132,7 @@ private:
 	QAction*			m_lpActionAlignRight;
 	QAction*			m_lpActionAlignJustify;
 
-	QAction*			m_lpActionTextColor;
+//	QAction*			m_lpActionTextColor;
 
 	QAction*			m_lpActionCut;
 	QAction*			m_lpActionCopy;
