@@ -1,3 +1,8 @@
+/*!
+ \file cchapterwindow.cpp
+
+*/
+
 #include "cchapterwindow.h"
 #include "ui_cchapterwindow.h"
 

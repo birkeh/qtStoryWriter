@@ -1,3 +1,8 @@
+/*!
+ \file cimagewidget.cpp
+
+*/
+
 #include "cimagewidget.h"
 #include "ui_cimagewidget.h"
 

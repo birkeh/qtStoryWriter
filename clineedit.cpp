@@ -1,3 +1,8 @@
+/*!
+ \file clineedit.cpp
+
+*/
+
 #include "clineedit.h"
 
 

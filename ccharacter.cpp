@@ -1,3 +1,8 @@
+/*!
+ \file ccharacter.cpp
+
+*/
+
 #include "ccharacter.h"
 
 #include "common.h"

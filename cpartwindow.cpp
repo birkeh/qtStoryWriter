@@ -1,3 +1,8 @@
+/*!
+ \file cpartwindow.cpp
+
+*/
+
 #include "cpartwindow.h"
 #include "ui_cpartwindow.h"
 

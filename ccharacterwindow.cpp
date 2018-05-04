@@ -1,3 +1,8 @@
+/*!
+ \file ccharacterwindow.cpp
+
+*/
+
 #include "ccharacterwindow.h"
 #include "ui_ccharacterwindow.h"
 

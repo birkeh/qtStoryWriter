@@ -1,3 +1,8 @@
+/*!
+ \file cchapter.cpp
+
+*/
+
 #include "cchapter.h"
 
 #include "common.h"

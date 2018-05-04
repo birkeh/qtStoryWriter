@@ -1,3 +1,8 @@
+/*!
+ \file cobject.cpp
+
+*/
+
 #include "cobject.h"
 
 #include "common.h"

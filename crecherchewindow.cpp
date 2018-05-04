@@ -1,3 +1,8 @@
+/*!
+ \file crecherchewindow.cpp
+
+*/
+
 #include "crecherchewindow.h"
 #include "ui_crecherchewindow.h"
 

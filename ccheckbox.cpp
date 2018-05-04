@@ -1,3 +1,8 @@
+/*!
+ \file ccheckbox.cpp
+
+*/
+
 #include "ccheckbox.h"
 
 

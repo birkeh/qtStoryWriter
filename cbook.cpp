@@ -1,3 +1,8 @@
+/*!
+ \file cbook.cpp
+
+*/
+
 #include "cbook.h"
 #include "common.h"
 

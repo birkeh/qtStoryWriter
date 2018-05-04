@@ -1,3 +1,8 @@
+/*!
+ \file ctextdocument.h
+
+*/
+
 #ifndef CTEXTDOCUMENT_H
 #define CTEXTDOCUMENT_H
 
@@ -16,20 +21,62 @@ class QPrinter;
 QT_END_NAMESPACE
 
 
+/*!
+ \brief
+
+ \class cTextDocument ctextdocument.h "ctextdocument.h"
+*/
 class cTextDocument : public QTextDocument
 {
 public:
 	cTextDocument(QObject *parent = Q_NULLPTR);
+	/*!
+	 \brief
+
+	 \fn cTextDocument
+	 \param text
+	 \param parent
+	*/
 	cTextDocument(const QString &text, QObject *parent = Q_NULLPTR);
 
+	/*!
+	 \brief
+
+	 \fn save
+	 \return bool
+	*/
 	bool			save();
+	/*!
+	 \brief
+
+	 \fn saveAs
+	 \param szFileName
+	 \return bool
+	*/
 	bool			saveAs(const QString& szFileName);
 
+	/*!
+	 \brief
+
+	 \fn printPreview
+	 \param lpPrinter
+	*/
 	void			printPreview(QPrinter* lpPrinter);
 private:
-	QString			m_szFileName;
+	QString			m_szFileName; /*!< TODO: describe */
 
+	/*!
+	 \brief
+
+	 \fn init
+	*/
 	void			init();
+	/*!
+	 \brief
+
+	 \fn saveDocument
+	 \return bool
+	*/
 	bool			saveDocument();
 private slots:
 };

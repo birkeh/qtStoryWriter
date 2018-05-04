@@ -1,3 +1,8 @@
+/*!
+ \file cscene.cpp
+
+*/
+
 #include "cscene.h"
 
 #include "common.h"

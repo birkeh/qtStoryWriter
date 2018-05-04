@@ -1,3 +1,8 @@
+/*!
+ \file ccharacter.h
+
+*/
+
 #ifndef CCHARACTER_H
 #define CCHARACTER_H
 
@@ -13,10 +18,20 @@
 #include <QObject>
 
 
+/*!
+ \brief
+
+ \class cCharacter ccharacter.h "ccharacter.h"
+*/
 class cCharacter : public QObject
 {
 	Q_OBJECT
 public:
+	/*!
+	 \brief
+
+	 \enum GENDER
+	*/
 	enum GENDER
 	{
 		GENDER_undefined	= 0,
@@ -24,120 +39,470 @@ public:
 		GENDER_female		= 2,
 	};
 
+	/*!
+	 \brief
+
+	 \fn cCharacter
+	 \param iID
+	 \param parent
+	*/
 	explicit cCharacter(qint32 iID = -1, QObject *parent = nullptr);
 
+	/*!
+	 \brief
+
+	 \fn setID
+	 \param iID
+	*/
 	void			setID(const qint32& iID);
+	/*!
+	 \brief
+
+	 \fn id
+	 \return qint32
+	*/
 	qint32			id();
 
+	/*!
+	 \brief
+
+	 \fn setMainCharacter
+	 \param bMainCharacter
+	*/
 	void			setMainCharacter(bool bMainCharacter);
+	/*!
+	 \brief
+
+	 \fn mainCharacter
+	 \return bool
+	*/
 	bool			mainCharacter();
 
+	/*!
+	 \brief
+
+	 \fn setCreature
+	 \param szCreature
+	*/
 	void			setCreature(const QString& szCreature);
+	/*!
+	 \brief
+
+	 \fn creature
+	 \return QString
+	*/
 	QString			creature();
 
+	/*!
+	 \brief
+
+	 \fn setGender
+	 \param gender
+	*/
 	void			setGender(GENDER gender);
+	/*!
+	 \brief
+
+	 \fn gender
+	 \return GENDER
+	*/
 	GENDER			gender();
+	/*!
+	 \brief
+
+	 \fn genderText
+	 \return QString
+	*/
 	QString			genderText();
+	/*!
+	 \brief
+
+	 \fn genderText
+	 \param gender
+	 \return QString
+	*/
 	QString			genderText(GENDER gender) const;
 
+	/*!
+	 \brief
+
+	 \fn setTitle
+	 \param szTitle
+	*/
 	void			setTitle(const QString& szTitle);
+	/*!
+	 \brief
+
+	 \fn title
+	 \return QString
+	*/
 	QString			title();
 
+	/*!
+	 \brief
+
+	 \fn setFirstName
+	 \param szFirstName
+	*/
 	void			setFirstName(const QString& szFirstName);
+	/*!
+	 \brief
+
+	 \fn firstName
+	 \return QString
+	*/
 	QString			firstName();
 
+	/*!
+	 \brief
+
+	 \fn setMiddleName
+	 \param szMiddleName
+	*/
 	void			setMiddleName(const QString& szMiddleName);
+	/*!
+	 \brief
+
+	 \fn middleName
+	 \return QString
+	*/
 	QString			middleName();
 
+	/*!
+	 \brief
+
+	 \fn setLastName
+	 \param szLastName
+	*/
 	void			setLastName(const QString& szLastName);
+	/*!
+	 \brief
+
+	 \fn lastName
+	 \return QString
+	*/
 	QString			lastName();
 
+	/*!
+	 \brief
+
+	 \fn name
+	 \return QString
+	*/
 	QString			name();
 
+	/*!
+	 \brief
+
+	 \fn setNickName
+	 \param szNickName
+	*/
 	void			setNickName(const QString& szNickName);
+	/*!
+	 \brief
+
+	 \fn nickName
+	 \return QString
+	*/
 	QString			nickName();
 
+	/*!
+	 \brief
+
+	 \fn setHeight
+	 \param dHeight
+	*/
 	void			setHeight(qreal dHeight);
+	/*!
+	 \brief
+
+	 \fn height
+	 \return qreal
+	*/
 	qreal			height();
 
+	/*!
+	 \brief
+
+	 \fn setWeight
+	 \param dWeight
+	*/
 	void			setWeight(qreal dWeight);
+	/*!
+	 \brief
+
+	 \fn weight
+	 \return qreal
+	*/
 	qreal			weight();
 
+	/*!
+	 \brief
+
+	 \fn setAge
+	 \param dAge
+	*/
 	void			setAge(qreal dAge);
+	/*!
+	 \brief
+
+	 \fn age
+	 \return qreal
+	*/
 	qreal			age();
 
+	/*!
+	 \brief
+
+	 \fn setDateOfBirth
+	 \param dateOfBirth
+	*/
 	void			setDateOfBirth(const QDate& dateOfBirth);
+	/*!
+	 \brief
+
+	 \fn dateOfBirth
+	 \return QDate
+	*/
 	QDate			dateOfBirth();
 
+	/*!
+	 \brief
+
+	 \fn setPlaceOfBirth
+	 \param szPlaceOfBirth
+	*/
 	void			setPlaceOfBirth(const QString& szPlaceOfBirth);
+	/*!
+	 \brief
+
+	 \fn placeOfBirth
+	 \return QString
+	*/
 	QString			placeOfBirth();
 
+	/*!
+	 \brief
+
+	 \fn setDateOfDeath
+	 \param dateOfDeath
+	*/
 	void			setDateOfDeath(const QDate& dateOfDeath);
+	/*!
+	 \brief
+
+	 \fn dateOfDeath
+	 \return QDate
+	*/
 	QDate			dateOfDeath();
 
+	/*!
+	 \brief
+
+	 \fn setPlaceOfDeath
+	 \param szPlaceOfDeath
+	*/
 	void			setPlaceOfDeath(const QString& szPlaceOfDeath);
+	/*!
+	 \brief
+
+	 \fn placeOfDeath
+	 \return QString
+	*/
 	QString			placeOfDeath();
 
+	/*!
+	 \brief
+
+	 \fn setHairColor
+	 \param szHairColor
+	*/
 	void			setHairColor(const QString& szHairColor);
+	/*!
+	 \brief
+
+	 \fn hairColor
+	 \return QString
+	*/
 	QString			hairColor();
 
+	/*!
+	 \brief
+
+	 \fn setHairCut
+	 \param szHairCut
+	*/
 	void			setHairCut(const QString& szHairCut);
+	/*!
+	 \brief
+
+	 \fn hairCut
+	 \return QString
+	*/
 	QString			hairCut();
 
+	/*!
+	 \brief
+
+	 \fn setHairLength
+	 \param szHairLength
+	*/
 	void			setHairLength(const QString& szHairLength);
+	/*!
+	 \brief
+
+	 \fn hairLength
+	 \return QString
+	*/
 	QString			hairLength();
 
+	/*!
+	 \brief
+
+	 \fn setFigure
+	 \param szFigure
+	*/
 	void			setFigure(const QString& szFigure);
+	/*!
+	 \brief
+
+	 \fn figure
+	 \return QString
+	*/
 	QString			figure();
 
+	/*!
+	 \brief
+
+	 \fn setNature
+	 \param szNature
+	*/
 	void			setNature(const QString& szNature);
+	/*!
+	 \brief
+
+	 \fn nature
+	 \return QString
+	*/
 	QString			nature();
 
+	/*!
+	 \brief
+
+	 \fn setSpokenLanguages
+	 \param szSpokenLanguages
+	*/
 	void			setSpokenLanguages(const QString& szSpokenLanguages);
+	/*!
+	 \brief
+
+	 \fn spokenLanguages
+	 \return QString
+	*/
 	QString			spokenLanguages();
 
+	/*!
+	 \brief
+
+	 \fn setSkin
+	 \param szSkin
+	*/
 	void			setSkin(const QString& szSkin);
+	/*!
+	 \brief
+
+	 \fn skin
+	 \return QString
+	*/
 	QString			skin();
 
+	/*!
+	 \brief
+
+	 \fn setSchool
+	 \param szSchool
+	*/
 	void			setSchool(const QString& szSchool);
+	/*!
+	 \brief
+
+	 \fn school
+	 \return QString
+	*/
 	QString			school();
 
+	/*!
+	 \brief
+
+	 \fn setJob
+	 \param szJob
+	*/
 	void			setJob(const QString& szJob);
+	/*!
+	 \brief
+
+	 \fn job
+	 \return QString
+	*/
 	QString			job();
 
+	/*!
+	 \brief
+
+	 \fn setDescription
+	 \param lpDescription
+	*/
 	void			setDescription(cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn description
+	 \return cTextDocument
+	*/
 	cTextDocument*	description();
 
+	/*!
+	 \brief
+
+	 \fn addImage
+	 \param lpImage
+	*/
 	void			addImage(cImage* lpImage);
+	/*!
+	 \brief
+
+	 \fn images
+	 \return QList<cImage *>
+	*/
 	QList<cImage*>	images();
 private:
-	qint32			m_id;
-	bool			m_bMainCharacter;
-	QString			m_szCreature;
-	GENDER			m_gender;
-	QString			m_szTitle;
-	QString			m_szFirstName;
-	QString			m_szMiddleName;
-	QString			m_szLastName;
-	QString			m_szNickName;
-	qreal			m_dHeight;
-	qreal			m_dWeight;
-	qreal			m_dAge;
-	QDate			m_dateOfBirth;
-	QString			m_szPlaceOfBirth;
-	QDate			m_dateOfDeath;
-	QString			m_szPlaceOfDeath;
-	QString			m_szHairColor;
-	QString			m_szHairCut;
-	QString			m_szHairLength;
-	QString			m_szFigure;
-	QString			m_szNature;
-	QString			m_szSpokenLanguages;
-	QString			m_szSkin;
-	QString			m_szSchool;
-	QString			m_szJob;
-	cTextDocument*	m_lpDescription;
-	QList<cImage*>	m_imageList;
+	qint32			m_id; /*!< TODO: describe */
+	bool			m_bMainCharacter; /*!< TODO: describe */
+	QString			m_szCreature; /*!< TODO: describe */
+	GENDER			m_gender; /*!< TODO: describe */
+	QString			m_szTitle; /*!< TODO: describe */
+	QString			m_szFirstName; /*!< TODO: describe */
+	QString			m_szMiddleName; /*!< TODO: describe */
+	QString			m_szLastName; /*!< TODO: describe */
+	QString			m_szNickName; /*!< TODO: describe */
+	qreal			m_dHeight; /*!< TODO: describe */
+	qreal			m_dWeight; /*!< TODO: describe */
+	qreal			m_dAge; /*!< TODO: describe */
+	QDate			m_dateOfBirth; /*!< TODO: describe */
+	QString			m_szPlaceOfBirth; /*!< TODO: describe */
+	QDate			m_dateOfDeath; /*!< TODO: describe */
+	QString			m_szPlaceOfDeath; /*!< TODO: describe */
+	QString			m_szHairColor; /*!< TODO: describe */
+	QString			m_szHairCut; /*!< TODO: describe */
+	QString			m_szHairLength; /*!< TODO: describe */
+	QString			m_szFigure; /*!< TODO: describe */
+	QString			m_szNature; /*!< TODO: describe */
+	QString			m_szSpokenLanguages; /*!< TODO: describe */
+	QString			m_szSkin; /*!< TODO: describe */
+	QString			m_szSchool; /*!< TODO: describe */
+	QString			m_szJob; /*!< TODO: describe */
+	cTextDocument*	m_lpDescription; /*!< TODO: describe */
+	QList<cImage*>	m_imageList; /*!< TODO: describe */
 signals:
 
 public slots:
@@ -145,13 +510,45 @@ public slots:
 
 Q_DECLARE_METATYPE(cCharacter*)
 
+/*!
+ \brief
+
+ \class cCharacterList ccharacter.h "ccharacter.h"
+*/
 class cCharacterList : public QList<cCharacter*>
 {
 public:
+	/*!
+	 \brief
+
+	 \fn load
+	 \param lpImageList
+	 \return bool
+	*/
 	bool			load(cImageList* lpImageList);
+	/*!
+	 \brief
+
+	 \fn save
+	 \return bool
+	*/
 	bool			save();
 
+	/*!
+	 \brief
+
+	 \fn add
+	 \param iID
+	 \return cCharacter
+	*/
 	cCharacter*		add(const qint32& iID);
+	/*!
+	 \brief
+
+	 \fn find
+	 \param iID
+	 \return cCharacter
+	*/
 	cCharacter*		find(const qint32& iID);
 };
 

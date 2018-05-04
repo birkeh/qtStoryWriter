@@ -1,3 +1,8 @@
+/*!
+ \file ctextdocument.cpp
+
+*/
+
 #include "ctextdocument.h"
 
 #include <QVector>

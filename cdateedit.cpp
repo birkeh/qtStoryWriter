@@ -1,3 +1,8 @@
+/*!
+ \file cdateedit.cpp
+
+*/
+
 #include "cdateedit.h"
 
 

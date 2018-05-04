@@ -1,3 +1,8 @@
+/*!
+ \file cwidget.cpp
+
+*/
+
 #include "cwidget.h"
 
 

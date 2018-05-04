@@ -1,3 +1,8 @@
+/*!
+ \file cpart.cpp
+
+*/
+
 #include "cpart.h"
 
 #include "common.h"

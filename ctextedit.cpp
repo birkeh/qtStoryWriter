@@ -1,3 +1,8 @@
+/*!
+ \file ctextedit.cpp
+
+*/
+
 #include "common.h"
 
 #include "ctextedit.h"

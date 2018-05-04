@@ -1,3 +1,8 @@
+/*!
+ \file cmdisubwindow.cpp
+
+*/
+
 #include "cmdisubwindow.h"
 
 #include <QCloseEvent>

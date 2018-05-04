@@ -1,3 +1,8 @@
+/*!
+ \file cstorybook.cpp
+
+*/
+
 #include "cstorybook.h"
 #include "common.h"
 

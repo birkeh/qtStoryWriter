@@ -1,3 +1,8 @@
+/*!
+ \file ctreeview.cpp
+
+*/
+
 #include "ctreeview.h"
 
 cTreeView::cTreeView(QWidget* parent) :

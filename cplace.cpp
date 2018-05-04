@@ -1,3 +1,8 @@
+/*!
+ \file cplace.cpp
+
+*/
+
 #include "cplace.h"
 
 #include "common.h"

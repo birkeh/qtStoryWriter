@@ -1,3 +1,8 @@
+/*!
+ \file cscenewindow.cpp
+
+*/
+
 #include "cscenewindow.h"
 #include "ui_cscenewindow.h"
 

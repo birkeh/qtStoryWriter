@@ -1,3 +1,8 @@
+/*!
+ \file crecherche.cpp
+
+*/
+
 #include "crecherche.h"
 
 #include "common.h"

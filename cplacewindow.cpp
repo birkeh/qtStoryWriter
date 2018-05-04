@@ -1,3 +1,8 @@
+/*!
+ \file cplacewindow.cpp
+
+*/
+
 #include "cplacewindow.h"
 #include "ui_cplacewindow.h"
 

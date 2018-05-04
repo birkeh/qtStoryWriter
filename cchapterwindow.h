@@ -1,3 +1,8 @@
+/*!
+ \file cchapterwindow.h
+
+*/
+
 #ifndef CCHAPTERWINDOW_H
 #define CCHAPTERWINDOW_H
 
@@ -16,22 +21,51 @@ namespace Ui {
 class cChapterWindow;
 }
 
+/*!
+ \brief
+
+ \class cChapterWindow cchapterwindow.h "cchapterwindow.h"
+*/
 class cChapterWindow : public cMDISubWindow
 {
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cChapterWindow
+	 \param parent
+	*/
 	explicit cChapterWindow(QWidget *parent = 0);
+	/*!
+	 \brief
+
+	 \fn ~cChapterWindow
+	*/
 	~cChapterWindow();
 
+	/*!
+	 \brief
+
+	 \fn setChapter
+	 \param lpChapter
+	 \param lpSceneList
+	*/
 	void				setChapter(cChapter* lpChapter, cSceneList* lpSceneList);
+	/*!
+	 \brief
+
+	 \fn chapter
+	 \return cChapter
+	*/
 	cChapter*			chapter();
 
 private:
-	Ui::cChapterWindow *ui;
-	cChapter*			m_lpChapter;
-	cSceneList*			m_lpSceneList;
-	QStandardItemModel*	m_lpSceneModel;
+	Ui::cChapterWindow *ui; /*!< TODO: describe */
+	cChapter*			m_lpChapter; /*!< TODO: describe */
+	cSceneList*			m_lpSceneList; /*!< TODO: describe */
+	QStandardItemModel*	m_lpSceneModel; /*!< TODO: describe */
 };
 
 #endif // CCHAPTERWINDOW_H

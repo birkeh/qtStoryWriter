@@ -1,3 +1,8 @@
+/*!
+ \file ccombobox.cpp
+
+*/
+
 #include "ccombobox.h"
 
 

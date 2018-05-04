@@ -122,7 +122,8 @@ FORMS += \
     crecherchewindow.ui
 
 DISTFILES += \
-    storyBook.project
+    storyBook.project \
+    Doxyfile
 
 RESOURCES += \
     qtstorywriter.qrc

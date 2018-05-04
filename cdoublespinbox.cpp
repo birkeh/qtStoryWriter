@@ -1,3 +1,8 @@
+/*!
+ \file cdoublespinbox.cpp
+
+*/
+
 #include "cdoublespinbox.h"
 
 cDoubleSpinBox::cDoubleSpinBox(QWidget* parent) :

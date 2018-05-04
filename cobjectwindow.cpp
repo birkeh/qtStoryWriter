@@ -1,3 +1,8 @@
+/*!
+ \file cobjectwindow.cpp
+
+*/
+
 #include "cobjectwindow.h"
 #include "ui_cobjectwindow.h"
 
