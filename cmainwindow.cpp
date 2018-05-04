@@ -29,6 +29,8 @@
 #include <QClipboard>
 #include <QMimeData>
 
+#include <QToolBar>
+
 #include <QMessageBox>
 
 
@@ -347,7 +349,6 @@ void cMainWindow::createTextActions()
 
 	m_lpFormatToolBar = addToolBar(tr("Format Actions"));
 	m_lpFormatToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-	addToolBarBreak(Qt::TopToolBarArea);
 	addToolBar(m_lpFormatToolBar);
 
 	m_lpComboFont	= new QFontComboBox(m_lpFormatToolBar);
