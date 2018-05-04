@@ -42,12 +42,13 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	m_lpFileToolBar(0),
 	m_lpEditToolBar(0),
 	m_lpTextToolBar(0),
-	m_lpFormatToolBar(0)
+	m_lpFormatToolBar(0),
+	m_lpOldTextEdit(0)
 {
 	initUI();
 	createActions();
 
-	//disableTextEdit();
+	disableTextEdit();
 
 	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
 	m_lpStoryBook		= new cStoryBook(szPath);
@@ -334,10 +335,10 @@ void cMainWindow::createTextActions()
 
 	m_lpTextMenu->addSeparator();
 
-//	QPixmap pix(16, 16);
-//	pix.fill(Qt::black);
-//	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
-//	m_lpTextToolBar->addAction(m_lpActionTextColor);
+	QPixmap pix(16, 16);
+	pix.fill(Qt::black);
+	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
+	m_lpTextToolBar->addAction(m_lpActionTextColor);
 
 	m_lpFormatToolBar = addToolBar(tr("Format Actions"));
 	m_lpFormatToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
@@ -367,6 +368,11 @@ void cMainWindow::disableTextEdit()
 	m_lpTextMenu->setEnabled(false);
 	m_lpTextToolBar->setEnabled(false);
 	m_lpFormatToolBar->setEnabled(false);
+
+	if(m_lpOldTextEdit)
+		disconnectTextEdit();
+
+	m_lpOldTextEdit	= 0;
 }
 
 void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
@@ -377,39 +383,82 @@ void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
 	m_lpTextToolBar->setEnabled(true);
 	m_lpFormatToolBar->setEnabled(true);
 
-	connect(m_lpActionTextBold,			&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextBold);
-	connect(m_lpActionTextItalic,		&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextItalic);
-	connect(m_lpActionTextUnderline,	&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextUnderline);
+	if(m_lpOldTextEdit == lpTextEdit)
+		return;
 
-//	connect(m_lpActionTextColor,		&QAction::triggered,			lpTextEdit,		&cTextEdit::onTextColor);
+	if(m_lpOldTextEdit)
+		disconnectTextEdit();
 
-	connect(lpTextEdit->document(),		&cTextDocument::undoAvailable,	m_lpActionUndo,	&QAction::setEnabled);
-	connect(lpTextEdit->document(),		&cTextDocument::redoAvailable,	m_lpActionRedo,	&QAction::setEnabled);
+	connect(m_lpActionTextBold,				&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextBold);
+	connect(m_lpActionTextItalic,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextItalic);
+	connect(m_lpActionTextUnderline,		&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextUnderline);
+
+	connect(m_lpActionTextColor,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextColor);
+
+	connect(lpTextEdit->document(),			&cTextDocument::undoAvailable,	m_lpActionUndo,			&QAction::setEnabled);
+	connect(lpTextEdit->document(),			&cTextDocument::redoAvailable,	m_lpActionRedo,			&QAction::setEnabled);
 	m_lpActionUndo->setEnabled(lpTextEdit->document()->isUndoAvailable());
 	m_lpActionRedo->setEnabled(lpTextEdit->document()->isRedoAvailable());
 
-	connect(m_lpActionUndo,				&QAction::triggered,			lpTextEdit,		&cTextEdit::undo);
-	connect(m_lpActionRedo,				&QAction::triggered,			lpTextEdit,		&cTextEdit::redo);
+	connect(m_lpActionUndo,					&QAction::triggered,			lpTextEdit,				&cTextEdit::undo);
+	connect(m_lpActionRedo,					&QAction::triggered,			lpTextEdit,				&cTextEdit::redo);
 
 #ifndef QT_NO_CLIPBOARD
 	m_lpActionCut->setEnabled(false);
 	m_lpActionCopy->setEnabled(false);
 
-	connect(QApplication::clipboard(),	&QClipboard::dataChanged,		this,			&cMainWindow::onClipboardDataChanged);
+	connect(QApplication::clipboard(),		&QClipboard::dataChanged,		this,					&cMainWindow::onClipboardDataChanged);
 
-	connect(m_lpActionCut,				&QAction::triggered,			lpTextEdit,		&cTextEdit::cut);
-	connect(m_lpActionCopy,				&QAction::triggered,			lpTextEdit,		&cTextEdit::copy);
-	connect(m_lpActionPaste,			&QAction::triggered,			lpTextEdit,		&cTextEdit::paste);
+	connect(m_lpActionCut,					&QAction::triggered,			lpTextEdit,				&cTextEdit::cut);
+	connect(m_lpActionCopy,					&QAction::triggered,			lpTextEdit,				&cTextEdit::copy);
+	connect(m_lpActionPaste,				&QAction::triggered,			lpTextEdit,				&cTextEdit::paste);
 #endif
 
-	connect(m_lpAlignGroup,				&QActionGroup::triggered,		lpTextEdit,		&cTextEdit::onTextAlign);
+	connect(m_lpAlignGroup,					&QActionGroup::triggered,		lpTextEdit,		&cTextEdit::onTextAlign);
 
-	connect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextFamily);
-	connect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextSize);
+	connect(m_lpComboFont,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextFamily);
+	connect(m_lpComboSize,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextSize);
 
-	connect(lpTextEdit,					&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
-//	connect(lpTextEdit,					&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
-	connect(lpTextEdit,					&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
+	connect(lpTextEdit,						&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
+	connect(lpTextEdit,						&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
+	connect(lpTextEdit,						&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
+
+	m_lpOldTextEdit	= lpTextEdit;
+}
+
+void cMainWindow::disconnectTextEdit()
+{
+	if(m_lpOldTextEdit)
+	{
+		disconnect(m_lpActionTextBold,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextBold);
+		disconnect(m_lpActionTextItalic,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextItalic);
+		disconnect(m_lpActionTextUnderline,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextUnderline);
+
+		disconnect(m_lpActionTextColor,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextColor);
+
+		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::undoAvailable,	m_lpActionUndo,			&QAction::setEnabled);
+		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::redoAvailable,	m_lpActionRedo,			&QAction::setEnabled);
+
+		disconnect(m_lpActionUndo,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::undo);
+		disconnect(m_lpActionRedo,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::redo);
+
+#ifndef QT_NO_CLIPBOARD
+		disconnect(QApplication::clipboard(),	&QClipboard::dataChanged,		this,					&cMainWindow::onClipboardDataChanged);
+
+		disconnect(m_lpActionCut,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::cut);
+		disconnect(m_lpActionCopy,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::copy);
+		disconnect(m_lpActionPaste,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::paste);
+#endif
+
+		disconnect(m_lpAlignGroup,				&QActionGroup::triggered,		m_lpOldTextEdit,		&cTextEdit::onTextAlign);
+
+		disconnect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextFamily);
+		disconnect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextSize);
+
+		disconnect(m_lpOldTextEdit,				&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
+		disconnect(m_lpOldTextEdit,				&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
+		disconnect(m_lpOldTextEdit,				&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
+	}
 }
 
 void cMainWindow::updateWindowTitle()
@@ -883,12 +932,12 @@ void cMainWindow::onFontChanged(const QFont& font)
 	m_lpActionTextUnderline->setChecked(font.underline());
 }
 
-//void cMainWindow::onColorChanged(const QColor& color)
-//{
-//	QPixmap pix(16, 16);
-//	pix.fill(color);
-//	m_lpActionTextColor->setIcon(pix);
-//}
+void cMainWindow::onColorChanged(const QColor& color)
+{
+	QPixmap pix(16, 16);
+	pix.fill(color);
+	m_lpActionTextColor->setIcon(pix);
+}
 
 void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 {
