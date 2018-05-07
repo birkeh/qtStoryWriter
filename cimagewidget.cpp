@@ -8,6 +8,8 @@
 
 #include "cmainwindow.h"
 
+#include "common.h"
+
 
 cImageWidget::cImageWidget(QWidget *parent) :
 	QWidget(parent),
@@ -15,6 +17,7 @@ cImageWidget::cImageWidget(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+// CONNECT CURRENTLY NOT POSSIBLE
 	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
 	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
 }

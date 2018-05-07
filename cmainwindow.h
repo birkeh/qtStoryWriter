@@ -30,6 +30,8 @@
 
 #include <QActionGroup>
 
+#include <QPoint>
+
 
 namespace Ui {
 class cMainWindow;
@@ -342,6 +344,42 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onOutlineContextMenu
+	 \param index
+	*/
+	void				onOutlineContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onCharacterContextMenu
+	 \param index
+	*/
+	void				onCharacterContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onPlaceContextMenu
+	 \param index
+	*/
+	void				onPlaceContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onObjectContextMenu
+	 \param index
+	*/
+	void				onObjectContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onRechercheContextMenu
+	 \param index
+	*/
+	void				onRechercheContextMenu(const QPoint& pos);
+
+	/*!
+	 \brief
+
 	 \fn onFileNew
 	*/
 	void				onFileNew();
@@ -413,6 +451,34 @@ private slots:
 	*/
 	void				onAlignmentChanged(const Qt::Alignment& alignment);
 
+	void				onAddPart();
+	void				onEditPart();
+	void				onDeletePart();
+
+	void				onAddChapter();
+	void				onEditChapter();
+	void				onDeleteChapter();
+
+	void				onAddScene();
+	void				onEditScene();
+	void				onDeleteScene();
+
+	void				onAddCharacter();
+	void				onEditCharacter();
+	void				onDeleteCharacter();
+
+	void				onAddPlace();
+	void				onEditPlace();
+	void				onDeletePlace();
+
+	void				onAddObject();
+	void				onEditObject();
+	void				onDeleteObject();
+
+	void				onAddRecherche();
+	void				onEditRecherche();
+	void				onDeleteRecherche();
+
 private:
 	Ui::cMainWindow*	ui; /*!< TODO: describe */
 	QStandardItemModel*	m_lpOutlineModel; /*!< TODO: describe */
@@ -452,6 +518,34 @@ private:
 	QAction*			m_lpActionCopy; /*!< TODO: describe */
 	QAction*			m_lpActionPaste; /*!< TODO: describe */
 
+	QAction*			m_lpActionPartAdd; /*!< TODO: describe */
+	QAction*			m_lpActionPartEdit; /*!< TODO: describe */
+	QAction*			m_lpActionPartDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionChapterAdd; /*!< TODO: describe */
+	QAction*			m_lpActionChapterEdit; /*!< TODO: describe */
+	QAction*			m_lpActionChapterDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionSceneAdd; /*!< TODO: describe */
+	QAction*			m_lpActionSceneEdit; /*!< TODO: describe */
+	QAction*			m_lpActionSceneDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionCharacterAdd; /*!< TODO: describe */
+	QAction*			m_lpActionCharacterEdit; /*!< TODO: describe */
+	QAction*			m_lpActionCharacterDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionPlaceAdd; /*!< TODO: describe */
+	QAction*			m_lpActionPlaceEdit; /*!< TODO: describe */
+	QAction*			m_lpActionPlaceDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionObjectAdd; /*!< TODO: describe */
+	QAction*			m_lpActionObjectEdit; /*!< TODO: describe */
+	QAction*			m_lpActionObjectDelete; /*!< TODO: describe */
+
+	QAction*			m_lpActionRechercheAdd; /*!< TODO: describe */
+	QAction*			m_lpActionRechercheEdit; /*!< TODO: describe */
+	QAction*			m_lpActionRechercheDelete; /*!< TODO: describe */
+
 	QActionGroup*		m_lpAlignGroup; /*!< TODO: describe */
 
 	QFontComboBox*		m_lpComboFont; /*!< TODO: describe */
@@ -490,6 +584,12 @@ private:
 	 \fn createTextActions
 	*/
 	void				createTextActions();
+	/*!
+	 \brief
+
+	 \fn createContextActions
+	*/
+	void				createContextActions();
 
 	/*!
 	 \brief

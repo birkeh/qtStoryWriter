@@ -60,6 +60,24 @@ public:
 	*/
 	cPart*				part();
 
+private slots:
+	/*!
+	 \brief
+
+	 \fn onChapterDoubleClicked
+	 \param index
+	*/
+	void					onChapterDoubleClicked(const QModelIndex& index);
+
+signals:
+	/*!
+	 \brief
+
+	 \fn showPartWindow
+	 \param lpPart
+	*/
+	void					showChapterWindow(cChapter* lpChapter);
+
 private:
 	Ui::cPartWindow*	ui; /*!< TODO: describe */
 	cPart*				m_lpPart; /*!< TODO: describe */

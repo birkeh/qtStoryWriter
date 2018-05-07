@@ -8,6 +8,8 @@
 
 #include "cmainwindow.h"
 
+#include "common.h"
+
 #include <QStandardItem>
 
 
@@ -21,6 +23,8 @@ cChapterWindow::cChapterWindow(QWidget *parent) :
 
 	m_lpSceneModel	= new QStandardItemModel(0, 1);
 	ui->m_lpSceneList->setModel(m_lpSceneModel);
+
+	connect(ui->m_lpSceneList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onSceneDoubleClicked(QModelIndex)));
 
 	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
 	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
@@ -75,4 +79,12 @@ void cChapterWindow::setChapter(cChapter* lpChapter, cSceneList* lpSceneList)
 cChapter* cChapterWindow::chapter()
 {
 	return(m_lpChapter);
+}
+
+void cChapterWindow::onSceneDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpSceneModel->itemFromIndex(index);
+	cScene*			lpScene		= qvariant_cast<cScene*>(lpItem->data());
+	if(lpScene)
+		showSceneWindow(lpScene);
 }

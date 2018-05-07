@@ -61,6 +61,24 @@ public:
 	*/
 	cChapter*			chapter();
 
+private slots:
+	/*!
+	 \brief
+
+	 \fn onSceneDoubleClicked
+	 \param index
+	*/
+	void					onSceneDoubleClicked(const QModelIndex& index);
+
+signals:
+	/*!
+	 \brief
+
+	 \fn showSceneWindow
+	 \param lpScene
+	*/
+	void					showSceneWindow(cScene* lpScene);
+
 private:
 	Ui::cChapterWindow *ui; /*!< TODO: describe */
 	cChapter*			m_lpChapter; /*!< TODO: describe */

@@ -8,6 +8,8 @@
 
 #include "cmainwindow.h"
 
+#include "common.h"
+
 #include <QStandardItem>
 
 

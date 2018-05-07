@@ -158,15 +158,23 @@ void cMainWindow::createActions()
 	createEditActions();
 	createTextActions();
 
-	connect(ui->m_lpMainTab,		&QTabWidget::currentChanged,	this,	&cMainWindow::onMainTabCurrentChanged);
-	connect(ui->m_lpMainTab,		&QTabWidget::tabCloseRequested,	this,	&cMainWindow::onMainTabTabCloseRequested);
-	connect(ui->m_lpMdiArea,		&QMdiArea::subWindowActivated,	this,	&cMainWindow::onMdiAreaSubWindowActivated);
+	createContextActions();
 
-	connect(ui->m_lpOutlineList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onOutlineDoubleClicked);
-	connect(ui->m_lpCharacterList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onCharacterDoubleClicked);
-	connect(ui->m_lpPlaceList,		&QTreeView::doubleClicked,		this,	&cMainWindow::onPlaceDoubleClicked);
-	connect(ui->m_lpObjectList,		&QTreeView::doubleClicked,		this,	&cMainWindow::onObjectDoubleClicked);
-	connect(ui->m_lpRechercheList,	&QTreeView::doubleClicked,		this,	&cMainWindow::onRechercheDoubleClicked);
+	connect(ui->m_lpMainTab,		&QTabWidget::currentChanged,			this,	&cMainWindow::onMainTabCurrentChanged);
+	connect(ui->m_lpMainTab,		&QTabWidget::tabCloseRequested,			this,	&cMainWindow::onMainTabTabCloseRequested);
+	connect(ui->m_lpMdiArea,		&QMdiArea::subWindowActivated,			this,	&cMainWindow::onMdiAreaSubWindowActivated);
+
+	connect(ui->m_lpOutlineList,	&QTreeView::doubleClicked,				this,	&cMainWindow::onOutlineDoubleClicked);
+	connect(ui->m_lpCharacterList,	&QTreeView::doubleClicked,				this,	&cMainWindow::onCharacterDoubleClicked);
+	connect(ui->m_lpPlaceList,		&QTreeView::doubleClicked,				this,	&cMainWindow::onPlaceDoubleClicked);
+	connect(ui->m_lpObjectList,		&QTreeView::doubleClicked,				this,	&cMainWindow::onObjectDoubleClicked);
+	connect(ui->m_lpRechercheList,	&QTreeView::doubleClicked,				this,	&cMainWindow::onRechercheDoubleClicked);
+
+	connect(ui->m_lpOutlineList,	&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onOutlineContextMenu);
+	connect(ui->m_lpCharacterList,	&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onCharacterContextMenu);
+	connect(ui->m_lpPlaceList,		&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onPlaceContextMenu);
+	connect(ui->m_lpObjectList,		&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onObjectContextMenu);
+	connect(ui->m_lpRechercheList,	&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onRechercheContextMenu);
 }
 
 void cMainWindow::createFileActions()
@@ -365,6 +373,93 @@ void cMainWindow::createTextActions()
 		m_lpComboSize->addItem(QString::number(size));
 	m_lpComboSize->setCurrentIndex(standardSizes.indexOf(QApplication::font().pointSize()));
 	m_focusException.append(m_lpComboSize);
+}
+
+void cMainWindow::createContextActions()
+{
+	m_lpActionPartAdd = new QAction(tr("add part"), this);
+	m_lpActionPartAdd->setStatusTip(tr("add a new part"));
+	connect(m_lpActionPartAdd, &QAction::triggered, this, &cMainWindow::onAddPart);
+
+	m_lpActionPartEdit = new QAction(tr("edit part"), this);
+	m_lpActionPartEdit->setStatusTip(tr("edit the part"));
+	connect(m_lpActionPartEdit, &QAction::triggered, this, &cMainWindow::onEditPart);
+
+	m_lpActionPartDelete = new QAction(tr("delete part"), this);
+	m_lpActionPartDelete->setStatusTip(tr("delete the part"));
+	connect(m_lpActionPartDelete, &QAction::triggered, this, &cMainWindow::onDeletePart);
+
+	m_lpActionChapterAdd = new QAction(tr("add chapter"), this);
+	m_lpActionChapterAdd->setStatusTip(tr("add a new chapter"));
+	connect(m_lpActionChapterAdd, &QAction::triggered, this, &cMainWindow::onAddChapter);
+
+	m_lpActionChapterEdit = new QAction(tr("edit chapter"), this);
+	m_lpActionChapterEdit->setStatusTip(tr("edit the chapter"));
+	connect(m_lpActionChapterEdit, &QAction::triggered, this, &cMainWindow::onEditChapter);
+
+	m_lpActionChapterDelete = new QAction(tr("delete chapter"), this);
+	m_lpActionChapterDelete->setStatusTip(tr("delete the chapter"));
+	connect(m_lpActionChapterDelete, &QAction::triggered, this, &cMainWindow::onDeleteChapter);
+
+	m_lpActionSceneAdd = new QAction(tr("add scene"), this);
+	m_lpActionSceneAdd->setStatusTip(tr("add a new scene"));
+	connect(m_lpActionSceneAdd, &QAction::triggered, this, &cMainWindow::onAddScene);
+
+	m_lpActionSceneEdit = new QAction(tr("edit scene"), this);
+	m_lpActionSceneEdit->setStatusTip(tr("edit the scene"));
+	connect(m_lpActionSceneEdit, &QAction::triggered, this, &cMainWindow::onEditScene);
+
+	m_lpActionSceneDelete = new QAction(tr("delete scene"), this);
+	m_lpActionSceneDelete->setStatusTip(tr("delete the scene"));
+	connect(m_lpActionSceneDelete, &QAction::triggered, this, &cMainWindow::onDeleteScene);
+
+	m_lpActionCharacterAdd = new QAction(tr("add character"), this);
+	m_lpActionCharacterAdd->setStatusTip(tr("add a new character"));
+	connect(m_lpActionCharacterAdd, &QAction::triggered, this, &cMainWindow::onAddCharacter);
+
+	m_lpActionCharacterEdit = new QAction(tr("edit character"), this);
+	m_lpActionCharacterEdit->setStatusTip(tr("edit the character"));
+	connect(m_lpActionCharacterEdit, &QAction::triggered, this, &cMainWindow::onEditCharacter);
+
+	m_lpActionCharacterDelete = new QAction(tr("delete character"), this);
+	m_lpActionCharacterDelete->setStatusTip(tr("delete the character"));
+	connect(m_lpActionCharacterDelete, &QAction::triggered, this, &cMainWindow::onDeleteCharacter);
+
+	m_lpActionPlaceAdd = new QAction(tr("add place"), this);
+	m_lpActionPlaceAdd->setStatusTip(tr("add a new place"));
+	connect(m_lpActionPlaceAdd, &QAction::triggered, this, &cMainWindow::onAddPlace);
+
+	m_lpActionPlaceEdit = new QAction(tr("edit place"), this);
+	m_lpActionPlaceEdit->setStatusTip(tr("edit the place"));
+	connect(m_lpActionPlaceEdit, &QAction::triggered, this, &cMainWindow::onEditPlace);
+
+	m_lpActionPlaceDelete = new QAction(tr("delete place"), this);
+	m_lpActionPlaceDelete->setStatusTip(tr("delete the place"));
+	connect(m_lpActionPlaceDelete, &QAction::triggered, this, &cMainWindow::onDeletePlace);
+
+	m_lpActionObjectAdd = new QAction(tr("add object"), this);
+	m_lpActionObjectAdd->setStatusTip(tr("add a new object"));
+	connect(m_lpActionObjectAdd, &QAction::triggered, this, &cMainWindow::onAddObject);
+
+	m_lpActionObjectEdit = new QAction(tr("edit object"), this);
+	m_lpActionObjectEdit->setStatusTip(tr("edit the object"));
+	connect(m_lpActionObjectEdit, &QAction::triggered, this, &cMainWindow::onEditObject);
+
+	m_lpActionObjectDelete = new QAction(tr("delete object"), this);
+	m_lpActionObjectDelete->setStatusTip(tr("delete the object"));
+	connect(m_lpActionObjectDelete, &QAction::triggered, this, &cMainWindow::onDeleteObject);
+
+	m_lpActionRechercheAdd = new QAction(tr("add recherche"), this);
+	m_lpActionRechercheAdd->setStatusTip(tr("add a new recherche"));
+	connect(m_lpActionRechercheAdd, &QAction::triggered, this, &cMainWindow::onAddRecherche);
+
+	m_lpActionRechercheEdit = new QAction(tr("edit recherche"), this);
+	m_lpActionRechercheEdit->setStatusTip(tr("edit the recherche"));
+	connect(m_lpActionRechercheEdit, &QAction::triggered, this, &cMainWindow::onEditRecherche);
+
+	m_lpActionRechercheDelete = new QAction(tr("delete recherche"), this);
+	m_lpActionRechercheDelete->setStatusTip(tr("delete the recherche"));
+	connect(m_lpActionRechercheDelete, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
 }
 
 void cMainWindow::disableTextEdit()
@@ -704,7 +799,9 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
-	connect(lpPartWindow,	&cPartWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
+	connect(lpPartWindow,	&cPartWindow::showChapterWindow,	this,	&cMainWindow::onShowChapterWindow);
+
+	connect(lpPartWindow,	&cPartWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpPartWindow->show();
 }
@@ -732,6 +829,8 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 	cWidget*			lpWidget1			= new cWidget(lpChapterWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpChapterWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
+
+	connect(lpChapterWindow,	&cChapterWindow::showSceneWindow,	this,	&cMainWindow::onShowSceneWindow);
 
 	connect(lpChapterWindow,	&cChapterWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
 
@@ -824,7 +923,7 @@ void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPlaceWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPlaceWindow->windowTitle());
 
-	connect(lpPlaceWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
+	connect(lpPlaceWindow,	&cPlaceWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpPlaceWindow->show();
 }
@@ -853,7 +952,7 @@ void cMainWindow::onShowObjectWindow(cObject* lpObject)
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpObjectWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpObjectWindow->windowTitle());
 
-	connect(lpObjectWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
+	connect(lpObjectWindow,	&cObjectWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpObjectWindow->show();
 }
@@ -886,9 +985,129 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 	connect(lpRechercheWindow,	&cRechercheWindow::showPlaceWindow,		this,	&cMainWindow::onShowPlaceWindow);
 	connect(lpRechercheWindow,	&cRechercheWindow::showObjectWindow,	this,	&cMainWindow::onShowObjectWindow);
 
-	connect(lpRechercheWindow,	&cSceneWindow::subWindowClosed,			this,	&cMainWindow::onSubWindowClosed);
+	connect(lpRechercheWindow,	&cRechercheWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpRechercheWindow->show();
+}
+
+void cMainWindow::onOutlineContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+	{
+		menu.addAction(m_lpActionPartAdd);
+	}
+	else
+	{
+		cPart*			lpPart		= qvariant_cast<cPart*>(lpItem->data());
+		cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+		cScene*			lpScene		= qvariant_cast<cScene*>(lpItem->data());
+
+		if(lpPart)
+		{
+			menu.addAction(m_lpActionPartAdd);
+			menu.addAction(m_lpActionPartEdit);
+			menu.addAction(m_lpActionPartDelete);
+			menu.addSeparator();
+			menu.addAction(m_lpActionChapterAdd);
+		}
+		else if(lpChapter)
+		{
+			menu.addAction(m_lpActionChapterAdd);
+			menu.addAction(m_lpActionChapterEdit);
+			menu.addAction(m_lpActionChapterDelete);
+			menu.addSeparator();
+			menu.addAction(m_lpActionSceneAdd);
+		}
+		else if(lpScene)
+		{
+			menu.addAction(m_lpActionSceneAdd);
+			menu.addAction(m_lpActionSceneEdit);
+			menu.addAction(m_lpActionSceneDelete);
+		}
+		else
+			menu.addAction(m_lpActionPartAdd);
+	}
+
+	menu.exec(ui->m_lpOutlineList->mapToGlobal(pos));
+}
+
+void cMainWindow::onCharacterContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpCharacterModel->itemFromIndex(ui->m_lpCharacterList->currentIndex());
+	if(!lpItem)
+	{
+		menu.addAction(m_lpActionCharacterAdd);
+	}
+	else
+	{
+		menu.addAction(m_lpActionCharacterAdd);
+		menu.addAction(m_lpActionCharacterEdit);
+		menu.addAction(m_lpActionCharacterDelete);
+	}
+
+	menu.exec(ui->m_lpCharacterList->mapToGlobal(pos));
+}
+
+void cMainWindow::onPlaceContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpPlaceModel->itemFromIndex(ui->m_lpPlaceList->currentIndex());
+	if(!lpItem)
+	{
+		menu.addAction(m_lpActionPlaceAdd);
+	}
+	else
+	{
+		menu.addAction(m_lpActionPlaceAdd);
+		menu.addAction(m_lpActionPlaceEdit);
+		menu.addAction(m_lpActionPlaceDelete);
+	}
+
+	menu.exec(ui->m_lpPlaceList->mapToGlobal(pos));
+}
+
+void cMainWindow::onObjectContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpObjectModel->itemFromIndex(ui->m_lpObjectList->currentIndex());
+	if(!lpItem)
+	{
+		menu.addAction(m_lpActionObjectAdd);
+	}
+	else
+	{
+		menu.addAction(m_lpActionObjectAdd);
+		menu.addAction(m_lpActionObjectEdit);
+		menu.addAction(m_lpActionObjectDelete);
+	}
+
+	menu.exec(ui->m_lpObjectList->mapToGlobal(pos));
+}
+
+void cMainWindow::onRechercheContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpRechercheModel->itemFromIndex(ui->m_lpRechercheList->currentIndex());
+	if(!lpItem)
+	{
+		menu.addAction(m_lpActionRechercheAdd);
+	}
+	else
+	{
+		menu.addAction(m_lpActionRechercheAdd);
+		menu.addAction(m_lpActionRechercheEdit);
+		menu.addAction(m_lpActionRechercheDelete);
+	}
+
+	menu.exec(ui->m_lpRechercheList->mapToGlobal(pos));
 }
 
 void cMainWindow::onFileNew()
@@ -955,4 +1174,158 @@ void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 		m_lpActionAlignRight->setChecked(true);
 	else if(alignment & Qt::AlignJustify)
 		m_lpActionAlignJustify->setChecked(true);
+}
+
+void cMainWindow::onAddPart()
+{
+}
+
+void cMainWindow::onEditPart()
+{
+	QStandardItem*	lpItem	= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cPart*			lpPart	= qvariant_cast<cPart*>(lpItem->data());
+
+	if(!lpPart)
+		return;
+
+	onShowPartWindow(lpPart);
+}
+
+void cMainWindow::onDeletePart()
+{
+}
+
+void cMainWindow::onAddChapter()
+{
+}
+
+void cMainWindow::onEditChapter()
+{
+	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+
+	if(!lpChapter)
+		return;
+
+	onShowChapterWindow(lpChapter);
+}
+
+void cMainWindow::onDeleteChapter()
+{
+}
+
+void cMainWindow::onAddScene()
+{
+}
+
+void cMainWindow::onEditScene()
+{
+	QStandardItem*	lpItem	= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cScene*			lpScene	= qvariant_cast<cScene*>(lpItem->data());
+
+	if(!lpScene)
+		return;
+
+	onShowSceneWindow(lpScene);
+}
+
+void cMainWindow::onDeleteScene()
+{
+}
+
+void cMainWindow::onAddCharacter()
+{
+}
+
+void cMainWindow::onEditCharacter()
+{
+	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(ui->m_lpCharacterList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
+
+	if(!lpCharacter)
+		return;
+
+	onShowCharacterWindow(lpCharacter);
+}
+
+void cMainWindow::onDeleteCharacter()
+{
+}
+
+void cMainWindow::onAddPlace()
+{
+}
+
+void cMainWindow::onEditPlace()
+{
+	QStandardItem*	lpItem	= m_lpPlaceModel->itemFromIndex(ui->m_lpPlaceList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cPlace*			lpPlace	= qvariant_cast<cPlace*>(lpItem->data());
+
+	if(!lpPlace)
+		return;
+
+	onShowPlaceWindow(lpPlace);
+}
+
+void cMainWindow::onDeletePlace()
+{
+}
+
+void cMainWindow::onAddObject()
+{
+}
+
+void cMainWindow::onEditObject()
+{
+	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(ui->m_lpObjectList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
+
+	if(!lpObject)
+		return;
+
+	onShowObjectWindow(lpObject);
+}
+
+void cMainWindow::onDeleteObject()
+{
+}
+
+void cMainWindow::onAddRecherche()
+{
+}
+
+void cMainWindow::onEditRecherche()
+{
+	QStandardItem*	lpItem		= m_lpRechercheModel->itemFromIndex(ui->m_lpRechercheList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cRecherche*		lpRecherche	= qvariant_cast<cRecherche*>(lpItem->data());
+
+	if(!lpRecherche)
+		return;
+
+	onShowRechercheWindow(lpRecherche);
+}
+
+void cMainWindow::onDeleteRecherche()
+{
 }

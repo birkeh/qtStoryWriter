@@ -8,6 +8,8 @@
 
 #include "cmainwindow.h"
 
+#include "common.h"
+
 #include <QStandardItem>
 
 
@@ -21,6 +23,8 @@ cPartWindow::cPartWindow(QWidget *parent) :
 
 	m_lpChapterModel	= new QStandardItemModel(0, 1);
 	ui->m_lpChapterList->setModel(m_lpChapterModel);
+
+	connect(ui->m_lpChapterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onChapterDoubleClicked(QModelIndex)));
 
 	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
 	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
@@ -71,4 +75,12 @@ void cPartWindow::setPart(cPart* lpPart, cChapterList* lpChapterList)
 cPart* cPartWindow::part()
 {
 	return(m_lpPart);
+}
+
+void cPartWindow::onChapterDoubleClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpChapterModel->itemFromIndex(index);
+	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+	if(lpChapter)
+		showChapterWindow(lpChapter);
 }

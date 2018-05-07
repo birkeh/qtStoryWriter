@@ -41,7 +41,7 @@ cWidget::cWidget(cCharacterWindow* parent) :
 cWidget::cWidget(cObjectWindow* parent) :
 	QWidget(parent),
 	m_type(TYPE_object),
-	m_lpWidget(0),
+	m_lpWidget(parent),
 	m_lpWindow(0)
 {
 }
@@ -49,7 +49,7 @@ cWidget::cWidget(cObjectWindow* parent) :
 cWidget::cWidget(cPlaceWindow* parent) :
 	QWidget(parent),
 	m_type(TYPE_place),
-	m_lpWidget(0),
+	m_lpWidget(parent),
 	m_lpWindow(0)
 {
 }
@@ -57,7 +57,7 @@ cWidget::cWidget(cPlaceWindow* parent) :
 cWidget::cWidget(cRechercheWindow* parent) :
 	QWidget(parent),
 	m_type(TYPE_recherche),
-	m_lpWidget(0),
+	m_lpWidget(parent),
 	m_lpWindow(0)
 {
 }
@@ -65,7 +65,7 @@ cWidget::cWidget(cRechercheWindow* parent) :
 cWidget::cWidget(QWidget* parent) :
 	QWidget(parent),
 	m_type(TYPE_unknown),
-	m_lpWidget(0),
+	m_lpWidget(parent),
 	m_lpWindow(0)
 {
 }
