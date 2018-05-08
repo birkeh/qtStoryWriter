@@ -1,8 +1,3 @@
-/*!
- \file cchapterwindow.h
-
-*/
-
 #ifndef CCHAPTERWINDOW_H
 #define CCHAPTERWINDOW_H
 
@@ -12,6 +7,8 @@
 #include "cscene.h"
 
 #include "cmdisubwindow.h"
+
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -52,14 +49,14 @@ public:
 	 \param lpChapter
 	 \param lpSceneList
 	*/
-	void				setChapter(cChapter* lpChapter, cSceneList* lpSceneList);
+	void					setChapter(cChapter* lpChapter, cSceneList* lpSceneList);
 	/*!
 	 \brief
 
 	 \fn chapter
 	 \return cChapter
 	*/
-	cChapter*			chapter();
+	cChapter*				chapter();
 
 private slots:
 	/*!
@@ -70,6 +67,9 @@ private slots:
 	*/
 	void					onSceneDoubleClicked(const QModelIndex& index);
 
+	void					onNameChanged(const QString& szName);
+	void					onDescriptionChanged();
+	void					onTextChanged();
 signals:
 	/*!
 	 \brief
@@ -80,10 +80,11 @@ signals:
 	void					showSceneWindow(cScene* lpScene);
 
 private:
-	Ui::cChapterWindow *ui; /*!< TODO: describe */
-	cChapter*			m_lpChapter; /*!< TODO: describe */
-	cSceneList*			m_lpSceneList; /*!< TODO: describe */
-	QStandardItemModel*	m_lpSceneModel; /*!< TODO: describe */
+	Ui::cChapterWindow*		ui; /*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
+	cChapter*				m_lpChapter; /*!< TODO: describe */
+	cSceneList*				m_lpSceneList; /*!< TODO: describe */
+	QStandardItemModel*		m_lpSceneModel; /*!< TODO: describe */
 };
 
 #endif // CCHAPTERWINDOW_H

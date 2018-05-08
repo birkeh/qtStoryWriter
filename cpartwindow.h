@@ -1,8 +1,3 @@
-/*!
- \file cpartwindow.h
-
-*/
-
 #ifndef CPARTWINDOW_H
 #define CPARTWINDOW_H
 
@@ -73,8 +68,8 @@ signals:
 	/*!
 	 \brief
 
-	 \fn showPartWindow
-	 \param lpPart
+	 \fn showChapterWindow
+	 \param lpChapter
 	*/
 	void					showChapterWindow(cChapter* lpChapter);
 

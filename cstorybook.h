@@ -135,6 +135,15 @@ public:
 	 \return cSceneList
 	*/
 	cSceneList*		sceneList();
+
+	/*!
+	 \brief
+
+	 \fn addPart
+	 \param szPartName
+	 \return bool
+	*/
+	bool			addPart(const QString& szPartName);
 private:
 	QString			m_szProject; /*!< TODO: describe */
 	bool			m_bIsOpen; /*!< TODO: describe */

@@ -1,8 +1,3 @@
-/*!
- \file cobjectwindow.h
-
-*/
-
 #ifndef COBJECTWINDOW_H
 #define COBJECTWINDOW_H
 

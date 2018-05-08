@@ -1,8 +1,3 @@
-/*!
- \file ccharacterwindow.h
-
-*/
-
 #ifndef CCHARACTERWINDOW_H
 #define CCHARACTERWINDOW_H
 

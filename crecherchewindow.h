@@ -1,8 +1,3 @@
-/*!
- \file crecherchewindow.h
-
-*/
-
 #ifndef CRECHERCHEWINDOW_H
 #define CRECHERCHEWINDOW_H
 

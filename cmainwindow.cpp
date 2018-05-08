@@ -31,7 +31,11 @@
 
 #include <QToolBar>
 
+#include <QSqlQuery>
+#include <QSqlError>
+
 #include <QMessageBox>
+#include <QInputDialog>
 
 
 cMainWindow::cMainWindow(QWidget *parent) :
@@ -74,6 +78,15 @@ cMainWindow::~cMainWindow()
 		delete m_lpStoryBook;
 
 	delete ui;
+}
+
+void cMainWindow::somethingChanged()
+{
+	if(!m_bSomethingChanged)
+	{
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 QAction* cMainWindow::actionAlignLeft()
@@ -572,11 +585,16 @@ void cMainWindow::updateWindowTitle()
 
 	QString	szTitle		= m_lpStoryBook->title();
 	QString	szAuthor	= m_lpStoryBook->author();
-
+	QString	szWindowTitle;
 	if(szAuthor.isEmpty())
-		setWindowTitle(QString("\"%1\" - qtStoryWriter").arg(szTitle));
+		szWindowTitle	= QString("\"%1\" - qtStoryWriter").arg(szTitle);
 	else
-		setWindowTitle(QString("\"%1\" by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor));
+		szWindowTitle	= QString("\"%1\" by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor);
+
+	if(m_bSomethingChanged)
+		szWindowTitle.append(" *");
+
+	setWindowTitle(szWindowTitle);
 }
 
 void cMainWindow::onTextEditGotFocus(cTextEdit* lpTextEdit)
@@ -1178,6 +1196,34 @@ void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 
 void cMainWindow::onAddPart()
 {
+	bool	bOK;
+	QString	szPartName	= "";
+
+	for(;;)
+	{
+		szPartName	= QInputDialog::getText(this, tr("New Part"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szPartName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Part"), tr("Part Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szPartName.isEmpty())
+	{
+		if(!m_lpStoryBook->addPart(szPartName))
+		{
+			QMessageBox::critical(this, tr("New Part"), tr("Part could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	}
 }
 
 void cMainWindow::onEditPart()

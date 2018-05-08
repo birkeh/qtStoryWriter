@@ -1,8 +1,3 @@
-/*!
- \file cwidget.h
-
-*/
-
 #ifndef CWIDGET_H
 #define CWIDGET_H
 
@@ -40,7 +35,7 @@ public:
 		TYPE_chapter	= 2,
 		TYPE_scene		= 3,
 		TYPE_character	= 4,
-		TYPE_object		= 5,
+		TYPE_object		= 5, /*!< TODO: describe */
 		TYPE_place		= 6,
 		TYPE_recherche	= 7,
 	};
@@ -124,7 +119,6 @@ public:
 	 \return QMdiSubWindow
 	*/
 	QMdiSubWindow*		window();
-
 	/*!
 	 \brief
 

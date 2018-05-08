@@ -64,6 +64,13 @@ public:
 	/*!
 	 \brief
 
+	 \fn somethingChanged
+	*/
+	void				somethingChanged();
+
+	/*!
+	 \brief
+
 	 \fn updateWindowTitle
 	*/
 	void				updateWindowTitle();
@@ -97,7 +104,7 @@ public:
 	*/
 	QAction*			actionAlignJustify();
 
-private slots:
+public slots:
 	/*!
 	 \brief
 
@@ -225,6 +232,7 @@ private slots:
 	*/
 	void				onComboBoxLostFocus(cComboBox* lpComboBox);
 
+private slots:
 	/*!
 	 \brief
 
@@ -451,32 +459,139 @@ private slots:
 	*/
 	void				onAlignmentChanged(const Qt::Alignment& alignment);
 
+	/*!
+	 \brief
+
+	 \fn onAddPart
+	*/
 	void				onAddPart();
+	/*!
+	 \brief
+
+	 \fn onEditPart
+	*/
 	void				onEditPart();
+	/*!
+	 \brief
+
+	 \fn onDeletePart
+	*/
 	void				onDeletePart();
 
+	/*!
+	 \brief
+
+	 \fn onAddChapter
+	*/
 	void				onAddChapter();
+	/*!
+	 \brief
+
+	 \fn onEditChapter
+	*/
 	void				onEditChapter();
+	/*!
+	 \brief
+
+	 \fn onDeleteChapter
+	*/
 	void				onDeleteChapter();
 
+	/*!
+	 \brief
+
+	 \fn onAddScene
+	*/
 	void				onAddScene();
+	/*!
+	 \brief
+
+	 \fn onEditScene
+	*/
 	void				onEditScene();
+	/*!
+	 \brief
+
+	 \fn onDeleteScene
+	*/
 	void				onDeleteScene();
 
+	/*!
+	 \brief
+
+	 \fn onAddCharacter
+	*/
 	void				onAddCharacter();
+	/*!
+	 \brief
+
+	 \fn onEditCharacter
+	*/
 	void				onEditCharacter();
+	/*!
+	 \brief
+
+	 \fn onDeleteCharacter
+	*/
 	void				onDeleteCharacter();
 
+	/*!
+	 \brief
+
+	 \fn onAddPlace
+	*/
 	void				onAddPlace();
+	/*!
+	 \brief
+
+	 \fn onEditPlace
+	*/
 	void				onEditPlace();
+	/*!
+	 \brief
+
+	 \fn onDeletePlace
+	*/
 	void				onDeletePlace();
 
+	/*!
+	 \brief
+
+	 \fn onAddObject
+	*/
 	void				onAddObject();
+	/*!
+	 \brief
+
+	 \fn onEditObject
+	*/
 	void				onEditObject();
+	/*!
+	 \brief
+
+	 \fn onDeleteObject
+	*/
 	void				onDeleteObject();
 
+	/*!
+	 \brief
+
+	 \fn onAddRecherche
+	*/
 	void				onAddRecherche();
+
+	/*!
+	 \brief
+
+	 \fn onEditRecherche
+	*/
 	void				onEditRecherche();
+
+	/*!
+	 \brief
+
+	 \fn onDeleteRecherche
+	*/
 	void				onDeleteRecherche();
 
 private:
@@ -487,6 +602,7 @@ private:
 	QStandardItemModel*	m_lpObjectModel; /*!< TODO: describe */
 	QStandardItemModel*	m_lpRechercheModel; /*!< TODO: describe */
 	bool				m_bUpdatingTab; /*!< TODO: describe */
+	bool				m_bSomethingChanged; /*!< TODO: describe */
 	cStoryBook*			m_lpStoryBook; /*!< TODO: describe */
 
 	QList<QWidget*>		m_focusException; /*!< TODO: describe */

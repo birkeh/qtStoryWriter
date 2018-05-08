@@ -1,8 +1,3 @@
-/*!
- \file cplacewindow.h
-
-*/
-
 #ifndef CPLACEWINDOW_H
 #define CPLACEWINDOW_H
 

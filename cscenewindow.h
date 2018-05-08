@@ -1,8 +1,3 @@
-/*!
- \file cscenewindow.h
-
-*/
-
 #ifndef CSCENEWINDOW_H
 #define CSCENEWINDOW_H
 

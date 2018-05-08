@@ -410,6 +410,13 @@ cSceneList* cStoryBook::sceneList()
 	return(&m_sceneList);
 }
 
+bool cStoryBook::addPart(const QString& szPartName)
+{
+	cPart*	lpPart	= m_partList.add(-1);
+	lpPart->setName(szPartName);
+	return(true);
+}
+
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
@@ -436,7 +443,8 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		lpItem->setData(QVariant::fromValue(lpPart));
 		lpItem->setFont(fontPart);
 		lpItem->setBackground(QBrush(background));
-		lpItem->setToolTip(lpPart->description()->toPlainText());
+		if(lpPart->description())
+			lpItem->setToolTip(lpPart->description()->toPlainText());
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
 
