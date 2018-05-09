@@ -5,6 +5,7 @@
 #include "crecherche.h"
 
 #include "cmdisubwindow.h"
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -76,6 +77,21 @@ private slots:
 	*/
 	void					onObjectDoubleClicked(const QModelIndex& index);
 
+	void					onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onLinkChanged
+	 \param szName
+	*/
+	void					onLinkChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
+	void					onDescriptionChanged();
+
 signals:
 	/*!
 	 \brief
@@ -101,6 +117,7 @@ signals:
 
 private:
 	Ui::cRechercheWindow*	ui; /*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
 	QStandardItemModel*		m_lpCharacterModel; /*!< TODO: describe */
 	QStandardItemModel*		m_lpPlaceModel; /*!< TODO: describe */
 	QStandardItemModel*		m_lpObjectModel; /*!< TODO: describe */

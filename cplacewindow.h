@@ -5,6 +5,7 @@
 #include "cplace.h"
 
 #include "cmdisubwindow.h"
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -53,8 +54,38 @@ public:
 	*/
 	cPlace*					place();
 
+private slots:
+	/*!
+	 \brief
+
+	 \fn onNameChanged
+	 \param szName
+	*/
+	void					onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onTypeChanged
+	 \param szName
+	*/
+	void					onTypeChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onLocationChanged
+	 \param szName
+	*/
+	void					onLocationChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
+	void					onDescriptionChanged();
+
 private:
 	Ui::cPlaceWindow*		ui; /*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
 	cPlace*					m_lpPlace; /*!< TODO: describe */
 };
 

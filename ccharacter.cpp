@@ -443,5 +443,119 @@ bool cCharacterList::load(cImageList *lpImageList)
 
 bool cCharacterList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE character SET mainCharacter=:mainCharacter, creature=:creature, gender=:gender, title=:title, firstName=:firstName, middleName=:middleName, lastName=:lastName, height=:height, weight=:weight, dateOfBirth=:dateOfBirth, dateOfDeath=:dateOfDeath, placeOfBirth=:placeOfBirth, placeOfDeath=:placeOfDeath, hairColor=:hairColor, hairCut=:hairCut, hairLength=:hairLength, figure=:figure, nature=:nature, spokenLanguages=:spokenLanguages, skin=:skin, school=:school, job=:job, description=:description WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO character (mainCharacter, creature, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, dateOfDeath, placeOfBirth, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description) VALUES (:mainCharacter, :creature, :gender, :title, :firstName,: middleName, :lastName, :height, :weight,:dateOfBirth, :dateOfDeath, :placeOfBirth, :placeOfDeath, :hairColor, :hairCut, :hairLength, :figure, :nature, :spokenLanguages, :skin, :school, :job, :description);");
+	querySelect.prepare("SELECT id FROM character WHERE _rowid_=(SELECT MAX(_rowid_) FROM character);");
+
+	QSqlQuery	imageDelete;
+	QSqlQuery	imageAdd;
+
+	imageDelete.prepare("DELETE FOM characterImage WHERE characterID=:characterID;");
+	imageAdd.prepare("INSERT INTO characterImage (characterID, imageID) VALUES (:characterID, :imageID);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cCharacter*	lpCharacter	= at(x);
+
+		if(lpCharacter->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpCharacter->id());
+			queryUpdate.bindValue(":mainCharacter", lpCharacter->mainCharacter());
+			queryUpdate.bindValue(":creature", lpCharacter->creature());
+			queryUpdate.bindValue(":gender", lpCharacter->gender());
+			queryUpdate.bindValue(":title", lpCharacter->title());
+			queryUpdate.bindValue(":firstName", lpCharacter->firstName());
+			queryUpdate.bindValue(":middleName", lpCharacter->middleName());
+			queryUpdate.bindValue(":lastName", lpCharacter->lastName());
+			queryUpdate.bindValue(":height", lpCharacter->height());
+			queryUpdate.bindValue(":weight", lpCharacter->weight());
+			queryUpdate.bindValue(":dateOfBirth", lpCharacter->dateOfBirth());
+			queryUpdate.bindValue(":dateOfDeath", lpCharacter->dateOfDeath());
+			queryUpdate.bindValue(":placeOfBirth", lpCharacter->placeOfBirth());
+			queryUpdate.bindValue(":placeOfDeath", lpCharacter->placeOfDeath());
+			queryUpdate.bindValue(":hairColor", lpCharacter->hairColor());
+			queryUpdate.bindValue(":hairCut", lpCharacter->hairCut());
+			queryUpdate.bindValue(":hairLength", lpCharacter->hairLength());
+			queryUpdate.bindValue(":figure", lpCharacter->figure());
+			queryUpdate.bindValue(":nature", lpCharacter->nature());
+			queryUpdate.bindValue(":spokenLanguages", lpCharacter->spokenLanguages());
+			queryUpdate.bindValue(":skin", lpCharacter->skin());
+			queryUpdate.bindValue(":school", lpCharacter->school());
+			queryUpdate.bindValue(":job", lpCharacter->job());
+			queryUpdate.bindValue(":description",  textDocument2Blob(lpCharacter->description()));
+
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			queryInsert.bindValue(":mainCharacter", lpCharacter->mainCharacter());
+			queryInsert.bindValue(":creature", lpCharacter->creature());
+			queryInsert.bindValue(":gender", lpCharacter->gender());
+			queryInsert.bindValue(":title", lpCharacter->title());
+			queryInsert.bindValue(":firstName", lpCharacter->firstName());
+			queryInsert.bindValue(":middleName", lpCharacter->middleName());
+			queryInsert.bindValue(":lastName", lpCharacter->lastName());
+			queryInsert.bindValue(":height", lpCharacter->height());
+			queryInsert.bindValue(":weight", lpCharacter->weight());
+			queryInsert.bindValue(":dateOfBirth", lpCharacter->dateOfBirth());
+			queryInsert.bindValue(":dateOfDeath", lpCharacter->dateOfDeath());
+			queryInsert.bindValue(":placeOfBirth", lpCharacter->placeOfBirth());
+			queryInsert.bindValue(":placeOfDeath", lpCharacter->placeOfDeath());
+			queryInsert.bindValue(":hairColor", lpCharacter->hairColor());
+			queryInsert.bindValue(":hairCut", lpCharacter->hairCut());
+			queryInsert.bindValue(":hairLength", lpCharacter->hairLength());
+			queryInsert.bindValue(":figure", lpCharacter->figure());
+			queryInsert.bindValue(":nature", lpCharacter->nature());
+			queryInsert.bindValue(":spokenLanguages", lpCharacter->spokenLanguages());
+			queryInsert.bindValue(":skin", lpCharacter->skin());
+			queryInsert.bindValue(":school", lpCharacter->school());
+			queryInsert.bindValue(":job", lpCharacter->job());
+			queryInsert.bindValue(":description",  textDocument2Blob(lpCharacter->description()));
+
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			lpCharacter->setID(querySelect.value("id").toInt());
+		}
+
+		imageDelete.bindValue("characterID", lpCharacter->id());
+		if(!imageDelete.exec())
+		{
+			myDebug << imageDelete.lastError().text();
+			return(false);
+		}
+
+		QList<cImage*>	images	= lpCharacter->images();
+
+		for(int x = 0;x < images.count();x++)
+		{
+			cImage*	lpImage	= images.at(x);
+
+			imageAdd.bindValue(":characterID", lpCharacter->id());
+			imageAdd.bindValue(":imageID", lpImage->id());
+			if(!imageAdd.exec())
+			{
+				myDebug << imageAdd.lastError().text();
+				return(false);
+			}
+		}
+	}
+
 	return(true);
 }

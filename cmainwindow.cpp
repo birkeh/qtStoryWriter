@@ -46,6 +46,7 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	m_lpPlaceModel(0),
 	m_lpObjectModel(0),
 	m_bUpdatingTab(false),
+	m_bSomethingChanged(false),
 	m_lpStoryBook(0),
 	m_lpFileMenu(0),
 	m_lpEditMenu(0),
@@ -1138,12 +1139,18 @@ void cMainWindow::onFileOpen()
 
 bool cMainWindow::onFileSave()
 {
+	if(m_lpStoryBook)
+		m_lpStoryBook->save();
+	m_bSomethingChanged	= false;
+	updateWindowTitle();
+
 	return(true);
 }
 
 bool cMainWindow::onFileSaveAs()
 {
-	return(true);
+	return(onFileSave());
+//	return(true);
 }
 
 void cMainWindow::onFilePrint()

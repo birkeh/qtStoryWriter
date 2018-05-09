@@ -23,11 +23,6 @@
 #include <QThread>
 
 
-//sceneCharacter
-//sceneObject
-//scenePlace
-//config
-
 cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	QObject(parent),
 	m_szProject(szProject),
@@ -70,6 +65,41 @@ cStoryBook::~cStoryBook()
 {
 	if(m_db.isOpen())
 		m_db.close();
+}
+
+bool cStoryBook::save()
+{
+	if(!m_db.isOpen())
+		return(false);
+
+	if(!saveImageList())
+		return(false);
+
+	if(!saveCharacterList())
+		return(false);
+
+	if(!savePlaceList())
+		return(false);
+
+	if(!saveObjectList())
+		return(false);
+
+	if(!saveBook())
+		return(false);
+
+	if(!savePartList())
+		return(false);
+
+	if(!saveChapterList())
+		return(false);
+
+	if(!saveSceneList())
+		return(false);
+
+	if(!saveRechercheList())
+		return(false);
+
+	return(true);
 }
 
 bool cStoryBook::openDatabase()
@@ -382,6 +412,51 @@ bool cStoryBook::loadRechercheList()
 bool cStoryBook::loadImageList()
 {
 	return(m_imageList.load());
+}
+
+bool cStoryBook::saveBook()
+{
+	return(m_book.save());
+}
+
+bool cStoryBook::savePartList()
+{
+	return(m_partList.save());
+}
+
+bool cStoryBook::saveChapterList()
+{
+	return(m_chapterList.save());
+}
+
+bool cStoryBook::saveSceneList()
+{
+	return(m_sceneList.save());
+}
+
+bool cStoryBook::saveCharacterList()
+{
+	return(m_characterList.save());
+}
+
+bool cStoryBook::savePlaceList()
+{
+	return(m_placeList.save());
+}
+
+bool cStoryBook::saveObjectList()
+{
+	return(m_objectList.save());
+}
+
+bool cStoryBook::saveRechercheList()
+{
+	return(m_rechercheList.save());
+}
+
+bool cStoryBook::saveImageList()
+{
+	return(m_imageList.save());
 }
 
 QString cStoryBook::title()

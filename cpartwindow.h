@@ -6,6 +6,7 @@
 #include "cchapter.h"
 
 #include "cmdisubwindow.h"
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -46,14 +47,14 @@ public:
 	 \param lpPart
 	 \param lpChapterList
 	*/
-	void				setPart(cPart* lpPart, cChapterList* lpChapterList);
+	void					setPart(cPart* lpPart, cChapterList* lpChapterList);
 	/*!
 	 \brief
 
 	 \fn part
 	 \return cPart
 	*/
-	cPart*				part();
+	cPart*					part();
 
 private slots:
 	/*!
@@ -63,6 +64,20 @@ private slots:
 	 \param index
 	*/
 	void					onChapterDoubleClicked(const QModelIndex& index);
+
+	void					onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
+	void					onDescriptionChanged();
+	/*!
+	 \brief
+
+	 \fn onTextChanged
+	*/
+	void					onTextChanged();
 
 signals:
 	/*!
@@ -74,10 +89,11 @@ signals:
 	void					showChapterWindow(cChapter* lpChapter);
 
 private:
-	Ui::cPartWindow*	ui; /*!< TODO: describe */
-	cPart*				m_lpPart; /*!< TODO: describe */
-	cChapterList*		m_lpChapterList; /*!< TODO: describe */
-	QStandardItemModel*	m_lpChapterModel; /*!< TODO: describe */
+	Ui::cPartWindow*		ui; /*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
+	cPart*					m_lpPart; /*!< TODO: describe */
+	cChapterList*			m_lpChapterList; /*!< TODO: describe */
+	QStandardItemModel*		m_lpChapterModel; /*!< TODO: describe */
 };
 
 #endif // CPARTWINDOW_H

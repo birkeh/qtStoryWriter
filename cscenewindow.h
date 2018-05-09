@@ -7,6 +7,7 @@
 #include "cscene.h"
 
 #include "cmdisubwindow.h"
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -59,13 +60,6 @@ private slots:
 	/*!
 	 \brief
 
-	 \fn onStateCurrentIndexChanged
-	 \param index
-	*/
-	void				onStateCurrentIndexChanged(int index);
-	/*!
-	 \brief
-
 	 \fn onCharacterDoubleClicked
 	 \param index
 	*/
@@ -84,6 +78,48 @@ private slots:
 	 \param index
 	*/
 	void				onObjectDoubleClicked(const QModelIndex& index);
+
+	void				onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
+	void				onDescriptionChanged();
+	/*!
+	 \brief
+
+	 \fn onStateChanged
+	 \param index
+	*/
+	void				onStateChanged(int index);
+	/*!
+	 \brief
+
+	 \fn onStartedChanged
+	 \param dateTime
+	*/
+	void				onStartedChanged(const QDateTime& dateTime);
+	/*!
+	 \brief
+
+	 \fn onFinishedChanged
+	 \param dateTime
+	*/
+	void				onFinishedChanged(const QDateTime& dateTime);
+	/*!
+	 \brief
+
+	 \fn onTargetDateChanged
+	 \param dateTime
+	*/
+	void				onTargetDateChanged(const QDateTime& dateTime);
+	/*!
+	 \brief
+
+	 \fn onTextChanged
+	*/
+	void				onTextChanged();
 
 signals:
 	/*!
@@ -110,6 +146,7 @@ signals:
 
 private:
 	Ui::cSceneWindow*	ui; /*!< TODO: describe */
+	cMainWindow*		m_lpMainWindow; /*!< TODO: describe */
 	QStandardItemModel*	m_lpCharacterModel; /*!< TODO: describe */
 	QStandardItemModel*	m_lpPlaceModel; /*!< TODO: describe */
 	QStandardItemModel*	m_lpObjectModel; /*!< TODO: describe */

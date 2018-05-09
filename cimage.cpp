@@ -141,5 +141,51 @@ bool cImageList::load()
 
 bool cImageList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE image SET type=:type, name=:name, description=:description WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO image (type, name, description) VALUES (:type, :name, :description);");
+	querySelect.prepare("SELECT id FROM image WHERE _rowid_=(SELECT MAX(_rowid_) FROM image);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cImage*	lpImage	= at(x);
+
+		if(lpImage->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpImage->id());
+			queryUpdate.bindValue(":type", lpImage->type());
+			queryUpdate.bindValue(":name", lpImage->name());
+			queryUpdate.bindValue(":description", textDocument2Blob(lpImage->description()));
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+// NICHT VOLLSTÄNDIG
+		}
+		else
+		{
+			queryInsert.bindValue(":type", lpImage->type());
+			queryInsert.bindValue(":name", lpImage->name());
+			queryInsert.bindValue(":description", textDocument2Blob(lpImage->description()));
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			lpImage->setID(querySelect.value("id").toInt());
+// NICHT VOLLSTÄNDIG
+		}
+	}
+
 	return(true);
 }

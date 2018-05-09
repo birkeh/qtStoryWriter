@@ -18,21 +18,22 @@
 cPlaceWindow::cPlaceWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cPlaceWindow),
+	m_lpMainWindow((cMainWindow*)parent),
 	m_lpPlace(0)
 {
 	ui->setupUi(this);
 
-	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpName,			&cLineEdit::gotFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,			&cLineEdit::lostFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpType, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpType, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpType,			&cLineEdit::gotFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpType,			&cLineEdit::lostFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpLocation, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpLocation, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpLocation,		&cLineEdit::gotFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpLocation,		&cLineEdit::lostFocus,	(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,	(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,	(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 }
 
 cPlaceWindow::~cPlaceWindow()
@@ -64,9 +65,37 @@ void cPlaceWindow::setPlace(cPlace* lpPlace)
 	ui->m_lpLayout->addItem(lpSpacer);
 
 	setWindowTitle(tr("[place] - ") + lpPlace->name());
+
+	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cPlaceWindow::onNameChanged);
+	connect(ui->m_lpType,			&cLineEdit::textChanged,	this,	&cPlaceWindow::onTypeChanged);
+	connect(ui->m_lpLocation,		&cLineEdit::textChanged,	this,	&cPlaceWindow::onLocationChanged);
+	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cPlaceWindow::onDescriptionChanged);
 }
 
 cPlace* cPlaceWindow::place()
 {
 	return(m_lpPlace);
+}
+
+void cPlaceWindow::onNameChanged(const QString& szName)
+{
+	m_lpPlace->setName(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cPlaceWindow::onTypeChanged(const QString& szName)
+{
+	m_lpPlace->setType(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cPlaceWindow::onLocationChanged(const QString& szName)
+{
+	m_lpPlace->setLocation(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cPlaceWindow::onDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
 }

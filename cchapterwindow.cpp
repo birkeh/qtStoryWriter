@@ -39,10 +39,6 @@ cChapterWindow::cChapterWindow(QWidget *parent) :
 
 	connect(ui->m_lpText,			&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
 	connect(ui->m_lpText,			&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
-
-	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,			&cChapterWindow::onNameChanged);
-	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,			&cChapterWindow::onDescriptionChanged);
-	connect(ui->m_lpText,			&cTextEdit::textChanged,	this,			&cChapterWindow::onTextChanged);
 }
 
 cChapterWindow::~cChapterWindow()
@@ -77,6 +73,10 @@ void cChapterWindow::setChapter(cChapter* lpChapter, cSceneList* lpSceneList)
 	ui->m_lpSceneList->resizeColumnToContents(0);
 
 	setWindowTitle(tr("[chapter] - ") + lpChapter->name());
+
+	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cChapterWindow::onNameChanged);
+	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cChapterWindow::onDescriptionChanged);
+	connect(ui->m_lpText,			&cTextEdit::textChanged,	this,	&cChapterWindow::onTextChanged);
 }
 
 cChapter* cChapterWindow::chapter()

@@ -28,3 +28,11 @@ cTextDocument*	blob2TextDocument(const QByteArray& ba)
 	lpTextDocument->setHtml(uncompressText(ba));
 	return(lpTextDocument);
 }
+
+QByteArray textDocument2Blob(cTextDocument* lpTextDocument)
+{
+	QByteArray	ba;
+
+	ba	= compressText(lpTextDocument->toHtml());
+	return(ba);
+}

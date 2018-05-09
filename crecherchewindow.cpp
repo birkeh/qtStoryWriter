@@ -19,6 +19,7 @@
 cRechercheWindow::cRechercheWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cRechercheWindow),
+	m_lpMainWindow((cMainWindow*)parent),
 	m_lpRecherche(0)
 {
 	ui->setupUi(this);
@@ -34,27 +35,27 @@ cRechercheWindow::cRechercheWindow(QWidget *parent) :
 	m_lpObjectModel		= new QStandardItemModel(0, 1);
 	ui->m_lpObjectList->setModel(m_lpObjectModel);
 
-	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
-	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
-	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
+	connect(ui->m_lpCharacterList,	&cTreeView::doubleClicked,		this,					&cRechercheWindow::onCharacterDoubleClicked);
+	connect(ui->m_lpPlaceList,		&cTreeView::doubleClicked,		this,					&cRechercheWindow::onPlaceDoubleClicked);
+	connect(ui->m_lpObjectList,		&cTreeView::doubleClicked,		this,					&cRechercheWindow::onObjectDoubleClicked);
 
-	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpName,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpLink, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpLink, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpLink,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpLink,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 
-	connect(ui->m_lpCharacterList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpCharacterList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpCharacterList,	&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpCharacterList,	&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpObjectList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpObjectList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpObjectList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpObjectList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpPlaceList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpPlaceList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpPlaceList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpPlaceList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 }
 
 cRechercheWindow::~cRechercheWindow()
@@ -175,6 +176,10 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 		ui->m_lpObjectList->resizeColumnToContents(i);
 
 	setWindowTitle(tr("[recherche] - ") + lpRecherche->name());
+
+	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cRechercheWindow::onNameChanged);
+	connect(ui->m_lpLink,			&cLineEdit::textChanged,	this,	&cRechercheWindow::onLinkChanged);
+	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cRechercheWindow::onDescriptionChanged);
 }
 
 cRecherche* cRechercheWindow::recherche()
@@ -204,4 +209,21 @@ void cRechercheWindow::onObjectDoubleClicked(const QModelIndex& index)
 	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
 	if(lpObject)
 		showObjectWindow(lpObject);
+}
+
+void cRechercheWindow::onNameChanged(const QString& szName)
+{
+	m_lpRecherche->setName(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onLinkChanged(const QString& szName)
+{
+	m_lpRecherche->setLink(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
 }

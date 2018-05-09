@@ -7,7 +7,6 @@
 #include "cscene.h"
 
 #include "cmdisubwindow.h"
-
 #include "cmainwindow.h"
 
 #include <QWidget>
@@ -68,8 +67,19 @@ private slots:
 	void					onSceneDoubleClicked(const QModelIndex& index);
 
 	void					onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
 	void					onDescriptionChanged();
+	/*!
+	 \brief
+
+	 \fn onTextChanged
+	*/
 	void					onTextChanged();
+
 signals:
 	/*!
 	 \brief

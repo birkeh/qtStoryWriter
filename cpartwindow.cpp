@@ -16,6 +16,7 @@
 cPartWindow::cPartWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cPartWindow),
+	m_lpMainWindow((cMainWindow*)parent),
 	m_lpPart(0),
 	m_lpChapterList(0)
 {
@@ -24,19 +25,19 @@ cPartWindow::cPartWindow(QWidget *parent) :
 	m_lpChapterModel	= new QStandardItemModel(0, 1);
 	ui->m_lpChapterList->setModel(m_lpChapterModel);
 
-	connect(ui->m_lpChapterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onChapterDoubleClicked(QModelIndex)));
+	connect(ui->m_lpChapterList,	&cTreeView::doubleClicked,	this,			&cPartWindow::onChapterDoubleClicked);
 
-	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpName,			&cLineEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,			&cLineEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpText, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpText, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpChapterList,	&cTreeView::gotFocus,		m_lpMainWindow,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpChapterList,	&cTreeView::lostFocus,		m_lpMainWindow,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
 
-	connect(ui->m_lpChapterList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpChapterList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpText,			&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpText,			&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
 }
 
 cPartWindow::~cPartWindow()
@@ -70,6 +71,10 @@ void cPartWindow::setPart(cPart* lpPart, cChapterList* lpChapterList)
 	ui->m_lpChapterList->resizeColumnToContents(0);
 
 	setWindowTitle(tr("[part] - ") + lpPart->name());
+
+	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cPartWindow::onNameChanged);
+	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cPartWindow::onDescriptionChanged);
+	connect(ui->m_lpText,			&cTextEdit::textChanged,	this,	&cPartWindow::onTextChanged);
 }
 
 cPart* cPartWindow::part()
@@ -83,4 +88,20 @@ void cPartWindow::onChapterDoubleClicked(const QModelIndex& index)
 	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
 	if(lpChapter)
 		showChapterWindow(lpChapter);
+}
+
+void cPartWindow::onNameChanged(const QString& szName)
+{
+	m_lpPart->setName(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cPartWindow::onDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
+}
+
+void cPartWindow::onTextChanged()
+{
+	m_lpMainWindow->somethingChanged();
 }

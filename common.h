@@ -46,5 +46,13 @@ QByteArray		compressText(const QString& uncompressed);
  \return cTextDocument
 */
 cTextDocument*	blob2TextDocument(const QByteArray& ba);
+/*!
+ \brief
+
+ \fn textDocument2Blob
+ \param lpTextDocument
+ \return QByteArray
+*/
+QByteArray		textDocument2Blob(cTextDocument* lpTextDocument);
 
 #endif // COMMON_H

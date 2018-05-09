@@ -50,6 +50,8 @@ public:
 	*/
 	~cStoryBook();
 
+	bool			save();
+
 	/*!
 	 \brief
 
@@ -244,6 +246,64 @@ private:
 	 \return bool
 	*/
 	bool			loadImageList();
+
+	bool			saveBook();
+	/*!
+	 \brief
+
+	 \fn savePartList
+	 \return bool
+	*/
+	bool			savePartList();
+	/*!
+	 \brief
+
+	 \fn saveChapterList
+	 \return bool
+	*/
+	bool			saveChapterList();
+	/*!
+	 \brief
+
+	 \fn saveSceneList
+	 \return bool
+	*/
+	bool			saveSceneList();
+	/*!
+	 \brief
+
+	 \fn saveCharacterList
+	 \return bool
+	*/
+	bool			saveCharacterList();
+	/*!
+	 \brief
+
+	 \fn savePlaceList
+	 \return bool
+	*/
+	bool			savePlaceList();
+	/*!
+	 \brief
+
+	 \fn saveObjectList
+	 \return bool
+	*/
+	bool			saveObjectList();
+	/*!
+	 \brief
+
+	 \fn saveRechercheList
+	 \return bool
+	*/
+	bool			saveRechercheList();
+	/*!
+	 \brief
+
+	 \fn saveImageList
+	 \return bool
+	*/
+	bool			saveImageList();
 };
 
 #endif // CSTORYBOOK_H

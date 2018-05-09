@@ -5,6 +5,7 @@
 #include "cobject.h"
 
 #include "cmdisubwindow.h"
+#include "cmainwindow.h"
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -53,8 +54,31 @@ public:
 	*/
 	cObject*				object();
 
+private slots:
+	/*!
+	 \brief
+
+	 \fn onNameChanged
+	 \param szName
+	*/
+	void					onNameChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onTypeChanged
+	 \param szName
+	*/
+	void					onTypeChanged(const QString& szName);
+	/*!
+	 \brief
+
+	 \fn onDescriptionChanged
+	*/
+	void					onDescriptionChanged();
+
 private:
 	Ui::cObjectWindow*		ui; /*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
 	cObject*				m_lpObject; /*!< TODO: describe */
 };
 

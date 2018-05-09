@@ -16,6 +16,7 @@
 cSceneWindow::cSceneWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cSceneWindow),
+	m_lpMainWindow((cMainWindow*)parent),
 	m_lpScene(0)
 {
 	ui->setupUi(this);
@@ -46,47 +47,46 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_unknown), cScene::STATE_unknown);
 	ui->m_lpState->setItemData(4, QBrush(cScene::stateColor(cScene::STATE_unknown)), Qt::BackgroundColorRole);
 
-	connect(ui->m_lpState, SIGNAL(currentIndexChanged(int)), this, SLOT(onStateCurrentIndexChanged(int)));
 
-	connect(ui->m_lpCharacterList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onCharacterDoubleClicked(QModelIndex)));
-	connect(ui->m_lpPlaceList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onPlaceDoubleClicked(QModelIndex)));
-	connect(ui->m_lpObjectList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onObjectDoubleClicked(QModelIndex)));
+	connect(ui->m_lpCharacterList,	&cTreeView::doubleClicked,		this,					&cSceneWindow::onCharacterDoubleClicked);
+	connect(ui->m_lpPlaceList,		&cTreeView::doubleClicked,		this,					&cSceneWindow::onPlaceDoubleClicked);
+	connect(ui->m_lpObjectList,		&cTreeView::doubleClicked,		this,					&cSceneWindow::onObjectDoubleClicked);
 
-	connect(ui->m_lpPart, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpPart, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpPart,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpPart,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpChapter, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpChapter, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpChapter,		&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpChapter,		&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpName, SIGNAL(gotFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditGotFocus(cLineEdit*)));
-	connect(ui->m_lpName, SIGNAL(lostFocus(cLineEdit*)), (cMainWindow*)parent, SLOT(onLineEditLostFocus(cLineEdit*)));
+	connect(ui->m_lpName,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpDescription, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpDescription, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 
-	connect(ui->m_lpCharacterList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpCharacterList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpCharacterList,	&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpCharacterList,	&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpObjectList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpObjectList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpObjectList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpObjectList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpPlaceList, SIGNAL(gotFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewGotFocus(cTreeView*)));
-	connect(ui->m_lpPlaceList, SIGNAL(lostFocus(cTreeView*)), (cMainWindow*)parent, SLOT(onTreeViewLostFocus(cTreeView*)));
+	connect(ui->m_lpPlaceList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpPlaceList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpState, SIGNAL(gotFocus(cComboBox*)), (cMainWindow*)parent, SLOT(onComboBoxGotFocus(cComboBox*)));
-	connect(ui->m_lpState, SIGNAL(lostFocus(cComboBox*)), (cMainWindow*)parent, SLOT(onComboBoxLostFocus(cComboBox*)));
+	connect(ui->m_lpState,			&cComboBox::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
+	connect(ui->m_lpState,			&cComboBox::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
 
-	connect(ui->m_lpStartedAt, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
-	connect(ui->m_lpStartedAt, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+	connect(ui->m_lpStartedAt,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpStartedAt,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpFinishedAt, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
-	connect(ui->m_lpFinishedAt, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpTargetDate, SIGNAL(gotFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditGotFocus(cDateTimeEdit*)));
-	connect(ui->m_lpTargetDate, SIGNAL(lostFocus(cDateTimeEdit*)), (cMainWindow*)parent, SLOT(onDateTimeEditLostFocus(cDateTimeEdit*)));
+	connect(ui->m_lpTargetDate,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpTargetDate,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpText, SIGNAL(gotFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditGotFocus(cTextEdit*)));
-	connect(ui->m_lpText, SIGNAL(lostFocus(cTextEdit*)), (cMainWindow*)parent, SLOT(onTextEditLostFocus(cTextEdit*)));
+	connect(ui->m_lpText,			&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpText,			&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 }
 
 cSceneWindow::~cSceneWindow()
@@ -211,19 +211,19 @@ void cSceneWindow::setScene(cScene* lpScene)
 		ui->m_lpObjectList->resizeColumnToContents(i);
 
 	setWindowTitle(tr("[scene] - ") + lpScene->name());
+
+	connect(ui->m_lpName,				&cLineEdit::textChanged,								this,	&cSceneWindow::onNameChanged);
+	connect(ui->m_lpDescription,		&cTextEdit::textChanged,								this,	&cSceneWindow::onDescriptionChanged);
+	connect(ui->m_lpState,				QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onStateChanged);
+	connect(ui->m_lpStartedAt,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onStartedChanged);
+	connect(ui->m_lpFinishedAt,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onFinishedChanged);
+	connect(ui->m_lpTargetDate,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onTargetDateChanged);
+	connect(ui->m_lpText,				&cTextEdit::textChanged,								this,	&cSceneWindow::onTextChanged);
 }
 
 cScene* cSceneWindow::scene()
 {
 	return(m_lpScene);
-}
-
-void cSceneWindow::onStateCurrentIndexChanged(int /*index*/)
-{
-	QBrush	brush	= qvariant_cast<QBrush>(ui->m_lpState->currentData(Qt::BackgroundColorRole));
-	QColor	color	= brush.color();
-
-	ui->m_lpState->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue()));
 }
 
 void cSceneWindow::onCharacterDoubleClicked(const QModelIndex& index)
@@ -248,4 +248,66 @@ void cSceneWindow::onObjectDoubleClicked(const QModelIndex& index)
 	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
 	if(lpObject)
 		showObjectWindow(lpObject);
+}
+
+void cSceneWindow::onNameChanged(const QString& szName)
+{
+	m_lpScene->setName(szName);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onStateChanged(int index)
+{
+	QBrush	brush	= qvariant_cast<QBrush>(ui->m_lpState->currentData(Qt::BackgroundColorRole));
+	QColor	color	= brush.color();
+
+	ui->m_lpState->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue()));
+
+	switch(index)
+	{
+	case 0:
+		m_lpScene->setState(cScene::STATE_init);
+		break;
+	case 1:
+		m_lpScene->setState(cScene::STATE_progress);
+		break;
+	case 2:
+		m_lpScene->setState(cScene::STATE_delayed);
+		break;
+	case 3:
+		m_lpScene->setState(cScene::STATE_finished);
+		break;
+	default:
+		m_lpScene->setState(cScene::STATE_unknown);
+		break;
+	}
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onStartedChanged(const QDateTime& dateTime)
+{
+	m_lpScene->setStartedAt(dateTime);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onFinishedChanged(const QDateTime& dateTime)
+{
+	m_lpScene->setFinishedAt(dateTime);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onTargetDateChanged(const QDateTime& dateTime)
+{
+	m_lpScene->setTargetDate(dateTime);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onTextChanged()
+{
+	m_lpMainWindow->somethingChanged();
 }
