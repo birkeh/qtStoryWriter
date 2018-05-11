@@ -573,6 +573,11 @@ bool cStoryBook::addRecherche(const QString& szRechercheName)
 	return(true);
 }
 
+bool cStoryBook::hasChapter(cPart* lpPart)
+{
+	return(m_chapterList.find(lpPart).count() > 0);
+}
+
 bool cStoryBook::hasScene(cChapter* lpChapter)
 {
 	return(m_sceneList.find(lpChapter).count() > 0);
@@ -600,6 +605,9 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	for(int x = 0;x < m_partList.count();x++)
 	{
 		cPart*			lpPart	= m_partList.at(x);
+		if(lpPart->deleted())
+			continue;
+
 		QStandardItem*	lpItem		= new QStandardItem(lpPart->name());
 		lpItem->setData(QVariant::fromValue(lpPart));
 		lpItem->setFont(fontPart);

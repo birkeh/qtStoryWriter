@@ -206,8 +206,17 @@ public:
 	/*!
 	 \brief
 
-	 \fn addRecherche
-	 \param szRechercheName
+	 \fn hasChapter
+	 \param lpPart
+	 \return bool
+	*/
+	bool			hasChapter(cPart* lpPart);
+
+	/*!
+	 \brief
+
+	 \fn cChapter
+	 \param lpChapter
 	 \return bool
 	*/
 	bool			hasScene(cChapter* lpChapter);

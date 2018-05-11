@@ -18,7 +18,8 @@ cPart::cPart(qint32 iID, QObject *parent) :
 	m_iSortOrder(-1),
 	m_lpDescription(0),
 	m_lpText(0),
-	m_lpItem(0)
+	m_lpItem(0),
+	m_bDeleted(false)
 {
 }
 
@@ -80,6 +81,16 @@ void cPart::setItem(QStandardItem* lpItem)
 QStandardItem* cPart::item()
 {
 	return(m_lpItem);
+}
+
+void cPart::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cPart::deleted()
+{
+	return(m_bDeleted);
 }
 
 cPart* cPartList::add(const qint32& iID)
@@ -149,16 +160,29 @@ bool cPartList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE part SET name=:name, sortOrder=:sortOrder, description=:description, text=:text WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO part (name, sortOrder, description, text) VALUES (:name, :sortOrder, :description, :text);");
 	querySelect.prepare("SELECT id FROM part WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
+	queryDelete.prepare("DELETE FROM part WHERE id=:id;");
 
 	for(int x = 0;x < count();x++)
 	{
 		cPart*	lpPart	= at(x);
 
-		if(lpPart->id() != -1)
+		if(lpPart->deleted())
+		{
+			queryDelete.bindValue(":id", lpPart->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpPart);
+		}
+		else if(lpPart->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpPart->id());
 			queryUpdate.bindValue(":name", lpPart->name());

@@ -40,14 +40,14 @@ public:
 	 \fn setID
 	 \param iID
 	*/
-	void			setID(const qint32& iID);
+	void				setID(const qint32& iID);
 	/*!
 	 \brief
 
 	 \fn id
 	 \return qint32
 	*/
-	qint32			id();
+	qint32				id();
 
 	/*!
 	 \brief
@@ -55,14 +55,14 @@ public:
 	 \fn setName
 	 \param szName
 	*/
-	void			setName(const QString& szName);
+	void				setName(const QString& szName);
 	/*!
 	 \brief
 
 	 \fn name
 	 \return QString
 	*/
-	QString			name();
+	QString				name();
 
 	/*!
 	 \brief
@@ -70,14 +70,14 @@ public:
 	 \fn setSortOrder
 	 \param iSortOrder
 	*/
-	void			setSortOrder(const qint32& iSortOrder);
+	void				setSortOrder(const qint32& iSortOrder);
 	/*!
 	 \brief
 
 	 \fn sortOrder
 	 \return qint32
 	*/
-	qint32			sortOrder();
+	qint32				sortOrder();
 
 	/*!
 	 \brief
@@ -85,14 +85,14 @@ public:
 	 \fn setDescription
 	 \param lpDescription
 	*/
-	void			setDescription(cTextDocument* lpDescription);
+	void				setDescription(cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn description
 	 \return cTextDocument
 	*/
-	cTextDocument*	description();
+	cTextDocument*		description();
 
 	/*!
 	 \brief
@@ -100,14 +100,14 @@ public:
 	 \fn setText
 	 \param lpText
 	*/
-	void			setText(cTextDocument* lpText);
+	void				setText(cTextDocument* lpText);
 	/*!
 	 \brief
 
 	 \fn text
 	 \return cTextDocument
 	*/
-	cTextDocument*	text();
+	cTextDocument*		text();
 
 	/*!
 	 \brief
@@ -115,22 +115,38 @@ public:
 	 \fn setItem
 	 \param lpItem
 	*/
-	void			setItem(QStandardItem* lpItem);
+	void				setItem(QStandardItem* lpItem);
 	/*!
 	 \brief
 
 	 \fn item
 	 \return QStandardItem
 	*/
-	QStandardItem*	item();
+	QStandardItem*		item();
+
+	/*!
+	 \brief
+
+	 \fn setDeleted
+	 \param bDeleted
+	*/
+	void				setDeleted(bool bDeleted);
+	/*!
+	 \brief
+
+	 \fn deleted
+	 \return bool
+	*/
+	bool				deleted();
 
 private:
-	qint32			m_iID; /*!< TODO: describe */
-	QString			m_szName; /*!< TODO: describe */
-	qint32			m_iSortOrder; /*!< TODO: describe */
-	cTextDocument*	m_lpDescription; /*!< TODO: describe */
-	cTextDocument*	m_lpText; /*!< TODO: describe */
-	QStandardItem*	m_lpItem; /*!< TODO: describe */
+	qint32				m_iID; /*!< TODO: describe */
+	QString				m_szName; /*!< TODO: describe */
+	qint32				m_iSortOrder; /*!< TODO: describe */
+	cTextDocument*		m_lpDescription; /*!< TODO: describe */
+	cTextDocument*		m_lpText; /*!< TODO: describe */
+	QStandardItem*		m_lpItem; /*!< TODO: describe */
+	bool				m_bDeleted; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cPart*)
@@ -149,14 +165,14 @@ public:
 	 \fn load
 	 \return bool
 	*/
-	bool			load();
+	bool				load();
 	/*!
 	 \brief
 
 	 \fn save
 	 \return bool
 	*/
-	bool			save();
+	bool				save();
 
 	/*!
 	 \brief
@@ -165,7 +181,7 @@ public:
 	 \param iID
 	 \return cPart
 	*/
-	cPart*			add(const qint32& iID);
+	cPart*				add(const qint32& iID);
 	/*!
 	 \brief
 
@@ -173,7 +189,7 @@ public:
 	 \param iID
 	 \return cPart
 	*/
-	cPart*			find(const qint32& iID);
+	cPart*				find(const qint32& iID);
 
 	/*!
 	 \brief
@@ -181,7 +197,7 @@ public:
 	 \fn nextSort
 	 \return cPart
 	*/
-	qint32			nextSort();
+	qint32				nextSort();
 };
 
 #endif // CPART_H

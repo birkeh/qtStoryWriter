@@ -1255,6 +1255,43 @@ void cMainWindow::onEditPart()
 
 void cMainWindow::onDeletePart()
 {
+	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cPart*			lpPart		= qvariant_cast<cPart*>(lpItem->data());
+
+	if(!lpPart)
+		return;
+
+	if(m_lpStoryBook->hasChapter(lpPart))
+	{
+		QMessageBox::critical(this, "Delete Part", tr("There are still some chapter in this part.\nPlease delete them before deleting the part."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Part", tr("Are you sure you want to delete this part:<br>") + "<b><center>" + lpPart->name() + "</center></b>") != QMessageBox::Yes)
+		return;
+
+	lpPart->setDeleted(true);
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_part)
+		{
+			cPartWindow*	lpPartWindow	= (cPartWindow*)lpWidget->widget();
+			if(lpPartWindow->part() == lpPart)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddChapter()
