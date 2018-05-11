@@ -50,7 +50,7 @@ void cObjectWindow::setObject(cObject* lpObject)
 	for(int x = 0;x < images.count();x++)
 	{
 		cImage*			lpImage			= images[x];
-		QPixmap			pixmap			= lpImage->load();
+		QPixmap			pixmap			= lpImage->image();
 		cImageWidget*	lpImageWidget	= new cImageWidget;
 
 		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);

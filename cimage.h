@@ -86,19 +86,14 @@ public:
 	*/
 	cTextDocument*	description();
 
-	/*!
-	 \brief
-
-	 \fn load
-	 \return QPixmap
-	*/
-	QPixmap			load();
-
+	void			setImage(const QPixmap& image);
+	QPixmap			image();
 private:
 	qint32			m_iID; /*!< TODO: describe */
 	QString			m_szName; /*!< TODO: describe */
 	QString			m_szType; /*!< TODO: describe */
 	cTextDocument*	m_lpDescription; /*!< TODO: describe */
+	QPixmap			m_image;
 };
 
 Q_DECLARE_METATYPE(cImage*)

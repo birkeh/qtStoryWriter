@@ -264,11 +264,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		lpScene->setStartedAt(query.value("startedAt").toDateTime());
 		lpScene->setFinishedAt(query.value("finishedAt").toDateTime());
 		lpScene->setTargetDate(query.value("targetDate").toDateTime());
-
-		QByteArray		ba		= query.value("text").toByteArray();
-		cTextDocument*	lpText	= new cTextDocument;
-		if(!ba.isEmpty())
-			lpText->setHtml(qUncompress(ba));
+		lpScene->setText(blob2TextDocument(query.value("text").toByteArray()));
 	}
 
 	query.prepare("SELECT sceneID, characterID FROM sceneCharacter;");
@@ -330,5 +326,64 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 
 bool cSceneList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE scene SET name=:name, chapterID=:chapterID, sortOrder=:sortOrder, description=:description, state=:state, startedAt=:startedAt, finishedAt=:finishedAt, targetDate=:targetDate, text=:text WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :text);");
+	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cScene*	lpScene	= at(x);
+
+		if(lpScene->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpScene->id());
+			queryUpdate.bindValue(":name", lpScene->name());
+			queryUpdate.bindValue(":chapterID", lpScene->chapter()->id());
+			queryUpdate.bindValue(":sortOrder", lpScene->sortOrder());
+			queryUpdate.bindValue(":description",  textDocument2Blob(lpScene->description()));
+			queryUpdate.bindValue(":state", lpScene->state());
+			queryUpdate.bindValue(":startedAt", lpScene->startedAt());
+			queryUpdate.bindValue(":finishedAt", lpScene->finishedAt());
+			queryUpdate.bindValue(":targetDate", lpScene->targetDate());
+			queryUpdate.bindValue(":text",  textDocument2Blob(lpScene->text()));
+
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			queryInsert.bindValue(":name", lpScene->name());
+			queryInsert.bindValue(":chapterID", lpScene->chapter()->id());
+			queryInsert.bindValue(":sortOrder", lpScene->sortOrder());
+			queryInsert.bindValue(":description",  textDocument2Blob(lpScene->description()));
+			queryInsert.bindValue(":state", lpScene->state());
+			queryInsert.bindValue(":startedAt", lpScene->startedAt());
+			queryInsert.bindValue(":finishedAt", lpScene->finishedAt());
+			queryInsert.bindValue(":targetDate", lpScene->targetDate());
+			queryInsert.bindValue(":text",  textDocument2Blob(lpScene->text()));
+
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			querySelect.next();
+			lpScene->setID(querySelect.value("id").toInt());
+		}
+	}
+
 	return(true);
 }

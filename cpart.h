@@ -157,6 +157,8 @@ public:
 	 \return cPart
 	*/
 	cPart*			find(const qint32& iID);
+
+	qint32			nextSort();
 };
 
 #endif // CPART_H

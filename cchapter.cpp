@@ -145,5 +145,56 @@ bool cChapterList::load(cPartList* lpPartList)
 
 bool cChapterList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE chapter SET name=:name, partID=:partID, sortOrder=:sortOrder, description=:description, text=:text WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO chapter (name, partID, sortOrder, description, text) VALUES (:name, :partID, :sortOrder, :description, :text);");
+	querySelect.prepare("SELECT id FROM chapter WHERE _rowid_=(SELECT MAX(_rowid_) FROM chapter);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cChapter*	lpChapter	= at(x);
+
+		if(lpChapter->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpChapter->id());
+			queryUpdate.bindValue(":name", lpChapter->name());
+			queryUpdate.bindValue(":partID", lpChapter->part()->id());
+			queryUpdate.bindValue(":sortOrder", lpChapter->sortOrder());
+			queryUpdate.bindValue(":description",  textDocument2Blob(lpChapter->description()));
+			queryUpdate.bindValue(":text",  textDocument2Blob(lpChapter->text()));
+
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			queryInsert.bindValue(":name", lpChapter->name());
+			queryInsert.bindValue(":partID", lpChapter->part()->id());
+			queryInsert.bindValue(":sortOrder", lpChapter->sortOrder());
+			queryInsert.bindValue(":description",  textDocument2Blob(lpChapter->description()));
+			queryInsert.bindValue(":text",  textDocument2Blob(lpChapter->text()));
+
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			querySelect.next();
+			lpChapter->setID(querySelect.value("id").toInt());
+		}
+	}
+
 	return(true);
 }

@@ -454,7 +454,7 @@ bool cCharacterList::save()
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
 
-	imageDelete.prepare("DELETE FOM characterImage WHERE characterID=:characterID;");
+	imageDelete.prepare("DELETE FROM characterImage WHERE characterID=:characterID;");
 	imageAdd.prepare("INSERT INTO characterImage (characterID, imageID) VALUES (:characterID, :imageID);");
 
 	for(int x = 0;x < count();x++)
@@ -531,10 +531,11 @@ bool cCharacterList::save()
 				myDebug << querySelect.lastError().text();
 				return(false);
 			}
+			querySelect.next();
 			lpCharacter->setID(querySelect.value("id").toInt());
 		}
 
-		imageDelete.bindValue("characterID", lpCharacter->id());
+		imageDelete.bindValue(":characterID", lpCharacter->id());
 		if(!imageDelete.exec())
 		{
 			myDebug << imageDelete.lastError().text();

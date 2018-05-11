@@ -697,6 +697,8 @@ void cMainWindow::onMainTabTabCloseRequested(int index)
 		return;
 
 	m_bUpdatingTab	= true;
+	disconnectTextEdit();
+	m_lpOldTextEdit	= 0;
 	cWidget*		lpWidget	= (cWidget*)ui->m_lpMainTab->currentWidget();
 	QMdiSubWindow*	lpWindow	= lpWidget->window();
 	ui->m_lpMainTab->removeTab(index);
@@ -731,6 +733,8 @@ void cMainWindow::onSubWindowClosed(QWidget* lpSubWindow)
 		return;
 
 	m_bUpdatingTab	= true;
+	disconnectTextEdit();
+	m_lpOldTextEdit	= 0;
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{

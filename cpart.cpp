@@ -98,6 +98,18 @@ cPart* cPartList::find(const qint32& iID)
 	return(0);
 }
 
+qint32 cPartList::nextSort()
+{
+	qint32	iSort	= -1;
+
+	for(int x = 0;x < count();x++)
+	{
+		if(iSort < at(x)->sortOrder())
+			iSort	= at(x)->sortOrder();
+	}
+	return(iSort+1);
+}
+
 bool cPartList::load()
 {
 	QSqlQuery	query;
@@ -123,5 +135,54 @@ bool cPartList::load()
 
 bool cPartList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE part SET name=:name, sortOrder=:sortOrder, description=:description, text=:text WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO part (name, sortOrder, description, text) VALUES (:name, :sortOrder, :description, :text);");
+	querySelect.prepare("SELECT id FROM part WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cPart*	lpPart	= at(x);
+
+		if(lpPart->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpPart->id());
+			queryUpdate.bindValue(":name", lpPart->name());
+			queryUpdate.bindValue(":sortOrder", lpPart->sortOrder());
+			queryUpdate.bindValue(":description",  textDocument2Blob(lpPart->description()));
+			queryUpdate.bindValue(":text",  textDocument2Blob(lpPart->text()));
+
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			queryInsert.bindValue(":name", lpPart->name());
+			queryInsert.bindValue(":sortOrder", lpPart->sortOrder());
+			queryInsert.bindValue(":description",  textDocument2Blob(lpPart->description()));
+			queryInsert.bindValue(":text",  textDocument2Blob(lpPart->text()));
+
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			querySelect.next();
+			lpPart->setID(querySelect.value("id").toInt());
+		}
+	}
+
 	return(true);
 }

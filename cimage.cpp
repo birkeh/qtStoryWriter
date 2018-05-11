@@ -9,6 +9,7 @@
 
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QBuffer>
 
 
 cImage::cImage(qint32 iID, QObject *parent) :
@@ -60,36 +61,14 @@ cTextDocument* cImage::description()
 	return(m_lpDescription);
 }
 
-QPixmap cImage::load()
+void cImage::setImage(const QPixmap& image)
 {
-	QSqlQuery	query;
-	QPixmap		image;
+	m_image	= image;
+}
 
-	query.prepare("SELECT image FROM image WHERE id = :id;");
-	query.bindValue(":id", m_iID);
-	if(!query.exec())
-	{
-		myDebug << query.lastError().text();
-		return(image);
-	}
-
-	if(!query.first())
-	{
-		myDebug << query.lastError().text();
-		return(image);
-	}
-
-	QByteArray	ba	= query.value("image").toByteArray();
-	if(!ba.isEmpty())
-	{
-		if(!image.loadFromData(ba))
-		{
-			myDebug << "image load error.";
-			return(image);
-		}
-	}
-
-	return(image);
+QPixmap cImage::image()
+{
+	return(m_image);
 }
 
 cImage* cImageList::add(const qint32& iID)
@@ -119,8 +98,9 @@ cImage* cImageList::find(const qint32& iID)
 bool cImageList::load()
 {
 	QSqlQuery	query;
+	QPixmap		image;
 
-	query.prepare("SELECT id, name, type, description FROM image ORDER BY name, type;");
+	query.prepare("SELECT id, name, type, description, image FROM image ORDER BY name, type;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -134,6 +114,17 @@ bool cImageList::load()
 		lpImage->setName(query.value("name").toString());
 		lpImage->setType(query.value("type").toString());
 		lpImage->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+
+		QByteArray	ba	= query.value("image").toByteArray();
+		if(!ba.isEmpty())
+		{
+			if(!image.loadFromData(ba))
+			{
+				myDebug << "image load error.";
+				return(false);
+			}
+			lpImage->setImage(image);
+		}
 	}
 
 	return(true);
@@ -145,8 +136,8 @@ bool cImageList::save()
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
 
-	queryUpdate.prepare("UPDATE image SET type=:type, name=:name, description=:description WHERE id=:id;");
-	queryInsert.prepare("INSERT INTO image (type, name, description) VALUES (:type, :name, :description);");
+	queryUpdate.prepare("UPDATE image SET type=:type, name=:name, description=:description, image=:image WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO image (type, name, description, image) VALUES (:type, :name, :description, :image);");
 	querySelect.prepare("SELECT id FROM image WHERE _rowid_=(SELECT MAX(_rowid_) FROM image);");
 
 	for(int x = 0;x < count();x++)
@@ -159,18 +150,31 @@ bool cImageList::save()
 			queryUpdate.bindValue(":type", lpImage->type());
 			queryUpdate.bindValue(":name", lpImage->name());
 			queryUpdate.bindValue(":description", textDocument2Blob(lpImage->description()));
+
+			QByteArray	ba;
+			QBuffer		buffer(&ba);
+			buffer.open(QIODevice::WriteOnly);
+			lpImage->image().save(&buffer, "JPG");
+			queryUpdate.bindValue(":image", ba);
+
 			if(!queryUpdate.exec())
 			{
 				myDebug << queryUpdate.lastError().text();
 				return(false);
 			}
-// NICHT VOLLSTÄNDIG
 		}
 		else
 		{
 			queryInsert.bindValue(":type", lpImage->type());
 			queryInsert.bindValue(":name", lpImage->name());
 			queryInsert.bindValue(":description", textDocument2Blob(lpImage->description()));
+
+			QByteArray	ba;
+			QBuffer		buffer(&ba);
+			buffer.open(QIODevice::WriteOnly);
+			lpImage->image().save(&buffer, "JPG");
+			queryInsert.bindValue(":image", ba);
+
 			if(!queryInsert.exec())
 			{
 				myDebug << queryInsert.lastError().text();
@@ -182,8 +186,8 @@ bool cImageList::save()
 				myDebug << querySelect.lastError().text();
 				return(false);
 			}
+			querySelect.next();
 			lpImage->setID(querySelect.value("id").toInt());
-// NICHT VOLLSTÄNDIG
 		}
 	}
 

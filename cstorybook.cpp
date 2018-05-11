@@ -489,6 +489,8 @@ bool cStoryBook::addPart(const QString& szPartName)
 {
 	cPart*	lpPart	= m_partList.add(-1);
 	lpPart->setName(szPartName);
+	lpPart->setSortOrder(m_partList.nextSort());
+
 	return(true);
 }
 

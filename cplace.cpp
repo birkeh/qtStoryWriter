@@ -151,5 +151,82 @@ bool cPlaceList::load(cImageList *lpImageList)
 
 bool cPlaceList::save()
 {
+	QSqlQuery	queryUpdate;
+	QSqlQuery	queryInsert;
+	QSqlQuery	querySelect;
+
+	queryUpdate.prepare("UPDATE place SET name=:name, location=:location, type=:type, description=:description WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO place (name, location, type, description) VALUES (:name, :location, :type, :description);");
+	querySelect.prepare("SELECT id FROM place WHERE _rowid_=(SELECT MAX(_rowid_) FROM place);");
+
+	QSqlQuery	imageDelete;
+	QSqlQuery	imageAdd;
+
+	imageDelete.prepare("DELETE FROM placeImage WHERE placeID=:placeID;");
+	imageAdd.prepare("INSERT INTO placeImage (placeID, imageID) VALUES (:placeID, :imageID);");
+
+	for(int x = 0;x < count();x++)
+	{
+		cPlace*	lpPlace	= at(x);
+
+		if(lpPlace->id() != -1)
+		{
+			queryUpdate.bindValue(":id", lpPlace->id());
+			queryUpdate.bindValue(":name", lpPlace->name());
+			queryUpdate.bindValue(":location", lpPlace->location());
+			queryUpdate.bindValue(":type", lpPlace->type());
+			queryUpdate.bindValue(":description",  textDocument2Blob(lpPlace->description()));
+
+			if(!queryUpdate.exec())
+			{
+				myDebug << queryUpdate.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			queryInsert.bindValue(":name", lpPlace->name());
+			queryInsert.bindValue(":location", lpPlace->location());
+			queryInsert.bindValue(":type", lpPlace->type());
+			queryInsert.bindValue(":description",  textDocument2Blob(lpPlace->description()));
+
+			if(!queryInsert.exec())
+			{
+				myDebug << queryInsert.lastError().text();
+				return(false);
+			}
+
+			if(!querySelect.exec())
+			{
+				myDebug << querySelect.lastError().text();
+				return(false);
+			}
+			querySelect.next();
+			lpPlace->setID(querySelect.value("id").toInt());
+		}
+
+		imageDelete.bindValue(":placeID", lpPlace->id());
+		if(!imageDelete.exec())
+		{
+			myDebug << imageDelete.lastError().text();
+			return(false);
+		}
+
+		QList<cImage*>	images	= lpPlace->images();
+
+		for(int x = 0;x < images.count();x++)
+		{
+			cImage*	lpImage	= images.at(x);
+
+			imageAdd.bindValue(":placeID", lpPlace->id());
+			imageAdd.bindValue(":imageID", lpImage->id());
+			if(!imageAdd.exec())
+			{
+				myDebug << imageAdd.lastError().text();
+				return(false);
+			}
+		}
+	}
+
 	return(true);
 }
