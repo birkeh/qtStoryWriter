@@ -19,7 +19,10 @@ cScene::cScene(qint32 iID, QObject *parent) :
 	m_iSortOrder(-1),
 	m_lpDescription(0),
 	m_state(STATE::STATE_unknown),
-	m_lpText(0)
+	m_lpText(0),
+	m_lpItem(0),
+	m_lpStateItem(0),
+	m_bDeleted(false)
 {
 }
 
@@ -205,6 +208,36 @@ QColor cScene::stateColor(STATE state)
 	return(Qt::darkRed);
 }
 
+void cScene::setItem(QStandardItem* lpItem)
+{
+	m_lpItem	= lpItem;
+}
+
+QStandardItem* cScene::item()
+{
+	return(m_lpItem);
+}
+
+void cScene::setStateItem(QStandardItem* lpItem)
+{
+	m_lpStateItem	= lpItem;
+}
+
+QStandardItem* cScene::stateItem()
+{
+	return(m_lpStateItem);
+}
+
+void cScene::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cScene::deleted()
+{
+	return(m_bDeleted);
+}
+
 cScene* cSceneList::add(const qint32& iID)
 {
 	cScene*	lpScene	= find(iID);
@@ -220,6 +253,9 @@ cScene* cSceneList::add(const qint32& iID)
 
 cScene* cSceneList::find(const qint32& iID)
 {
+	if(iID == -1)
+		return(0);
+
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == iID)
@@ -235,10 +271,22 @@ QList<cScene*> cSceneList::find(cChapter* lpChapter)
 
 	for(int x = 0;x < count();x++)
 	{
-		if(at(x)->chapter() == lpChapter)
+		if(at(x)->chapter() == lpChapter && !at(x)->deleted())
 			sceneList.append(at(x));
 	}
 	return(sceneList);
+}
+
+qint32 cSceneList::nextSort(cChapter* lpChapter)
+{
+	qint32	iSort	= -1;
+
+	for(int x = 0;x < count();x++)
+	{
+		if(lpChapter == at(x)->chapter() && iSort < at(x)->sortOrder())
+			iSort	= at(x)->sortOrder();
+	}
+	return(iSort+1);
 }
 
 bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
@@ -329,16 +377,29 @@ bool cSceneList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE scene SET name=:name, chapterID=:chapterID, sortOrder=:sortOrder, description=:description, state=:state, startedAt=:startedAt, finishedAt=:finishedAt, targetDate=:targetDate, text=:text WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :text);");
 	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
+	queryDelete.prepare("DELETE FROM scene WHERE id=:id;");
 
 	for(int x = 0;x < count();x++)
 	{
 		cScene*	lpScene	= at(x);
 
-		if(lpScene->id() != -1)
+		if(lpScene->deleted())
+		{
+			queryDelete.bindValue(":id", lpScene->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpScene);
+		}
+		else if(lpScene->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpScene->id());
 			queryUpdate.bindValue(":name", lpScene->name());

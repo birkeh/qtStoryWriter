@@ -93,10 +93,18 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="cDateEdit" name="m_lpDayOfDeath"/>
+          <widget class="cDateEdit" name="m_lpDayOfDeath">
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="3" column="1">
-          <widget class="cDateEdit" name="m_lpDayOfBirth"/>
+          <widget class="cDateEdit" name="m_lpDayOfBirth">
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_8">
@@ -145,16 +153,6 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Title:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
@@ -193,9 +191,6 @@
          </item>
          <item row="0" column="5">
           <widget class="cLineEdit" name="m_lpLastName"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="cLineEdit" name="m_lpTitle"/>
          </item>
          <item row="5" column="4">
           <widget class="QLabel" name="label_3">
@@ -344,6 +339,32 @@
            </layout>
           </widget>
          </item>
+         <item row="2" column="3">
+          <widget class="cLineEdit" name="m_lpTitle"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Title:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_22">
+           <property name="text">
+            <string>Nick Name:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="cLineEdit" name="m_lpNickName"/>
+         </item>
         </layout>
        </item>
       </layout>
@@ -427,8 +448,34 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>m_lpTab</tabstop>
   <tabstop>m_lpFirstName</tabstop>
+  <tabstop>m_lpMiddleName</tabstop>
+  <tabstop>m_lpLastName</tabstop>
+  <tabstop>m_lpMainCharacter</tabstop>
+  <tabstop>m_lpCreature</tabstop>
+  <tabstop>m_lpNickName</tabstop>
+  <tabstop>m_lpTitle</tabstop>
+  <tabstop>m_lpMale</tabstop>
+  <tabstop>m_lpFemale</tabstop>
+  <tabstop>m_lpOther</tabstop>
+  <tabstop>m_lpDayOfBirth</tabstop>
+  <tabstop>m_lpPlaceOfBirth</tabstop>
+  <tabstop>m_lpDayOfDeath</tabstop>
+  <tabstop>m_lpPlaceOfDeath</tabstop>
+  <tabstop>m_lpHeight</tabstop>
+  <tabstop>m_lpFigure</tabstop>
+  <tabstop>m_lpWeight</tabstop>
+  <tabstop>m_lpSkin</tabstop>
+  <tabstop>m_lpNature</tabstop>
+  <tabstop>m_lpHairColor</tabstop>
+  <tabstop>m_lpHairCut</tabstop>
+  <tabstop>m_lpHairLength</tabstop>
+  <tabstop>m_lpSchool</tabstop>
+  <tabstop>m_lpSpokenLanguages</tabstop>
+  <tabstop>m_lpJob</tabstop>
   <tabstop>m_lpDescription</tabstop>
+  <tabstop>m_lpScrollArea</tabstop>
  </tabstops>
  <resources/>
  <connections/>

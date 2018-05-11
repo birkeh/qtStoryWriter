@@ -93,6 +93,10 @@ void cPartWindow::onChapterDoubleClicked(const QModelIndex& index)
 void cPartWindow::onNameChanged(const QString& szName)
 {
 	m_lpPart->setName(szName);
+
+	if(m_lpPart->item())
+		m_lpPart->item()->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 

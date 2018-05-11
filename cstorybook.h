@@ -146,6 +146,72 @@ public:
 	 \return bool
 	*/
 	bool			addPart(const QString& szPartName);
+
+	/*!
+	 \brief
+
+	 \fn addChapter
+	 \param lpPart
+	 \param szChapterName
+	 \return bool
+	*/
+	bool			addChapter(cPart* lpPart, const QString& szChapterName);
+
+	/*!
+	 \brief
+
+	 \fn addScene
+	 \param lpChapter
+	 \param szSceneName
+	 \return bool
+	*/
+	bool			addScene(cChapter* lpChapter, const QString& szSceneName);
+
+	/*!
+	 \brief
+
+	 \fn addCharacter
+	 \param szCharacterName
+	 \return bool
+	*/
+	bool			addCharacter(const QString& szCharacterName);
+
+	/*!
+	 \brief
+
+	 \fn addPlace
+	 \param szPlaceName
+	 \return bool
+	*/
+	bool			addPlace(const QString& szPlaceName);
+
+	/*!
+	 \brief
+
+	 \fn addObject
+	 \param szObjectName
+	 \return bool
+	*/
+	bool			addObject(const QString& szObjectName);
+
+	/*!
+	 \brief
+
+	 \fn addRecherche
+	 \param szRechercheName
+	 \return bool
+	*/
+	bool			addRecherche(const QString& szRechercheName);
+
+	/*!
+	 \brief
+
+	 \fn addRecherche
+	 \param szRechercheName
+	 \return bool
+	*/
+	bool			hasScene(cChapter* lpChapter);
+
 private:
 	QString			m_szProject; /*!< TODO: describe */
 	bool			m_bIsOpen; /*!< TODO: describe */
@@ -247,6 +313,12 @@ private:
 	*/
 	bool			loadImageList();
 
+	/*!
+	 \brief
+
+	 \fn saveBook
+	 \return bool
+	*/
 	bool			saveBook();
 	/*!
 	 \brief

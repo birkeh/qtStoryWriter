@@ -17,7 +17,8 @@ cPart::cPart(qint32 iID, QObject *parent) :
 	m_szName(""),
 	m_iSortOrder(-1),
 	m_lpDescription(0),
-	m_lpText(0)
+	m_lpText(0),
+	m_lpItem(0)
 {
 }
 
@@ -69,6 +70,16 @@ void cPart::setText(cTextDocument* lpText)
 cTextDocument* cPart::text()
 {
 	return(m_lpText);
+}
+
+void cPart::setItem(QStandardItem* lpItem)
+{
+	m_lpItem	= lpItem;
+}
+
+QStandardItem* cPart::item()
+{
+	return(m_lpItem);
 }
 
 cPart* cPartList::add(const qint32& iID)

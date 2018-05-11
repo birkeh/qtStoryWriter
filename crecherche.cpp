@@ -123,6 +123,9 @@ cRecherche* cRechercheList::add(const qint32& iID)
 
 cRecherche* cRechercheList::find(const qint32& iID)
 {
+	if(iID == -1)
+		return(0);
+
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == iID)

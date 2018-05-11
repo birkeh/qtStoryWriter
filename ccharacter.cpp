@@ -371,6 +371,9 @@ cCharacter* cCharacterList::add(const qint32& iID)
 
 cCharacter* cCharacterList::find(const qint32& iID)
 {
+	if(iID == -1)
+		return(0);
+
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == iID)
@@ -384,7 +387,7 @@ bool cCharacterList::load(cImageList *lpImageList)
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, mainCharacter, creature, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description FROM character ORDER BY mainCharacter DESC, lastName, middleName, firstName;");
+	query.prepare("SELECT id, mainCharacter, creature, gender, title, firstName, middleName, lastName, nickName, height, weight, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description FROM character ORDER BY mainCharacter DESC, lastName, middleName, firstName;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -402,6 +405,7 @@ bool cCharacterList::load(cImageList *lpImageList)
 		lpCharacter->setFirstName(query.value("firstName").toString());
 		lpCharacter->setMiddleName(query.value("middleName").toString());
 		lpCharacter->setLastName(query.value("lastName").toString());
+		lpCharacter->setNickName(query.value("nickName").toString());
 		lpCharacter->setHeight(query.value("height").toDouble());
 		lpCharacter->setWeight(query.value("weight").toDouble());
 		lpCharacter->setDateOfBirth(query.value("dateOfBirth").toDate());
@@ -447,8 +451,8 @@ bool cCharacterList::save()
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
 
-	queryUpdate.prepare("UPDATE character SET mainCharacter=:mainCharacter, creature=:creature, gender=:gender, title=:title, firstName=:firstName, middleName=:middleName, lastName=:lastName, height=:height, weight=:weight, dateOfBirth=:dateOfBirth, dateOfDeath=:dateOfDeath, placeOfBirth=:placeOfBirth, placeOfDeath=:placeOfDeath, hairColor=:hairColor, hairCut=:hairCut, hairLength=:hairLength, figure=:figure, nature=:nature, spokenLanguages=:spokenLanguages, skin=:skin, school=:school, job=:job, description=:description WHERE id=:id;");
-	queryInsert.prepare("INSERT INTO character (mainCharacter, creature, gender, title, firstName, middleName, lastName, height, weight, dateOfBirth, dateOfDeath, placeOfBirth, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description) VALUES (:mainCharacter, :creature, :gender, :title, :firstName,: middleName, :lastName, :height, :weight,:dateOfBirth, :dateOfDeath, :placeOfBirth, :placeOfDeath, :hairColor, :hairCut, :hairLength, :figure, :nature, :spokenLanguages, :skin, :school, :job, :description);");
+	queryUpdate.prepare("UPDATE character SET mainCharacter=:mainCharacter, creature=:creature, gender=:gender, title=:title, firstName=:firstName, middleName=:middleName, lastName=:lastName, nickName=:nickName, height=:height, weight=:weight, dateOfBirth=:dateOfBirth, dateOfDeath=:dateOfDeath, placeOfBirth=:placeOfBirth, placeOfDeath=:placeOfDeath, hairColor=:hairColor, hairCut=:hairCut, hairLength=:hairLength, figure=:figure, nature=:nature, spokenLanguages=:spokenLanguages, skin=:skin, school=:school, job=:job, description=:description WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO character (mainCharacter, creature, gender, title, firstName, middleName, lastName, nickName, height, weight, dateOfBirth, dateOfDeath, placeOfBirth, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description) VALUES (:mainCharacter, :creature, :gender, :title, :firstName, :middleName, :lastName, :nickName, :height, :weight,:dateOfBirth, :dateOfDeath, :placeOfBirth, :placeOfDeath, :hairColor, :hairCut, :hairLength, :figure, :nature, :spokenLanguages, :skin, :school, :job, :description);");
 	querySelect.prepare("SELECT id FROM character WHERE _rowid_=(SELECT MAX(_rowid_) FROM character);");
 
 	QSqlQuery	imageDelete;
@@ -471,6 +475,7 @@ bool cCharacterList::save()
 			queryUpdate.bindValue(":firstName", lpCharacter->firstName());
 			queryUpdate.bindValue(":middleName", lpCharacter->middleName());
 			queryUpdate.bindValue(":lastName", lpCharacter->lastName());
+			queryUpdate.bindValue(":nickName", lpCharacter->nickName());
 			queryUpdate.bindValue(":height", lpCharacter->height());
 			queryUpdate.bindValue(":weight", lpCharacter->weight());
 			queryUpdate.bindValue(":dateOfBirth", lpCharacter->dateOfBirth());
@@ -503,6 +508,7 @@ bool cCharacterList::save()
 			queryInsert.bindValue(":firstName", lpCharacter->firstName());
 			queryInsert.bindValue(":middleName", lpCharacter->middleName());
 			queryInsert.bindValue(":lastName", lpCharacter->lastName());
+			queryInsert.bindValue(":nickName", lpCharacter->nickName());
 			queryInsert.bindValue(":height", lpCharacter->height());
 			queryInsert.bindValue(":weight", lpCharacter->weight());
 			queryInsert.bindValue(":dateOfBirth", lpCharacter->dateOfBirth());

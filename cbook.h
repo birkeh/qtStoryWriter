@@ -34,148 +34,148 @@ public:
 	explicit cBook(const QString& szTitle = "", QObject *parent = nullptr);
 
 	/*!
-	 \brief
+	 \brief Load the main book values from the database.
 
 	 \fn load
-	 \return bool
+	 \return true on success, otherwise false
 	*/
 	bool			load();
 	/*!
-	 \brief
+	 \brief Save the main book values to the database.
 
 	 \fn save
-	 \return bool
+	 \return true on success, otherwise false
 	*/
 	bool			save();
 
 	/*!
-	 \brief
+	 \brief Set the title of the book.
 
 	 \fn setTitle
-	 \param szTitle
+	 \param szTitle Title of the book
 	*/
 	void			setTitle(const QString& szTitle);
 	/*!
-	 \brief
+	 \brief Returns the title of the book.
 
 	 \fn title
-	 \return QString
+	 \return title of the book
 	*/
 	QString			title();
 
 	/*!
-	 \brief
+	 \brief Set the subtitle of the book.
 
 	 \fn setSubTitle
-	 \param szSubTitle
+	 \param szSubTitle subtitle of the book
 	*/
 	void			setSubTitle(const QString& szSubTitle);
 	/*!
-	 \brief
+	 \brief Return the subtitle of the book.
 
 	 \fn subTitle
-	 \return QString
+	 \return subtitle of the book
 	*/
 	QString			subTitle();
 
 	/*!
-	 \brief
+	 \brief Set the short description of the book. The text may be formatted.
 
 	 \fn setShortDescription
-	 \param lpShortDescription
+	 \param lpShortDescription pointer to a cTextDocument containing the short description
 	*/
 	void			setShortDescription(cTextDocument* lpShortDescription);
 	/*!
-	 \brief
+	 \brief Return the short description of the book.
 
 	 \fn shortDescription
-	 \return cTextDocument
+	 \return short description of the book as a cTextDocument
 	*/
 	cTextDocument*	shortDescription();
 
 	/*!
-	 \brief
+	 \brief Set the description of the book. The text may be formatted.
 
 	 \fn setDescription
-	 \param lpDescription
+	 \param lpDescription pointer to a cTextDocument containing the description
 	*/
 	void			setDescription(cTextDocument* lpDescription);
 	/*!
-	 \brief
+	 \brief Return the description of the book.
 
 	 \fn description
-	 \return cTextDocument
+	 \return description of the book as a cTextDocument
 	*/
 	cTextDocument*	description();
 
 	/*!
-	 \brief
+	 \brief Set the author of the book.
 
 	 \fn setAuthor
-	 \param szAuthor
+	 \param name of the author
 	*/
 	void			setAuthor(const QString& szAuthor);
 	/*!
-	 \brief
+	 \brief Return the author of the book.
 
 	 \fn author
-	 \return QString
+	 \return name of the author
 	*/
 	QString			author();
 
 	/*!
-	 \brief
+	 \brief Set the date and time when the document has been started.
 
 	 \fn setStartedAt
-	 \param startedAt
+	 \param date and time when the document has been started
 	*/
 	void			setStartedAt(const QDateTime& startedAt);
 	/*!
-	 \brief
+	 \brief Return the date and time when the document has been started.
 
 	 \fn startedAt
-	 \return QDateTime
+	 \return date and time when the document has been started
 	*/
 	QDateTime		startedAt();
 
 	/*!
-	 \brief
+	 \brief Set the date and time when the document has been finished.
 
 	 \fn setFinishedAt
-	 \param finishedAt
+	 \param date and time when the document has been finished
 	*/
 	void			setFinishedAt(const QDateTime& finishedAt);
 	/*!
-	 \brief
+	 \brief Return the date and time when the document has been finished.
 
 	 \fn finishedAt
-	 \return QDateTime
+	 \return date and time when the document has been finished
 	*/
 	QDateTime		finishedAt();
 
 	/*!
-	 \brief
+	 \brief Set the date and time when the document should be finished.
 
 	 \fn setTargetDate
-	 \param targetDate
+	 \param date and time when the document should be finished
 	*/
 	void			setTargetDate(const QDateTime& targetDate);
 	/*!
-	 \brief
+	 \brief Return the date and time when the document should be finished.
 
 	 \fn targetDate
-	 \return QDateTime
+	 \return date and time when the document should be finished
 	*/
 	QDateTime		targetDate();
 private:
-	QString			m_szTitle; /*!< TODO: describe */
-	QString			m_szSubtitle; /*!< TODO: describe */
-	cTextDocument*	m_lpShortDescription; /*!< TODO: describe */
-	cTextDocument*	m_lpDescription; /*!< TODO: describe */
-	QString			m_szAuthor; /*!< TODO: describe */
-	QDateTime		m_startedAt; /*!< TODO: describe */
-	QDateTime		m_finishedAt; /*!< TODO: describe */
-	QDateTime		m_targetDate; /*!< TODO: describe */
+	QString			m_szTitle; /*!< title of the document */
+	QString			m_szSubtitle; /*!< subtitle of the document */
+	cTextDocument*	m_lpShortDescription; /*!< short description of the document. The text may be formatted */
+	cTextDocument*	m_lpDescription; /*!< description of the document. The text may be formatted */
+	QString			m_szAuthor; /*!< name of the author of the document */
+	QDateTime		m_startedAt; /*!< date and time when the document has been startd */
+	QDateTime		m_finishedAt; /*!< date and time when the document has been finished */
+	QDateTime		m_targetDate; /*!< date and time when the document should be finished */
 };
 
 Q_DECLARE_METATYPE(cBook*)

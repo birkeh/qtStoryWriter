@@ -95,6 +95,10 @@ void cChapterWindow::onSceneDoubleClicked(const QModelIndex& index)
 void cChapterWindow::onNameChanged(const QString& szName)
 {
 	m_lpChapter->setName(szName);
+
+	if(m_lpChapter->item())
+		m_lpChapter->item()->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 

@@ -494,6 +494,90 @@ bool cStoryBook::addPart(const QString& szPartName)
 	return(true);
 }
 
+bool cStoryBook::addChapter(cPart* lpPart, const QString& szChapterName)
+{
+	cChapter*	lpChapter	= m_chapterList.add(-1);
+	lpChapter->setName(szChapterName);
+	lpChapter->setPart(lpPart);
+	lpChapter->setSortOrder(m_chapterList.nextSort(lpPart));
+
+	return(true);
+}
+
+bool cStoryBook::addScene(cChapter* lpChapter, const QString& szSceneName)
+{
+	cScene*	lpScene	= m_sceneList.add(-1);
+	lpScene->setName(szSceneName);
+	lpScene->setChapter(lpChapter);
+	lpScene->setSortOrder(m_sceneList.nextSort(lpChapter));
+
+	return(true);
+}
+
+bool cStoryBook::addCharacter(const QString& szCharacterName)
+{
+	QString		szFirstName;
+	QString		szMiddleName;
+	QString		szLastName;
+	QStringList	list	= szCharacterName.split(" ");
+
+	if(list.count() == 1)
+		szFirstName	= list.at(0);
+	else if(list.count() == 2)
+	{
+		szFirstName	= list.at(0);
+		szLastName	= list.at(1);
+	}
+	else
+	{
+		szFirstName		= list.at(0);
+		szLastName		= list.last();
+		szMiddleName	= list.at(1);
+
+		for(int x = 2;x < list.count()-1;x++)
+		{
+			szMiddleName.append(" ");
+			szMiddleName.append(list.at(x));
+		}
+	}
+
+	cCharacter*	lpCharacter	= m_characterList.add(-1);
+	lpCharacter->setFirstName(szFirstName);
+	lpCharacter->setMiddleName(szMiddleName);
+	lpCharacter->setLastName(szLastName);
+
+	return(true);
+}
+
+bool cStoryBook::addPlace(const QString& szPlaceName)
+{
+	cPlace*	lpPlace	= m_placeList.add(-1);
+	lpPlace->setName(szPlaceName);
+
+	return(true);
+}
+
+bool cStoryBook::addObject(const QString& szObjectName)
+{
+	cObject*	lpObject	= m_objectList.add(-1);
+	lpObject->setName(szObjectName);
+
+	return(true);
+}
+
+bool cStoryBook::addRecherche(const QString& szRechercheName)
+{
+	cRecherche*	lpRecherche	= m_rechercheList.add(-1);
+	lpRecherche->setName(szRechercheName);
+
+	return(true);
+}
+
+bool cStoryBook::hasScene(cChapter* lpChapter)
+{
+	return(m_sceneList.find(lpChapter).count() > 0);
+}
+
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
@@ -524,6 +608,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItem->setToolTip(lpPart->description()->toPlainText());
 		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
+		lpPart->setItem(lpItem);
 
 		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpModel->invisibleRootItem()->index(), true);
 	}
@@ -531,6 +616,10 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	for(int x = 0;x < m_chapterList.count();x++)
 	{
 		cChapter*		lpChapter	= m_chapterList.at(x);
+
+		if(lpChapter->deleted())
+			continue;
+
 		QStandardItem*	lpRoot		= part.value(lpChapter->part()->id());
 
 		if(lpRoot)
@@ -540,9 +629,12 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItem->setFont(fontChapter);
 			lpItem->setForeground(QBrush(Qt::darkBlue));
 			lpItem->setBackground(QBrush(background));
-			lpItem->setToolTip(lpChapter->description()->toPlainText());
+			if(lpChapter->description())
+				lpItem->setToolTip(lpChapter->description()->toPlainText());
 			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
+			lpChapter->setItem(lpItem);
+
 			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
 		}
 	}
@@ -550,6 +642,10 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 	for(int x = 0;x < m_sceneList.count();x++)
 	{
 		cScene*			lpScene		= m_sceneList.at(x);
+
+		if(lpScene->deleted())
+			continue;
+
 		QStandardItem*	lpChapterItem	= chapter.value(lpScene->chapter()->id());
 
 		if(lpChapterItem)
@@ -562,12 +658,16 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItems[0]->setData(QVariant::fromValue(lpScene));
 			lpItems[0]->setFont(fontScene);
 			lpItems[0]->setForeground(QBrush(Qt::blue));
-			lpItems[0]->setToolTip(lpScene->description()->toPlainText());
+			if(lpScene->description())
+				lpItems[0]->setToolTip(lpScene->description()->toPlainText());
 
 			lpItems[1]->setData(QVariant::fromValue(lpScene));
 			lpItems[1]->setBackground(QBrush(lpScene->stateColor()));
 			lpItems[1]->setTextAlignment(Qt::AlignCenter);
-			lpItems[1]->setToolTip(lpScene->description()->toPlainText());
+			if(lpScene->description())
+				lpItems[1]->setToolTip(lpScene->description()->toPlainText());
+			lpScene->setItem(lpItems[0]);
+			lpScene->setStateItem(lpItems[1]);
 
 			lpChapterItem->appendRow(lpItems);
 		}
@@ -618,7 +718,8 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 			else
 				lpItems[i]->setFont(fontNonMainCharacter);
 
-			lpItems[i]->setToolTip(lpCharacter->description()->toPlainText());
+			if(lpCharacter->description())
+				lpItems[i]->setToolTip(lpCharacter->description()->toPlainText());
 		}
 
 		lpModel->appendRow(lpItems);
@@ -655,7 +756,8 @@ bool cStoryBook::fillPlaceList(QTreeView* lpView)
 		for(int i = 0;i < headerLabels.count();i++)
 		{
 			lpItems[i]->setData(QVariant::fromValue(lpPlace));
-			lpItems[i]->setToolTip(lpPlace->description()->toPlainText());
+			if(lpPlace->description())
+				lpItems[i]->setToolTip(lpPlace->description()->toPlainText());
 		}
 
 		lpModel->appendRow(lpItems);
@@ -691,7 +793,8 @@ bool cStoryBook::fillObjectList(QTreeView* lpView)
 		for(int i = 0;i < headerLabels.count();i++)
 		{
 			lpItems[i]->setData(QVariant::fromValue(lpObject));
-			lpItems[i]->setToolTip(lpObject->description()->toPlainText());
+			if(lpObject->description())
+				lpItems[i]->setToolTip(lpObject->description()->toPlainText());
 		}
 
 		lpModel->appendRow(lpItems);
@@ -727,7 +830,8 @@ bool cStoryBook::fillRechercheList(QTreeView* lpView)
 		for(int i = 0;i < headerLabels.count();i++)
 		{
 			lpItems[i]->setData(QVariant::fromValue(lpRecherche));
-			lpItems[i]->setToolTip(lpRecherche->description()->toPlainText());
+			if(lpRecherche->description())
+				lpItems[i]->setToolTip(lpRecherche->description()->toPlainText());
 		}
 
 		lpModel->appendRow(lpItems);

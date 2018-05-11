@@ -33,6 +33,9 @@ cCharacterWindow::cCharacterWindow(QWidget *parent) :
 	connect(ui->m_lpLastName,			&cLineEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
 	connect(ui->m_lpLastName,			&cLineEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
+	connect(ui->m_lpNickName,			&cLineEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpNickName,			&cLineEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+
 	connect(ui->m_lpMainCharacter,		&cCheckBox::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onCheckBoxGotFocus);
 	connect(ui->m_lpMainCharacter,		&cCheckBox::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onCheckBoxLostFocus);
 
@@ -112,6 +115,7 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 	ui->m_lpFirstName->setText(lpCharacter->firstName());
 	ui->m_lpMiddleName->setText(lpCharacter->middleName());
 	ui->m_lpLastName->setText(lpCharacter->lastName());
+	ui->m_lpNickName->setText(lpCharacter->nickName());
 	ui->m_lpMainCharacter->setChecked(lpCharacter->mainCharacter());
 	ui->m_lpCreature->setText(lpCharacter->creature());
 	ui->m_lpTitle->setText(lpCharacter->title());
@@ -163,6 +167,7 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 	connect(ui->m_lpFirstName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onFirstNameChanged);
 	connect(ui->m_lpMiddleName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onMiddleNameChanged);
 	connect(ui->m_lpLastName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onLastNameChanged);
+	connect(ui->m_lpNickName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onNickNameChanged);
 	connect(ui->m_lpMainCharacter,		&cCheckBox::clicked,									this,	&cCharacterWindow::onMainCharacterClicked);
 	connect(ui->m_lpCreature,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onCreatureChanged);
 	connect(ui->m_lpMale,				&cCheckBox::clicked,									this,	&cCharacterWindow::onGenderMaleClicked);
@@ -207,6 +212,12 @@ void cCharacterWindow::onMiddleNameChanged(const QString& szText)
 void cCharacterWindow::onLastNameChanged(const QString& szText)
 {
 	m_lpCharacter->setLastName(szText);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cCharacterWindow::onNickNameChanged(const QString& szText)
+{
+	m_lpCharacter->setNickName(szText);
 	m_lpMainWindow->somethingChanged();
 }
 

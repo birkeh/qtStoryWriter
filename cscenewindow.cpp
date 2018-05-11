@@ -253,6 +253,10 @@ void cSceneWindow::onObjectDoubleClicked(const QModelIndex& index)
 void cSceneWindow::onNameChanged(const QString& szName)
 {
 	m_lpScene->setName(szName);
+
+	if(m_lpScene->item())
+		m_lpScene->item()->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -286,6 +290,9 @@ void cSceneWindow::onStateChanged(int index)
 		m_lpScene->setState(cScene::STATE_unknown);
 		break;
 	}
+	m_lpScene->stateItem()->setBackground(QBrush(m_lpScene->stateColor()));
+	m_lpScene->stateItem()->setText(m_lpScene->stateText());
+
 	m_lpMainWindow->somethingChanged();
 }
 

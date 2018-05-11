@@ -1234,6 +1234,8 @@ void cMainWindow::onAddPart()
 		}
 
 		m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
 	}
 }
 
@@ -1257,6 +1259,49 @@ void cMainWindow::onDeletePart()
 
 void cMainWindow::onAddChapter()
 {
+	bool			bOK;
+	QString			szChapterName	= "";
+	QStandardItem*	lpItem			= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cPart*			lpPart			= qvariant_cast<cPart*>(lpItem->data());
+	if(!lpPart)
+	{
+		lpItem	= lpItem->parent();
+		lpPart	= qvariant_cast<cPart*>(lpItem->data());
+
+		if(!lpPart)
+			return;
+	}
+
+	for(;;)
+	{
+		szChapterName	= QInputDialog::getText(this, tr("New Chapter"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szChapterName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Chapter"), tr("Chapter Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szChapterName.isEmpty())
+	{
+		if(!m_lpStoryBook->addChapter(lpPart, szChapterName))
+		{
+			QMessageBox::critical(this, tr("New Chapter"), tr("Chapter could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditChapter()
@@ -1275,10 +1320,96 @@ void cMainWindow::onEditChapter()
 
 void cMainWindow::onDeleteChapter()
 {
+	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+
+	if(!lpChapter)
+		return;
+
+	if(m_lpStoryBook->hasScene(lpChapter))
+	{
+		QMessageBox::critical(this, "Delete Chapter", tr("There are still some scenes in this chapter.\nPlease delete them before deleting the chapter."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Chapter", tr("Are you sure you want to delete this chapter:<br>") + "<b><center>" + lpChapter->name() + "</center></b>" + tr("<br>from part <br>") + "<b><center>" + lpChapter->part()->name() + "</center></b>") != QMessageBox::Yes)
+		return;
+
+	lpChapter->setDeleted(true);
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_chapter)
+		{
+			cChapterWindow*	lpChapterWindow	= (cChapterWindow*)lpWidget->widget();
+			if(lpChapterWindow->chapter() == lpChapter)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddScene()
 {
+	bool			bOK;
+	QString			szSceneName		= "";
+	QStandardItem*	lpItem			= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cChapter*		lpChapter		= qvariant_cast<cChapter*>(lpItem->data());
+	if(!lpChapter)
+	{
+		lpItem		= lpItem->parent();
+		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+
+		if(!lpChapter)
+		{
+			lpItem		= lpItem->parent();
+			lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+
+			if(!lpChapter)
+				return;
+		}
+	}
+
+	for(;;)
+	{
+		szSceneName	= QInputDialog::getText(this, tr("New Scene"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szSceneName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Scene"), tr("Scene Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szSceneName.isEmpty())
+	{
+		if(!m_lpStoryBook->addScene(lpChapter, szSceneName))
+		{
+			QMessageBox::critical(this, tr("New Scene"), tr("Scene could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditScene()
@@ -1297,10 +1428,70 @@ void cMainWindow::onEditScene()
 
 void cMainWindow::onDeleteScene()
 {
+	QStandardItem*	lpItem	= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cScene*			lpScene	= qvariant_cast<cScene*>(lpItem->data());
+
+	if(!lpScene)
+		return;
+
+	if(QMessageBox::question(this, "Delete Scene", tr("Are you sure you want to delete this scene:<br>") + "<b><center>" + lpScene->name() + "</center></b>" + tr("<br>from chapter <br>") + "<b><center>" + lpScene->chapter()->name() + "</center></b>") != QMessageBox::Yes)
+		return;
+
+	lpScene->setDeleted(true);
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_scene)
+		{
+			cSceneWindow*	lpSceneWindow	= (cSceneWindow*)lpWidget->widget();
+			if(lpSceneWindow->scene() == lpScene)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddCharacter()
 {
+	bool	bOK;
+	QString	szCharacterName	= "";
+
+	for(;;)
+	{
+		szCharacterName	= QInputDialog::getText(this, tr("New Character"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szCharacterName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Character"), tr("Character Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szCharacterName.isEmpty())
+	{
+		if(!m_lpStoryBook->addCharacter(szCharacterName))
+		{
+			QMessageBox::critical(this, tr("New Character"), tr("Character could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditCharacter()
@@ -1323,6 +1514,36 @@ void cMainWindow::onDeleteCharacter()
 
 void cMainWindow::onAddPlace()
 {
+	bool	bOK;
+	QString	szPlaceName	= "";
+
+	for(;;)
+	{
+		szPlaceName	= QInputDialog::getText(this, tr("New Place"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szPlaceName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Place"), tr("Place Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szPlaceName.isEmpty())
+	{
+		if(!m_lpStoryBook->addPlace(szPlaceName))
+		{
+			QMessageBox::critical(this, tr("New Place"), tr("Place could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditPlace()
@@ -1345,6 +1566,36 @@ void cMainWindow::onDeletePlace()
 
 void cMainWindow::onAddObject()
 {
+	bool	bOK;
+	QString	szObjectName	= "";
+
+	for(;;)
+	{
+		szObjectName	= QInputDialog::getText(this, tr("New Object"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szObjectName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Object"), tr("Object Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szObjectName.isEmpty())
+	{
+		if(!m_lpStoryBook->addObject(szObjectName))
+		{
+			QMessageBox::critical(this, tr("New Object"), tr("Object could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditObject()
@@ -1367,6 +1618,36 @@ void cMainWindow::onDeleteObject()
 
 void cMainWindow::onAddRecherche()
 {
+	bool	bOK;
+	QString	szRechercheName	= "";
+
+	for(;;)
+	{
+		szRechercheName	= QInputDialog::getText(this, tr("New Recherche"), tr("Name:"), QLineEdit::Normal, "", &bOK);
+		if(!bOK)
+			return;
+
+		if(szRechercheName.isEmpty())
+		{
+			QMessageBox::critical(this, tr("New Recherche"), tr("Recherche Name is empty."));
+			bOK	= false;
+		}
+		else
+			break;
+	}
+
+	if(bOK && !szRechercheName.isEmpty())
+	{
+		if(!m_lpStoryBook->addRecherche(szRechercheName))
+		{
+			QMessageBox::critical(this, tr("New Recherche"), tr("Recherche could not be created."));
+			return;
+		}
+
+		m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+		m_bSomethingChanged	= true;
+		updateWindowTitle();
+	}
 }
 
 void cMainWindow::onEditRecherche()

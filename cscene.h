@@ -279,6 +279,52 @@ public:
 	 \return QColor
 	*/
 	static QColor		stateColor(STATE state);
+
+	/*!
+	 \brief
+
+	 \fn setItem
+	 \param lpItem
+	*/
+	void				setItem(QStandardItem* lpItem);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QStandardItem
+	*/
+	QStandardItem*		item();
+
+	/*!
+	 \brief
+
+	 \fn setStateItem
+	 \param lpItem
+	*/
+	void				setStateItem(QStandardItem* lpItem);
+	/*!
+	 \brief
+
+	 \fn stateItem
+	 \return QStandardItem
+	*/
+	QStandardItem*		stateItem();
+
+	/*!
+	 \brief
+
+	 \fn setDeleted
+	 \param bDeleted
+	*/
+	void				setDeleted(bool bDeleted);
+	/*!
+	 \brief
+
+	 \fn deleted
+	 \return bool
+	*/
+	bool				deleted();
+
 private:
 	qint32				m_iID; /*!< TODO: describe */
 	cChapter*			m_lpChapter; /*!< TODO: describe */
@@ -293,6 +339,9 @@ private:
 	QList<cCharacter*>	m_characterList; /*!< TODO: describe */
 	QList<cObject*>		m_objectList; /*!< TODO: describe */
 	QList<cPlace*>		m_placeList; /*!< TODO: describe */
+	QStandardItem*		m_lpItem; /*!< TODO: describe */
+	QStandardItem*		m_lpStateItem; /*!< TODO: describe */
+	bool				m_bDeleted; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cScene*)
@@ -349,6 +398,15 @@ public:
 	 \return QList<cScene *>
 	*/
 	QList<cScene*>		find(cChapter* lpChapter);
+
+	/*!
+	 \brief
+
+	 \fn nextSort
+	 \param lpPart
+	 \return cPart
+	*/
+	qint32				nextSort(cChapter* lpChapter);
 };
 
 #endif // CSCENE_H

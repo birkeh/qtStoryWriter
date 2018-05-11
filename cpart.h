@@ -13,6 +13,7 @@
 #include <QList>
 #include <QString>
 #include <QObject>
+#include <QStandardItem>
 
 
 /*!
@@ -108,12 +109,28 @@ public:
 	*/
 	cTextDocument*	text();
 
+	/*!
+	 \brief
+
+	 \fn setItem
+	 \param lpItem
+	*/
+	void			setItem(QStandardItem* lpItem);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QStandardItem
+	*/
+	QStandardItem*	item();
+
 private:
 	qint32			m_iID; /*!< TODO: describe */
 	QString			m_szName; /*!< TODO: describe */
 	qint32			m_iSortOrder; /*!< TODO: describe */
 	cTextDocument*	m_lpDescription; /*!< TODO: describe */
 	cTextDocument*	m_lpText; /*!< TODO: describe */
+	QStandardItem*	m_lpItem; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cPart*)
@@ -158,6 +175,12 @@ public:
 	*/
 	cPart*			find(const qint32& iID);
 
+	/*!
+	 \brief
+
+	 \fn nextSort
+	 \return cPart
+	*/
 	qint32			nextSort();
 };
 

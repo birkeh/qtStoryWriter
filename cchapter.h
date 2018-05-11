@@ -125,6 +125,36 @@ public:
 	*/
 	cTextDocument*		text();
 
+	/*!
+	 \brief
+
+	 \fn setItem
+	 \param lpItem
+	*/
+	void				setItem(QStandardItem* lpItem);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QStandardItem
+	*/
+	QStandardItem*	item();
+
+	/*!
+	 \brief
+
+	 \fn setDeleted
+	 \param bDeleted
+	*/
+	void				setDeleted(bool bDeleted);
+	/*!
+	 \brief
+
+	 \fn deleted
+	 \return bool
+	*/
+	bool				deleted();
+
 private:
 	qint32				m_iID; /*!< TODO: describe */
 	cPart*				m_lpPart; /*!< TODO: describe */
@@ -132,6 +162,8 @@ private:
 	qint32				m_iSortOrder; /*!< TODO: describe */
 	cTextDocument*		m_lpDescription; /*!< TODO: describe */
 	cTextDocument*		m_lpText; /*!< TODO: describe */
+	QStandardItem*		m_lpItem; /*!< TODO: describe */
+	bool				m_bDeleted; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cChapter*)
@@ -185,6 +217,15 @@ public:
 	 \return QList<cChapter *>
 	*/
 	QList<cChapter*>	find(cPart* lpPart);
+
+	/*!
+	 \brief
+
+	 \fn nextSort
+	 \param lpPart
+	 \return cPart
+	*/
+	qint32				nextSort(cPart* lpPart);
 };
 
 #endif // CCHAPTER_H

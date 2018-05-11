@@ -79,6 +79,13 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onLastNameChanged
+	 \param szText
+	*/
+	void					onNickNameChanged(const QString& szText);
+	/*!
+	 \brief
+
 	 \fn onMainCharacterClicked
 	 \param bChecked
 	*/

@@ -18,7 +18,9 @@ cChapter::cChapter(qint32 iID, QObject *parent) :
 	m_szName(""),
 	m_iSortOrder(-1),
 	m_lpDescription(0),
-	m_lpText(0)
+	m_lpText(0),
+	m_lpItem(0),
+	m_bDeleted(false)
 {
 }
 
@@ -82,6 +84,26 @@ cTextDocument* cChapter::text()
 	return(m_lpText);
 }
 
+void cChapter::setItem(QStandardItem* lpItem)
+{
+	m_lpItem	= lpItem;
+}
+
+QStandardItem* cChapter::item()
+{
+	return(m_lpItem);
+}
+
+void cChapter::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cChapter::deleted()
+{
+	return(m_bDeleted);
+}
+
 cChapter* cChapterList::add(const qint32& iID)
 {
 	cChapter*	lpChapter	= find(iID);
@@ -118,6 +140,18 @@ QList<cChapter*> cChapterList::find(cPart* lpPart)
 	return(chapterList);
 }
 
+qint32 cChapterList::nextSort(cPart* lpPart)
+{
+	qint32	iSort	= -1;
+
+	for(int x = 0;x < count();x++)
+	{
+		if(lpPart == at(x)->part() && iSort < at(x)->sortOrder())
+			iSort	= at(x)->sortOrder();
+	}
+	return(iSort+1);
+}
+
 bool cChapterList::load(cPartList* lpPartList)
 {
 	QSqlQuery	query;
@@ -148,16 +182,29 @@ bool cChapterList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE chapter SET name=:name, partID=:partID, sortOrder=:sortOrder, description=:description, text=:text WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO chapter (name, partID, sortOrder, description, text) VALUES (:name, :partID, :sortOrder, :description, :text);");
 	querySelect.prepare("SELECT id FROM chapter WHERE _rowid_=(SELECT MAX(_rowid_) FROM chapter);");
+	queryDelete.prepare("DELETE FROM chapter WHERE id=:id;");
 
 	for(int x = 0;x < count();x++)
 	{
 		cChapter*	lpChapter	= at(x);
 
-		if(lpChapter->id() != -1)
+		if(lpChapter->deleted())
+		{
+			queryDelete.bindValue(":id", lpChapter->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpChapter);
+		}
+		else if(lpChapter->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpChapter->id());
 			queryUpdate.bindValue(":name", lpChapter->name());
