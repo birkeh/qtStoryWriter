@@ -74,7 +74,7 @@ bool cBook::save()
 	if(query.value("CNT").toInt() == 1)
 		query.prepare("UPDATE book SET title = :title, subTitle = :subTitle, shortDescription = :shortDescription, description = :description, author = :author, startedAt = :startedAt, finishedAt = :finishedAt, targetDate = :targetDate;");
 	else
-		query.prepare("INSERT INTO book (title, subTitle, shortDesctiption, description, author, startedAt, finishedAt, targetDate) VALUES (:title, :subTitle, :shortDesctiption, :description, :author, :startedAt, :finishedAt, :targetDate);");
+		query.prepare("INSERT INTO book (title, subTitle, shortDescription, description, author, startedAt, finishedAt, targetDate) VALUES (:title, :subTitle, :shortDescription, :description, :author, :startedAt, :finishedAt, :targetDate);");
 
 	query.bindValue(":title", title());
 	query.bindValue(":subTitle", subTitle());

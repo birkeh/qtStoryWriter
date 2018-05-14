@@ -23,6 +23,14 @@
 #include <QThread>
 
 
+
+cStoryBook::cStoryBook(QObject *parent) :
+	QObject(parent),
+	m_szProject(""),
+	m_bIsOpen(false)
+{
+}
+
 cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	QObject(parent),
 	m_szProject(szProject),
@@ -69,6 +77,9 @@ cStoryBook::~cStoryBook()
 
 bool cStoryBook::save()
 {
+	if(m_szProject.isEmpty())
+		return(false);
+
 	if(!m_db.isOpen())
 		return(false);
 
@@ -102,16 +113,49 @@ bool cStoryBook::save()
 	return(true);
 }
 
-bool cStoryBook::openDatabase()
+bool cStoryBook::saveAs(const QString& szProject)
 {
-	QFile		file(m_szProject);
+	if(m_szProject == szProject)
+		return(save());
 
-	if(!file.exists())
-	{
-		myDebug << QObject::tr("project does not exist");
+	m_szProject	= szProject;
+
+	if(m_db.isOpen())
+		m_db.close();
+
+	if(!openDatabase())
 		return(false);
 
-	}
+	for(int x = 0;x < m_imageList.count();x++)
+		m_imageList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_characterList.count();x++)
+		m_characterList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_placeList.count();x++)
+		m_placeList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_objectList.count();x++)
+		m_objectList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_partList.count();x++)
+		m_partList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_chapterList.count();x++)
+		m_chapterList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_sceneList.count();x++)
+		m_sceneList.at(x)->setID(-1);
+
+	for(int x = 0;x < m_rechercheList.count();x++)
+		m_rechercheList.at(x)->setID(-1);
+
+
+	return(save());
+}
+
+bool cStoryBook::openDatabase()
+{
 	m_db	= QSqlDatabase::addDatabase("QSQLITE");
 	m_db.setHostName("localhost");
 	m_db.setDatabaseName(m_szProject);
@@ -163,9 +207,9 @@ bool cStoryBook::createDatabase()
 	QSqlQuery	query;
 
 	if(!createTable("CREATE TABLE config ( "
-					"    key             STRING, "
-					"    value           STRING "
-					");"))
+					"    [key] STRING, "
+					"    value STRING "
+					"); "))
 		return(false);
 
 	query.prepare("INSERT INTO config (key, value) VALUES (:key, :value);");
@@ -186,174 +230,174 @@ bool cStoryBook::createDatabase()
 					"    startedAt        DATETIME, "
 					"    finishedAt       DATETIME, "
 					"    targetDate       DATETIME "
-					");"))
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE chapter ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	partID      INTEGER REFERENCES part (id), "
-					"	name        TEXT, "
-					"	sortOrder   INTEGER, "
-					"	description BLOB, "
-					"	text        BLOB "
-					");"))
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    partID      INTEGER REFERENCES part (id), "
+					"    name        TEXT, "
+					"    sortOrder   INTEGER, "
+					"    description BLOB, "
+					"    text        BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE character ( "
-					"	id              INTEGER PRIMARY KEY AUTOINCREMENT "
-					"							UNIQUE, "
-					"	mainCharacter   BOOLEAN, "
-					"	gender          INTEGER, "
-					"	title           TEXT, "
-					"	firstName       TEXT, "
-					"	middleName      TEXT, "
-					"	lastName        TEXT, "
-					"   nickName        TEXT, "
-					"	height          DOUBLE, "
-					"	weight          DOUBLE, "
-					"   age             DOUBLE, "
-					"	dateOfBirth     DATE, "
-					"	placeOfBirth    TEXT, "
-					"	dateOfDeath     DATE, "
-					"	placeOfDeath    TEXT, "
-					"	hairColor       TEXT, "
-					"	hairCut         TEXT, "
-					"	hairLength      TEXT, "
-					"	figure          TEXT, "
-					"	nature          TEXT, "
-					"	spokenLanguages TEXT, "
-					"	skin            TEXT, "
-					"	school          TEXT, "
-					"	job             TEXT, "
-					"	description     BLOB "
-					");"))
-		return(false);
-
-	if(!createTable("CREATE TABLE image ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	type        TEXT, "
-					"	name        TEXT, "
-					"	description BLOB, "
-					"	image       BLOB "
-					");"))
+					"    id              INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                            UNIQUE, "
+					"    mainCharacter   BOOLEAN, "
+					"    creature        TEXT, "
+					"    gender          INTEGER, "
+					"    title           TEXT, "
+					"    firstName       TEXT, "
+					"    middleName      TEXT, "
+					"    lastName        TEXT, "
+					"    nickName        TEXT, "
+					"    height          DOUBLE, "
+					"    weight          DOUBLE, "
+					"    dateOfBirth     DATE, "
+					"    placeOfBirth    TEXT, "
+					"    dateOfDeath     DATE, "
+					"    placeOfDeath    TEXT, "
+					"    hairColor       TEXT, "
+					"    hairCut         TEXT, "
+					"    hairLength      TEXT, "
+					"    figure          TEXT, "
+					"    nature          TEXT, "
+					"    spokenLanguages TEXT, "
+					"    skin            TEXT, "
+					"    school          TEXT, "
+					"    job             TEXT, "
+					"    description     BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE characterImage ( "
-					"	characterID INTEGER REFERENCES character (id), "
-					"	imageID     INTEGER REFERENCES image (id)  "
-					");"))
+					"    characterID INTEGER REFERENCES character (id), "
+					"    imageID     INTEGER REFERENCES image (id)  "
+					"); "))
+		return(false);
+
+	if(!createTable("CREATE TABLE image ( "
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    type        TEXT, "
+					"    name        TEXT, "
+					"    description BLOB, "
+					"    image       BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE object ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	name        TEXT, "
-					"	type        TEXT, "
-					"	description BLOB "
-					");"))
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    name        TEXT, "
+					"    type        TEXT, "
+					"    description BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE objectImage ( "
-					"	objectID INTEGER REFERENCES object (id), "
-					"	imageID  INTEGER REFERENCES image (id) "
-					");"))
+					"    objectID INTEGER REFERENCES object (id), "
+					"    imageID  INTEGER REFERENCES image (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE part ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	name        TEXT, "
-					"	[order]     INTEGER, "
-					"	description BLOB, "
-					"	text        BLOB "
-					");"))
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    name        TEXT, "
+					"    sortOrder   INTEGER, "
+					"    description BLOB, "
+					"    text        BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE place ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	name        TEXT, "
-					"	location    TEXT, "
-					"	type        TEXT, "
-					"	description BLOB "
-					");"))
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    name        TEXT, "
+					"    location    TEXT, "
+					"    type        TEXT, "
+					"    description BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE placeImage ( "
-					"	placeID INTEGER REFERENCES place (id), "
-					"	imageID INTEGER REFERENCES image (id)  "
-					");"))
+					"    placeID INTEGER REFERENCES place (id), "
+					"    imageID INTEGER REFERENCES image (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE recherche ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	name        TEXT, "
-					"	description BLOB, "
-					"	link        TEXT "
-					");"))
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
+					"                        UNIQUE, "
+					"    name        TEXT, "
+					"    description BLOB, "
+					"    link        TEXT "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheCharacter ( "
-					"	rechercheID INTEGER REFERENCES recherche (id), "
-					"	characterID INTEGER REFERENCES character (id) "
-					");"))
+					"    rechercheID INTEGER REFERENCES recherche (id), "
+					"    characterID INTEGER REFERENCES character (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheImage ( "
-					"	rechercheID INTEGER REFERENCES recherche (id), "
-					"	imageID     INTEGER REFERENCES image (id)  "
-					");"))
+					"    rechercheID INTEGER REFERENCES recherche (id), "
+					"    imageID     INTEGER REFERENCES image (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheObject ( "
-					"	rechercheID INTEGER REFERENCES recherche (id), "
-					"	objectID    INTEGER REFERENCES object (id)  "
-					");"))
+					"    rechercheID INTEGER REFERENCES recherche (id), "
+					"    objectID    INTEGER REFERENCES object (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE recherchePlace ( "
-					"	rechercheID INTEGER REFERENCES recherche (id), "
-					"	placeID     INTEGER REFERENCES place (id)  "
-					");"))
+					"    rechercheID INTEGER REFERENCES recherche (id), "
+					"    placeID     INTEGER REFERENCES place (id)  "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE scene ( "
-					"	id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"						UNIQUE, "
-					"	chapterID   INTEGER REFERENCES chapter (id), "
-					"	name        TEXT, "
-					"	[order]     INTEGER, "
-					"	description TEXT, "
-					"	state       INTEGER, "
-					"	startedAt   DATETIME, "
-					"	finishedAt  DATETIME, "
-					"	targetDate  DATETIME, "
-					"	text        BLOB "
-					");"))
+					"    id          INTEGER  PRIMARY KEY AUTOINCREMENT "
+					"                         UNIQUE, "
+					"    chapterID   INTEGER  REFERENCES chapter (id), "
+					"    name        TEXT, "
+					"    sortOrder   INTEGER, "
+					"    description BLOB, "
+					"    state       INTEGER, "
+					"    startedAt   DATETIME, "
+					"    finishedAt  DATETIME, "
+					"    targetDate  DATETIME, "
+					"    text        BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE sceneCharacter ( "
-					"	sceneID     INTEGER REFERENCES scene (id), "
-					"	characterID INTEGER REFERENCES character (id), "
-					"	description BLOB "
-					");"))
+					"    sceneID     INTEGER REFERENCES scene (id), "
+					"    characterID INTEGER REFERENCES character (id), "
+					"    description BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE sceneObject ( "
-					"	sceneID     INTEGER REFERENCES scene (id), "
-					"	objectID    INTEGER REFERENCES object (id), "
-					"	description BLOB "
-					");"))
+					"    sceneID     INTEGER REFERENCES scene (id), "
+					"    objectID    INTEGER REFERENCES object (id), "
+					"    description BLOB "
+					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE scenePlace ( "
-					"	sceneID     INTEGER REFERENCES scene (id), "
-					"	placeID     INTEGER REFERENCES place (id), "
-					"	description BLOB "
-					");"))
+					"    sceneID     INTEGER REFERENCES scene (id), "
+					"    placeID     INTEGER REFERENCES place (id), "
+					"    description BLOB "
+					"); "))
 		return(false);
 
 	return(true);

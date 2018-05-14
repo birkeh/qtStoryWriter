@@ -39,6 +39,13 @@ public:
 	 \brief
 
 	 \fn cStoryBook
+	 \param parent
+	*/
+	explicit cStoryBook(QObject *parent = nullptr);
+	/*!
+	 \brief
+
+	 \fn cStoryBook
 	 \param szProject
 	 \param parent
 	*/
@@ -50,7 +57,21 @@ public:
 	*/
 	~cStoryBook();
 
+	/*!
+	 \brief
+
+	 \fn save
+	 \return bool
+	*/
 	bool			save();
+	/*!
+	 \brief
+
+	 \fn saveAs
+	 \param szProject
+	 \return bool
+	*/
+	bool			saveAs(const QString& szProject);
 
 	/*!
 	 \brief

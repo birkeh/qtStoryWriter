@@ -124,6 +124,25 @@ void cMainWindow::closeEvent(QCloseEvent *event)
 	else
 		settings.setValue("main/maximized", QVariant::fromValue(false));
 
+	if(m_bSomethingChanged)
+	{
+		switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+		{
+		case QMessageBox::Yes:
+			onFileSave();
+			event->accept();
+			return;
+		case QMessageBox::No:
+			event->accept();
+			return;
+		case QMessageBox::Cancel:
+			event->ignore();
+			return;
+		default:
+			return;
+		}
+	}
+
 	event->accept();
 }
 
@@ -594,6 +613,8 @@ void cMainWindow::updateWindowTitle()
 
 	if(m_bSomethingChanged)
 		szWindowTitle.append(" *");
+
+	m_lpActionSave->setEnabled(m_bSomethingChanged);
 
 	setWindowTitle(szWindowTitle);
 }
