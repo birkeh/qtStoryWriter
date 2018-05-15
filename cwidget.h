@@ -2,6 +2,7 @@
 #define CWIDGET_H
 
 
+#include "cpropertieswindow.h"
 #include "cpartwindow.h"
 #include "cchapterwindow.h"
 #include "cscenewindow.h"
@@ -38,7 +39,16 @@ public:
 		TYPE_object		= 5, /*!< TODO: describe */
 		TYPE_place		= 6,
 		TYPE_recherche	= 7,
+		TYPE_properties	= 8,
 	};
+
+	/*!
+	 \brief
+
+	 \fn cWidget
+	 \param parent
+	*/
+	explicit			cWidget(cPropertiesWindow* parent);
 
 	/*!
 	 \brief

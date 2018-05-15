@@ -6,6 +6,14 @@
 #include "cwidget.h"
 
 
+cWidget::cWidget(cPropertiesWindow* parent) :
+	QWidget(parent),
+	m_type(TYPE_properties),
+	m_lpWidget(parent),
+	m_lpWindow(0)
+{
+}
+
 cWidget::cWidget(cPartWindow* parent) :
 	QWidget(parent),
 	m_type(TYPE_part),

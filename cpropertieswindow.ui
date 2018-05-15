@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>cPropertiesWindow</class>
+ <widget class="QWidget" name="cPropertiesWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>725</width>
+    <height>528</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0">
+     <item row="3" column="1">
+      <widget class="cDateTimeEdit" name="m_lpStartedAt">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Started at:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Short Description:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Finished at:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Author:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Description:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Title:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Subtitle:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="cDateTimeEdit" name="m_lpFinishedAt">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Target Date:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="5">
+      <widget class="cLineEdit" name="m_lpTitle"/>
+     </item>
+     <item row="1" column="1" colspan="5">
+      <widget class="cLineEdit" name="m_lpSubTitle"/>
+     </item>
+     <item row="2" column="1" colspan="5">
+      <widget class="cLineEdit" name="m_lpAuthor"/>
+     </item>
+     <item row="4" column="1" colspan="5">
+      <widget class="cTextEdit" name="m_lpShortDescription"/>
+     </item>
+     <item row="5" column="1" colspan="5">
+      <widget class="cTextEdit" name="m_lpDescription"/>
+     </item>
+     <item row="3" column="5">
+      <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>cTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ctextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>clineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>cdatetimeedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_lpTitle</tabstop>
+  <tabstop>m_lpSubTitle</tabstop>
+  <tabstop>m_lpAuthor</tabstop>
+  <tabstop>m_lpStartedAt</tabstop>
+  <tabstop>m_lpFinishedAt</tabstop>
+  <tabstop>m_lpTargetDate</tabstop>
+  <tabstop>m_lpShortDescription</tabstop>
+  <tabstop>m_lpDescription</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

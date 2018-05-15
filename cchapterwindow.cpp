@@ -66,7 +66,8 @@ void cChapterWindow::setChapter(cChapter* lpChapter, cSceneList* lpSceneList)
 
 		QStandardItem*	lpItem		= new QStandardItem(lpScene->name());
 		lpItem->setData(QVariant::fromValue(lpScene));
-		lpItem->setToolTip(lpScene->description()->toPlainText());
+		if(lpScene->description())
+			lpItem->setToolTip(lpScene->description()->toPlainText());
 		m_lpSceneModel->appendRow(lpItem);
 	}
 

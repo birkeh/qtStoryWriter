@@ -64,7 +64,8 @@ void cPartWindow::setPart(cPart* lpPart, cChapterList* lpChapterList)
 
 		QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
 		lpItem->setData(QVariant::fromValue(lpChapter));
-		lpItem->setToolTip(lpChapter->description()->toPlainText());
+		if(lpChapter->description())
+			lpItem->setToolTip(lpChapter->description()->toPlainText());
 		m_lpChapterModel->appendRow(lpItem);
 	}
 

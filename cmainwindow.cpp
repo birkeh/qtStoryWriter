@@ -37,6 +37,8 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+#include <QFileDialog>
+
 
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -62,15 +64,7 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	disableTextEdit();
 
-	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
-	m_lpStoryBook		= new cStoryBook(szPath);
-	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
-	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
-	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
-	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
-	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
-
-	updateWindowTitle();
+	onFileNew();
 }
 
 cMainWindow::~cMainWindow()
@@ -112,18 +106,6 @@ QAction* cMainWindow::actionAlignJustify()
 
 void cMainWindow::closeEvent(QCloseEvent *event)
 {
-	QSettings	settings;
-	settings.setValue("main/width", QVariant::fromValue(size().width()));
-	settings.setValue("main/height", QVariant::fromValue(size().height()));
-	settings.setValue("main/x", QVariant::fromValue(x()));
-	settings.setValue("main/y", QVariant::fromValue(y()));
-	settings.setValue("main/splitter1", QVariant::fromValue(ui->m_lpMainSplitter->sizes()[0]));
-	settings.setValue("main/splitter2", QVariant::fromValue(ui->m_lpMainSplitter->sizes()[1]));
-	if(this->isMaximized())
-		settings.setValue("main/maximized", QVariant::fromValue(true));
-	else
-		settings.setValue("main/maximized", QVariant::fromValue(false));
-
 	if(m_bSomethingChanged)
 	{
 		switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
@@ -142,6 +124,18 @@ void cMainWindow::closeEvent(QCloseEvent *event)
 			return;
 		}
 	}
+
+	QSettings	settings;
+	settings.setValue("main/width", QVariant::fromValue(size().width()));
+	settings.setValue("main/height", QVariant::fromValue(size().height()));
+	settings.setValue("main/x", QVariant::fromValue(x()));
+	settings.setValue("main/y", QVariant::fromValue(y()));
+	settings.setValue("main/splitter1", QVariant::fromValue(ui->m_lpMainSplitter->sizes()[0]));
+	settings.setValue("main/splitter2", QVariant::fromValue(ui->m_lpMainSplitter->sizes()[1]));
+	if(this->isMaximized())
+		settings.setValue("main/maximized", QVariant::fromValue(true));
+	else
+		settings.setValue("main/maximized", QVariant::fromValue(false));
 
 	event->accept();
 }
@@ -258,6 +252,10 @@ void cMainWindow::createFileActions()
 
 	m_lpFileMenu->addSeparator();
 #endif
+
+	lpAction					= m_lpFileMenu->addAction(tr("P&roperties..."), this, &cMainWindow::onFileProperties);
+	lpAction->setPriority(QAction::LowPriority);
+	m_lpFileMenu->addSeparator();
 
 	lpAction					= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
 	lpAction->setShortcut(Qt::CTRL + Qt::Key_Q);
@@ -819,6 +817,29 @@ void cMainWindow::onRechercheDoubleClicked(const QModelIndex& index)
 	onShowRechercheWindow(lpRecherche);
 }
 
+void cMainWindow::onShowPropertiesWindow()
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_properties)
+		{
+			ui->m_lpMainTab->setCurrentIndex(x);
+			ui->m_lpMdiArea->setActiveSubWindow(lpWidget->window());
+			m_bUpdatingTab	= false;
+			return;
+		}
+	}
+
+	cPropertiesWindow*		lpPropertiesWindow		= new cPropertiesWindow(this);
+	lpPropertiesWindow->setBook(m_lpStoryBook->book());
+	cWidget*			lpWidget1			= new cWidget(lpPropertiesWindow);
+	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPropertiesWindow));
+	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPropertiesWindow->windowTitle());
+
+	lpPropertiesWindow->show();
+}
+
 void cMainWindow::onShowPartWindow(cPart* lpPart)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
@@ -1156,6 +1177,43 @@ void cMainWindow::onRechercheContextMenu(const QPoint& pos)
 
 void cMainWindow::onFileNew()
 {
+//	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
+//	m_lpStoryBook		= new cStoryBook(szPath);
+//	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+//	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+//	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+//	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+//	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+
+	if(m_bSomethingChanged)
+	{
+		switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+		{
+		case QMessageBox::Yes:
+			if(!onFileSave())
+				return;
+			break;
+		case QMessageBox::No:
+			break;
+		case QMessageBox::Cancel:
+			return;
+		default:
+			return;
+		}
+	}
+
+	if(m_lpStoryBook)
+		delete m_lpStoryBook;
+
+	m_lpStoryBook	= new cStoryBook;
+
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+
+	updateWindowTitle();
 }
 
 void cMainWindow::onFileOpen()
@@ -1165,7 +1223,23 @@ void cMainWindow::onFileOpen()
 bool cMainWindow::onFileSave()
 {
 	if(m_lpStoryBook)
-		m_lpStoryBook->save();
+	{
+		if(m_lpStoryBook->project().isEmpty())
+		{
+			QString	szProjectName	= getProjectName();
+			if(szProjectName.isEmpty())
+				return(false);
+
+			QFile	file(szProjectName);
+			if(file.exists())
+				file.remove();
+
+			if(!m_lpStoryBook->saveAs(szProjectName))
+				return(false);
+		}
+		else
+			m_lpStoryBook->save();
+	}
 	m_bSomethingChanged	= false;
 	updateWindowTitle();
 
@@ -1174,8 +1248,21 @@ bool cMainWindow::onFileSave()
 
 bool cMainWindow::onFileSaveAs()
 {
-	return(onFileSave());
-//	return(true);
+	QString	szProjectName	= getProjectName();
+	if(szProjectName.isEmpty())
+		return(false);
+
+	QFile	file(szProjectName);
+	if(file.exists())
+		file.remove();
+
+	if(!m_lpStoryBook->saveAs(szProjectName))
+		return(false);
+
+	m_bSomethingChanged	= false;
+	updateWindowTitle();
+
+	return(true);
 }
 
 void cMainWindow::onFilePrint()
@@ -1188,6 +1275,11 @@ void cMainWindow::onFilePrintPreview()
 
 void cMainWindow::onFilePrintPdf()
 {
+}
+
+void cMainWindow::onFileProperties()
+{
+	onShowPropertiesWindow();
 }
 
 void cMainWindow::onClipboardDataChanged()
@@ -1724,4 +1816,17 @@ void cMainWindow::onEditRecherche()
 
 void cMainWindow::onDeleteRecherche()
 {
+}
+
+QString cMainWindow::getProjectName(const QString& szFileName)
+{
+	QFileDialog	dialog;
+	QString		szPath	= szFileName;
+
+	if(szPath.isEmpty())
+		szPath	= QDir::homePath();
+
+	QString		szProjectName	= QFileDialog::getSaveFileName(this, tr("Save Project"), szPath, tr("StoryWriter Files (*.storyWriter)"));
+
+	return(szProjectName);
 }

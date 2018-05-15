@@ -302,6 +302,13 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onShowPropertiesWindow
+	*/
+	void				onShowPropertiesWindow();
+
+	/*!
+	 \brief
+
 	 \fn onShowPartWindow
 	 \param lpPart
 	*/
@@ -429,6 +436,12 @@ private slots:
 	 \fn onFilePrintPdf
 	*/
 	void				onFilePrintPdf();
+	/*!
+	 \brief
+
+	 \fn onFilePrintPdf
+	*/
+	void				onFileProperties();
 
 	/*!
 	 \brief
@@ -726,6 +739,14 @@ private:
 	 \fn disconnectTextEdit
 	*/
 	void				disconnectTextEdit();
+
+	/*!
+	 \brief
+
+	 \fn getProjectName
+	 \return QString
+	*/
+	QString				getProjectName(const QString& szFileName = QString());
 
 protected:
 	/*!

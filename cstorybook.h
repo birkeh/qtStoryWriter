@@ -147,6 +147,20 @@ public:
 	/*!
 	 \brief
 
+	 \fn project
+	 \return QString
+	*/
+	QString			project();
+	/*!
+	 \brief
+
+	 \fn book
+	 \return cBook
+	*/
+	cBook*			book();
+	/*!
+	 \brief
+
 	 \fn chapterList
 	 \return cChapterList
 	*/

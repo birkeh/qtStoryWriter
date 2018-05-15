@@ -73,7 +73,8 @@ SOURCES += \
     cdateedit.cpp \
     cdoublespinbox.cpp \
     ccombobox.cpp \
-    cdatetimeedit.cpp
+    cdatetimeedit.cpp \
+    cpropertieswindow.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -108,7 +109,8 @@ HEADERS += \
     cdateedit.h \
     cdoublespinbox.h \
     ccombobox.h \
-    cdatetimeedit.h
+    cdatetimeedit.h \
+    cpropertieswindow.h
 
 FORMS += \
         cmainwindow.ui \
@@ -119,7 +121,8 @@ FORMS += \
     cimagewidget.ui \
     cobjectwindow.ui \
     cplacewindow.ui \
-    crecherchewindow.ui
+    crecherchewindow.ui \
+    cpropertieswindow.ui
 
 DISTFILES += \
     storyBook.project \

@@ -29,6 +29,8 @@ cStoryBook::cStoryBook(QObject *parent) :
 	m_szProject(""),
 	m_bIsOpen(false)
 {
+	m_book.setTitle("untitled");
+	m_bIsOpen	= true;
 }
 
 cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
@@ -519,6 +521,11 @@ QString cStoryBook::author()
 		return(m_book.author());
 }
 
+cBook* cStoryBook::book()
+{
+	return(&m_book);
+}
+
 cChapterList* cStoryBook::chapterList()
 {
 	return(&m_chapterList);
@@ -527,6 +534,11 @@ cChapterList* cStoryBook::chapterList()
 cSceneList* cStoryBook::sceneList()
 {
 	return(&m_sceneList);
+}
+
+QString cStoryBook::project()
+{
+	return(m_szProject);
 }
 
 bool cStoryBook::addPart(const QString& szPartName)
