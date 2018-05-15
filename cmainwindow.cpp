@@ -68,6 +68,7 @@ cMainWindow::cMainWindow(QWidget *parent) :
 
 	QSettings	settings;
 	m_szOldPath	= settings.value("file/lastPath", QDir::homePath()).toString();
+	updateRecentFileActions();
 }
 
 cMainWindow::~cMainWindow()
@@ -261,6 +262,16 @@ void cMainWindow::createFileActions()
 	lpAction					= m_lpFileMenu->addAction(tr("P&roperties..."), this, &cMainWindow::onFileProperties);
 	lpAction->setPriority(QAction::LowPriority);
 	m_lpFileMenu->addSeparator();
+
+	for(int i = 0; i < MaxRecentFiles;i++)
+	{
+		m_lpActionRecentFile[i]	= new QAction(this);
+		m_lpActionRecentFile[i]->setVisible(false);
+		m_lpFileMenu->addAction(m_lpActionRecentFile[i]);
+		connect(m_lpActionRecentFile[i], &QAction::triggered, this, &cMainWindow::openRecentFile);
+	}
+	m_lpSeparatorRecent			= m_lpFileMenu->addSeparator();
+	m_lpSeparatorRecent->setVisible(false);
 
 	lpAction					= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
 	lpAction->setShortcut(Qt::CTRL + Qt::Key_Q);
@@ -842,6 +853,8 @@ void cMainWindow::onShowPropertiesWindow()
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPropertiesWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPropertiesWindow->windowTitle());
 
+	connect(lpPropertiesWindow,	&cPropertiesWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
+
 	lpPropertiesWindow->show();
 }
 
@@ -870,7 +883,6 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
 
 	connect(lpPartWindow,	&cPartWindow::showChapterWindow,	this,	&cMainWindow::onShowChapterWindow);
-
 	connect(lpPartWindow,	&cPartWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
 	lpPartWindow->show();
@@ -901,7 +913,6 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
 
 	connect(lpChapterWindow,	&cChapterWindow::showSceneWindow,	this,	&cMainWindow::onShowSceneWindow);
-
 	connect(lpChapterWindow,	&cChapterWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
 
 	lpChapterWindow->show();
@@ -1257,6 +1268,7 @@ void cMainWindow::onFileOpen()
 	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
 	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
 
+	setCurrentFile(szProjectName);
 	updateWindowTitle();
 }
 
@@ -1276,6 +1288,8 @@ bool cMainWindow::onFileSave()
 
 			if(!m_lpStoryBook->saveAs(szProjectName))
 				return(false);
+
+			setCurrentFile(szProjectName);
 		}
 		else
 			m_lpStoryBook->save();
@@ -1300,6 +1314,7 @@ bool cMainWindow::onFileSaveAs()
 		return(false);
 
 	m_bSomethingChanged	= false;
+	setCurrentFile(szProjectName);
 	updateWindowTitle();
 
 	return(true);
@@ -1881,4 +1896,82 @@ QString cMainWindow::getProjectSaveName(const QString& szFileName)
 	m_szOldPath	= fileInfo.absolutePath();
 
 	return(szProjectName);
+}
+
+void cMainWindow::setCurrentFile(const QString& fileName)
+{
+	QSettings	settings;
+	QStringList	files	= settings.value("file/recentFiles").toStringList();
+	files.removeAll(fileName);
+	files.prepend(fileName);
+	while(files.size() > MaxRecentFiles)
+		files.removeLast();
+
+	settings.setValue("file/recentFiles", files);
+
+	updateRecentFileActions();
+}
+
+void cMainWindow::updateRecentFileActions()
+{
+	QSettings	settings;
+	QStringList	files			= settings.value("file/recentFiles").toStringList();
+
+	int			numRecentFiles	= qMin(files.size(), (int)MaxRecentFiles);
+
+	for(int i = 0; i < numRecentFiles; i++)
+	{
+		QString	text	= tr("&%1 %2").arg(i + 1).arg(QFileInfo(files[i]).fileName());
+		m_lpActionRecentFile[i]->setText(text);
+		m_lpActionRecentFile[i]->setData(files[i]);
+		m_lpActionRecentFile[i]->setVisible(true);
+	}
+
+	for(int j = numRecentFiles; j < MaxRecentFiles; j++)
+		m_lpActionRecentFile[j]->setVisible(false);
+
+	m_lpSeparatorRecent->setVisible(numRecentFiles > 0);
+}
+
+void cMainWindow::openRecentFile()
+{
+	QAction*	lpAction	= qobject_cast<QAction*>(sender());
+	if(lpAction)
+	{
+		if(m_lpStoryBook)
+		{
+			if(m_bSomethingChanged)
+			{
+				switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+				{
+				case QMessageBox::Yes:
+					if(!onFileSave())
+						return;
+					break;
+				case QMessageBox::No:
+					break;
+				case QMessageBox::Cancel:
+					return;
+				default:
+					return;
+				}
+			}
+		}
+
+		QString	szProjectName	= lpAction->data().toString();
+		if(szProjectName.isEmpty())
+			return;
+
+		delete m_lpStoryBook;
+
+		m_lpStoryBook	= new cStoryBook(szProjectName);
+
+		m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+		m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+		m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+		m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+		m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+
+		updateWindowTitle();
+	}
 }

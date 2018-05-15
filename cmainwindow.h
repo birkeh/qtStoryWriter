@@ -675,6 +675,11 @@ private:
 	QAction*			m_lpActionRechercheEdit; /*!< TODO: describe */
 	QAction*			m_lpActionRechercheDelete; /*!< TODO: describe */
 
+	QAction*			m_lpSeparatorRecent;
+
+	enum { MaxRecentFiles = 5 };
+	QAction*			m_lpActionRecentFile[MaxRecentFiles];
+
 	QActionGroup*		m_lpAlignGroup; /*!< TODO: describe */
 
 	QFontComboBox*		m_lpComboFont; /*!< TODO: describe */
@@ -756,6 +761,25 @@ private:
 	*/
 	QString				getProjectSaveName(const QString& szFileName = QString());
 
+	/*!
+	 \brief
+
+	 \fn setCurrentFile
+	*/
+	void				setCurrentFile(const QString& szFileName);
+
+	/*!
+	 \brief
+
+	 \fn openRecentFile
+	*/
+	void				openRecentFile();
+	/*!
+	 \brief
+
+	 \fn updateRecentFileActions
+	*/
+	void				updateRecentFileActions();
 protected:
 	/*!
 	 \brief
