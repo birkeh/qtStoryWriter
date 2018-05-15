@@ -681,6 +681,7 @@ private:
 	QComboBox*			m_lpComboSize; /*!< TODO: describe */
 
 	cTextEdit*			m_lpOldTextEdit; /*!< TODO: describe */
+	QString				m_szOldPath; /*!< TODO: describe */
 
 	/*!
 	 \brief
@@ -743,10 +744,17 @@ private:
 	/*!
 	 \brief
 
-	 \fn getProjectName
+	 \fn getProjectLoadName
 	 \return QString
 	*/
-	QString				getProjectName(const QString& szFileName = QString());
+	QString				getProjectLoadName();
+	/*!
+	 \brief
+
+	 \fn getProjectSaveName
+	 \return QString
+	*/
+	QString				getProjectSaveName(const QString& szFileName = QString());
 
 protected:
 	/*!

@@ -65,6 +65,9 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	disableTextEdit();
 
 	onFileNew();
+
+	QSettings	settings;
+	m_szOldPath	= settings.value("file/lastPath", QDir::homePath()).toString();
 }
 
 cMainWindow::~cMainWindow()
@@ -136,6 +139,8 @@ void cMainWindow::closeEvent(QCloseEvent *event)
 		settings.setValue("main/maximized", QVariant::fromValue(true));
 	else
 		settings.setValue("main/maximized", QVariant::fromValue(false));
+
+	settings.setValue("file/lastPath", QVariant::fromValue(m_szOldPath));
 
 	event->accept();
 }
@@ -1218,6 +1223,41 @@ void cMainWindow::onFileNew()
 
 void cMainWindow::onFileOpen()
 {
+	if(m_lpStoryBook)
+	{
+		if(m_bSomethingChanged)
+		{
+			switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+			{
+			case QMessageBox::Yes:
+				if(!onFileSave())
+					return;
+				break;
+			case QMessageBox::No:
+				break;
+			case QMessageBox::Cancel:
+				return;
+			default:
+				return;
+			}
+		}
+	}
+
+	QString	szProjectName	= getProjectLoadName();
+	if(szProjectName.isEmpty())
+		return;
+
+	delete m_lpStoryBook;
+
+	m_lpStoryBook	= new cStoryBook(szProjectName);
+
+	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
+	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+
+	updateWindowTitle();
 }
 
 bool cMainWindow::onFileSave()
@@ -1226,7 +1266,7 @@ bool cMainWindow::onFileSave()
 	{
 		if(m_lpStoryBook->project().isEmpty())
 		{
-			QString	szProjectName	= getProjectName();
+			QString	szProjectName	= getProjectSaveName();
 			if(szProjectName.isEmpty())
 				return(false);
 
@@ -1248,7 +1288,7 @@ bool cMainWindow::onFileSave()
 
 bool cMainWindow::onFileSaveAs()
 {
-	QString	szProjectName	= getProjectName();
+	QString	szProjectName	= getProjectSaveName();
 	if(szProjectName.isEmpty())
 		return(false);
 
@@ -1818,15 +1858,27 @@ void cMainWindow::onDeleteRecherche()
 {
 }
 
-QString cMainWindow::getProjectName(const QString& szFileName)
+QString cMainWindow::getProjectLoadName()
 {
-	QFileDialog	dialog;
+	QString		szPath	= m_szOldPath;
+
+	QString		szProjectName	= QFileDialog::getOpenFileName(this, tr("Save Project"), m_szOldPath, tr("StoryWriter Files (*.storyWriter)"));
+	QFileInfo	fileInfo(szProjectName);
+	m_szOldPath	= fileInfo.absolutePath();
+
+	return(szProjectName);
+}
+
+QString cMainWindow::getProjectSaveName(const QString& szFileName)
+{
 	QString		szPath	= szFileName;
 
 	if(szPath.isEmpty())
-		szPath	= QDir::homePath();
+		szPath	= m_szOldPath;
 
-	QString		szProjectName	= QFileDialog::getSaveFileName(this, tr("Save Project"), szPath, tr("StoryWriter Files (*.storyWriter)"));
+	QString		szProjectName	= QFileDialog::getSaveFileName(this, tr("Save Project"), m_szOldPath, tr("StoryWriter Files (*.storyWriter)"));
+	QFileInfo	fileInfo(szProjectName);
+	m_szOldPath	= fileInfo.absolutePath();
 
 	return(szProjectName);
 }
