@@ -608,85 +608,86 @@ private slots:
 	void				onDeleteRecherche();
 
 private:
-	Ui::cMainWindow*	ui; /*!< TODO: describe */
-	QStandardItemModel*	m_lpOutlineModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpCharacterModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpPlaceModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpObjectModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpRechercheModel; /*!< TODO: describe */
-	bool				m_bUpdatingTab; /*!< TODO: describe */
-	bool				m_bSomethingChanged; /*!< TODO: describe */
-	cStoryBook*			m_lpStoryBook; /*!< TODO: describe */
+	Ui::cMainWindow*	ui;										/*!< User Interface */
+	QStandardItemModel*	m_lpOutlineModel;						/*!< Item Model for Outline list */
+	QStandardItemModel*	m_lpCharacterModel;						/*!< Item Model for Character list */
+	QStandardItemModel*	m_lpPlaceModel;							/*!< Item Model for Place list */
+	QStandardItemModel*	m_lpObjectModel;						/*!< Item Model for Object list */
+	QStandardItemModel*	m_lpRechercheModel;						/*!< Item Model for Recherche list */
+	bool				m_bUpdatingTab;							/*!< TRUE if main tab is currently being updated */
+	bool				m_bSomethingChanged;					/*!< TRUE if the current project has unsaved changes */
+	cStoryBook*			m_lpStoryBook;							/*!< Pointer to the storybook */
 
-	QList<QWidget*>		m_focusException; /*!< TODO: describe */
+	QList<QWidget*>		m_focusException;						/*!< TODO: describe */
 
-	QMenu*				m_lpFileMenu; /*!< TODO: describe */
-	QMenu*				m_lpEditMenu; /*!< TODO: describe */
-	QMenu*				m_lpTextMenu; /*!< TODO: describe */
+	QMenu*				m_lpFileMenu;							/*!< Pointer to the file menu */
+	QMenu*				m_lpEditMenu;							/*!< Pointer to the edit menu */
+	QMenu*				m_lpTextMenu;							/*!< Pointer to the text menu */
 
-	QToolBar*			m_lpFileToolBar; /*!< TODO: describe */
-	QToolBar*			m_lpEditToolBar; /*!< TODO: describe */
-	QToolBar*			m_lpTextToolBar; /*!< TODO: describe */
-	QToolBar*			m_lpFormatToolBar; /*!< TODO: describe */
-	QAction*			m_lpActionSave; /*!< TODO: describe */
-	QAction*			m_lpActionUndo; /*!< TODO: describe */
-	QAction*			m_lpActionRedo; /*!< TODO: describe */
+	QToolBar*			m_lpFileToolBar;						/*!< Pointer to the file toolbar */
+	QToolBar*			m_lpEditToolBar;						/*!< Pointer to the edit toolbar */
+	QToolBar*			m_lpTextToolBar;						/*!< Pointer to the text toolbar */
+	QToolBar*			m_lpFormatToolBar;						/*!< Pointer to the text format toolbar*/
 
-	QAction*			m_lpActionTextBold; /*!< TODO: describe */
-	QAction*			m_lpActionTextItalic; /*!< TODO: describe */
-	QAction*			m_lpActionTextUnderline; /*!< TODO: describe */
+	QAction*			m_lpActionSave;							/*!< Pointer to the File->Save action */
+	QAction*			m_lpActionUndo;							/*!< Pointer to the Undo action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionRedo;							/*!< Pointer to the Redo action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionAlignLeft; /*!< TODO: describe */
-	QAction*			m_lpActionAlignCenter; /*!< TODO: describe */
-	QAction*			m_lpActionAlignRight; /*!< TODO: describe */
-	QAction*			m_lpActionAlignJustify; /*!< TODO: describe */
+	QAction*			m_lpActionTextBold;						/*!< Pointer to the Bold text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionTextItalic;					/*!< Pointer to the Italic text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionTextUnderline;				/*!< Pointer to the Unterline text format action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionTextColor; /*!< TODO: describe */
+	QAction*			m_lpActionAlignLeft;					/*!< Pointer to the Align Left text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionAlignCenter;					/*!< Pointer to the Align Center text format action.  This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionAlignRight;					/*!< Pointer to the Align Right text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionAlignJustify;					/*!< Pointer to the Align Justify (Block) text format action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionCut; /*!< TODO: describe */
-	QAction*			m_lpActionCopy; /*!< TODO: describe */
-	QAction*			m_lpActionPaste; /*!< TODO: describe */
+	QAction*			m_lpActionTextColor;					/*!< Pointer to the Text Color action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionPartAdd; /*!< TODO: describe */
-	QAction*			m_lpActionPartEdit; /*!< TODO: describe */
-	QAction*			m_lpActionPartDelete; /*!< TODO: describe */
+	QAction*			m_lpActionCut;							/*!< Pointer to the Cut Text action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionCopy;							/*!< Pointer to the Copy Text action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpActionPaste;						/*!< pointer to the Paste Text action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionChapterAdd; /*!< TODO: describe */
-	QAction*			m_lpActionChapterEdit; /*!< TODO: describe */
-	QAction*			m_lpActionChapterDelete; /*!< TODO: describe */
+	QAction*			m_lpActionPartAdd;						/*!< TODO: describe */
+	QAction*			m_lpActionPartEdit;						/*!< TODO: describe */
+	QAction*			m_lpActionPartDelete;					/*!< TODO: describe */
 
-	QAction*			m_lpActionSceneAdd; /*!< TODO: describe */
-	QAction*			m_lpActionSceneEdit; /*!< TODO: describe */
-	QAction*			m_lpActionSceneDelete; /*!< TODO: describe */
+	QAction*			m_lpActionChapterAdd;					/*!< TODO: describe */
+	QAction*			m_lpActionChapterEdit;					/*!< TODO: describe */
+	QAction*			m_lpActionChapterDelete;				/*!< TODO: describe */
 
-	QAction*			m_lpActionCharacterAdd; /*!< TODO: describe */
-	QAction*			m_lpActionCharacterEdit; /*!< TODO: describe */
-	QAction*			m_lpActionCharacterDelete; /*!< TODO: describe */
+	QAction*			m_lpActionSceneAdd;						/*!< TODO: describe */
+	QAction*			m_lpActionSceneEdit;					/*!< TODO: describe */
+	QAction*			m_lpActionSceneDelete;					/*!< TODO: describe */
 
-	QAction*			m_lpActionPlaceAdd; /*!< TODO: describe */
-	QAction*			m_lpActionPlaceEdit; /*!< TODO: describe */
-	QAction*			m_lpActionPlaceDelete; /*!< TODO: describe */
+	QAction*			m_lpActionCharacterAdd;					/*!< TODO: describe */
+	QAction*			m_lpActionCharacterEdit;				/*!< TODO: describe */
+	QAction*			m_lpActionCharacterDelete;				/*!< TODO: describe */
 
-	QAction*			m_lpActionObjectAdd; /*!< TODO: describe */
-	QAction*			m_lpActionObjectEdit; /*!< TODO: describe */
-	QAction*			m_lpActionObjectDelete; /*!< TODO: describe */
+	QAction*			m_lpActionPlaceAdd;						/*!< TODO: describe */
+	QAction*			m_lpActionPlaceEdit;					/*!< TODO: describe */
+	QAction*			m_lpActionPlaceDelete;					/*!< TODO: describe */
 
-	QAction*			m_lpActionRechercheAdd; /*!< TODO: describe */
-	QAction*			m_lpActionRechercheEdit; /*!< TODO: describe */
-	QAction*			m_lpActionRechercheDelete; /*!< TODO: describe */
+	QAction*			m_lpActionObjectAdd;					/*!< TODO: describe */
+	QAction*			m_lpActionObjectEdit;					/*!< TODO: describe */
+	QAction*			m_lpActionObjectDelete;					/*!< TODO: describe */
+
+	QAction*			m_lpActionRechercheAdd;					/*!< TODO: describe */
+	QAction*			m_lpActionRechercheEdit;				/*!< TODO: describe */
+	QAction*			m_lpActionRechercheDelete;				/*!< TODO: describe */
 
 	QAction*			m_lpSeparatorRecent;
 
-	enum { MaxRecentFiles = 5 }; /*!< TODO: describe */
-	QAction*			m_lpActionRecentFile[MaxRecentFiles]; /*!< TODO: describe */
+	enum { MaxRecentFiles = 5 };								/*!< TODO: describe */
+	QAction*			m_lpActionRecentFile[MaxRecentFiles];	/*!< TODO: describe */
 
-	QActionGroup*		m_lpAlignGroup; /*!< TODO: describe */
+	QActionGroup*		m_lpAlignGroup;							/*!< TODO: describe */
 
-	QFontComboBox*		m_lpComboFont; /*!< TODO: describe */
-	QComboBox*			m_lpComboSize; /*!< TODO: describe */
+	QFontComboBox*		m_lpComboFont;							/*!< TODO: describe */
+	QComboBox*			m_lpComboSize;							/*!< TODO: describe */
 
-	cTextEdit*			m_lpOldTextEdit; /*!< TODO: describe */
-	QString				m_szOldPath; /*!< TODO: describe */
+	cTextEdit*			m_lpOldTextEdit;						/*!< TODO: describe */
+	QString				m_szOldPath;							/*!< TODO: describe */
 
 	/*!
 	 \brief
