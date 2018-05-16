@@ -38,11 +38,11 @@ public:
 	*/
 	enum STATE
 	{
-		STATE_unknown	= 0,
-		STATE_init		= 1,
-		STATE_progress	= 2,
-		STATE_delayed	= 3,
-		STATE_finished	= 4,
+		STATE_unknown	= 0, /*!< TODO: describe */
+		STATE_init		= 1, /*!< TODO: describe */
+		STATE_progress	= 2, /*!< TODO: describe */
+		STATE_delayed	= 3, /*!< TODO: describe */
+		STATE_finished	= 4, /*!< TODO: describe */
 	};
 
 	/*!

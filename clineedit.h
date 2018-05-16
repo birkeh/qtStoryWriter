@@ -21,6 +21,12 @@ class cLineEdit : public QLineEdit
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cLineEdit
+	 \param parent
+	*/
 	cLineEdit(QWidget* parent = Q_NULLPTR);
 
 signals:

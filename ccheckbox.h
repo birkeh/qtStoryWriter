@@ -21,6 +21,12 @@ class cCheckBox : public QCheckBox
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cCheckBox
+	 \param parent
+	*/
 	cCheckBox(QWidget* parent = Q_NULLPTR);
 
 signals:

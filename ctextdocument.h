@@ -29,6 +29,12 @@ QT_END_NAMESPACE
 class cTextDocument : public QTextDocument
 {
 public:
+	/*!
+	 \brief
+
+	 \fn cTextDocument
+	 \param parent
+	*/
 	cTextDocument(QObject *parent = Q_NULLPTR);
 	/*!
 	 \brief

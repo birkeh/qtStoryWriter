@@ -21,6 +21,12 @@ class cDoubleSpinBox : public QDoubleSpinBox
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cDoubleSpinBox
+	 \param parent
+	*/
 	cDoubleSpinBox(QWidget* parent = Q_NULLPTR);
 
 signals:

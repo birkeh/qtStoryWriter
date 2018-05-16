@@ -79,6 +79,11 @@ private slots:
 	*/
 	void				onObjectDoubleClicked(const QModelIndex& index);
 
+	/*!
+	 \brief
+
+	 \fn onNameChanged
+	*/
 	void				onNameChanged(const QString& szName);
 	/*!
 	 \brief

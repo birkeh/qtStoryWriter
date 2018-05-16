@@ -21,6 +21,12 @@ class cTreeView : public QTreeView
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cTreeView
+	 \param parent
+	*/
 	cTreeView(QWidget* parent = Q_NULLPTR);
 
 signals:

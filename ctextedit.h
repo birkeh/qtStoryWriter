@@ -23,6 +23,12 @@ class cTextEdit : public QTextEdit
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cTextEdit
+	 \param parent
+	*/
 	cTextEdit(QWidget* parent = Q_NULLPTR);
 	/*!
 	 \brief

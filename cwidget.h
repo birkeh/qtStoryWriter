@@ -31,15 +31,15 @@ public:
 	*/
 	enum TYPE
 	{
-		TYPE_unknown	= 0,
-		TYPE_part		= 1,
-		TYPE_chapter	= 2,
-		TYPE_scene		= 3,
-		TYPE_character	= 4,
+		TYPE_unknown	= 0, /*!< TODO: describe */
+		TYPE_part		= 1, /*!< TODO: describe */
+		TYPE_chapter	= 2, /*!< TODO: describe */
+		TYPE_scene		= 3, /*!< TODO: describe */
+		TYPE_character	= 4, /*!< TODO: describe */
 		TYPE_object		= 5, /*!< TODO: describe */
-		TYPE_place		= 6,
-		TYPE_recherche	= 7,
-		TYPE_properties	= 8,
+		TYPE_place		= 6, /*!< TODO: describe */
+		TYPE_recherche	= 7, /*!< TODO: describe */
+		TYPE_properties	= 8, /*!< TODO: describe */
 	};
 
 	/*!

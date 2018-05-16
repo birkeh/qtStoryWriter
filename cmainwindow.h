@@ -677,8 +677,8 @@ private:
 
 	QAction*			m_lpSeparatorRecent;
 
-	enum { MaxRecentFiles = 5 };
-	QAction*			m_lpActionRecentFile[MaxRecentFiles];
+	enum { MaxRecentFiles = 5 }; /*!< TODO: describe */
+	QAction*			m_lpActionRecentFile[MaxRecentFiles]; /*!< TODO: describe */
 
 	QActionGroup*		m_lpAlignGroup; /*!< TODO: describe */
 

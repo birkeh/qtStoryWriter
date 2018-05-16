@@ -34,9 +34,9 @@ public:
 	*/
 	enum GENDER
 	{
-		GENDER_undefined	= 0,
-		GENDER_male			= 1,
-		GENDER_female		= 2,
+		GENDER_undefined	= 0, /*!< TODO: describe */
+		GENDER_male			= 1, /*!< TODO: describe */
+		GENDER_female		= 2, /*!< TODO: describe */
 	};
 
 	/*!

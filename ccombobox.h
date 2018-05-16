@@ -21,6 +21,12 @@ class cComboBox : public QComboBox
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cComboBox
+	 \param parent
+	*/
 	cComboBox(QWidget* parent = Q_NULLPTR);
 
 signals:

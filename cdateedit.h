@@ -21,6 +21,12 @@ class cDateEdit : public QDateEdit
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cDateEdit
+	 \param parent
+	*/
 	cDateEdit(QWidget* parent = Q_NULLPTR);
 
 signals:

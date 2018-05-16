@@ -21,6 +21,12 @@ class cRadioButton : public QRadioButton
 	Q_OBJECT
 
 public:
+	/*!
+	 \brief
+
+	 \fn cRadioButton
+	 \param parent
+	*/
 	cRadioButton(QWidget* parent = Q_NULLPTR);
 
 signals:
