@@ -112,6 +112,11 @@ bool cStoryBook::save()
 	if(!saveRechercheList())
 		return(false);
 
+	QSqlQuery	query;
+	query.prepare("VACUUM;");
+	if(!query.exec())
+		myDebug << query.lastError().text();
+
 	return(true);
 }
 
