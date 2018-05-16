@@ -1193,14 +1193,6 @@ void cMainWindow::onRechercheContextMenu(const QPoint& pos)
 
 void cMainWindow::onFileNew()
 {
-//	QString		szPath	= QDir::homePath() + QDir::separator() + "OneDrive - WINDESIGN" + QDir::separator() + "__BOOKS__" + QDir::separator() + "qtStoryWriter" + QDir::separator() + "rückwärts.storyWriter" ;
-//	m_lpStoryBook		= new cStoryBook(szPath);
-//	m_lpStoryBook->fillOutlineList(ui->m_lpOutlineList);
-//	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
-//	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
-//	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
-//	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
-
 	if(m_bSomethingChanged)
 	{
 		switch(QMessageBox::question(this, tr("Save"), m_lpStoryBook->title() + tr(" has been changed.\nDo you want to save?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
@@ -1217,6 +1209,8 @@ void cMainWindow::onFileNew()
 			return;
 		}
 	}
+
+	ui->m_lpMdiArea->closeAllSubWindows();
 
 	if(m_lpStoryBook)
 		delete m_lpStoryBook;
@@ -1258,7 +1252,10 @@ void cMainWindow::onFileOpen()
 	if(szProjectName.isEmpty())
 		return;
 
-	delete m_lpStoryBook;
+	ui->m_lpMdiArea->closeAllSubWindows();
+
+	if(m_lpStoryBook)
+		delete m_lpStoryBook;
 
 	m_lpStoryBook	= new cStoryBook(szProjectName);
 
