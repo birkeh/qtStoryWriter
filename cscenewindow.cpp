@@ -11,13 +11,17 @@
 #include "common.h"
 
 #include <QStandardItem>
+#include <QMenu>
 
 
 cSceneWindow::cSceneWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cSceneWindow),
 	m_lpMainWindow((cMainWindow*)parent),
-	m_lpScene(0)
+	m_lpScene(0),
+	m_lpCharacterList(0),
+	m_lpPlaceList(0),
+	m_lpObjectList(0)
 {
 	ui->setupUi(this);
 
@@ -48,45 +52,49 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	ui->m_lpState->setItemData(4, QBrush(cScene::stateColor(cScene::STATE_unknown)), Qt::BackgroundColorRole);
 
 
-	connect(ui->m_lpCharacterList,	&cTreeView::doubleClicked,		this,					&cSceneWindow::onCharacterDoubleClicked);
-	connect(ui->m_lpPlaceList,		&cTreeView::doubleClicked,		this,					&cSceneWindow::onPlaceDoubleClicked);
-	connect(ui->m_lpObjectList,		&cTreeView::doubleClicked,		this,					&cSceneWindow::onObjectDoubleClicked);
+	connect(ui->m_lpCharacterList,	&cTreeView::doubleClicked,				this,					&cSceneWindow::onCharacterDoubleClicked);
+	connect(ui->m_lpPlaceList,		&cTreeView::doubleClicked,				this,					&cSceneWindow::onPlaceDoubleClicked);
+	connect(ui->m_lpObjectList,		&cTreeView::doubleClicked,				this,					&cSceneWindow::onObjectDoubleClicked);
 
-	connect(ui->m_lpPart,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
-	connect(ui->m_lpPart,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+	connect(ui->m_lpPart,			&cLineEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpPart,			&cLineEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpChapter,		&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
-	connect(ui->m_lpChapter,		&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+	connect(ui->m_lpChapter,		&cLineEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpChapter,		&cLineEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpName,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
-	connect(ui->m_lpName,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+	connect(ui->m_lpName,			&cLineEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,			&cLineEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
-	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 
-	connect(ui->m_lpCharacterList,	&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpCharacterList,	&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
+	connect(ui->m_lpCharacterList,	&cTreeView::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpCharacterList,	&cTreeView::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpObjectList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpObjectList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
+	connect(ui->m_lpObjectList,		&cTreeView::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpObjectList,		&cTreeView::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpPlaceList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpPlaceList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
+	connect(ui->m_lpPlaceList,		&cTreeView::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
+	connect(ui->m_lpPlaceList,		&cTreeView::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
 
-	connect(ui->m_lpState,			&cComboBox::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
-	connect(ui->m_lpState,			&cComboBox::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
+	connect(ui->m_lpState,			&cComboBox::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
+	connect(ui->m_lpState,			&cComboBox::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
 
-	connect(ui->m_lpStartedAt,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
-	connect(ui->m_lpStartedAt,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
+	connect(ui->m_lpStartedAt,		&cDateTimeEdit::gotFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpStartedAt,		&cDateTimeEdit::lostFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
-	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
+	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::gotFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpFinishedAt,		&cDateTimeEdit::lostFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpTargetDate,		&cDateTimeEdit::gotFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
-	connect(ui->m_lpTargetDate,		&cDateTimeEdit::lostFocus,		(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
+	connect(ui->m_lpTargetDate,		&cDateTimeEdit::gotFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpTargetDate,		&cDateTimeEdit::lostFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
-	connect(ui->m_lpText,			&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
-	connect(ui->m_lpText,			&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
+	connect(ui->m_lpText,			&cTextEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpText,			&cTextEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
+
+	connect(ui->m_lpCharacterList,	&cTreeView::customContextMenuRequested,	this,					&cSceneWindow::onCharacterContextMenu);
+	connect(ui->m_lpPlaceList,		&cTreeView::customContextMenuRequested,	this,					&cSceneWindow::onPlaceContextMenu);
+	connect(ui->m_lpObjectList,		&cTreeView::customContextMenuRequested,	this,					&cSceneWindow::onObjectContextMenu);
 }
 
 cSceneWindow::~cSceneWindow()
@@ -94,9 +102,12 @@ cSceneWindow::~cSceneWindow()
 	delete ui;
 }
 
-void cSceneWindow::setScene(cScene* lpScene)
+void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cPlaceList* lpPlaceList, cObjectList* lpObjectList)
 {
 	m_lpScene			= lpScene;
+	m_lpCharacterList	= lpCharacterList;
+	m_lpPlaceList		= lpPlaceList;
+	m_lpObjectList		= lpObjectList;
 
 	ui->m_lpPart->setText(lpScene->chapter()->part()->name());
 	ui->m_lpChapter->setText(lpScene->chapter()->name());
@@ -120,9 +131,9 @@ void cSceneWindow::setScene(cScene* lpScene)
 	ui->m_lpTargetDate->setDateTime(lpScene->targetDate());
 	ui->m_lpText->setDocument(lpScene->text());
 
-	QList<cCharacter*>	characterList	= lpScene->characterList();
-	QList<cPlace*>		placeList		= lpScene->placeList();
-	QList<cObject*>		objectList		= lpScene->objectList();
+	QList<cCharacterDescription*>	characterList	= lpScene->characterList();
+	QList<cPlaceDescription*>		placeList		= lpScene->placeList();
+	QList<cObjectDescription*>		objectList		= lpScene->objectList();
 
 	QStringList			headerLabels;
 
@@ -130,7 +141,8 @@ void cSceneWindow::setScene(cScene* lpScene)
 	m_lpCharacterModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < characterList.count();x++)
 	{
-		cCharacter*				lpCharacter	= characterList[x];
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpCharacter->name()));
@@ -149,8 +161,8 @@ void cSceneWindow::setScene(cScene* lpScene)
 
 		for(int y = 0;y < headerLabels.count();y++)
 		{
-			items[y]->setData(QVariant::fromValue(lpCharacter));
-			items[y]->setToolTip(lpCharacter->description()->toPlainText());
+			items[y]->setData(QVariant::fromValue(lpCharacterDescription));
+			items[y]->setToolTip(lpCharacterDescription->description()->toPlainText());
 		}
 
 		m_lpCharacterModel->appendRow(items);
@@ -161,11 +173,13 @@ void cSceneWindow::setScene(cScene* lpScene)
 	for(int i = 0;i < headerLabels.count();i++)
 		ui->m_lpCharacterList->resizeColumnToContents(i);
 
+
 	headerLabels	= QStringList() << tr("name") << tr("location") << tr("type");
 	m_lpPlaceModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < placeList.count();x++)
 	{
-		cPlace*					lpPlace	= placeList[x];
+		cPlaceDescription*		lpPlaceDescription	= placeList[x];
+		cPlace*					lpPlace				= lpPlaceDescription->place();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpPlace->name()));
@@ -174,8 +188,8 @@ void cSceneWindow::setScene(cScene* lpScene)
 
 		for(int y = 0;y < headerLabels.count();y++)
 		{
-			items[y]->setData(QVariant::fromValue(lpPlace));
-			items[y]->setToolTip(lpPlace->description()->toPlainText());
+			items[y]->setData(QVariant::fromValue(lpPlaceDescription));
+			items[y]->setToolTip(lpPlaceDescription->description()->toPlainText());
 		}
 
 		m_lpPlaceModel->appendRow(items);
@@ -186,11 +200,13 @@ void cSceneWindow::setScene(cScene* lpScene)
 	for(int i = 0;i < headerLabels.count();i++)
 		ui->m_lpPlaceList->resizeColumnToContents(i);
 
+
 	headerLabels	= QStringList() << tr("name") << tr("type");
 	m_lpObjectModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < objectList.count();x++)
 	{
-		cObject*				lpObject	= objectList[x];
+		cObjectDescription*		lpObjectDescription	= objectList[x];
+		cObject*				lpObject			= lpObjectDescription->object();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpObject->name()));
@@ -198,8 +214,8 @@ void cSceneWindow::setScene(cScene* lpScene)
 
 		for(int y = 0;y < headerLabels.count();y++)
 		{
-			items[y]->setData(QVariant::fromValue(lpObject));
-			items[y]->setToolTip(lpObject->description()->toPlainText());
+			items[y]->setData(QVariant::fromValue(lpObjectDescription));
+			items[y]->setToolTip(lpObjectDescription->description()->toPlainText());
 		}
 
 		m_lpObjectModel->appendRow(items);
@@ -317,4 +333,121 @@ void cSceneWindow::onTargetDateChanged(const QDateTime& dateTime)
 void cSceneWindow::onTextChanged()
 {
 	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onCharacterContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpCharacterModel->itemFromIndex(ui->m_lpCharacterList->currentIndex());
+
+	if(!lpItem)
+	{
+		menu.addAction(tr("add character to list"), this, SLOT(onAddCharacterToList()));
+	}
+	else
+	{
+		cCharacterDescription*	lpCharacterDescription	= qvariant_cast<cCharacterDescription*>(lpItem->data());
+
+		if(lpCharacterDescription)
+		{
+			menu.addAction(tr("add character to list"), this, SLOT(onAddCharacterToList()));
+			menu.addAction(tr("edit character description"), this, SLOT(onEditCharacterDescription()));
+			menu.addAction(tr("remove character from list"), this, SLOT(onRemoveCharacterFromList()));
+		}
+		else
+			menu.addAction(tr("add character to list"), this, SLOT(onAddCharacterToList()));
+	}
+
+	menu.exec(ui->m_lpCharacterList->mapToGlobal(pos));
+}
+
+void cSceneWindow::onPlaceContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpPlaceModel->itemFromIndex(ui->m_lpPlaceList->currentIndex());
+
+	if(!lpItem)
+	{
+		menu.addAction(tr("add place to list"), this, SLOT(onAddPlaceToList()));
+	}
+	else
+	{
+		cPlaceDescription*	lpPlaceDescription	= qvariant_cast<cPlaceDescription*>(lpItem->data());
+
+		if(lpPlaceDescription)
+		{
+			menu.addAction(tr("add place to list"), this, SLOT(onAddPlaceToList()));
+			menu.addAction(tr("edit place description"), this, SLOT(onEditPlaceDescription()));
+			menu.addAction(tr("remove place from list"), this, SLOT(onRemovePlaceFromList()));
+		}
+		else
+			menu.addAction(tr("add place to list"), this, SLOT(onAddPlaceToList()));
+	}
+
+	menu.exec(ui->m_lpPlaceList->mapToGlobal(pos));
+}
+
+void cSceneWindow::onObjectContextMenu(const QPoint& pos)
+{
+	QMenu			menu(this);
+
+	QStandardItem*	lpItem	= m_lpObjectModel->itemFromIndex(ui->m_lpObjectList->currentIndex());
+
+	if(!lpItem)
+	{
+		menu.addAction(tr("add object to list"), this, SLOT(onAddObjectToList()));
+	}
+	else
+	{
+		cObjectDescription*	lpObjectDescription	= qvariant_cast<cObjectDescription*>(lpItem->data());
+
+		if(lpObjectDescription)
+		{
+			menu.addAction(tr("add object to list"), this, SLOT(onAddObjectToList()));
+			menu.addAction(tr("edit object description"), this, SLOT(onEditObjectDescription()));
+			menu.addAction(tr("remove object from list"), this, SLOT(onRemoveObjectFromList()));
+		}
+		else
+			menu.addAction(tr("add object to list"), this, SLOT(onAddObjectToList()));
+	}
+
+	menu.exec(ui->m_lpObjectList->mapToGlobal(pos));
+}
+
+void cSceneWindow::onAddCharacterToList()
+{
+}
+
+void cSceneWindow::onRemoveCharacterFromList()
+{
+}
+
+void cSceneWindow::onEditCharacterDescription()
+{
+}
+
+void cSceneWindow::onAddPlaceToList()
+{
+}
+
+void cSceneWindow::onRemovePlaceFromList()
+{
+}
+
+void cSceneWindow::onEditPlaceDescription()
+{
+}
+
+void cSceneWindow::onAddObjectToList()
+{
+}
+
+void cSceneWindow::onRemoveObjectFromList()
+{
+}
+
+void cSceneWindow::onEditObjectDescription()
+{
 }

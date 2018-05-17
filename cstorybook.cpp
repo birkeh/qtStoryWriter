@@ -548,6 +548,21 @@ cSceneList* cStoryBook::sceneList()
 	return(&m_sceneList);
 }
 
+cCharacterList* cStoryBook::characterList()
+{
+	return(&m_characterList);
+}
+
+cPlaceList* cStoryBook::placeList()
+{
+	return(&m_placeList);
+}
+
+cObjectList* cStoryBook::objectList()
+{
+	return(&m_objectList);
+}
+
 QString cStoryBook::project()
 {
 	return(m_szProject);

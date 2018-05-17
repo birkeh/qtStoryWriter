@@ -126,38 +126,32 @@ cTextDocument* cScene::text()
 	return(m_lpText);
 }
 
-void cScene::addCharacter(cCharacter* lpCharacter)
+void cScene::addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription)
 {
-	if(m_characterList.contains(lpCharacter))
-		return;
-	m_characterList.append(lpCharacter);
+	m_characterList.append(new cCharacterDescription(lpCharacter, lpDescription));
 }
 
-QList<cCharacter*> cScene::characterList()
+QList<cCharacterDescription*> cScene::characterList()
 {
 	return(m_characterList);
 }
 
-void cScene::addObject(cObject* lpObject)
+void cScene::addObject(cObject* lpObject, cTextDocument* lpDescription)
 {
-	if(m_objectList.contains(lpObject))
-		return;
-	m_objectList.append(lpObject);
+	m_objectList.append(new cObjectDescription(lpObject, lpDescription));
 }
 
-QList<cObject*> cScene::objectList()
+QList<cObjectDescription*> cScene::objectList()
 {
 	return(m_objectList);
 }
 
-void cScene::addPlace(cPlace* lpPlace)
+void cScene::addPlace(cPlace* lpPlace, cTextDocument* lpDescription)
 {
-	if(m_placeList.contains(lpPlace))
-		return;
-	m_placeList.append(lpPlace);
+	m_placeList.append(new cPlaceDescription(lpPlace, lpDescription));
 }
 
-QList<cPlace*> cScene::placeList()
+QList<cPlaceDescription*> cScene::placeList()
 {
 	return(m_placeList);
 }
@@ -315,7 +309,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		lpScene->setText(blob2TextDocument(query.value("text").toByteArray()));
 	}
 
-	query.prepare("SELECT sceneID, characterID FROM sceneCharacter;");
+	query.prepare("SELECT sceneID, characterID, description FROM sceneCharacter;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -329,11 +323,11 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		{
 			cCharacter*	lpCharacter		= lpCharacterList->find(query.value("characterID").toInt());
 			if(lpCharacter)
-				lpScene->addCharacter(lpCharacter);
+				lpScene->addCharacter(lpCharacter, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
-	query.prepare("SELECT sceneID, objectID FROM sceneObject;");
+	query.prepare("SELECT sceneID, objectID, description FROM sceneObject;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -347,11 +341,11 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		{
 			cObject*	lpObject		= lpObjectList->find(query.value("objectID").toInt());
 			if(lpObject)
-				lpScene->addObject(lpObject);
+				lpScene->addObject(lpObject, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
-	query.prepare("SELECT sceneID, placeID FROM scenePlace;");
+	query.prepare("SELECT sceneID, placeID, description FROM scenePlace;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -365,7 +359,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		{
 			cPlace*	lpPlace		= lpPlaceList->find(query.value("placeID").toInt());
 			if(lpPlace)
-				lpScene->addPlace(lpPlace);
+				lpScene->addPlace(lpPlace, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
@@ -383,6 +377,24 @@ bool cSceneList::save()
 	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :text);");
 	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
 	queryDelete.prepare("DELETE FROM scene WHERE id=:id;");
+
+	QSqlQuery	characterDelete;
+	QSqlQuery	characterAdd;
+
+	characterDelete.prepare("DELETE FROM sceneCharacter WHERE sceneID=:sceneID;");
+	characterAdd.prepare("INSERT INTO sceneCharacter (sceneID, characterID, description) VALUES (:sceneID, :characterID, :description);");
+
+	QSqlQuery	placeDelete;
+	QSqlQuery	placeAdd;
+
+	placeDelete.prepare("DELETE FROM scenePlace WHERE sceneID=:sceneID;");
+	placeAdd.prepare("INSERT INTO scenePlace (sceneID, placeID, description) VALUES (:sceneID, :placeID, :description);");
+
+	QSqlQuery	objectDelete;
+	QSqlQuery	objectAdd;
+
+	objectDelete.prepare("DELETE FROM sceneObject WHERE sceneID=:sceneID;");
+	objectAdd.prepare("INSERT INTO sceneObject (sceneID, objectID, description) VALUES (:sceneID, :objectID, :description);");
 
 	for(int x = 0;x < count();x++)
 	{
@@ -443,6 +455,75 @@ bool cSceneList::save()
 			}
 			querySelect.next();
 			lpScene->setID(querySelect.value("id").toInt());
+		}
+
+		characterDelete.bindValue(":sceneID", lpScene->id());
+		if(!characterDelete.exec())
+		{
+			myDebug << characterDelete.lastError().text();
+			return(false);
+		}
+
+		QList<cCharacterDescription*>	character	= lpScene->characterList();
+
+		for(int x = 0;x < character.count();x++)
+		{
+			cCharacterDescription*	lpCharacter	= character.at(x);
+
+			characterAdd.bindValue(":sceneID", lpScene->id());
+			characterAdd.bindValue(":characterID", lpCharacter->character()->id());
+			characterAdd.bindValue(":description", textDocument2Blob(lpCharacter->description()));
+			if(!characterAdd.exec())
+			{
+				myDebug << characterAdd.lastError().text();
+				return(false);
+			}
+		}
+
+		placeDelete.bindValue(":sceneID", lpScene->id());
+		if(!placeDelete.exec())
+		{
+			myDebug << placeDelete.lastError().text();
+			return(false);
+		}
+
+		QList<cPlaceDescription*>	place	= lpScene->placeList();
+
+		for(int x = 0;x < place.count();x++)
+		{
+			cPlaceDescription*	lpPlace = place.at(x);
+
+			placeAdd.bindValue(":sceneID", lpScene->id());
+			placeAdd.bindValue(":placeID", lpPlace->place()->id());
+			placeAdd.bindValue(":description", textDocument2Blob(lpPlace->description()));
+			if(!placeAdd.exec())
+			{
+				myDebug << placeAdd.lastError().text();
+				return(false);
+			}
+		}
+
+		objectDelete.bindValue(":sceneID", lpScene->id());
+		if(!objectDelete.exec())
+		{
+			myDebug << objectDelete.lastError().text();
+			return(false);
+		}
+
+		QList<cObjectDescription*>	object	= lpScene->objectList();
+
+		for(int x = 0;x < object.count();x++)
+		{
+			cObjectDescription*	lpObject	= object.at(x);
+
+			objectAdd.bindValue(":sceneID", lpScene->id());
+			objectAdd.bindValue(":objectID", lpObject->object()->id());
+			objectAdd.bindValue(":description", textDocument2Blob(lpObject->description()));
+			if(!objectAdd.exec())
+			{
+				myDebug << objectAdd.lastError().text();
+				return(false);
+			}
 		}
 	}
 

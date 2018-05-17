@@ -60,14 +60,14 @@ public:
 	 \fn setID
 	 \param iID
 	*/
-	void				setID(const qint32& iID);
+	void							setID(const qint32& iID);
 	/*!
 	 \brief
 
 	 \fn id
 	 \return qint32
 	*/
-	qint32				id();
+	qint32							id();
 
 	/*!
 	 \brief
@@ -75,14 +75,14 @@ public:
 	 \fn setChapter
 	 \param lpChapter
 	*/
-	void				setChapter(cChapter *lpChapter);
+	void							setChapter(cChapter *lpChapter);
 	/*!
 	 \brief
 
 	 \fn chapter
 	 \return cChapter
 	*/
-	cChapter*			chapter();
+	cChapter*						chapter();
 
 	/*!
 	 \brief
@@ -90,14 +90,14 @@ public:
 	 \fn setName
 	 \param szName
 	*/
-	void				setName(const QString& szName);
+	void							setName(const QString& szName);
 	/*!
 	 \brief
 
 	 \fn name
 	 \return QString
 	*/
-	QString				name();
+	QString							name();
 
 	/*!
 	 \brief
@@ -105,14 +105,14 @@ public:
 	 \fn setSortOrder
 	 \param iSortOrder
 	*/
-	void				setSortOrder(const qint32& iSortOrder);
+	void							setSortOrder(const qint32& iSortOrder);
 	/*!
 	 \brief
 
 	 \fn sortOrder
 	 \return qint32
 	*/
-	qint32				sortOrder();
+	qint32							sortOrder();
 
 	/*!
 	 \brief
@@ -120,14 +120,14 @@ public:
 	 \fn setDescription
 	 \param lpDescription
 	*/
-	void				setDescription(cTextDocument* lpDescription);
+	void							setDescription(cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn description
 	 \return cTextDocument
 	*/
-	cTextDocument*		description();
+	cTextDocument*					description();
 
 	/*!
 	 \brief
@@ -135,14 +135,14 @@ public:
 	 \fn setState
 	 \param state
 	*/
-	void				setState(const STATE state);
+	void							setState(const STATE state);
 	/*!
 	 \brief
 
 	 \fn state
 	 \return STATE
 	*/
-	STATE				state();
+	STATE							state();
 
 	/*!
 	 \brief
@@ -150,14 +150,14 @@ public:
 	 \fn setStartedAt
 	 \param startedAt
 	*/
-	void				setStartedAt(const QDateTime& startedAt);
+	void							setStartedAt(const QDateTime& startedAt);
 	/*!
 	 \brief
 
 	 \fn startedAt
 	 \return QDateTime
 	*/
-	QDateTime			startedAt();
+	QDateTime						startedAt();
 
 	/*!
 	 \brief
@@ -165,14 +165,14 @@ public:
 	 \fn setFinishedAt
 	 \param finishedAt
 	*/
-	void				setFinishedAt(const QDateTime& finishedAt);
+	void							setFinishedAt(const QDateTime& finishedAt);
 	/*!
 	 \brief
 
 	 \fn finishedAt
 	 \return QDateTime
 	*/
-	QDateTime			finishedAt();
+	QDateTime						finishedAt();
 
 	/*!
 	 \brief
@@ -180,14 +180,14 @@ public:
 	 \fn setTargetDate
 	 \param targetDate
 	*/
-	void				setTargetDate(const QDateTime& targetDate);
+	void							setTargetDate(const QDateTime& targetDate);
 	/*!
 	 \brief
 
 	 \fn targetDate
 	 \return QDateTime
 	*/
-	QDateTime			targetDate();
+	QDateTime						targetDate();
 
 	/*!
 	 \brief
@@ -195,59 +195,62 @@ public:
 	 \fn setText
 	 \param lpText
 	*/
-	void				setText(cTextDocument* lpText);
+	void							setText(cTextDocument* lpText);
 	/*!
 	 \brief
 
 	 \fn text
 	 \return cTextDocument
 	*/
-	cTextDocument*		text();
+	cTextDocument*					text();
 
 	/*!
 	 \brief
 
 	 \fn addCharacter
 	 \param lpCharacter
+	 \param lpDescription
 	*/
-	void				addCharacter(cCharacter* lpCharacter);
+	void							addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn characterList
 	 \return QList<cCharacter *>
 	*/
-	QList<cCharacter*>	characterList();
+	QList<cCharacterDescription*>	characterList();
 
 	/*!
 	 \brief
 
 	 \fn addObject
 	 \param lpObject
+	 \param lpDescription
 	*/
-	void				addObject(cObject* lpObject);
+	void							addObject(cObject* lpObject, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn objectList
 	 \return QList<cObject *>
 	*/
-	QList<cObject*>		objectList();
+	QList<cObjectDescription*>		objectList();
 
 	/*!
 	 \brief
 
 	 \fn addPlace
 	 \param lpPlace
+	 \param lpDescription
 	*/
-	void				addPlace(cPlace* lpPlace);
+	void							addPlace(cPlace* lpPlace, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn placeList
 	 \return QList<cPlace *>
 	*/
-	QList<cPlace*>		placeList();
+	QList<cPlaceDescription*>		placeList();
 
 	/*!
 	 \brief
@@ -255,7 +258,7 @@ public:
 	 \fn stateText
 	 \return QString
 	*/
-	QString				stateText();
+	QString							stateText();
 	/*!
 	 \brief
 
@@ -263,14 +266,14 @@ public:
 	 \param state
 	 \return QString
 	*/
-	static QString		stateText(STATE state);
+	static QString					stateText(STATE state);
 	/*!
 	 \brief
 
 	 \fn stateColor
 	 \return QColor
 	*/
-	QColor				stateColor();
+	QColor							stateColor();
 	/*!
 	 \brief
 
@@ -278,7 +281,7 @@ public:
 	 \param state
 	 \return QColor
 	*/
-	static QColor		stateColor(STATE state);
+	static QColor					stateColor(STATE state);
 
 	/*!
 	 \brief
@@ -286,14 +289,14 @@ public:
 	 \fn setItem
 	 \param lpItem
 	*/
-	void				setItem(QStandardItem* lpItem);
+	void							setItem(QStandardItem* lpItem);
 	/*!
 	 \brief
 
 	 \fn item
 	 \return QStandardItem
 	*/
-	QStandardItem*		item();
+	QStandardItem*					item();
 
 	/*!
 	 \brief
@@ -301,14 +304,14 @@ public:
 	 \fn setStateItem
 	 \param lpItem
 	*/
-	void				setStateItem(QStandardItem* lpItem);
+	void							setStateItem(QStandardItem* lpItem);
 	/*!
 	 \brief
 
 	 \fn stateItem
 	 \return QStandardItem
 	*/
-	QStandardItem*		stateItem();
+	QStandardItem*					stateItem();
 
 	/*!
 	 \brief
@@ -316,32 +319,32 @@ public:
 	 \fn setDeleted
 	 \param bDeleted
 	*/
-	void				setDeleted(bool bDeleted);
+	void							setDeleted(bool bDeleted);
 	/*!
 	 \brief
 
 	 \fn deleted
 	 \return bool
 	*/
-	bool				deleted();
+	bool							deleted();
 
 private:
-	qint32				m_iID; /*!< TODO: describe */
-	cChapter*			m_lpChapter; /*!< TODO: describe */
-	QString				m_szName; /*!< TODO: describe */
-	qint32				m_iSortOrder; /*!< TODO: describe */
-	cTextDocument*		m_lpDescription; /*!< TODO: describe */
-	STATE				m_state; /*!< TODO: describe */
-	QDateTime			m_startedAt; /*!< TODO: describe */
-	QDateTime			m_finishedAt; /*!< TODO: describe */
-	QDateTime			m_targetDate; /*!< TODO: describe */
-	cTextDocument*		m_lpText; /*!< TODO: describe */
-	QList<cCharacter*>	m_characterList; /*!< TODO: describe */
-	QList<cObject*>		m_objectList; /*!< TODO: describe */
-	QList<cPlace*>		m_placeList; /*!< TODO: describe */
-	QStandardItem*		m_lpItem; /*!< TODO: describe */
-	QStandardItem*		m_lpStateItem; /*!< TODO: describe */
-	bool				m_bDeleted; /*!< TODO: describe */
+	qint32							m_iID; /*!< TODO: describe */
+	cChapter*						m_lpChapter; /*!< TODO: describe */
+	QString							m_szName; /*!< TODO: describe */
+	qint32							m_iSortOrder; /*!< TODO: describe */
+	cTextDocument*					m_lpDescription; /*!< TODO: describe */
+	STATE							m_state; /*!< TODO: describe */
+	QDateTime						m_startedAt; /*!< TODO: describe */
+	QDateTime						m_finishedAt; /*!< TODO: describe */
+	QDateTime						m_targetDate; /*!< TODO: describe */
+	cTextDocument*					m_lpText; /*!< TODO: describe */
+	QList<cCharacterDescription*>	m_characterList; /*!< TODO: describe */
+	QList<cObjectDescription*>		m_objectList; /*!< TODO: describe */
+	QList<cPlaceDescription*>		m_placeList; /*!< TODO: describe */
+	QStandardItem*					m_lpItem; /*!< TODO: describe */
+	QStandardItem*					m_lpStateItem; /*!< TODO: describe */
+	bool							m_bDeleted; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cScene*)

@@ -937,7 +937,8 @@ void cMainWindow::onShowSceneWindow(cScene* lpScene)
 	}
 
 	cSceneWindow*		lpSceneWindow		= new cSceneWindow(this);
-	lpSceneWindow->setScene(lpScene);
+	lpSceneWindow->setScene(lpScene, m_lpStoryBook->characterList(), m_lpStoryBook->placeList(), m_lpStoryBook->objectList());
+
 	cWidget*			lpWidget1			= new cWidget(lpSceneWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpSceneWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());

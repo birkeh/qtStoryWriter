@@ -47,7 +47,7 @@ public:
 	 \fn setScene
 	 \param lpScene
 	*/
-	void				setScene(cScene* lpScene);
+	void				setScene(cScene* lpScene, cCharacterList* lpCharacterList, cPlaceList* lpPlaceList, cObjectList* lpObjectList);
 	/*!
 	 \brief
 
@@ -126,6 +126,40 @@ private slots:
 	*/
 	void				onTextChanged();
 
+	/*!
+	 \brief
+
+	 \fn onCharacterContextMenu
+	 \param pos
+	*/
+	void				onCharacterContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onPlaceContextMenu
+	 \param pos
+	*/
+	void				onPlaceContextMenu(const QPoint& pos);
+	/*!
+	 \brief
+
+	 \fn onObjectContextMenu
+	 \param pos
+	*/
+	void				onObjectContextMenu(const QPoint& pos);
+
+	void				onAddCharacterToList();
+	void				onRemoveCharacterFromList();
+	void				onEditCharacterDescription();
+
+	void				onAddPlaceToList();
+	void				onRemovePlaceFromList();
+	void				onEditPlaceDescription();
+
+	void				onAddObjectToList();
+	void				onRemoveObjectFromList();
+	void				onEditObjectDescription();
+
 signals:
 	/*!
 	 \brief
@@ -150,12 +184,15 @@ signals:
 	void				showObjectWindow(cObject* lpObject);
 
 private:
-	Ui::cSceneWindow*	ui; /*!< TODO: describe */
-	cMainWindow*		m_lpMainWindow; /*!< TODO: describe */
-	QStandardItemModel*	m_lpCharacterModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpPlaceModel; /*!< TODO: describe */
-	QStandardItemModel*	m_lpObjectModel; /*!< TODO: describe */
-	cScene*				m_lpScene; /*!< TODO: describe */
+	Ui::cSceneWindow*	ui;					/*!< TODO: describe */
+	cMainWindow*		m_lpMainWindow;		/*!< TODO: describe */
+	QStandardItemModel*	m_lpCharacterModel;	/*!< TODO: describe */
+	QStandardItemModel*	m_lpPlaceModel;		/*!< TODO: describe */
+	QStandardItemModel*	m_lpObjectModel;	/*!< TODO: describe */
+	cScene*				m_lpScene;			/*!< TODO: describe */
+	cCharacterList*		m_lpCharacterList;	/*!< TODO: describe */
+	cPlaceList*			m_lpPlaceList;		/*!< TODO: describe */
+	cObjectList*		m_lpObjectList;		/*!< TODO: describe */
 };
 
 #endif // CSCENEWINDOW_H

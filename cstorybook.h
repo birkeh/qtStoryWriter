@@ -172,6 +172,27 @@ public:
 	 \return cSceneList
 	*/
 	cSceneList*		sceneList();
+	/*!
+	 \brief
+
+	 \fn characterList
+	 \return cCharacterList
+	*/
+	cCharacterList*	characterList();
+	/*!
+	 \brief
+
+	 \fn placeList
+	 \return cPlaceList
+	*/
+	cPlaceList*		placeList();
+	/*!
+	 \brief
+
+	 \fn objectList
+	 \return cObjectList
+	*/
+	cObjectList*	objectList();
 
 	/*!
 	 \brief
