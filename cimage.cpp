@@ -71,6 +71,33 @@ QPixmap cImage::image()
 	return(m_image);
 }
 
+cImageDescription::cImageDescription(cImage* lpImage, cTextDocument* lpDescription, QObject* parent) :
+	QObject(parent)
+{
+	setImage(lpImage);
+	setDescription(lpDescription);
+}
+
+void cImageDescription::setImage(cImage* lpImage)
+{
+	m_lpImage	= lpImage;
+}
+
+cImage* cImageDescription::image()
+{
+	return(m_lpImage);
+}
+
+void cImageDescription::setDescription(cTextDocument* lpDescription)
+{
+	m_lpDescription	= lpDescription;
+}
+
+cTextDocument* cImageDescription::description()
+{
+	return(m_lpDescription);
+}
+
 cImage* cImageList::add(const qint32& iID)
 {
 	cImage*	lpImage	= find(iID);

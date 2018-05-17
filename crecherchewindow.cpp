@@ -71,12 +71,13 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 	ui->m_lpLink->setText(lpRecherche->link());
 	ui->m_lpDescription->setDocument(lpRecherche->description());
 
-	QList<cImage*>	images	= lpRecherche->images();
+	QList<cImageDescription*>	images	= lpRecherche->images();
 	for(int x = 0;x < images.count();x++)
 	{
-		cImage*			lpImage			= images[x];
-		QPixmap			pixmap			= lpImage->image();
-		cImageWidget*	lpImageWidget	= new cImageWidget;
+		cImageDescription*	lpImageDescription	= images[x];
+		cImage*				lpImage				= lpImageDescription->image();
+		QPixmap				pixmap				= lpImage->image();
+		cImageWidget*		lpImageWidget		= new cImageWidget;
 
 		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);
 		ui->m_lpLayout->addWidget(lpImageWidget);
@@ -85,9 +86,9 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	ui->m_lpLayout->addItem(lpSpacer);
 
-	QList<cCharacter*>	characterList	= lpRecherche->characterList();
-	QList<cPlace*>		placeList		= lpRecherche->placeList();
-	QList<cObject*>		objectList		= lpRecherche->objectList();
+	QList<cCharacterDescription*>	characterList	= lpRecherche->characterList();
+	QList<cPlaceDescription*>		placeList		= lpRecherche->placeList();
+	QList<cObjectDescription*>		objectList		= lpRecherche->objectList();
 
 	QStringList			headerLabels;
 
@@ -95,7 +96,8 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 	m_lpCharacterModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < characterList.count();x++)
 	{
-		cCharacter*				lpCharacter	= characterList[x];
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpCharacter->name()));
@@ -130,7 +132,8 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 	m_lpPlaceModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < placeList.count();x++)
 	{
-		cPlace*					lpPlace	= placeList[x];
+		cPlaceDescription*		lpPlaceDescription	= placeList[x];
+		cPlace*					lpPlace				= lpPlaceDescription->place();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpPlace->name()));
@@ -155,7 +158,8 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 	m_lpObjectModel->setHorizontalHeaderLabels(headerLabels);
 	for(int x = 0;x < objectList.count();x++)
 	{
-		cObject*				lpObject	= objectList[x];
+		cObjectDescription*		lpObjectDescription	= objectList[x];
+		cObject*				lpObject			= lpObjectDescription->object();
 		QList<QStandardItem*>	items;
 
 		items.append(new QStandardItem(lpObject->name()));

@@ -40,14 +40,14 @@ public:
 	 \fn setID
 	 \param iID
 	*/
-	void			setID(const qint32& iID);
+	void						setID(const qint32& iID);
 	/*!
 	 \brief
 
 	 \fn id
 	 \return qint32
 	*/
-	qint32			id();
+	qint32						id();
 
 	/*!
 	 \brief
@@ -55,14 +55,14 @@ public:
 	 \fn setName
 	 \param szName
 	*/
-	void			setName(const QString& szName);
+	void						setName(const QString& szName);
 	/*!
 	 \brief
 
 	 \fn name
 	 \return QString
 	*/
-	QString			name();
+	QString						name();
 
 	/*!
 	 \brief
@@ -70,14 +70,14 @@ public:
 	 \fn setType
 	 \param szType
 	*/
-	void			setType(const QString& szType);
+	void						setType(const QString& szType);
 	/*!
 	 \brief
 
 	 \fn type
 	 \return QString
 	*/
-	QString			type();
+	QString						type();
 
 	/*!
 	 \brief
@@ -85,40 +85,86 @@ public:
 	 \fn setDescription
 	 \param lpDescription
 	*/
-	void			setDescription(cTextDocument* lpDescription);
+	void						setDescription(cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn description
 	 \return cTextDocument
 	*/
-	cTextDocument*	description();
+	cTextDocument*				description();
 
 	/*!
 	 \brief
 
 	 \fn addImage
 	 \param lpImage
+	 \param lpDescription
 	*/
-	void			addImage(cImage* lpImage);
+	void						addImage(cImage* lpImage, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn images
-	 \return QList<cImage *>
+	 \return QList<cImageDescription *>
 	*/
-	QList<cImage*>	images();
+	QList<cImageDescription*>	images();
 
 private:
-	qint32			m_iID; /*!< TODO: describe */
-	QString			m_szName; /*!< TODO: describe */
-	QString			m_szType; /*!< TODO: describe */
-	cTextDocument*	m_lpDescription; /*!< TODO: describe */
-	QList<cImage*>	m_imageList; /*!< TODO: describe */
+	qint32						m_iID; /*!< TODO: describe */
+	QString						m_szName; /*!< TODO: describe */
+	QString						m_szType; /*!< TODO: describe */
+	cTextDocument*				m_lpDescription; /*!< TODO: describe */
+	QList<cImageDescription*>	m_imageList; /*!< TODO: describe */
 
 signals:
 
 public slots:
+};
+
+/*!
+ \brief
+
+ \class cObjectDescription cobject.h "cobject.h"
+*/
+class cObjectDescription : public QObject
+{
+	Q_OBJECT
+public:
+	cObjectDescription(cObject* lpObject, cTextDocument* lpDescription, QObject* parent = nullptr);
+
+	/*!
+	 \brief
+
+	 \fn setObject
+	 \param lpObject
+	*/
+	void				setObject(cObject* lpObject);
+	/*!
+	 \brief
+
+	 \fn object
+	 \return cObject
+	*/
+	cObject*			object();
+
+	/*!
+	 \brief
+
+	 \fn setDescription
+	 \param lpDescription
+	*/
+	void				setDescription(cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn description
+	 \return cTextDocument
+	*/
+	cTextDocument*		description();
+private:
+	cObject*			m_lpObject; /*!< TODO: describe */
+	cTextDocument*		m_lpDescription; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cObject*)

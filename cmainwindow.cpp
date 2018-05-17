@@ -1969,6 +1969,7 @@ void cMainWindow::openRecentFile()
 		m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
 		m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
 
+		setCurrentFile(szProjectName);
 		updateWindowTitle();
 	}
 }

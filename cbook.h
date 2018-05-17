@@ -16,7 +16,18 @@
 
 
 /*!
- \brief
+ \brief The cStoryBook class provides basic values of a book project.
+
+With the constructor, the title of the book may be set.
+
+	cBook* lpBook = new cBook("My title");
+
+If the database has already been loaded, the book class may be initialized like this:
+
+	cBook* lpBook = new cBook;
+	lpBook->load();
+
+This class should always be initialized by cStoryBook.
 
  \class cBook cbook.h "cbook.h"
 */
@@ -25,7 +36,7 @@ class cBook : public QObject
 	Q_OBJECT
 public:
 	/*!
-	 \brief constructor of cBook
+	 \brief Creates a new cBook with the given <i>title</i> and <i>parent</i> to hold basic book project values. Use load() to load the values from the database.
 
 	 \fn cBook
 	 \param szTitle title of the book
@@ -56,7 +67,7 @@ public:
 	*/
 	void			setTitle(const QString& szTitle);
 	/*!
-	 \brief Returns the title of the book.
+	 \brief Return the title of the book.
 
 	 \fn title
 	 \return title of the book
@@ -168,14 +179,14 @@ public:
 	*/
 	QDateTime		targetDate();
 private:
-	QString			m_szTitle; /*!< title of the document */
-	QString			m_szSubtitle; /*!< subtitle of the document */
-	cTextDocument*	m_lpShortDescription; /*!< short description of the document. The text may be formatted */
-	cTextDocument*	m_lpDescription; /*!< description of the document. The text may be formatted */
-	QString			m_szAuthor; /*!< name of the author of the document */
-	QDateTime		m_startedAt; /*!< date and time when the document has been startd */
-	QDateTime		m_finishedAt; /*!< date and time when the document has been finished */
-	QDateTime		m_targetDate; /*!< date and time when the document should be finished */
+	QString			m_szTitle;				/*!< This property holds the title of the document.<br>The default value is empty. <br><b>Access functions:</b><br><table><tr><td>QString</td><td><b>title</b>()</td></tr><tr><td>void</td><td><b>setTitle</b>(const QString& szTitle)</td></tr></table> */
+	QString			m_szSubtitle;			/*!< subtitle of the document */
+	cTextDocument*	m_lpShortDescription;	/*!< short description of the document. The text may be formatted */
+	cTextDocument*	m_lpDescription;		/*!< description of the document. The text may be formatted */
+	QString			m_szAuthor;				/*!< name of the author of the document */
+	QDateTime		m_startedAt;			/*!< date and time when the document has been startd */
+	QDateTime		m_finishedAt;			/*!< date and time when the document has been finished */
+	QDateTime		m_targetDate;			/*!< date and time when the document should be finished */
 };
 
 Q_DECLARE_METATYPE(cBook*)

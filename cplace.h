@@ -40,14 +40,14 @@ public:
 	 \fn setID
 	 \param iID
 	*/
-	void			setID(const qint32& iID);
+	void						setID(const qint32& iID);
 	/*!
 	 \brief
 
 	 \fn id
 	 \return qint32
 	*/
-	qint32			id();
+	qint32						id();
 
 	/*!
 	 \brief
@@ -55,14 +55,14 @@ public:
 	 \fn setName
 	 \param szName
 	*/
-	void			setName(const QString& szName);
+	void						setName(const QString& szName);
 	/*!
 	 \brief
 
 	 \fn name
 	 \return QString
 	*/
-	QString			name();
+	QString						name();
 
 	/*!
 	 \brief
@@ -70,14 +70,14 @@ public:
 	 \fn setLocation
 	 \param szLocation
 	*/
-	void			setLocation(const QString& szLocation);
+	void						setLocation(const QString& szLocation);
 	/*!
 	 \brief
 
 	 \fn location
 	 \return QString
 	*/
-	QString			location();
+	QString						location();
 
 	/*!
 	 \brief
@@ -85,14 +85,84 @@ public:
 	 \fn setType
 	 \param szType
 	*/
-	void			setType(const QString& szType);
+	void						setType(const QString& szType);
 	/*!
 	 \brief
 
 	 \fn type
 	 \return QString
 	*/
-	QString			type();
+	QString						type();
+
+	/*!
+	 \brief
+
+	 \fn setDescription
+	 \param lpDescription
+	*/
+	void						setDescription(cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn description
+	 \return cTextDocument
+	*/
+	cTextDocument*				description();
+
+	/*!
+	 \brief
+
+	 \fn addImage
+	 \param lpImage
+	 \param lpDescription
+	*/
+	void						addImage(cImage* lpImage, cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn images
+	 \return QList<cImageDescription *>
+	*/
+	QList<cImageDescription*>	images();
+
+private:
+	qint32						m_iID; /*!< TODO: describe */
+	QString						m_szName; /*!< TODO: describe */
+	QString						m_szLocation; /*!< TODO: describe */
+	QString						m_szType; /*!< TODO: describe */
+	cTextDocument*				m_lpDescription; /*!< TODO: describe */
+	QList<cImageDescription*>	m_imageList; /*!< TODO: describe */
+
+signals:
+
+public slots:
+};
+
+/*!
+ \brief
+
+ \class cPlaceDescription cplace.h "cplace.h"
+*/
+class cPlaceDescription : public QObject
+{
+	Q_OBJECT
+public:
+	cPlaceDescription(cPlace* lpPlace, cTextDocument* lpDescription, QObject* parent = nullptr);
+
+	/*!
+	 \brief
+
+	 \fn setPlace
+	 \param lpPlace
+	*/
+	void			setPlace(cPlace* lpPlace);
+	/*!
+	 \brief
+
+	 \fn place
+	 \return cPlace
+	*/
+	cPlace*			place();
 
 	/*!
 	 \brief
@@ -108,33 +178,9 @@ public:
 	 \return cTextDocument
 	*/
 	cTextDocument*	description();
-
-	/*!
-	 \brief
-
-	 \fn addImage
-	 \param lpImage
-	*/
-	void			addImage(cImage* lpImage);
-	/*!
-	 \brief
-
-	 \fn images
-	 \return QList<cImage *>
-	*/
-	QList<cImage*>	images();
-
 private:
-	qint32			m_iID; /*!< TODO: describe */
-	QString			m_szName; /*!< TODO: describe */
-	QString			m_szLocation; /*!< TODO: describe */
-	QString			m_szType; /*!< TODO: describe */
+	cPlace*			m_lpPlace; /*!< TODO: describe */
 	cTextDocument*	m_lpDescription; /*!< TODO: describe */
-	QList<cImage*>	m_imageList; /*!< TODO: describe */
-
-signals:
-
-public slots:
 };
 
 Q_DECLARE_METATYPE(cPlace*)

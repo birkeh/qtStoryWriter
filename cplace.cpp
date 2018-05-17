@@ -71,16 +71,41 @@ cTextDocument* cPlace::description()
 	return(m_lpDescription);
 }
 
-void cPlace::addImage(cImage* lpImage)
+void cPlace::addImage(cImage* lpImage, cTextDocument* lpDescription)
 {
-	if(m_imageList.contains(lpImage))
-		return;
-	m_imageList.append(lpImage);
+	m_imageList.append(new cImageDescription(lpImage, lpDescription));
 }
 
-QList<cImage*> cPlace::images()
+QList<cImageDescription*> cPlace::images()
 {
 	return(m_imageList);
+}
+
+cPlaceDescription::cPlaceDescription(cPlace* lpPlace, cTextDocument* lpDescription, QObject* parent) :
+	QObject(parent)
+{
+	setPlace(lpPlace);
+	setDescription(lpDescription);
+}
+
+void cPlaceDescription::setPlace(cPlace* lpPlace)
+{
+	m_lpPlace	= lpPlace;
+}
+
+cPlace* cPlaceDescription::place()
+{
+	return(m_lpPlace);
+}
+
+void cPlaceDescription::setDescription(cTextDocument* lpDescription)
+{
+	m_lpDescription	= lpDescription;
+}
+
+cTextDocument* cPlaceDescription::description()
+{
+	return(m_lpDescription);
 }
 
 cPlace* cPlaceList::add(const qint32& iID)
@@ -131,7 +156,7 @@ bool cPlaceList::load(cImageList *lpImageList)
 		lpPlace->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 	}
 
-	query.prepare("SELECT placeID, imageID FROM placeImage;");
+	query.prepare("SELECT placeID, imageID, description FROM placeImage;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -145,7 +170,7 @@ bool cPlaceList::load(cImageList *lpImageList)
 		{
 			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
 			if(lpImage)
-				lpPlace->addImage(lpImage);
+				lpPlace->addImage(lpImage, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
@@ -166,7 +191,7 @@ bool cPlaceList::save()
 	QSqlQuery	imageAdd;
 
 	imageDelete.prepare("DELETE FROM placeImage WHERE placeID=:placeID;");
-	imageAdd.prepare("INSERT INTO placeImage (placeID, imageID) VALUES (:placeID, :imageID);");
+	imageAdd.prepare("INSERT INTO placeImage (placeID, imageID, description) VALUES (:placeID, :imageID, :description);");
 
 	for(int x = 0;x < count();x++)
 	{
@@ -215,14 +240,16 @@ bool cPlaceList::save()
 			return(false);
 		}
 
-		QList<cImage*>	images	= lpPlace->images();
+		QList<cImageDescription*>	images	= lpPlace->images();
 
 		for(int x = 0;x < images.count();x++)
 		{
-			cImage*	lpImage	= images.at(x);
+			cImageDescription*	lpImageDescription	= images.at(x);
+			cImage*				lpImage				= lpImageDescription->image();
 
 			imageAdd.bindValue(":placeID", lpPlace->id());
 			imageAdd.bindValue(":imageID", lpImage->id());
+			imageAdd.bindValue(":description", textDocument2Blob(lpImageDescription->description()));
 			if(!imageAdd.exec())
 			{
 				myDebug << imageAdd.lastError().text();

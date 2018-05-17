@@ -108,6 +108,51 @@ private:
 	QPixmap			m_image; /*!< TODO: describe */
 };
 
+/*!
+ \brief
+
+ \class cImageDescription cimage.h "cimage.h"
+*/
+class cImageDescription : public QObject
+{
+	Q_OBJECT
+public:
+	cImageDescription(cImage* lpImage, cTextDocument* lpDescription, QObject* parent = nullptr);
+
+	/*!
+	 \brief
+
+	 \fn setImage
+	 \param lpImage
+	*/
+	void			setImage(cImage* lpImage);
+	/*!
+	 \brief
+
+	 \fn image
+	 \return cImage
+	*/
+	cImage*			image();
+
+	/*!
+	 \brief
+
+	 \fn setDescription
+	 \param lpDescription
+	*/
+	void			setDescription(cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn description
+	 \return cTextDocument
+	*/
+	cTextDocument*	description();
+private:
+	cImage*			m_lpImage; /*!< TODO: describe */
+	cTextDocument*	m_lpDescription; /*!< TODO: describe */
+};
+
 Q_DECLARE_METATYPE(cImage*)
 
 /*!

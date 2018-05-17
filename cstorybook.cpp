@@ -283,7 +283,8 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE characterImage ( "
 					"    characterID INTEGER REFERENCES character (id), "
-					"    imageID     INTEGER REFERENCES image (id)  "
+					"    imageID     INTEGER REFERENCES image (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
@@ -308,7 +309,8 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE objectImage ( "
 					"    objectID INTEGER REFERENCES object (id), "
-					"    imageID  INTEGER REFERENCES image (id)  "
+					"    imageID  INTEGER REFERENCES image (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
@@ -334,7 +336,8 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE placeImage ( "
 					"    placeID INTEGER REFERENCES place (id), "
-					"    imageID INTEGER REFERENCES image (id)  "
+					"    imageID INTEGER REFERENCES image (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
@@ -349,25 +352,29 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE rechercheCharacter ( "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
-					"    characterID INTEGER REFERENCES character (id)  "
+					"    characterID INTEGER REFERENCES character (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheImage ( "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
-					"    imageID     INTEGER REFERENCES image (id)  "
+					"    imageID     INTEGER REFERENCES image (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheObject ( "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
-					"    objectID    INTEGER REFERENCES object (id)  "
+					"    objectID    INTEGER REFERENCES object (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 
 	if(!createTable("CREATE TABLE recherchePlace ( "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
-					"    placeID     INTEGER REFERENCES place (id)  "
+					"    placeID     INTEGER REFERENCES place (id), "
+					"    description BLOB "
 					"); "))
 		return(false);
 

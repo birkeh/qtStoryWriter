@@ -148,12 +148,13 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 	ui->m_lpJob->setHtml(lpCharacter->job());
 	ui->m_lpDescription->setDocument(lpCharacter->description());
 
-	QList<cImage*>	images	= lpCharacter->images();
+	QList<cImageDescription*>	images	= lpCharacter->images();
 	for(int x = 0;x < images.count();x++)
 	{
-		cImage*			lpImage			= images[x];
-		QPixmap			pixmap			= lpImage->image();
-		cImageWidget*	lpImageWidget	= new cImageWidget;
+		cImageDescription*	lpImageDescription	= images[x];
+		cImage*				lpImage				= lpImageDescription->image();
+		QPixmap				pixmap				= lpImage->image();
+		cImageWidget*		lpImageWidget		= new cImageWidget;
 
 		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);
 		ui->m_lpLayout->addWidget(lpImageWidget);

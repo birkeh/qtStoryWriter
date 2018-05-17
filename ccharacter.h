@@ -467,45 +467,90 @@ public:
 	 \fn addImage
 	 \param lpImage
 	*/
-	void			addImage(cImage* lpImage);
+	void			addImage(cImage* lpImage, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn images
 	 \return QList<cImage *>
 	*/
-	QList<cImage*>	images();
+	QList<cImageDescription*>	images();
 private:
-	qint32			m_id; /*!< TODO: describe */
-	bool			m_bMainCharacter; /*!< TODO: describe */
-	QString			m_szCreature; /*!< TODO: describe */
-	GENDER			m_gender; /*!< TODO: describe */
-	QString			m_szTitle; /*!< TODO: describe */
-	QString			m_szFirstName; /*!< TODO: describe */
-	QString			m_szMiddleName; /*!< TODO: describe */
-	QString			m_szLastName; /*!< TODO: describe */
-	QString			m_szNickName; /*!< TODO: describe */
-	qreal			m_dHeight; /*!< TODO: describe */
-	qreal			m_dWeight; /*!< TODO: describe */
-	qreal			m_dAge; /*!< TODO: describe */
-	QDate			m_dateOfBirth; /*!< TODO: describe */
-	QString			m_szPlaceOfBirth; /*!< TODO: describe */
-	QDate			m_dateOfDeath; /*!< TODO: describe */
-	QString			m_szPlaceOfDeath; /*!< TODO: describe */
-	QString			m_szHairColor; /*!< TODO: describe */
-	QString			m_szHairCut; /*!< TODO: describe */
-	QString			m_szHairLength; /*!< TODO: describe */
-	QString			m_szFigure; /*!< TODO: describe */
-	QString			m_szNature; /*!< TODO: describe */
-	QString			m_szSpokenLanguages; /*!< TODO: describe */
-	QString			m_szSkin; /*!< TODO: describe */
-	QString			m_szSchool; /*!< TODO: describe */
-	QString			m_szJob; /*!< TODO: describe */
-	cTextDocument*	m_lpDescription; /*!< TODO: describe */
-	QList<cImage*>	m_imageList; /*!< TODO: describe */
+	qint32						m_id; /*!< TODO: describe */
+	bool						m_bMainCharacter; /*!< TODO: describe */
+	QString						m_szCreature; /*!< TODO: describe */
+	GENDER						m_gender; /*!< TODO: describe */
+	QString						m_szTitle; /*!< TODO: describe */
+	QString						m_szFirstName; /*!< TODO: describe */
+	QString						m_szMiddleName; /*!< TODO: describe */
+	QString						m_szLastName; /*!< TODO: describe */
+	QString						m_szNickName; /*!< TODO: describe */
+	qreal						m_dHeight; /*!< TODO: describe */
+	qreal						m_dWeight; /*!< TODO: describe */
+	qreal						m_dAge; /*!< TODO: describe */
+	QDate						m_dateOfBirth; /*!< TODO: describe */
+	QString						m_szPlaceOfBirth; /*!< TODO: describe */
+	QDate						m_dateOfDeath; /*!< TODO: describe */
+	QString						m_szPlaceOfDeath; /*!< TODO: describe */
+	QString						m_szHairColor; /*!< TODO: describe */
+	QString						m_szHairCut; /*!< TODO: describe */
+	QString						m_szHairLength; /*!< TODO: describe */
+	QString						m_szFigure; /*!< TODO: describe */
+	QString						m_szNature; /*!< TODO: describe */
+	QString						m_szSpokenLanguages; /*!< TODO: describe */
+	QString						m_szSkin; /*!< TODO: describe */
+	QString						m_szSchool; /*!< TODO: describe */
+	QString						m_szJob; /*!< TODO: describe */
+	cTextDocument*				m_lpDescription; /*!< TODO: describe */
+	QList<cImageDescription*>	m_imageList; /*!< TODO: describe */
 signals:
 
 public slots:
+};
+
+/*!
+ \brief
+
+ \class cCharacterDescription ccharacter.h "ccharacter.h"
+*/
+class cCharacterDescription : public QObject
+{
+	Q_OBJECT
+public:
+	cCharacterDescription(cCharacter* lpCharacter, cTextDocument* lpDescription, QObject* parent = nullptr);
+
+	/*!
+	 \brief
+
+	 \fn setCharacter
+	 \param lpCharacter
+	*/
+	void			setCharacter(cCharacter* lpCharacter);
+	/*!
+	 \brief
+
+	 \fn character
+	 \return cCharacter
+	*/
+	cCharacter*		character();
+
+	/*!
+	 \brief
+
+	 \fn setDescription
+	 \param lpDescription
+	*/
+	void			setDescription(cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn description
+	 \return cTextDocument
+	*/
+	cTextDocument*	description();
+private:
+	cCharacter*		m_lpCharacter; /*!< TODO: describe */
+	cTextDocument*	m_lpDescription; /*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cCharacter*)

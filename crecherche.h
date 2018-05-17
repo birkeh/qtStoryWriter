@@ -43,14 +43,14 @@ public:
 	 \fn setID
 	 \param iID
 	*/
-	void				setID(const qint32& iID);
+	void							setID(const qint32& iID);
 	/*!
 	 \brief
 
 	 \fn id
 	 \return qint32
 	*/
-	qint32				id();
+	qint32							id();
 
 	/*!
 	 \brief
@@ -58,14 +58,14 @@ public:
 	 \fn setName
 	 \param szName
 	*/
-	void				setName(const QString& szName);
+	void							setName(const QString& szName);
 	/*!
 	 \brief
 
 	 \fn name
 	 \return QString
 	*/
-	QString				name();
+	QString							name();
 
 	/*!
 	 \brief
@@ -73,14 +73,14 @@ public:
 	 \fn setLink
 	 \param szLink
 	*/
-	void				setLink(const QString& szLink);
+	void							setLink(const QString& szLink);
 	/*!
 	 \brief
 
 	 \fn link
 	 \return QString
 	*/
-	QString				link();
+	QString							link();
 
 	/*!
 	 \brief
@@ -88,82 +88,86 @@ public:
 	 \fn setDescription
 	 \param lpDescription
 	*/
-	void				setDescription(cTextDocument* lpDescription);
+	void							setDescription(cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn description
 	 \return cTextDocument
 	*/
-	cTextDocument*		description();
+	cTextDocument*					description();
 
 	/*!
 	 \brief
 
 	 \fn addImage
 	 \param lpImage
+	 \param lpDescription
 	*/
-	void				addImage(cImage* lpImage);
+	void							addImage(cImage* lpImage, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn addCharacter
 	 \param lpCharacter
+	 \param lpDescription
 	*/
-	void				addCharacter(cCharacter* lpCharacter);
+	void							addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn addObject
 	 \param lpObject
+	 \param lpDescription
 	*/
-	void				addObject(cObject* lpObject);
+	void							addObject(cObject* lpObject, cTextDocument* lpDescription);
 	/*!
 	 \brief
 
 	 \fn addPlace
 	 \param lpPlace
+	 \param lpDescription
 	*/
-	void				addPlace(cPlace* lpPlace);
+	void							addPlace(cPlace* lpPlace, cTextDocument* lpDescription);
 
 	/*!
 	 \brief
 
 	 \fn images
-	 \return QList<cImage *>
+	 \return QList<cImageDescription *>
 	*/
-	QList<cImage*>		images();
+	QList<cImageDescription*>		images();
 	/*!
 	 \brief
 
 	 \fn characterList
-	 \return QList<cCharacter *>
+	 \return QList<cCharacterDescription *>
 	*/
-	QList<cCharacter*>	characterList();
+	QList<cCharacterDescription*>	characterList();
 	/*!
 	 \brief
 
 	 \fn objectList
-	 \return QList<cObject *>
+	 \return QList<cObjectDescription *>
 	*/
-	QList<cObject*>		objectList();
+	QList<cObjectDescription*>		objectList();
 	/*!
 	 \brief
 
 	 \fn placeList
-	 \return QList<cPlace *>
+	 \return QList<cPlaceDescription *>
 	*/
-	QList<cPlace*>		placeList();
+	QList<cPlaceDescription*>		placeList();
 
 private:
-	qint32				m_iID; /*!< TODO: describe */
-	QString				m_szName; /*!< TODO: describe */
-	QString				m_szLink; /*!< TODO: describe */
-	cTextDocument*		m_lpDescription; /*!< TODO: describe */
-	QList<cImage*>		m_imageList; /*!< TODO: describe */
-	QList<cCharacter*>	m_characterList; /*!< TODO: describe */
-	QList<cObject*>		m_objectList; /*!< TODO: describe */
-	QList<cPlace*>		m_placeList; /*!< TODO: describe */
+	qint32							m_iID; /*!< TODO: describe */
+	QString							m_szName; /*!< TODO: describe */
+	QString							m_szLink; /*!< TODO: describe */
+	cTextDocument*					m_lpDescription; /*!< TODO: describe */
+	QList<cImageDescription*>		m_imageList; /*!< TODO: describe */
+	QList<cCharacterDescription*>	m_characterList; /*!< TODO: describe */
+	QList<cObjectDescription*>		m_objectList; /*!< TODO: describe */
+	QList<cPlaceDescription*>		m_placeList; /*!< TODO: describe */
 
 signals:
 

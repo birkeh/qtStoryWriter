@@ -60,50 +60,42 @@ cTextDocument* cRecherche::description()
 	return(m_lpDescription);
 }
 
-void cRecherche::addImage(cImage* lpImage)
+void cRecherche::addImage(cImage* lpImage, cTextDocument* lpDescription)
 {
-	if(m_imageList.contains(lpImage))
-		return;
-	m_imageList.append(lpImage);
+	m_imageList.append(new cImageDescription(lpImage, lpDescription));
 }
 
-void cRecherche::addCharacter(cCharacter* lpCharacter)
+void cRecherche::addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription)
 {
-	if(m_characterList.contains(lpCharacter))
-		return;
-	m_characterList.append(lpCharacter);
+	m_characterList.append(new cCharacterDescription(lpCharacter, lpDescription));
 }
 
-void cRecherche::addObject(cObject* lpObject)
+void cRecherche::addObject(cObject* lpObject, cTextDocument* lpDescription)
 {
-	if(m_objectList.contains(lpObject))
-		return;
-	m_objectList.append(lpObject);
+	m_objectList.append(new cObjectDescription(lpObject, lpDescription));
 }
 
-void cRecherche::addPlace(cPlace* lpPlace)
+void cRecherche::addPlace(cPlace* lpPlace, cTextDocument* lpDescription)
 {
-	if(m_placeList.contains(lpPlace))
-		return;
-	m_placeList.append(lpPlace);
+	m_placeList.append(new cPlaceDescription(lpPlace, lpDescription));
 }
 
-QList<cImage*> cRecherche::images()
+QList<cImageDescription*> cRecherche::images()
 {
 	return(m_imageList);
 }
 
-QList<cCharacter*> cRecherche::characterList()
+QList<cCharacterDescription*> cRecherche::characterList()
 {
 	return(m_characterList);
 }
 
-QList<cObject*> cRecherche::objectList()
+QList<cObjectDescription*> cRecherche::objectList()
 {
 	return(m_objectList);
 }
 
-QList<cPlace*> cRecherche::placeList()
+QList<cPlaceDescription*> cRecherche::placeList()
 {
 	return(m_placeList);
 }
@@ -155,7 +147,7 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		lpObject->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 	}
 
-	query.prepare("SELECT rechercheID, imageID FROM rechercheImage;");
+	query.prepare("SELECT rechercheID, imageID, description FROM rechercheImage;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -169,11 +161,11 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		{
 			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
 			if(lpImage)
-				lpRecherche->addImage(lpImage);
+				lpRecherche->addImage(lpImage, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
-	query.prepare("SELECT rechercheID, characterID FROM rechercheCharacter;");
+	query.prepare("SELECT rechercheID, characterID, description FROM rechercheCharacter;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -187,11 +179,11 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		{
 			cCharacter*	lpCharacter		= lpCharacterList->find(query.value("characterID").toInt());
 			if(lpCharacter)
-				lpRecherche->addCharacter(lpCharacter);
+				lpRecherche->addCharacter(lpCharacter, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
-	query.prepare("SELECT rechercheID, objectID FROM rechercheObject;");
+	query.prepare("SELECT rechercheID, objectID, description FROM rechercheObject;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -205,11 +197,11 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		{
 			cObject*	lpObject		= lpObjectList->find(query.value("objectID").toInt());
 			if(lpObject)
-				lpRecherche->addObject(lpObject);
+				lpRecherche->addObject(lpObject, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
-	query.prepare("SELECT rechercheID, placeID FROM recherchePlace;");
+	query.prepare("SELECT rechercheID, placeID, description FROM recherchePlace;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -223,7 +215,7 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		{
 			cPlace*	lpPlace		= lpPlaceList->find(query.value("placeID").toInt());
 			if(lpPlace)
-				lpRecherche->addPlace(lpPlace);
+				lpRecherche->addPlace(lpPlace, blob2TextDocument(query.value("description").toByteArray()));
 		}
 	}
 
@@ -243,22 +235,22 @@ bool cRechercheList::save()
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
 	imageDelete.prepare("DELETE FROM rechercheImage WHERE rechercheID=:rechercheID;");
-	imageAdd.prepare("INSERT INTO rechercheImage (rechercheID, imageID) VALUES (:rechercheID, :imageID);");
+	imageAdd.prepare("INSERT INTO rechercheImage (rechercheID, imageID, description) VALUES (:rechercheID, :imageID, :description);");
 
 	QSqlQuery	characterDelete;
 	QSqlQuery	characterAdd;
 	characterDelete.prepare("DELETE FROM rechercheCharacter WHERE rechercheID=:rechercheID;");
-	characterAdd.prepare("INSERT INTO rechercheCharacter (rechercheID, characterID) VALUES (:rechercheID, :characterID);");
+	characterAdd.prepare("INSERT INTO rechercheCharacter (rechercheID, characterID, description) VALUES (:rechercheID, :characterID, :description);");
 
 	QSqlQuery	objectDelete;
 	QSqlQuery	objectAdd;
 	objectDelete.prepare("DELETE FROM rechercheObject WHERE rechercheID=:rechercheID;");
-	objectAdd.prepare("INSERT INTO rechercheObject (rechercheID, ObjectID) VALUES (:rechercheID, :objectID);");
+	objectAdd.prepare("INSERT INTO rechercheObject (rechercheID, ObjectID, description) VALUES (:rechercheID, :objectID, :description);");
 
 	QSqlQuery	placeDelete;
 	QSqlQuery	placeAdd;
 	placeDelete.prepare("DELETE FROM recherchePlace WHERE rechercheID=:rechercheID;");
-	placeAdd.prepare("INSERT INTO recherchePlace (rechercheID, placeID) VALUES (:rechercheID, :placeID);");
+	placeAdd.prepare("INSERT INTO recherchePlace (rechercheID, placeID, description) VALUES (:rechercheID, :placeID, :description);");
 
 	for(int x = 0;x < count();x++)
 	{
@@ -326,14 +318,16 @@ bool cRechercheList::save()
 			return(false);
 		}
 
-		QList<cImage*>	images	= lpRecherche->images();
+		QList<cImageDescription*>	images	= lpRecherche->images();
 
 		for(int x = 0;x < images.count();x++)
 		{
-			cImage*	lpImage	= images.at(x);
+			cImageDescription*	lpImageDescription	= images.at(x);
+			cImage*				lpImage				= lpImageDescription->image();
 
 			imageAdd.bindValue(":rechercheID", lpRecherche->id());
 			imageAdd.bindValue(":imageID", lpImage->id());
+			imageAdd.bindValue(":description", textDocument2Blob(lpImageDescription->description()));
 			if(!imageAdd.exec())
 			{
 				myDebug << imageAdd.lastError().text();
@@ -341,14 +335,16 @@ bool cRechercheList::save()
 			}
 		}
 
-		QList<cCharacter*>	characters	= lpRecherche->characterList();
+		QList<cCharacterDescription*>	characters	= lpRecherche->characterList();
 
 		for(int x = 0;x < characters.count();x++)
 		{
-			cCharacter*	lpCharacter	= characters.at(x);
+			cCharacterDescription*	lpCharacterDescription	= characters.at(x);
+			cCharacter*				lpCharacter				= lpCharacterDescription->character();
 
 			characterAdd.bindValue(":rechercheID", lpRecherche->id());
 			characterAdd.bindValue(":characterID", lpCharacter->id());
+			characterAdd.bindValue(":description", textDocument2Blob(lpCharacterDescription->description()));
 			if(!characterAdd.exec())
 			{
 				myDebug << characterAdd.lastError().text();
@@ -356,14 +352,16 @@ bool cRechercheList::save()
 			}
 		}
 
-		QList<cObject*>	objects	= lpRecherche->objectList();
+		QList<cObjectDescription*>	objects	= lpRecherche->objectList();
 
 		for(int x = 0;x < objects.count();x++)
 		{
-			cObject*	lpObject	= objects.at(x);
+			cObjectDescription*	lpObjectDescription	= objects.at(x);
+			cObject*			lpObject			= lpObjectDescription->object();
 
 			objectAdd.bindValue(":rechercheID", lpRecherche->id());
 			objectAdd.bindValue(":objectID", lpObject->id());
+			objectAdd.bindValue(":description", textDocument2Blob(lpObjectDescription->description()));
 			if(!objectAdd.exec())
 			{
 				myDebug << objectAdd.lastError().text();
@@ -371,14 +369,16 @@ bool cRechercheList::save()
 			}
 		}
 
-		QList<cPlace*>	places	= lpRecherche->placeList();
+		QList<cPlaceDescription*>	places	= lpRecherche->placeList();
 
 		for(int x = 0;x < places.count();x++)
 		{
-			cPlace*	lpPlace	= places.at(x);
+			cPlaceDescription*	lpPlaceDescription	= places.at(x);
+			cPlace*				lpPlace				= lpPlaceDescription->place();
 
 			placeAdd.bindValue(":rechercheID", lpRecherche->id());
 			placeAdd.bindValue(":placeID", lpPlace->id());
+			placeAdd.bindValue(":description", textDocument2Blob(lpPlaceDescription->description()));
 			if(!placeAdd.exec())
 			{
 				myDebug << placeAdd.lastError().text();
