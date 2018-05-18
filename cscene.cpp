@@ -131,6 +131,11 @@ void cScene::addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription)
 	m_characterList.append(new cCharacterDescription(lpCharacter, lpDescription));
 }
 
+void cScene::removeCharacter(cCharacterDescription* lpCharacter)
+{
+	m_characterList.removeOne(lpCharacter);
+}
+
 QList<cCharacterDescription*> cScene::characterList()
 {
 	return(m_characterList);

@@ -14,6 +14,7 @@
 
 #include <QStandardItem>
 #include <QMenu>
+#include <QMessageBox>
 
 
 cSceneWindow::cSceneWindow(QWidget *parent) :
@@ -393,12 +394,51 @@ void cSceneWindow::onAddCharacterToList()
 
 	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
 	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
+
+	m_lpMainWindow->somethingChanged();
 }
 
 void cSceneWindow::onRemoveCharacterFromList()
 {
+	cCharacterDescription*	lpCharacterDescription	= qvariant_cast<cCharacterDescription*>(ui->m_lpCharacterList->currentData());
+
+	if(!lpCharacterDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpCharacterDescription->character()->name())) == QMessageBox::No)
+		return;
+
+	m_lpScene->removeCharacter(lpCharacterDescription);
+
+	QList<cCharacterDescription*>	characterList	= m_lpScene->characterList();
+
+	ui->m_lpCharacterList->clear();
+
+	for(int x = ui->m_lpCharacterDetails->count()-1;x >= 0;x--)
+		ui->m_lpCharacterDetails->removeWidget(ui->m_lpCharacterDetails->widget(x));
+
+	for(int x = 0;x < characterList.count();x++)
+	{
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
+
+		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
+		lpTextEdit->setDocument(lpCharacterDescription->description());
+		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onCharacterDescriptionChanged);
+	}
+	ui->m_lpCharacterList->setCurrentIndex(0);
+	ui->m_lpCharacterDetails->setCurrentIndex(0);
+
 	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
 	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
+
+	m_lpMainWindow->somethingChanged();
 }
 
 void cSceneWindow::onAddPlaceToList()

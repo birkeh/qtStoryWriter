@@ -215,6 +215,14 @@ public:
 	/*!
 	 \brief
 
+	 \fn addCharacter
+	 \param lpCharacter
+	 \param lpDescription
+	*/
+	void							removeCharacter(cCharacterDescription* lpCharacter);
+	/*!
+	 \brief
+
 	 \fn characterList
 	 \return QList<cCharacter *>
 	*/
