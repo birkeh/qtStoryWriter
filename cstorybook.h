@@ -278,18 +278,18 @@ public:
 	bool			hasScene(cChapter* lpChapter);
 
 private:
-	QString			m_szProject; /*!< TODO: describe */
-	bool			m_bIsOpen; /*!< TODO: describe */
-	QSqlDatabase	m_db; /*!< TODO: describe */
-	cBook			m_book; /*!< TODO: describe */
-	cPartList		m_partList; /*!< TODO: describe */
-	cChapterList	m_chapterList; /*!< TODO: describe */
-	cSceneList		m_sceneList; /*!< TODO: describe */
-	cCharacterList	m_characterList; /*!< TODO: describe */
-	cPlaceList		m_placeList; /*!< TODO: describe */
-	cObjectList		m_objectList; /*!< TODO: describe */
-	cRechercheList	m_rechercheList; /*!< TODO: describe */
-	cImageList		m_imageList; /*!< TODO: describe */
+	QString			m_szProject;		/*!< TODO: describe */
+	bool			m_bIsOpen;			/*!< TODO: describe */
+	QSqlDatabase	m_db;				/*!< TODO: describe */
+	cBook			m_book;				/*!< TODO: describe */
+	cPartList		m_partList;			/*!< TODO: describe */
+	cChapterList	m_chapterList;		/*!< TODO: describe */
+	cSceneList		m_sceneList;		/*!< TODO: describe */
+	cCharacterList	m_characterList;	/*!< TODO: describe */
+	cPlaceList		m_placeList;		/*!< TODO: describe */
+	cObjectList		m_objectList;		/*!< TODO: describe */
+	cRechercheList	m_rechercheList;	/*!< TODO: describe */
+	cImageList		m_imageList;		/*!< TODO: describe */
 
 	/*!
 	 \brief

@@ -6,6 +6,8 @@
 #include "cscenewindow.h"
 #include "ui_cscenewindow.h"
 
+#include "ccharacterselectdialog.h"
+
 #include "cmainwindow.h"
 
 #include "common.h"
@@ -146,6 +148,9 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	ui->m_lpCharacterList->setCurrentText(0);
 	ui->m_lpCharacterDetails->setCurrentIndex(0);
 
+	ui->m_lpCharacterRemove->setEnabled((characterList.count() > 0));
+	ui->m_lpCharacterShowDetails->setEnabled((characterList.count() > 0));
+
 	for(int x = 0;x < placeList.count();x++)
 	{
 		cPlaceDescription*	lpPlaceDescription	= placeList[x];
@@ -164,6 +169,9 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	ui->m_lpPlaceList->setCurrentText(0);
 	ui->m_lpPlaceDetails->setCurrentIndex(0);
 
+	ui->m_lpPlaceRemove->setEnabled((characterList.count() > 0));
+	ui->m_lpPlaceShowDetails->setEnabled((characterList.count() > 0));
+
 	for(int x = 0;x < objectList.count();x++)
 	{
 		cObjectDescription*	lpObjectDescription	= objectList[x];
@@ -181,6 +189,9 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	}
 	ui->m_lpObjectList->setCurrentText(0);
 	ui->m_lpObjectDetails->setCurrentIndex(0);
+
+	ui->m_lpObjectRemove->setEnabled((characterList.count() > 0));
+	ui->m_lpObjectShowDetails->setEnabled((characterList.count() > 0));
 
 	connect(ui->m_lpCharacterList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onCharacterIndexChanged);
 	connect(ui->m_lpPlaceList,			QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onPlaceIndexChanged);
@@ -333,24 +344,83 @@ void cSceneWindow::onObjectIndexChanged(int index)
 
 void cSceneWindow::onAddCharacterToList()
 {
+	cCharacterSelectDialog*	lpDialog	= new cCharacterSelectDialog(this);
+	lpDialog->setCharacterList(m_lpCharacterList, m_lpScene->characterList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cCharacter*	lpCharacterNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpCharacterNew)
+		return;
+
+	m_lpScene->addCharacter(lpCharacterNew, new cTextDocument(this));
+
+	QList<cCharacterDescription*>	characterList	= m_lpScene->characterList();
+
+	ui->m_lpCharacterList->clear();
+
+	for(int x = ui->m_lpCharacterDetails->count()-1;x >= 0;x--)
+		ui->m_lpCharacterDetails->removeWidget(ui->m_lpCharacterDetails->widget(x));
+
+	qint16	index	= 0;
+
+	for(int x = 0;x < characterList.count();x++)
+	{
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
+
+		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
+		lpTextEdit->setDocument(lpCharacterDescription->description());
+		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onCharacterDescriptionChanged);
+
+		if(lpCharacter == lpCharacterNew)
+			index	= x;
+	}
+	ui->m_lpCharacterList->setCurrentIndex(index);
+	ui->m_lpCharacterDetails->setCurrentIndex(index);
+
+	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
+	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
 }
 
 void cSceneWindow::onRemoveCharacterFromList()
 {
+	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
+	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
 }
 
 void cSceneWindow::onAddPlaceToList()
 {
+	ui->m_lpPlaceRemove->setEnabled((ui->m_lpPlaceList->count() > 0));
+	ui->m_lpPlaceShowDetails->setEnabled((ui->m_lpPlaceList->count() > 0));
 }
 
 void cSceneWindow::onRemovePlaceFromList()
 {
+	ui->m_lpPlaceRemove->setEnabled((ui->m_lpPlaceList->count() > 0));
+	ui->m_lpPlaceShowDetails->setEnabled((ui->m_lpPlaceList->count() > 0));
 }
 
 void cSceneWindow::onAddObjectToList()
 {
+	ui->m_lpObjectRemove->setEnabled((ui->m_lpObjectList->count() > 0));
+	ui->m_lpObjectShowDetails->setEnabled((ui->m_lpObjectList->count() > 0));
 }
 
 void cSceneWindow::onRemoveObjectFromList()
 {
+	ui->m_lpObjectRemove->setEnabled((ui->m_lpObjectList->count() > 0));
+	ui->m_lpObjectShowDetails->setEnabled((ui->m_lpObjectList->count() > 0));
 }

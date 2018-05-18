@@ -476,33 +476,33 @@ public:
 	*/
 	QList<cImageDescription*>	images();
 private:
-	qint32						m_id; /*!< TODO: describe */
-	bool						m_bMainCharacter; /*!< TODO: describe */
-	QString						m_szCreature; /*!< TODO: describe */
-	GENDER						m_gender; /*!< TODO: describe */
-	QString						m_szTitle; /*!< TODO: describe */
-	QString						m_szFirstName; /*!< TODO: describe */
-	QString						m_szMiddleName; /*!< TODO: describe */
-	QString						m_szLastName; /*!< TODO: describe */
-	QString						m_szNickName; /*!< TODO: describe */
-	qreal						m_dHeight; /*!< TODO: describe */
-	qreal						m_dWeight; /*!< TODO: describe */
-	qreal						m_dAge; /*!< TODO: describe */
-	QDate						m_dateOfBirth; /*!< TODO: describe */
-	QString						m_szPlaceOfBirth; /*!< TODO: describe */
-	QDate						m_dateOfDeath; /*!< TODO: describe */
-	QString						m_szPlaceOfDeath; /*!< TODO: describe */
-	QString						m_szHairColor; /*!< TODO: describe */
-	QString						m_szHairCut; /*!< TODO: describe */
-	QString						m_szHairLength; /*!< TODO: describe */
-	QString						m_szFigure; /*!< TODO: describe */
-	QString						m_szNature; /*!< TODO: describe */
-	QString						m_szSpokenLanguages; /*!< TODO: describe */
-	QString						m_szSkin; /*!< TODO: describe */
-	QString						m_szSchool; /*!< TODO: describe */
-	QString						m_szJob; /*!< TODO: describe */
-	cTextDocument*				m_lpDescription; /*!< TODO: describe */
-	QList<cImageDescription*>	m_imageList; /*!< TODO: describe */
+	qint32						m_id;					/*!< TODO: describe */
+	bool						m_bMainCharacter;		/*!< TODO: describe */
+	QString						m_szCreature;			/*!< TODO: describe */
+	GENDER						m_gender;				/*!< TODO: describe */
+	QString						m_szTitle;				/*!< TODO: describe */
+	QString						m_szFirstName;			/*!< TODO: describe */
+	QString						m_szMiddleName;			/*!< TODO: describe */
+	QString						m_szLastName;			/*!< TODO: describe */
+	QString						m_szNickName;			/*!< TODO: describe */
+	qreal						m_dHeight;				/*!< TODO: describe */
+	qreal						m_dWeight;				/*!< TODO: describe */
+	qreal						m_dAge;					/*!< TODO: describe */
+	QDate						m_dateOfBirth;			/*!< TODO: describe */
+	QString						m_szPlaceOfBirth;		/*!< TODO: describe */
+	QDate						m_dateOfDeath;			/*!< TODO: describe */
+	QString						m_szPlaceOfDeath;		/*!< TODO: describe */
+	QString						m_szHairColor;			/*!< TODO: describe */
+	QString						m_szHairCut;			/*!< TODO: describe */
+	QString						m_szHairLength;			/*!< TODO: describe */
+	QString						m_szFigure;				/*!< TODO: describe */
+	QString						m_szNature;				/*!< TODO: describe */
+	QString						m_szSpokenLanguages;	/*!< TODO: describe */
+	QString						m_szSkin;				/*!< TODO: describe */
+	QString						m_szSchool;				/*!< TODO: describe */
+	QString						m_szJob;				/*!< TODO: describe */
+	cTextDocument*				m_lpDescription;		/*!< TODO: describe */
+	QList<cImageDescription*>	m_imageList;			/*!< TODO: describe */
 signals:
 
 public slots:
@@ -549,8 +549,8 @@ public:
 	*/
 	cTextDocument*	description();
 private:
-	cCharacter*		m_lpCharacter; /*!< TODO: describe */
-	cTextDocument*	m_lpDescription; /*!< TODO: describe */
+	cCharacter*		m_lpCharacter;		/*!< TODO: describe */
+	cTextDocument*	m_lpDescription;	/*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cCharacter*)

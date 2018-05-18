@@ -77,9 +77,9 @@ private slots:
 	void					onDescriptionChanged();
 
 private:
-	Ui::cObjectWindow*		ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cObject*				m_lpObject; /*!< TODO: describe */
+	Ui::cObjectWindow*		ui;				/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
+	cObject*				m_lpObject;		/*!< TODO: describe */
 };
 
 #endif // COBJECTWINDOW_H

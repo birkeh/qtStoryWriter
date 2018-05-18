@@ -95,11 +95,11 @@ signals:
 	void					showChapterWindow(cChapter* lpChapter);
 
 private:
-	Ui::cPartWindow*		ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cPart*					m_lpPart; /*!< TODO: describe */
-	cChapterList*			m_lpChapterList; /*!< TODO: describe */
-	QStandardItemModel*		m_lpChapterModel; /*!< TODO: describe */
+	Ui::cPartWindow*		ui;					/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;		/*!< TODO: describe */
+	cPart*					m_lpPart;			/*!< TODO: describe */
+	cChapterList*			m_lpChapterList;	/*!< TODO: describe */
+	QStandardItemModel*		m_lpChapterModel;	/*!< TODO: describe */
 };
 
 #endif // CPARTWINDOW_H

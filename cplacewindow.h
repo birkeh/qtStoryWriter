@@ -84,9 +84,9 @@ private slots:
 	void					onDescriptionChanged();
 
 private:
-	Ui::cPlaceWindow*		ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cPlace*					m_lpPlace; /*!< TODO: describe */
+	Ui::cPlaceWindow*		ui;				/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
+	cPlace*					m_lpPlace;		/*!< TODO: describe */
 };
 
 #endif // CPLACEWINDOW_H

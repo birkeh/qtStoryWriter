@@ -140,13 +140,13 @@ public:
 	bool				deleted();
 
 private:
-	qint32				m_iID; /*!< TODO: describe */
-	QString				m_szName; /*!< TODO: describe */
-	qint32				m_iSortOrder; /*!< TODO: describe */
-	cTextDocument*		m_lpDescription; /*!< TODO: describe */
-	cTextDocument*		m_lpText; /*!< TODO: describe */
-	QStandardItem*		m_lpItem; /*!< TODO: describe */
-	bool				m_bDeleted; /*!< TODO: describe */
+	qint32				m_iID;				/*!< TODO: describe */
+	QString				m_szName;			/*!< TODO: describe */
+	qint32				m_iSortOrder;		/*!< TODO: describe */
+	cTextDocument*		m_lpDescription;	/*!< TODO: describe */
+	cTextDocument*		m_lpText;			/*!< TODO: describe */
+	QStandardItem*		m_lpItem;			/*!< TODO: describe */
+	bool				m_bDeleted;			/*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cPart*)

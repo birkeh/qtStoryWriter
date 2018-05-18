@@ -329,22 +329,22 @@ public:
 	bool							deleted();
 
 private:
-	qint32							m_iID; /*!< TODO: describe */
-	cChapter*						m_lpChapter; /*!< TODO: describe */
-	QString							m_szName; /*!< TODO: describe */
-	qint32							m_iSortOrder; /*!< TODO: describe */
-	cTextDocument*					m_lpDescription; /*!< TODO: describe */
-	STATE							m_state; /*!< TODO: describe */
-	QDateTime						m_startedAt; /*!< TODO: describe */
-	QDateTime						m_finishedAt; /*!< TODO: describe */
-	QDateTime						m_targetDate; /*!< TODO: describe */
-	cTextDocument*					m_lpText; /*!< TODO: describe */
-	QList<cCharacterDescription*>	m_characterList; /*!< TODO: describe */
-	QList<cObjectDescription*>		m_objectList; /*!< TODO: describe */
-	QList<cPlaceDescription*>		m_placeList; /*!< TODO: describe */
-	QStandardItem*					m_lpItem; /*!< TODO: describe */
-	QStandardItem*					m_lpStateItem; /*!< TODO: describe */
-	bool							m_bDeleted; /*!< TODO: describe */
+	qint32							m_iID;				/*!< TODO: describe */
+	cChapter*						m_lpChapter;		/*!< TODO: describe */
+	QString							m_szName;			/*!< TODO: describe */
+	qint32							m_iSortOrder;		/*!< TODO: describe */
+	cTextDocument*					m_lpDescription;	/*!< TODO: describe */
+	STATE							m_state;			/*!< TODO: describe */
+	QDateTime						m_startedAt;		/*!< TODO: describe */
+	QDateTime						m_finishedAt;		/*!< TODO: describe */
+	QDateTime						m_targetDate;		/*!< TODO: describe */
+	cTextDocument*					m_lpText;			/*!< TODO: describe */
+	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
+	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
+	QList<cPlaceDescription*>		m_placeList;		/*!< TODO: describe */
+	QStandardItem*					m_lpItem;			/*!< TODO: describe */
+	QStandardItem*					m_lpStateItem;		/*!< TODO: describe */
+	bool							m_bDeleted;			/*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cScene*)

@@ -169,13 +169,43 @@ private slots:
 	*/
 	void				onObjectIndexChanged(int index);
 
+	/*!
+	 \brief
+
+	 \fn onAddCharacterToList
+	*/
 	void				onAddCharacterToList();
+	/*!
+	 \brief
+
+	 \fn onRemoveCharacterFromList
+	*/
 	void				onRemoveCharacterFromList();
 
+	/*!
+	 \brief
+
+	 \fn onAddPlaceToList
+	*/
 	void				onAddPlaceToList();
+	/*!
+	 \brief
+
+	 \fn onRemovePlaceFromList
+	*/
 	void				onRemovePlaceFromList();
 
+	/*!
+	 \brief
+
+	 \fn onAddObjectToList
+	*/
 	void				onAddObjectToList();
+	/*!
+	 \brief
+
+	 \fn onRemoveObjectFromList
+	*/
 	void				onRemoveObjectFromList();
 
 signals:

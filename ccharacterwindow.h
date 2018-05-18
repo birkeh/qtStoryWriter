@@ -235,9 +235,9 @@ private slots:
 	void					onDescriptionChanged();
 
 private:
-	Ui::cCharacterWindow*	ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cCharacter*				m_lpCharacter; /*!< TODO: describe */
+	Ui::cCharacterWindow*	ui;				/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
+	cCharacter*				m_lpCharacter;	/*!< TODO: describe */
 };
 
 #endif // CCHARACTERWINDOW_H

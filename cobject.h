@@ -111,11 +111,11 @@ public:
 	QList<cImageDescription*>	images();
 
 private:
-	qint32						m_iID; /*!< TODO: describe */
-	QString						m_szName; /*!< TODO: describe */
-	QString						m_szType; /*!< TODO: describe */
-	cTextDocument*				m_lpDescription; /*!< TODO: describe */
-	QList<cImageDescription*>	m_imageList; /*!< TODO: describe */
+	qint32						m_iID;				/*!< TODO: describe */
+	QString						m_szName;			/*!< TODO: describe */
+	QString						m_szType;			/*!< TODO: describe */
+	cTextDocument*				m_lpDescription;	/*!< TODO: describe */
+	QList<cImageDescription*>	m_imageList;		/*!< TODO: describe */
 
 signals:
 
@@ -163,8 +163,8 @@ public:
 	*/
 	cTextDocument*		description();
 private:
-	cObject*			m_lpObject; /*!< TODO: describe */
-	cTextDocument*		m_lpDescription; /*!< TODO: describe */
+	cObject*			m_lpObject;			/*!< TODO: describe */
+	cTextDocument*		m_lpDescription;	/*!< TODO: describe */
 };
 
 Q_DECLARE_METATYPE(cObject*)

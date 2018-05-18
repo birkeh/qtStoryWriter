@@ -111,9 +111,9 @@ private slots:
 	void					onTargetDateChanged(const QDateTime& dateTime);
 
 private:
-	Ui::cPropertiesWindow*	ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cBook*					m_lpBook; /*!< TODO: describe */
+	Ui::cPropertiesWindow*	ui;				/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
+	cBook*					m_lpBook;		/*!< TODO: describe */
 };
 
 #endif // CPROPERTIESWINDOW_H

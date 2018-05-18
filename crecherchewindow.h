@@ -122,12 +122,12 @@ signals:
 	void					showObjectWindow(cObject* lpObject);
 
 private:
-	Ui::cRechercheWindow*	ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	QStandardItemModel*		m_lpCharacterModel; /*!< TODO: describe */
-	QStandardItemModel*		m_lpPlaceModel; /*!< TODO: describe */
-	QStandardItemModel*		m_lpObjectModel; /*!< TODO: describe */
-	cRecherche*				m_lpRecherche; /*!< TODO: describe */
+	Ui::cRechercheWindow*	ui;					/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;		/*!< TODO: describe */
+	QStandardItemModel*		m_lpCharacterModel;	/*!< TODO: describe */
+	QStandardItemModel*		m_lpPlaceModel;		/*!< TODO: describe */
+	QStandardItemModel*		m_lpObjectModel;	/*!< TODO: describe */
+	cRecherche*				m_lpRecherche;		/*!< TODO: describe */
 };
 
 #endif // CRECHERCHEWINDOW_H

@@ -96,11 +96,11 @@ signals:
 	void					showSceneWindow(cScene* lpScene);
 
 private:
-	Ui::cChapterWindow*		ui; /*!< TODO: describe */
-	cMainWindow*			m_lpMainWindow; /*!< TODO: describe */
-	cChapter*				m_lpChapter; /*!< TODO: describe */
-	cSceneList*				m_lpSceneList; /*!< TODO: describe */
-	QStandardItemModel*		m_lpSceneModel; /*!< TODO: describe */
+	Ui::cChapterWindow*		ui;				/*!< TODO: describe */
+	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
+	cChapter*				m_lpChapter;	/*!< TODO: describe */
+	cSceneList*				m_lpSceneList;	/*!< TODO: describe */
+	QStandardItemModel*		m_lpSceneModel;	/*!< TODO: describe */
 };
 
 #endif // CCHAPTERWINDOW_H

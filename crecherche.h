@@ -160,14 +160,14 @@ public:
 	QList<cPlaceDescription*>		placeList();
 
 private:
-	qint32							m_iID; /*!< TODO: describe */
-	QString							m_szName; /*!< TODO: describe */
-	QString							m_szLink; /*!< TODO: describe */
-	cTextDocument*					m_lpDescription; /*!< TODO: describe */
-	QList<cImageDescription*>		m_imageList; /*!< TODO: describe */
-	QList<cCharacterDescription*>	m_characterList; /*!< TODO: describe */
-	QList<cObjectDescription*>		m_objectList; /*!< TODO: describe */
-	QList<cPlaceDescription*>		m_placeList; /*!< TODO: describe */
+	qint32							m_iID;				/*!< TODO: describe */
+	QString							m_szName;			/*!< TODO: describe */
+	QString							m_szLink;			/*!< TODO: describe */
+	cTextDocument*					m_lpDescription;	/*!< TODO: describe */
+	QList<cImageDescription*>		m_imageList;		/*!< TODO: describe */
+	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
+	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
+	QList<cPlaceDescription*>		m_placeList;		/*!< TODO: describe */
 
 signals:
 
