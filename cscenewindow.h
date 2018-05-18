@@ -63,21 +63,21 @@ private slots:
 	 \fn onCharacterDoubleClicked
 	 \param index
 	*/
-	void				onCharacterDoubleClicked(const QModelIndex& index);
+	void				onCharacterShowDetails();
 	/*!
 	 \brief
 
 	 \fn onPlaceDoubleClicked
 	 \param index
 	*/
-	void				onPlaceDoubleClicked(const QModelIndex& index);
+	void				onPlaceShowDetails();
 	/*!
 	 \brief
 
 	 \fn onObjectDoubleClicked
 	 \param index
 	*/
-	void				onObjectDoubleClicked(const QModelIndex& index);
+	void				onObjectShowDetails();
 
 	/*!
 	 \brief
@@ -129,36 +129,54 @@ private slots:
 	/*!
 	 \brief
 
-	 \fn onCharacterContextMenu
-	 \param pos
+	 \fn onCharacterDescriptionChanged
 	*/
-	void				onCharacterContextMenu(const QPoint& pos);
+	void				onCharacterDescriptionChanged();
+
 	/*!
 	 \brief
 
-	 \fn onPlaceContextMenu
-	 \param pos
+	 \fn onPlaceDescriptionChanged
 	*/
-	void				onPlaceContextMenu(const QPoint& pos);
+	void				onPlaceDescriptionChanged();
+
 	/*!
 	 \brief
 
-	 \fn onObjectContextMenu
-	 \param pos
+	 \fn onPlaceDescriptionChanged
 	*/
-	void				onObjectContextMenu(const QPoint& pos);
+	void				onObjectDescriptionChanged();
+
+	/*!
+	 \brief
+
+	 \fn onCharacterIndexChanged
+	 \param index
+	*/
+	void				onCharacterIndexChanged(int index);
+	/*!
+	 \brief
+
+	 \fn onPlaceIndexChanged
+	 \param index
+	*/
+	void				onPlaceIndexChanged(int index);
+	/*!
+	 \brief
+
+	 \fn onObjectIndexChanged
+	 \param index
+	*/
+	void				onObjectIndexChanged(int index);
 
 	void				onAddCharacterToList();
 	void				onRemoveCharacterFromList();
-	void				onEditCharacterDescription();
 
 	void				onAddPlaceToList();
 	void				onRemovePlaceFromList();
-	void				onEditPlaceDescription();
 
 	void				onAddObjectToList();
 	void				onRemoveObjectFromList();
-	void				onEditObjectDescription();
 
 signals:
 	/*!
@@ -186,9 +204,6 @@ signals:
 private:
 	Ui::cSceneWindow*	ui;					/*!< TODO: describe */
 	cMainWindow*		m_lpMainWindow;		/*!< TODO: describe */
-	QStandardItemModel*	m_lpCharacterModel;	/*!< TODO: describe */
-	QStandardItemModel*	m_lpPlaceModel;		/*!< TODO: describe */
-	QStandardItemModel*	m_lpObjectModel;	/*!< TODO: describe */
 	cScene*				m_lpScene;			/*!< TODO: describe */
 	cCharacterList*		m_lpCharacterList;	/*!< TODO: describe */
 	cPlaceList*			m_lpPlaceList;		/*!< TODO: describe */
