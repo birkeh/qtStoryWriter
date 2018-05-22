@@ -38,5 +38,10 @@
         <file>images/win/textunder.png</file>
         <file>images/win/zoomin.png</file>
         <file>images/win/zoomout.png</file>
+        <file>images/splash.png</file>
+        <file>fonts/Stingray.otf</file>
+        <file>fonts/BiggerLove.ttf</file>
+        <file>fonts/Luna.ttf</file>
+        <file>fonts/Tomatoes.ttf</file>
     </qresource>
 </RCC>

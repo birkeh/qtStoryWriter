@@ -18,6 +18,8 @@
 #include "cdatetimeedit.h"
 #include "ccombobox.h"
 
+#include "csplashscreen.h"
+
 #include <QMainWindow>
 #include <QMdiSubWindow>
 
@@ -51,9 +53,10 @@ public:
 	 \brief
 
 	 \fn cMainWindow
+	 \param lpSplashScreen
 	 \param parent
 	*/
-	explicit cMainWindow(QWidget* parent = 0);
+	explicit cMainWindow(cSplashScreen* lpSplashScreen, QWidget* parent = 0);
 	/*!
 	 \brief
 
@@ -609,6 +612,9 @@ private slots:
 
 private:
 	Ui::cMainWindow*	ui;										/*!< User Interface */
+
+	cSplashScreen*		m_lpSplashScreen;
+
 	QStandardItemModel*	m_lpOutlineModel;						/*!< Item Model for Outline list */
 	QStandardItemModel*	m_lpCharacterModel;						/*!< Item Model for Character list */
 	QStandardItemModel*	m_lpPlaceModel;							/*!< Item Model for Place list */

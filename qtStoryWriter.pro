@@ -75,7 +75,8 @@ SOURCES += \
     ccombobox.cpp \
     cdatetimeedit.cpp \
     cpropertieswindow.cpp \
-    ccharacterselectdialog.cpp
+    ccharacterselectdialog.cpp \
+    csplashscreen.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -112,7 +113,8 @@ HEADERS += \
     ccombobox.h \
     cdatetimeedit.h \
     cpropertieswindow.h \
-    ccharacterselectdialog.h
+    ccharacterselectdialog.h \
+    csplashscreen.h
 
 FORMS += \
         cmainwindow.ui \

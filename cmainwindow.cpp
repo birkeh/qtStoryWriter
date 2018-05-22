@@ -40,9 +40,10 @@
 #include <QFileDialog>
 
 
-cMainWindow::cMainWindow(QWidget *parent) :
+cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
+	m_lpSplashScreen(lpSplashScreen),
 	m_lpOutlineModel(0),
 	m_lpCharacterModel(0),
 	m_lpPlaceModel(0),
@@ -69,6 +70,8 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	QSettings	settings;
 	m_szOldPath	= settings.value("file/lastPath", QDir::homePath()).toString();
 	updateRecentFileActions();
+
+	QThread::msleep(2000);
 }
 
 cMainWindow::~cMainWindow()
