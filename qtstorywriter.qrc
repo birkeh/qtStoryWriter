@@ -43,5 +43,6 @@
         <file>fonts/BiggerLove.ttf</file>
         <file>fonts/Luna.ttf</file>
         <file>fonts/Tomatoes.ttf</file>
+        <file>images/splashEmpty.png</file>
     </qresource>
 </RCC>

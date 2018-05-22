@@ -16,20 +16,21 @@
 int main(int argc, char *argv[])
 {
 	QApplication	a(argc, argv);
-	QPixmap			pixmap(":/images/splash.png");
-	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap.scaled(480, 289));
+//	QPixmap			pixmap(":/images/splash.png");
+	QPixmap			pixmap(":/images/splashEmpty.png");
+	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap);
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Stingray.otf");
-	int				id			= QFontDatabase::addApplicationFont(":/fonts/BiggerLove.ttf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Luna.ttf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Tomatoes.ttf");
+	int				id			= QFontDatabase::addApplicationFont(":/fonts/BiggerLove.ttf");
 	QString			family		= QFontDatabase::applicationFontFamilies(id).at(0);
 	QFont			splashFont(family);
 
-	lpSplash->setMessageRect(QRect(0, 50, 480, 189), Qt::AlignHCenter);
+	lpSplash->setMessageRect(QRect(0, 20, 480, 299), Qt::AlignHCenter);
 
 	splashFont.setPixelSize(18);
 	lpSplash->setFont(splashFont);
-	lpSplash->setStatusMessageColor(Qt::white);
+	lpSplash->setStatusMessageColor(Qt::darkGray);
 
 	lpSplash->show();
 	a.processEvents();
