@@ -130,8 +130,7 @@ FORMS += \
     ccharacterselectdialog.ui
 
 DISTFILES += \
-    storyBook.project \
     Doxyfile
 
 RESOURCES += \
-    qtstorywriter.qrc
+    storywriter.qrc
