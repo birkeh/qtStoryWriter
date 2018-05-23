@@ -130,7 +130,9 @@ FORMS += \
     ccharacterselectdialog.ui
 
 DISTFILES += \
-    Doxyfile
+    Doxyfile \
+    resources/splash.png \
+    resources/splash.psd
 
 RESOURCES += \
     storywriter.qrc

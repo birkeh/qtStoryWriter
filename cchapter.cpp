@@ -119,6 +119,9 @@ cChapter* cChapterList::add(const qint32& iID)
 
 cChapter* cChapterList::find(const qint32& iID)
 {
+	if(iID == -1)
+		return(0);
+
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == iID)

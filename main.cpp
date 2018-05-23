@@ -16,13 +16,14 @@
 int main(int argc, char *argv[])
 {
 	QApplication	a(argc, argv);
-//	QPixmap			pixmap(":/images/splash.png");
-	QPixmap			pixmap(":/images/splashEmpty.png");
+	QPixmap			pixmap(":/images/splash.png");
+//	QPixmap			pixmap(":/images/splashEmpty.png");
 	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap);
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Stingray.otf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Luna.ttf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Tomatoes.ttf");
-	int				id			= QFontDatabase::addApplicationFont(":/fonts/BiggerLove.ttf");
+//	int				id			= QFontDatabase::addApplicationFont(":/fonts/BiggerLove.ttf");
+	int				id			= QFontDatabase::addApplicationFont(":/fonts/Tahu!.ttf");
 	QString			family		= QFontDatabase::applicationFontFamilies(id).at(0);
 	QFont			splashFont(family);
 

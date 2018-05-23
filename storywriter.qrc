@@ -44,5 +44,6 @@
         <file>fonts/Luna.ttf</file>
         <file>fonts/Tomatoes.ttf</file>
         <file>images/splashEmpty.png</file>
+        <file>fonts/Tahu!.ttf</file>
     </qresource>
 </RCC>
