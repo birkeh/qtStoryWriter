@@ -666,6 +666,17 @@ bool cStoryBook::hasScene(cChapter* lpChapter)
 	return(m_sceneList.find(lpChapter).count() > 0);
 }
 
+bool cStoryBook::characterInUse(cCharacter* lpCharacter)
+{
+	if(m_sceneList.find(lpCharacter).count() > 0)
+		return(true);
+
+	if(m_rechercheList.find(lpCharacter).count() > 0)
+		return(true);
+
+	return(false);
+}
+
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
@@ -796,6 +807,9 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 	{
 		cCharacter*				lpCharacter	= m_characterList.at(x);
 		QList<QStandardItem*>	lpItems;
+
+		if(lpCharacter->deleted())
+			continue;
 
 		lpItems.append(new QStandardItem(lpCharacter->name()));
 		lpItems.append(new QStandardItem(lpCharacter->creature()));

@@ -38,7 +38,8 @@ cCharacter::cCharacter(qint32 iID, QObject *parent) :
 	m_szSkin(QString("")),
 	m_szSchool(QString("")),
 	m_szJob(QString("")),
-	m_lpDescription(0)
+	m_lpDescription(0),
+	m_bDeleted(false)
 {
 }
 
@@ -344,6 +345,17 @@ cTextDocument* cCharacter::description()
 	return(m_lpDescription);
 }
 
+
+void cCharacter::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cCharacter::deleted()
+{
+	return(m_bDeleted);
+}
+
 void cCharacter::addImage(cImage* lpImage, cTextDocument* lpDescription)
 {
 	m_imageList.append(new cImageDescription(lpImage, lpDescription));
@@ -475,10 +487,12 @@ bool cCharacterList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE character SET mainCharacter=:mainCharacter, creature=:creature, gender=:gender, title=:title, firstName=:firstName, middleName=:middleName, lastName=:lastName, nickName=:nickName, height=:height, weight=:weight, dateOfBirth=:dateOfBirth, dateOfDeath=:dateOfDeath, placeOfBirth=:placeOfBirth, placeOfDeath=:placeOfDeath, hairColor=:hairColor, hairCut=:hairCut, hairLength=:hairLength, figure=:figure, nature=:nature, spokenLanguages=:spokenLanguages, skin=:skin, school=:school, job=:job, description=:description WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO character (mainCharacter, creature, gender, title, firstName, middleName, lastName, nickName, height, weight, dateOfBirth, dateOfDeath, placeOfBirth, placeOfDeath, hairColor, hairCut, hairLength, figure, nature, spokenLanguages, skin, school, job, description) VALUES (:mainCharacter, :creature, :gender, :title, :firstName, :middleName, :lastName, :nickName, :height, :weight,:dateOfBirth, :dateOfDeath, :placeOfBirth, :placeOfDeath, :hairColor, :hairCut, :hairLength, :figure, :nature, :spokenLanguages, :skin, :school, :job, :description);");
 	querySelect.prepare("SELECT id FROM character WHERE _rowid_=(SELECT MAX(_rowid_) FROM character);");
+	queryDelete.prepare("DELETE FROM character WHERE id=:id;");
 
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
@@ -490,7 +504,18 @@ bool cCharacterList::save()
 	{
 		cCharacter*	lpCharacter	= at(x);
 
-		if(lpCharacter->id() != -1)
+		if(lpCharacter->deleted())
+		{
+			queryDelete.bindValue(":id", lpCharacter->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpCharacter);
+		}
+		else if(lpCharacter->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpCharacter->id());
 			queryUpdate.bindValue(":mainCharacter", lpCharacter->mainCharacter());

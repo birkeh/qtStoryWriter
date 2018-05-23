@@ -276,6 +276,26 @@ QList<cScene*> cSceneList::find(cChapter* lpChapter)
 	return(sceneList);
 }
 
+QList<cScene*> cSceneList::find(cCharacter* lpCharacter)
+{
+	QList<cScene*>	sceneList;
+
+	for(int x = 0;x < count();x++)
+	{
+		QList<cCharacterDescription*>	list	= at(x)->characterList();
+
+		for(int y = 0;y < list.count();y++)
+		{
+			if(list.at(y)->character() == lpCharacter)
+			{
+				sceneList.append(at(x));
+				break;
+			}
+		}
+	}
+	return(sceneList);
+}
+
 qint32 cSceneList::nextSort(cChapter* lpChapter)
 {
 	qint32	iSort	= -1;

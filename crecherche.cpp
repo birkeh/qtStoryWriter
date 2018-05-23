@@ -127,6 +127,26 @@ cRecherche* cRechercheList::find(const qint32& iID)
 	return(0);
 }
 
+QList<cRecherche*> cRechercheList::find(cCharacter* lpCharacter)
+{
+	QList<cRecherche*>	rechercheList;
+
+	for(int x = 0;x < count();x++)
+	{
+		QList<cCharacterDescription*>	list	= at(x)->characterList();
+
+		for(int y = 0;y < list.count();y++)
+		{
+			if(list.at(y)->character() == lpCharacter)
+			{
+				rechercheList.append(at(x));
+				break;
+			}
+		}
+	}
+	return(rechercheList);
+}
+
 bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
 {
 	QSqlQuery	query;

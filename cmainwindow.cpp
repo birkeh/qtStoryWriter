@@ -1440,7 +1440,7 @@ void cMainWindow::onDeletePart()
 
 	}
 
-	if(QMessageBox::question(this, "Delete Part", tr("Are you sure you want to delete this part:<br>") + "<b><center>" + lpPart->name() + "</center></b>") != QMessageBox::Yes)
+	if(QMessageBox::question(this, "Delete Part", tr("Are you sure you want to delete this part:<br>") + "<b>" + lpPart->name() + "</b>") != QMessageBox::Yes)
 		return;
 
 	lpPart->setDeleted(true);
@@ -1542,7 +1542,7 @@ void cMainWindow::onDeleteChapter()
 
 	}
 
-	if(QMessageBox::question(this, "Delete Chapter", tr("Are you sure you want to delete this chapter:<br>") + "<b><center>" + lpChapter->name() + "</center></b>" + tr("<br>from part <br>") + "<b><center>" + lpChapter->part()->name() + "</center></b>") != QMessageBox::Yes)
+	if(QMessageBox::question(this, "Delete Chapter", tr("Are you sure you want to delete this chapter:<br>") + "<b>" + lpChapter->name() + "</b>" + tr("<br>from part <br>") + "<b>" + lpChapter->part()->name() + "</b>") != QMessageBox::Yes)
 		return;
 
 	lpChapter->setDeleted(true);
@@ -1643,7 +1643,7 @@ void cMainWindow::onDeleteScene()
 	if(!lpScene)
 		return;
 
-	if(QMessageBox::question(this, "Delete Scene", tr("Are you sure you want to delete this scene:<br>") + "<b><center>" + lpScene->name() + "</center></b>" + tr("<br>from chapter <br>") + "<b><center>" + lpScene->chapter()->name() + "</center></b>") != QMessageBox::Yes)
+	if(QMessageBox::question(this, "Delete Scene", tr("Are you sure you want to delete this scene:<br>") + "<b>" + lpScene->name() + "</b>" + tr("<br>from chapter <br>") + "<b>" + lpScene->chapter()->name() + "</b>") != QMessageBox::Yes)
 		return;
 
 	lpScene->setDeleted(true);
@@ -1716,6 +1716,43 @@ void cMainWindow::onEditCharacter()
 
 void cMainWindow::onDeleteCharacter()
 {
+	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(ui->m_lpCharacterList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
+
+	if(!lpCharacter)
+		return;
+
+	if(m_lpStoryBook->characterInUse(lpCharacter))
+	{
+		QMessageBox::critical(this, "Delete Character", tr("This character is still in use.\nPlease delete the usage before deleting the character."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Character", tr("Are you sure you want to delete this character:<br>") + "<b>" + lpCharacter->name() + "</b>?") != QMessageBox::Yes)
+		return;
+
+	lpCharacter->setDeleted(true);
+	m_lpStoryBook->fillCharacterList(ui->m_lpCharacterList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_character)
+		{
+			cCharacterWindow*	lpCharacterWindow	= (cCharacterWindow*)lpWidget->widget();
+			if(lpCharacterWindow->character() == lpCharacter)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddPlace()

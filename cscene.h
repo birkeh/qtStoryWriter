@@ -405,6 +405,15 @@ public:
 	 \brief
 
 	 \fn find
+	 \param lpCharacter
+	 \return QList<cCharacter *>
+	*/
+	QList<cScene *> find(cCharacter* lpCharacter);
+
+	/*!
+	 \brief
+
+	 \fn find
 	 \param lpChapter
 	 \return QList<cScene *>
 	*/

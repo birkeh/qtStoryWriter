@@ -277,6 +277,15 @@ public:
 	*/
 	bool			hasScene(cChapter* lpChapter);
 
+	/*!
+	 \brief
+
+	 \fn characterInUse
+	 \param lpCharacter
+	 \return bool
+	*/
+	bool			characterInUse(cCharacter* lpCharacter);
+
 private:
 	QString			m_szProject;		/*!< TODO: describe */
 	bool			m_bIsOpen;			/*!< TODO: describe */

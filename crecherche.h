@@ -219,6 +219,15 @@ public:
 	 \return cRecherche
 	*/
 	cRecherche*			find(const qint32& iID);
+
+	/*!
+	 \brief
+
+	 \fn find
+	 \param lpCharacter
+	 \return QList<cCharacter *>
+	*/
+	QList<cRecherche *> find(cCharacter* lpCharacter);
 };
 
 #endif // CRECHERCHE_H
