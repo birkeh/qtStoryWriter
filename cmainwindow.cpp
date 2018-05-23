@@ -616,7 +616,7 @@ void cMainWindow::updateWindowTitle()
 {
 	if(!m_lpStoryBook)
 	{
-		setWindowTitle("qtStoryWriter");
+		setWindowTitle("storyWriter");
 		return;
 	}
 
@@ -624,9 +624,9 @@ void cMainWindow::updateWindowTitle()
 	QString	szAuthor	= m_lpStoryBook->author();
 	QString	szWindowTitle;
 	if(szAuthor.isEmpty())
-		szWindowTitle	= QString("\"%1\" - qtStoryWriter").arg(szTitle);
+		szWindowTitle	= QString("\"%1\" - storyWriter").arg(szTitle);
 	else
-		szWindowTitle	= QString("\"%1\" by %2 - qtStoryWriter").arg(szTitle).arg(szAuthor);
+		szWindowTitle	= QString("\"%1\" by %2 - storyWriter").arg(szTitle).arg(szAuthor);
 
 	if(m_bSomethingChanged)
 		szWindowTitle.append(" *");

@@ -8,7 +8,7 @@ QT       += core gui xml sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = qtStoryWriter
+TARGET = storyWriter
 TEMPLATE = app
 qtHaveModule(printsupport): QT += printsupport
 

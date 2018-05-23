@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
 	QCoreApplication::setOrganizationName("WIN-DESIGN");
 	QCoreApplication::setOrganizationDomain("windesign.at");
-	QCoreApplication::setApplicationName("qtStoryWriter");
+	QCoreApplication::setApplicationName("storyWriter");
 
 	QSettings	settings;
 
