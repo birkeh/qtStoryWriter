@@ -1805,6 +1805,43 @@ void cMainWindow::onEditPlace()
 
 void cMainWindow::onDeletePlace()
 {
+	QStandardItem*	lpItem		= m_lpPlaceModel->itemFromIndex(ui->m_lpPlaceList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cPlace*			lpPlace		= qvariant_cast<cPlace*>(lpItem->data());
+
+	if(!lpPlace)
+		return;
+
+	if(m_lpStoryBook->placeInUse(lpPlace))
+	{
+		QMessageBox::critical(this, "Delete Place", tr("This place is still in use.\nPlease delete the usage before deleting the place."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Place", tr("Are you sure you want to delete this place:<br>") + "<b>" + lpPlace->name() + "</b>?") != QMessageBox::Yes)
+		return;
+
+	lpPlace->setDeleted(true);
+	m_lpStoryBook->fillPlaceList(ui->m_lpPlaceList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_place)
+		{
+			cPlaceWindow*	lpPlaceWindow	= (cPlaceWindow*)lpWidget->widget();
+			if(lpPlaceWindow->place() == lpPlace)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddObject()
@@ -1857,6 +1894,43 @@ void cMainWindow::onEditObject()
 
 void cMainWindow::onDeleteObject()
 {
+	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(ui->m_lpObjectList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
+
+	if(!lpObject)
+		return;
+
+	if(m_lpStoryBook->objectInUse(lpObject))
+	{
+		QMessageBox::critical(this, "Delete Object", tr("This object is still in use.\nPlease delete the usage before deleting the object."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Object", tr("Are you sure you want to delete this object:<br>") + "<b>" + lpObject->name() + "</b>?") != QMessageBox::Yes)
+		return;
+
+	lpObject->setDeleted(true);
+	m_lpStoryBook->fillObjectList(ui->m_lpObjectList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_object)
+		{
+			cObjectWindow*	lpObjectWindow	= (cObjectWindow*)lpWidget->widget();
+			if(lpObjectWindow->object() == lpObject)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 void cMainWindow::onAddRecherche()
@@ -1909,6 +1983,43 @@ void cMainWindow::onEditRecherche()
 
 void cMainWindow::onDeleteRecherche()
 {
+	QStandardItem*	lpItem		= m_lpRechercheModel->itemFromIndex(ui->m_lpRechercheList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cRecherche*		lpRecherche	= qvariant_cast<cRecherche*>(lpItem->data());
+
+	if(!lpRecherche)
+		return;
+
+	if(m_lpStoryBook->rechercheInUse(lpRecherche))
+	{
+		QMessageBox::critical(this, "Delete Recherche", tr("This recherche is still in use.\nPlease delete the usage before deleting the recherche."));
+		return;
+
+	}
+
+	if(QMessageBox::question(this, "Delete Recherche", tr("Are you sure you want to delete this recherche:<br>") + "<b>" + lpRecherche->name() + "</b>?") != QMessageBox::Yes)
+		return;
+
+	lpRecherche->setDeleted(true);
+	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
+	m_bSomethingChanged	= true;
+	updateWindowTitle();
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		if(lpWidget->type() == cWidget::TYPE_recherche)
+		{
+			cRechercheWindow*	lpRechercheWindow	= (cRechercheWindow*)lpWidget->widget();
+			if(lpRechercheWindow->recherche() == lpRecherche)
+			{
+				onMainTabTabCloseRequested(x);
+				return;
+			}
+		}
+	}
 }
 
 QString cMainWindow::getProjectLoadName()

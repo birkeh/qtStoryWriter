@@ -159,6 +159,21 @@ public:
 	*/
 	QList<cPlaceDescription*>		placeList();
 
+	/*!
+	 \brief
+
+	 \fn setDeleted
+	 \param bDeleted
+	*/
+	void							setDeleted(bool bDeleted);
+	/*!
+	 \brief
+
+	 \fn deleted
+	 \return bool
+	*/
+	bool							deleted();
+
 private:
 	qint32							m_iID;				/*!< TODO: describe */
 	QString							m_szName;			/*!< TODO: describe */
@@ -168,6 +183,7 @@ private:
 	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
 	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
 	QList<cPlaceDescription*>		m_placeList;		/*!< TODO: describe */
+	bool							m_bDeleted;			/*!< TODO: describe */
 
 signals:
 
@@ -228,6 +244,24 @@ public:
 	 \return QList<cCharacter *>
 	*/
 	QList<cRecherche *> find(cCharacter* lpCharacter);
+
+	/*!
+	 \brief
+
+	 \fn find
+	 \param lpPlace
+	 \return QList<cScene *>
+	*/
+	QList<cRecherche *>		find(cPlace* lpPlace);
+
+	/*!
+	 \brief
+
+	 \fn find
+	 \param lpObject
+	 \return QList<cScene *>
+	*/
+	QList<cRecherche *>		find(cObject* lpObject);
 };
 
 #endif // CRECHERCHE_H

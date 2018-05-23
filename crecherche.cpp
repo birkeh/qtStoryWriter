@@ -16,7 +16,8 @@ cRecherche::cRecherche(qint32 iID, QObject *parent) :
 	m_iID(iID),
 	m_szName(""),
 	m_szLink(""),
-	m_lpDescription(0)
+	m_lpDescription(0),
+	m_bDeleted(false)
 {
 }
 
@@ -58,6 +59,16 @@ void cRecherche::setDescription(cTextDocument* lpDescription)
 cTextDocument* cRecherche::description()
 {
 	return(m_lpDescription);
+}
+
+void cRecherche::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cRecherche::deleted()
+{
+	return(m_bDeleted);
 }
 
 void cRecherche::addImage(cImage* lpImage, cTextDocument* lpDescription)
@@ -138,6 +149,46 @@ QList<cRecherche*> cRechercheList::find(cCharacter* lpCharacter)
 		for(int y = 0;y < list.count();y++)
 		{
 			if(list.at(y)->character() == lpCharacter)
+			{
+				rechercheList.append(at(x));
+				break;
+			}
+		}
+	}
+	return(rechercheList);
+}
+
+QList<cRecherche*> cRechercheList::find(cPlace* lpPlace)
+{
+	QList<cRecherche*>	rechercheList;
+
+	for(int x = 0;x < count();x++)
+	{
+		QList<cPlaceDescription*>	list	= at(x)->placeList();
+
+		for(int y = 0;y < list.count();y++)
+		{
+			if(list.at(y)->place() == lpPlace)
+			{
+				rechercheList.append(at(x));
+				break;
+			}
+		}
+	}
+	return(rechercheList);
+}
+
+QList<cRecherche*> cRechercheList::find(cObject* lpObject)
+{
+	QList<cRecherche*>	rechercheList;
+
+	for(int x = 0;x < count();x++)
+	{
+		QList<cObjectDescription*>	list	= at(x)->objectList();
+
+		for(int y = 0;y < list.count();y++)
+		{
+			if(list.at(y)->object() == lpObject)
 			{
 				rechercheList.append(at(x));
 				break;
@@ -247,13 +298,16 @@ bool cRechercheList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE recherche SET name=:name, description=:description, link=:link WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO recherche (name, description, link) VALUES (:name, :description, :link);");
 	querySelect.prepare("SELECT id FROM recherche WHERE _rowid_=(SELECT MAX(_rowid_) FROM recherche);");
+	queryDelete.prepare("DELETE FROM recherche WHERE id=:id;");
 
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
+
 	imageDelete.prepare("DELETE FROM rechercheImage WHERE rechercheID=:rechercheID;");
 	imageAdd.prepare("INSERT INTO rechercheImage (rechercheID, imageID, description) VALUES (:rechercheID, :imageID, :description);");
 
@@ -276,7 +330,18 @@ bool cRechercheList::save()
 	{
 		cRecherche*	lpRecherche	= at(x);
 
-		if(lpRecherche->id() != -1)
+		if(lpRecherche->deleted())
+		{
+			queryDelete.bindValue(":id", lpRecherche->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpRecherche);
+		}
+		else if(lpRecherche->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpRecherche->id());
 			queryUpdate.bindValue(":name", lpRecherche->name());

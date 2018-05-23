@@ -677,6 +677,33 @@ bool cStoryBook::characterInUse(cCharacter* lpCharacter)
 	return(false);
 }
 
+bool cStoryBook::placeInUse(cPlace* lpPlace)
+{
+	if(m_sceneList.find(lpPlace).count() > 0)
+		return(true);
+
+	if(m_rechercheList.find(lpPlace).count() > 0)
+		return(true);
+
+	return(false);
+}
+
+bool cStoryBook::objectInUse(cObject* lpObject)
+{
+	if(m_sceneList.find(lpObject).count() > 0)
+		return(true);
+
+	if(m_rechercheList.find(lpObject).count() > 0)
+		return(true);
+
+	return(false);
+}
+
+bool cStoryBook::rechercheInUse(cRecherche* /*lpRecherche*/)
+{
+	return(false);
+}
+
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
 	QMap<qint32, QStandardItem*>	part;
@@ -854,6 +881,9 @@ bool cStoryBook::fillPlaceList(QTreeView* lpView)
 		cPlace*					lpPlace		= m_placeList.at(x);
 		QList<QStandardItem*>	lpItems;
 
+		if(lpPlace->deleted())
+			continue;
+
 		lpItems.append(new QStandardItem(lpPlace->name()));
 		lpItems.append(new QStandardItem(lpPlace->location()));
 		lpItems.append(new QStandardItem(lpPlace->type()));
@@ -892,6 +922,9 @@ bool cStoryBook::fillObjectList(QTreeView* lpView)
 		cObject*				lpObject		= m_objectList.at(x);
 		QList<QStandardItem*>	lpItems;
 
+		if(lpObject->deleted())
+			continue;
+
 		lpItems.append(new QStandardItem(lpObject->name()));
 		lpItems.append(new QStandardItem(lpObject->type()));
 
@@ -928,6 +961,9 @@ bool cStoryBook::fillRechercheList(QTreeView* lpView)
 	{
 		cRecherche*				lpRecherche		= m_rechercheList.at(x);
 		QList<QStandardItem*>	lpItems;
+
+		if(lpRecherche->deleted())
+			continue;
 
 		lpItems.append(new QStandardItem(lpRecherche->name()));
 		lpItems.append(new QStandardItem(lpRecherche->link()));

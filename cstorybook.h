@@ -286,6 +286,33 @@ public:
 	*/
 	bool			characterInUse(cCharacter* lpCharacter);
 
+	/*!
+	 \brief
+
+	 \fn placeInUse
+	 \param lpPlace
+	 \return bool
+	*/
+	bool			placeInUse(cPlace* lpPlace);
+
+	/*!
+	 \brief
+
+	 \fn objectInUse
+	 \param lpObject
+	 \return bool
+	*/
+	bool			objectInUse(cObject* lpObject);
+
+	/*!
+	 \brief
+
+	 \fn rechercheInUse
+	 \param lpRecherche
+	 \return bool
+	*/
+	bool			rechercheInUse(cRecherche* lpRecherche);
+
 private:
 	QString			m_szProject;		/*!< TODO: describe */
 	bool			m_bIsOpen;			/*!< TODO: describe */
