@@ -16,7 +16,8 @@ cObject::cObject(qint32 iID, QObject *parent) :
 	m_iID(iID),
 	m_szName(""),
 	m_szType(""),
-	m_lpDescription(0)
+	m_lpDescription(0),
+	m_bDeleted(false)
 {
 }
 
@@ -58,6 +59,16 @@ void cObject::setDescription(cTextDocument* lpDescription)
 cTextDocument* cObject::description()
 {
 	return(m_lpDescription);
+}
+
+void cObject::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cObject::deleted()
+{
+	return(m_bDeleted);
 }
 
 void cObject::addImage(cImage* lpImage, cTextDocument* lpDescription)
@@ -170,10 +181,12 @@ bool cObjectList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE object SET name=:name, type=:type, description=:description WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO object (name, type, description) VALUES (:name, :type, :description);");
 	querySelect.prepare("SELECT id FROM object WHERE _rowid_=(SELECT MAX(_rowid_) FROM object);");
+	queryDelete.prepare("DELETE FROM object WHERE id=:id;");
 
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
@@ -185,7 +198,18 @@ bool cObjectList::save()
 	{
 		cObject*	lpObject	= at(x);
 
-		if(lpObject->id() != -1)
+		if(lpObject->deleted())
+		{
+			queryDelete.bindValue(":id", lpObject->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpObject);
+		}
+		else if(lpObject->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpObject->id());
 			queryUpdate.bindValue(":name", lpObject->name());
