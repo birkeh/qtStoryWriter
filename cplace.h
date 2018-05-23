@@ -125,6 +125,21 @@ public:
 	*/
 	QList<cImageDescription*>	images();
 
+	/*!
+	 \brief
+
+	 \fn setDeleted
+	 \param bDeleted
+	*/
+	void							setDeleted(bool bDeleted);
+	/*!
+	 \brief
+
+	 \fn deleted
+	 \return bool
+	*/
+	bool							deleted();
+
 private:
 	qint32						m_iID;				/*!< TODO: describe */
 	QString						m_szName;			/*!< TODO: describe */
@@ -132,6 +147,7 @@ private:
 	QString						m_szType;			/*!< TODO: describe */
 	cTextDocument*				m_lpDescription;	/*!< TODO: describe */
 	QList<cImageDescription*>	m_imageList;		/*!< TODO: describe */
+	bool						m_bDeleted;			/*!< TODO: describe */
 
 signals:
 

@@ -17,7 +17,8 @@ cPlace::cPlace(qint32 iID, QObject *parent) :
 	m_szName(""),
 	m_szLocation(""),
 	m_szType(""),
-	m_lpDescription(0)
+	m_lpDescription(0),
+	m_bDeleted(false)
 {
 }
 
@@ -69,6 +70,16 @@ void cPlace::setDescription(cTextDocument* lpDescription)
 cTextDocument* cPlace::description()
 {
 	return(m_lpDescription);
+}
+
+void cPlace::setDeleted(bool bDeleted)
+{
+	m_bDeleted	= bDeleted;
+}
+
+bool cPlace::deleted()
+{
+	return(m_bDeleted);
 }
 
 void cPlace::addImage(cImage* lpImage, cTextDocument* lpDescription)
@@ -182,10 +193,12 @@ bool cPlaceList::save()
 	QSqlQuery	queryUpdate;
 	QSqlQuery	queryInsert;
 	QSqlQuery	querySelect;
+	QSqlQuery	queryDelete;
 
 	queryUpdate.prepare("UPDATE place SET name=:name, location=:location, type=:type, description=:description WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO place (name, location, type, description) VALUES (:name, :location, :type, :description);");
 	querySelect.prepare("SELECT id FROM place WHERE _rowid_=(SELECT MAX(_rowid_) FROM place);");
+	queryDelete.prepare("DELETE FROM place WHERE id=:id;");
 
 	QSqlQuery	imageDelete;
 	QSqlQuery	imageAdd;
@@ -197,7 +210,18 @@ bool cPlaceList::save()
 	{
 		cPlace*	lpPlace	= at(x);
 
-		if(lpPlace->id() != -1)
+		if(lpPlace->deleted())
+		{
+			queryDelete.bindValue(":id", lpPlace->id());
+
+			if(!queryDelete.exec())
+			{
+				myDebug << queryDelete.lastError().text();
+				return(false);
+			}
+			this->removeOne(lpPlace);
+		}
+		else if(lpPlace->id() != -1)
 		{
 			queryUpdate.bindValue(":id", lpPlace->id());
 			queryUpdate.bindValue(":name", lpPlace->name());
