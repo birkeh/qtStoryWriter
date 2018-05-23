@@ -406,9 +406,27 @@ public:
 
 	 \fn find
 	 \param lpCharacter
-	 \return QList<cCharacter *>
+	 \return QList<cScene *>
 	*/
-	QList<cScene *> find(cCharacter* lpCharacter);
+	QList<cScene *>		find(cCharacter* lpCharacter);
+
+	/*!
+	 \brief
+
+	 \fn find
+	 \param lpPlace
+	 \return QList<cScene *>
+	*/
+	QList<cScene *>		find(cPlace* lpPlace);
+
+	/*!
+	 \brief
+
+	 \fn find
+	 \param lpObject
+	 \return QList<cScene *>
+	*/
+	QList<cScene *>		find(cObject* lpObject);
 
 	/*!
 	 \brief
