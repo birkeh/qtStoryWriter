@@ -15,6 +15,8 @@
 #include <QString>
 #include <QObject>
 
+#include <QStandardItem>
+
 
 /*!
  \brief
@@ -113,17 +115,32 @@ public:
 	/*!
 	 \brief
 
+	 \fn setItem
+	 \param itemList
+	*/
+	void						setItem(QList<QStandardItem*> itemList);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QList<QStandardItem*>
+	*/
+	QList<QStandardItem*>		item();
+
+	/*!
+	 \brief
+
 	 \fn setDeleted
 	 \param bDeleted
 	*/
-	void							setDeleted(bool bDeleted);
+	void						setDeleted(bool bDeleted);
 	/*!
 	 \brief
 
 	 \fn deleted
 	 \return bool
 	*/
-	bool							deleted();
+	bool						deleted();
 
 private:
 	qint32						m_iID;				/*!< TODO: describe */
@@ -131,6 +148,7 @@ private:
 	QString						m_szType;			/*!< TODO: describe */
 	cTextDocument*				m_lpDescription;	/*!< TODO: describe */
 	QList<cImageDescription*>	m_imageList;		/*!< TODO: describe */
+	QList<QStandardItem*>		m_itemList;			/*!< TODO: describe */
 	bool						m_bDeleted;			/*!< TODO: describe */
 
 signals:

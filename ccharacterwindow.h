@@ -238,6 +238,20 @@ private:
 	Ui::cCharacterWindow*	ui;				/*!< TODO: describe */
 	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
 	cCharacter*				m_lpCharacter;	/*!< TODO: describe */
+
+	/*!
+	 \brief
+
+	 \fn nameChanged
+	*/
+	void					nameChanged();
+
+	/*!
+	 \brief
+
+	 \fn genderChanged
+	*/
+	void					genderChanged();
 };
 
 #endif // CCHARACTERWINDOW_H

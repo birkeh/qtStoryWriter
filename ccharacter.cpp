@@ -345,6 +345,15 @@ cTextDocument* cCharacter::description()
 	return(m_lpDescription);
 }
 
+void cCharacter::setItem(QList<QStandardItem*> itemList)
+{
+	m_itemList	= itemList;
+}
+
+QList<QStandardItem*> cCharacter::item()
+{
+	return(m_itemList);
+}
 
 void cCharacter::setDeleted(bool bDeleted)
 {

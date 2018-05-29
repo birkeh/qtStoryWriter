@@ -12,12 +12,17 @@
 
 #include "csplashscreen.h"
 
+//#define SHOW_SPLASH
 
 int main(int argc, char *argv[])
 {
 	QApplication	a(argc, argv);
+
+#ifdef SHOW_SPLASH
 	QPixmap			pixmap(":/images/splash.png");
-//	QPixmap			pixmap(":/images/splashEmpty.png");
+#else
+	QPixmap			pixmap(":/images/splashEmpty.png");
+#endif
 	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap);
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Stingray.otf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Luna.ttf");

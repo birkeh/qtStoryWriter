@@ -61,6 +61,16 @@ cTextDocument* cRecherche::description()
 	return(m_lpDescription);
 }
 
+void cRecherche::setItem(QList<QStandardItem*> itemList)
+{
+	m_itemList	= itemList;
+}
+
+QList<QStandardItem*> cRecherche::item()
+{
+	return(m_itemList);
+}
+
 void cRecherche::setDeleted(bool bDeleted)
 {
 	m_bDeleted	= bDeleted;

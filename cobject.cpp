@@ -61,6 +61,16 @@ cTextDocument* cObject::description()
 	return(m_lpDescription);
 }
 
+void cObject::setItem(QList<QStandardItem*> itemList)
+{
+	m_itemList	= itemList;
+}
+
+QList<QStandardItem*> cObject::item()
+{
+	return(m_itemList);
+}
+
 void cObject::setDeleted(bool bDeleted)
 {
 	m_bDeleted	= bDeleted;

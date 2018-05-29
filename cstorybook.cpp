@@ -855,6 +855,7 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 		}
 
 		lpModel->appendRow(lpItems);
+		lpCharacter->setItem(lpItems);
 	}
 
 	lpView->header()->setStretchLastSection(true);
@@ -896,6 +897,7 @@ bool cStoryBook::fillPlaceList(QTreeView* lpView)
 		}
 
 		lpModel->appendRow(lpItems);
+		lpPlace->setItem(lpItems);
 	}
 
 	lpView->header()->setStretchLastSection(true);
@@ -936,6 +938,7 @@ bool cStoryBook::fillObjectList(QTreeView* lpView)
 		}
 
 		lpModel->appendRow(lpItems);
+		lpObject->setItem(lpItems);
 	}
 
 	lpView->header()->setStretchLastSection(true);
@@ -976,6 +979,7 @@ bool cStoryBook::fillRechercheList(QTreeView* lpView)
 		}
 
 		lpModel->appendRow(lpItems);
+		lpRecherche->setItem(lpItems);
 	}
 
 	lpView->header()->setStretchLastSection(true);

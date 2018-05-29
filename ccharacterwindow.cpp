@@ -201,19 +201,36 @@ cCharacter* cCharacterWindow::character()
 void cCharacterWindow::onFirstNameChanged(const QString& szText)
 {
 	m_lpCharacter->setFirstName(szText);
+
+	nameChanged();
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cCharacterWindow::onMiddleNameChanged(const QString& szText)
 {
 	m_lpCharacter->setMiddleName(szText);
+
+	nameChanged();
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cCharacterWindow::onLastNameChanged(const QString& szText)
 {
 	m_lpCharacter->setLastName(szText);
+
+	nameChanged();
+
 	m_lpMainWindow->somethingChanged();
+}
+
+void cCharacterWindow::nameChanged()
+{
+	QList<QStandardItem*>	items	= m_lpCharacter->item();
+
+	if(items.count())
+		items[0]->setText(m_lpCharacter->name());
 }
 
 void cCharacterWindow::onNickNameChanged(const QString& szText)
@@ -225,12 +242,40 @@ void cCharacterWindow::onNickNameChanged(const QString& szText)
 void cCharacterWindow::onMainCharacterClicked(bool bChecked)
 {
 	m_lpCharacter->setMainCharacter(bChecked);
+
+	QList<QStandardItem*>	items	= m_lpCharacter->item();
+
+	if(items.count())
+	{
+		QFont				font	= items[0]->font();
+
+		if(bChecked)
+		{
+			font.setBold(true);
+			font.setItalic(false);
+		}
+		else
+		{
+			font.setBold(false);
+			font.setItalic(true);
+		}
+
+		for(int x = 0;x < items.count();x++)
+			items[x]->setFont(font);
+	}
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cCharacterWindow::onCreatureChanged(const QString& szText)
 {
 	m_lpCharacter->setCreature(szText);
+
+	QList<QStandardItem*>	items	= m_lpCharacter->item();
+
+	if(items.count() >= 2)
+		items[1]->setText(szText);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -242,6 +287,8 @@ void cCharacterWindow::onGenderMaleClicked(bool /*bChecked*/)
 		m_lpCharacter->setGender(cCharacter::GENDER_female);
 	else
 		m_lpCharacter->setGender(cCharacter::GENDER_undefined);
+
+	genderChanged();
 
 	m_lpMainWindow->somethingChanged();
 }
@@ -255,6 +302,8 @@ void cCharacterWindow::onGenderFemaleClicked(bool /*bChecked*/)
 	else
 		m_lpCharacter->setGender(cCharacter::GENDER_undefined);
 
+	genderChanged();
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -267,7 +316,17 @@ void cCharacterWindow::onGenderOtherClicked(bool /*bChecked*/)
 	else
 		m_lpCharacter->setGender(cCharacter::GENDER_undefined);
 
+	genderChanged();
+
 	m_lpMainWindow->somethingChanged();
+}
+
+void cCharacterWindow::genderChanged()
+{
+	QList<QStandardItem*>	items	= m_lpCharacter->item();
+
+	if(items.count() >= 3)
+		items[2]->setText(m_lpCharacter->genderText());
 }
 
 void cCharacterWindow::onTitleChanged(const QString& szText)

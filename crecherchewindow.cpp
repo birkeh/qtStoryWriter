@@ -218,12 +218,24 @@ void cRechercheWindow::onObjectDoubleClicked(const QModelIndex& index)
 void cRechercheWindow::onNameChanged(const QString& szName)
 {
 	m_lpRecherche->setName(szName);
+
+	QList<QStandardItem*>	items	= m_lpRecherche->item();
+
+	if(items.count())
+		items[0]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cRechercheWindow::onLinkChanged(const QString& szName)
 {
 	m_lpRecherche->setLink(szName);
+
+	QList<QStandardItem*>	items	= m_lpRecherche->item();
+
+	if(items.count() >= 2)
+		items[1]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 

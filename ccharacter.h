@@ -17,6 +17,8 @@
 #include <QColor>
 #include <QObject>
 
+#include <QStandardItem>
+
 
 /*!
  \brief
@@ -479,6 +481,21 @@ public:
 	/*!
 	 \brief
 
+	 \fn setItem
+	 \param itemList
+	*/
+	void							setItem(QList<QStandardItem*> itemList);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QList<QStandardItem*>
+	*/
+	QList<QStandardItem*>			item();
+
+	/*!
+	 \brief
+
 	 \fn setDeleted
 	 \param bDeleted
 	*/
@@ -518,6 +535,7 @@ private:
 	QString							m_szJob;				/*!< TODO: describe */
 	cTextDocument*					m_lpDescription;		/*!< TODO: describe */
 	QList<cImageDescription*>		m_imageList;			/*!< TODO: describe */
+	QList<QStandardItem*>			m_itemList;				/*!< TODO: describe */
 	bool							m_bDeleted;				/*!< TODO: describe */
 signals:
 

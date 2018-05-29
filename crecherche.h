@@ -18,6 +18,8 @@
 #include <QString>
 #include <QObject>
 
+#include <QStandardItem>
+
 
 /*!
  \brief
@@ -162,6 +164,21 @@ public:
 	/*!
 	 \brief
 
+	 \fn setItem
+	 \param itemList
+	*/
+	void							setItem(QList<QStandardItem*> itemList);
+	/*!
+	 \brief
+
+	 \fn item
+	 \return QList<QStandardItem*>
+	*/
+	QList<QStandardItem*>			item();
+
+	/*!
+	 \brief
+
 	 \fn setDeleted
 	 \param bDeleted
 	*/
@@ -183,6 +200,7 @@ private:
 	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
 	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
 	QList<cPlaceDescription*>		m_placeList;		/*!< TODO: describe */
+	QList<QStandardItem*>			m_itemList;			/*!< TODO: describe */
 	bool							m_bDeleted;			/*!< TODO: describe */
 
 signals:

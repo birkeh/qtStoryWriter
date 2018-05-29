@@ -81,18 +81,36 @@ cPlace* cPlaceWindow::place()
 void cPlaceWindow::onNameChanged(const QString& szName)
 {
 	m_lpPlace->setName(szName);
+
+	QList<QStandardItem*>	items	= m_lpPlace->item();
+
+	if(items.count())
+		items[0]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPlaceWindow::onTypeChanged(const QString& szName)
 {
 	m_lpPlace->setType(szName);
+
+	QList<QStandardItem*>	items	= m_lpPlace->item();
+
+	if(items.count() >= 2)
+		items[1]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPlaceWindow::onLocationChanged(const QString& szName)
 {
 	m_lpPlace->setLocation(szName);
+
+	QList<QStandardItem*>	items	= m_lpPlace->item();
+
+	if(items.count() >= 3)
+		items[2]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 

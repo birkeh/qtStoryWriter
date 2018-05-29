@@ -76,12 +76,24 @@ cObject* cObjectWindow::object()
 void cObjectWindow::onNameChanged(const QString& szName)
 {
 	m_lpObject->setName(szName);
+
+	QList<QStandardItem*>	items	= m_lpObject->item();
+
+	if(items.count())
+		items[0]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cObjectWindow::onTypeChanged(const QString& szName)
 {
 	m_lpObject->setType(szName);
+
+	QList<QStandardItem*>	items	= m_lpObject->item();
+
+	if(items.count() >= 2)
+		items[1]->setText(szName);
+
 	m_lpMainWindow->somethingChanged();
 }
 
