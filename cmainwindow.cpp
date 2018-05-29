@@ -39,6 +39,8 @@
 
 #include <QFileDialog>
 
+#include <QDesktopServices>
+
 
 cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QWidget *parent) :
 	QMainWindow(parent),
@@ -510,6 +512,10 @@ void cMainWindow::createContextActions()
 	m_lpActionRechercheDelete = new QAction(tr("delete recherche"), this);
 	m_lpActionRechercheDelete->setStatusTip(tr("delete the recherche"));
 	connect(m_lpActionRechercheDelete, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
+
+	m_lpActionRechercheOpenLink	= new QAction(tr("open link"), this);
+	m_lpActionRechercheOpenLink->setStatusTip(tr("open the link"));
+	connect(m_lpActionRechercheOpenLink, &QAction::triggered, this, &cMainWindow::onOpenRechercheLink);
 }
 
 void cMainWindow::disableTextEdit()
@@ -1190,6 +1196,8 @@ void cMainWindow::onRechercheContextMenu(const QPoint& pos)
 		menu.addAction(m_lpActionRechercheAdd);
 		menu.addAction(m_lpActionRechercheEdit);
 		menu.addAction(m_lpActionRechercheDelete);
+		menu.addSeparator();
+		menu.addAction(m_lpActionRechercheOpenLink);
 	}
 
 	menu.exec(ui->m_lpRechercheList->mapToGlobal(pos));
@@ -2020,6 +2028,25 @@ void cMainWindow::onDeleteRecherche()
 			}
 		}
 	}
+}
+
+void cMainWindow::onOpenRechercheLink()
+{
+	QStandardItem*	lpItem		= m_lpRechercheModel->itemFromIndex(ui->m_lpRechercheList->currentIndex());
+	if(!lpItem)
+		return;
+
+	cRecherche*		lpRecherche	= qvariant_cast<cRecherche*>(lpItem->data());
+
+	if(!lpRecherche)
+		return;
+
+	QString			szLink		= lpRecherche->link();
+
+	if(szLink.isEmpty())
+		return;
+
+	QDesktopServices::openUrl(QUrl(szLink));
 }
 
 QString cMainWindow::getProjectLoadName()

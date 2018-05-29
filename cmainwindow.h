@@ -610,6 +610,13 @@ private slots:
 	*/
 	void				onDeleteRecherche();
 
+	/*!
+	 \brief
+
+	 \fn onOpenRechercheLink
+	*/
+	void				onOpenRechercheLink();
+
 private:
 	Ui::cMainWindow*	ui;										/*!< User Interface */
 
@@ -681,6 +688,7 @@ private:
 	QAction*			m_lpActionRechercheAdd;					/*!< TODO: describe */
 	QAction*			m_lpActionRechercheEdit;				/*!< TODO: describe */
 	QAction*			m_lpActionRechercheDelete;				/*!< TODO: describe */
+	QAction*			m_lpActionRechercheOpenLink;			/*!< TODO: describe */
 
 	QAction*			m_lpSeparatorRecent;
 
