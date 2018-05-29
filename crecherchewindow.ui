@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_lpTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="m_lpBasic">
       <attribute name="title">
@@ -117,25 +117,43 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="cTreeView" name="m_lpCharacterList">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="m_lpObject">
-      <attribute name="title">
-       <string>Object</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="0">
-        <widget class="cTreeView" name="m_lpObjectList">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0,0,0">
+           <item>
+            <widget class="cComboBox" name="m_lpCharacterList"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpCharacterShowDetails">
+             <property name="text">
+              <string>details...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpCaracterAdd">
+             <property name="text">
+              <string>add...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpCharacterRemove">
+             <property name="text">
+              <string>remove</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="m_lpCharacterDetails">
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -145,11 +163,85 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
-        <widget class="cTreeView" name="m_lpPlaceList">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0,0">
+           <item>
+            <widget class="cComboBox" name="m_lpPlaceList"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpPlaceShowDetails">
+             <property name="text">
+              <string>details...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpPlaceAdd">
+             <property name="text">
+              <string>add...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpPlaceRemove">
+             <property name="text">
+              <string>remove</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="m_lpPlaceDetails">
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_lpObject">
+      <attribute name="title">
+       <string>Object</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,0,0">
+           <item>
+            <widget class="cComboBox" name="m_lpObjectList"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpObjectShowDetails">
+             <property name="text">
+              <string>details...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpObjectAdd">
+             <property name="text">
+              <string>add...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_lpObjectRemove">
+             <property name="text">
+              <string>remove</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="m_lpObjectDetails"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -169,9 +261,9 @@
    <header>clineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>cTreeView</class>
-   <extends>QTreeView</extends>
-   <header>ctreeview.h</header>
+   <class>cComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ccombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -7,6 +7,8 @@
 #include "ui_cscenewindow.h"
 
 #include "ccharacterselectdialog.h"
+#include "cplaceselectdialog.h"
+#include "cobjectselectdialog.h"
 
 #include "cmainwindow.h"
 
@@ -127,72 +129,9 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	ui->m_lpTargetDate->setDateTime(lpScene->targetDate());
 	ui->m_lpText->setDocument(lpScene->text());
 
-	QList<cCharacterDescription*>	characterList	= lpScene->characterList();
-	QList<cPlaceDescription*>		placeList		= lpScene->placeList();
-	QList<cObjectDescription*>		objectList		= lpScene->objectList();
-
-	for(int x = 0;x < characterList.count();x++)
-	{
-		cCharacterDescription*	lpCharacterDescription	= characterList[x];
-		cCharacter*				lpCharacter				= lpCharacterDescription->character();
-
-		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
-		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
-		lpTextEdit->setDocument(lpCharacterDescription->description());
-		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
-
-		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
-		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
-
-		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onCharacterDescriptionChanged);
-	}
-	ui->m_lpCharacterList->setCurrentText(0);
-	ui->m_lpCharacterDetails->setCurrentIndex(0);
-
-	ui->m_lpCharacterRemove->setEnabled((characterList.count() > 0));
-	ui->m_lpCharacterShowDetails->setEnabled((characterList.count() > 0));
-
-	for(int x = 0;x < placeList.count();x++)
-	{
-		cPlaceDescription*	lpPlaceDescription	= placeList[x];
-		cPlace*				lpPlace				= lpPlaceDescription->place();
-
-		ui->m_lpPlaceList->addItem(lpPlace->name(), QVariant::fromValue(lpPlaceDescription));
-		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpPlaceDetails);
-		lpTextEdit->setDocument(lpPlaceDescription->description());
-		ui->m_lpPlaceDetails->addWidget(lpTextEdit);
-
-		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
-		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
-
-		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onPlaceDescriptionChanged);
-	}
-	ui->m_lpPlaceList->setCurrentText(0);
-	ui->m_lpPlaceDetails->setCurrentIndex(0);
-
-	ui->m_lpPlaceRemove->setEnabled((characterList.count() > 0));
-	ui->m_lpPlaceShowDetails->setEnabled((characterList.count() > 0));
-
-	for(int x = 0;x < objectList.count();x++)
-	{
-		cObjectDescription*	lpObjectDescription	= objectList[x];
-		cObject*			lpObject			= lpObjectDescription->object();
-
-		ui->m_lpObjectList->addItem(lpObject->name(), QVariant::fromValue(lpObjectDescription));
-		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpObjectDetails);
-		lpTextEdit->setDocument(lpObjectDescription->description());
-		ui->m_lpObjectDetails->addWidget(lpTextEdit);
-
-		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
-		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
-
-		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onObjectDescriptionChanged);
-	}
-	ui->m_lpObjectList->setCurrentText(0);
-	ui->m_lpObjectDetails->setCurrentIndex(0);
-
-	ui->m_lpObjectRemove->setEnabled((characterList.count() > 0));
-	ui->m_lpObjectShowDetails->setEnabled((characterList.count() > 0));
+	fillCharacterList();
+	fillPlaceList();
+	fillObjectList();
 
 	connect(ui->m_lpCharacterList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onCharacterIndexChanged);
 	connect(ui->m_lpPlaceList,			QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onPlaceIndexChanged);
@@ -360,8 +299,116 @@ void cSceneWindow::onAddCharacterToList()
 	if(!lpCharacterNew)
 		return;
 
-	m_lpScene->addCharacter(lpCharacterNew, new cTextDocument(this));
+	m_lpScene->addCharacter(lpCharacterNew, new cTextDocument);
 
+	fillCharacterList(lpCharacterNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onRemoveCharacterFromList()
+{
+	cCharacterDescription*	lpCharacterDescription	= qvariant_cast<cCharacterDescription*>(ui->m_lpCharacterList->currentData());
+
+	if(!lpCharacterDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpCharacterDescription->character()->name())) == QMessageBox::No)
+		return;
+
+	m_lpScene->removeCharacter(lpCharacterDescription);
+
+	fillCharacterList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onAddPlaceToList()
+{
+	cPlaceSelectDialog*	lpDialog	= new cPlaceSelectDialog(this);
+	lpDialog->setPlaceList(m_lpPlaceList, m_lpScene->placeList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cPlace*		lpPlaceNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpPlaceNew)
+		return;
+
+	m_lpScene->addPlace(lpPlaceNew, new cTextDocument);
+
+	fillPlaceList(lpPlaceNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onRemovePlaceFromList()
+{
+	cPlaceDescription*	lpPlaceDescription	= qvariant_cast<cPlaceDescription*>(ui->m_lpPlaceList->currentData());
+
+	if(!lpPlaceDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpPlaceDescription->place()->name())) == QMessageBox::No)
+		return;
+
+	m_lpScene->removePlace(lpPlaceDescription);
+
+	QList<cPlaceDescription*>	placeList	= m_lpScene->placeList();
+
+	fillPlaceList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onAddObjectToList()
+{
+	cObjectSelectDialog*	lpDialog	= new cObjectSelectDialog(this);
+	lpDialog->setObjectList(m_lpObjectList, m_lpScene->objectList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cObject*	lpObjectNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpObjectNew)
+		return;
+
+	m_lpScene->addObject(lpObjectNew, new cTextDocument);
+
+	fillObjectList(lpObjectNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onRemoveObjectFromList()
+{
+	cObjectDescription*	lpObjectDescription	= qvariant_cast<cObjectDescription*>(ui->m_lpObjectList->currentData());
+
+	if(!lpObjectDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpObjectDescription->object()->name())) == QMessageBox::No)
+		return;
+
+	m_lpScene->removeObject(lpObjectDescription);
+
+	fillObjectList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::fillCharacterList(cCharacter* lpCharacterNew)
+{
 	QList<cCharacterDescription*>	characterList	= m_lpScene->characterList();
 
 	ui->m_lpCharacterList->clear();
@@ -389,78 +436,83 @@ void cSceneWindow::onAddCharacterToList()
 		if(lpCharacter == lpCharacterNew)
 			index	= x;
 	}
+
 	ui->m_lpCharacterList->setCurrentIndex(index);
 	ui->m_lpCharacterDetails->setCurrentIndex(index);
 
 	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
 	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
-
-	m_lpMainWindow->somethingChanged();
 }
 
-void cSceneWindow::onRemoveCharacterFromList()
+void cSceneWindow::fillPlaceList(cPlace* lpPlaceNew)
 {
-	cCharacterDescription*	lpCharacterDescription	= qvariant_cast<cCharacterDescription*>(ui->m_lpCharacterList->currentData());
+	QList<cPlaceDescription*>	placeList	= m_lpScene->placeList();
 
-	if(!lpCharacterDescription)
-		return;
+	ui->m_lpPlaceList->clear();
 
-	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpCharacterDescription->character()->name())) == QMessageBox::No)
-		return;
+	for(int x = ui->m_lpPlaceDetails->count()-1;x >= 0;x--)
+		ui->m_lpPlaceDetails->removeWidget(ui->m_lpPlaceDetails->widget(x));
 
-	m_lpScene->removeCharacter(lpCharacterDescription);
+	qint16	index	= 0;
 
-	QList<cCharacterDescription*>	characterList	= m_lpScene->characterList();
-
-	ui->m_lpCharacterList->clear();
-
-	for(int x = ui->m_lpCharacterDetails->count()-1;x >= 0;x--)
-		ui->m_lpCharacterDetails->removeWidget(ui->m_lpCharacterDetails->widget(x));
-
-	for(int x = 0;x < characterList.count();x++)
+	for(int x = 0;x < placeList.count();x++)
 	{
-		cCharacterDescription*	lpCharacterDescription	= characterList[x];
-		cCharacter*				lpCharacter				= lpCharacterDescription->character();
+		cPlaceDescription*		lpPlaceDescription		= placeList[x];
+		cPlace*					lpPlace					= lpPlaceDescription->place();
 
-		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
-		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
-		lpTextEdit->setDocument(lpCharacterDescription->description());
-		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
+		ui->m_lpPlaceList->addItem(lpPlace->name(), QVariant::fromValue(lpPlaceDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpPlaceDetails);
+		lpTextEdit->setDocument(lpPlaceDescription->description());
+		ui->m_lpPlaceDetails->addWidget(lpTextEdit);
 
 		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
 		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
 
-		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onCharacterDescriptionChanged);
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onPlaceDescriptionChanged);
+
+		if(lpPlace == lpPlaceNew)
+			index	= x;
 	}
-	ui->m_lpCharacterList->setCurrentIndex(0);
-	ui->m_lpCharacterDetails->setCurrentIndex(0);
 
-	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
-	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
+	ui->m_lpPlaceList->setCurrentIndex(index);
+	ui->m_lpPlaceDetails->setCurrentIndex(index);
 
-	m_lpMainWindow->somethingChanged();
-}
-
-void cSceneWindow::onAddPlaceToList()
-{
 	ui->m_lpPlaceRemove->setEnabled((ui->m_lpPlaceList->count() > 0));
 	ui->m_lpPlaceShowDetails->setEnabled((ui->m_lpPlaceList->count() > 0));
 }
 
-void cSceneWindow::onRemovePlaceFromList()
+void cSceneWindow::fillObjectList(cObject* lpObjectNew)
 {
-	ui->m_lpPlaceRemove->setEnabled((ui->m_lpPlaceList->count() > 0));
-	ui->m_lpPlaceShowDetails->setEnabled((ui->m_lpPlaceList->count() > 0));
-}
+	QList<cObjectDescription*>	objectList	= m_lpScene->objectList();
 
-void cSceneWindow::onAddObjectToList()
-{
-	ui->m_lpObjectRemove->setEnabled((ui->m_lpObjectList->count() > 0));
-	ui->m_lpObjectShowDetails->setEnabled((ui->m_lpObjectList->count() > 0));
-}
+	ui->m_lpObjectList->clear();
 
-void cSceneWindow::onRemoveObjectFromList()
-{
+	for(int x = ui->m_lpObjectDetails->count()-1;x >= 0;x--)
+		ui->m_lpObjectDetails->removeWidget(ui->m_lpObjectDetails->widget(x));
+
+	qint16	index	= 0;
+
+	for(int x = 0;x < objectList.count();x++)
+	{
+		cObjectDescription*		lpObjectDescription		= objectList[x];
+		cObject*				lpObject				= lpObjectDescription->object();
+
+		ui->m_lpObjectList->addItem(lpObject->name(), QVariant::fromValue(lpObjectDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpObjectDetails);
+		lpTextEdit->setDocument(lpObjectDescription->description());
+		ui->m_lpObjectDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cSceneWindow::onObjectDescriptionChanged);
+
+		if(lpObject == lpObjectNew)
+			index	= x;
+	}
+	ui->m_lpObjectList->setCurrentIndex(index);
+	ui->m_lpObjectDetails->setCurrentIndex(index);
+
 	ui->m_lpObjectRemove->setEnabled((ui->m_lpObjectList->count() > 0));
 	ui->m_lpObjectShowDetails->setEnabled((ui->m_lpObjectList->count() > 0));
 }

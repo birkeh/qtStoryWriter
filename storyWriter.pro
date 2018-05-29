@@ -76,7 +76,9 @@ SOURCES += \
     cdatetimeedit.cpp \
     cpropertieswindow.cpp \
     ccharacterselectdialog.cpp \
-    csplashscreen.cpp
+    csplashscreen.cpp \
+    cplaceselectdialog.cpp \
+    cobjectselectdialog.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -114,7 +116,9 @@ HEADERS += \
     cdatetimeedit.h \
     cpropertieswindow.h \
     ccharacterselectdialog.h \
-    csplashscreen.h
+    csplashscreen.h \
+    cplaceselectdialog.h \
+    cobjectselectdialog.h
 
 FORMS += \
         cmainwindow.ui \
@@ -127,7 +131,9 @@ FORMS += \
     cplacewindow.ui \
     crecherchewindow.ui \
     cpropertieswindow.ui \
-    ccharacterselectdialog.ui
+    ccharacterselectdialog.ui \
+    cplaceselectdialog.ui \
+    cobjectselectdialog.ui
 
 DISTFILES += \
     Doxyfile \

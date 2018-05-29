@@ -146,6 +146,11 @@ void cScene::addObject(cObject* lpObject, cTextDocument* lpDescription)
 	m_objectList.append(new cObjectDescription(lpObject, lpDescription));
 }
 
+void cScene::removeObject(cObjectDescription* lpObject)
+{
+	m_objectList.removeOne(lpObject);
+}
+
 QList<cObjectDescription*> cScene::objectList()
 {
 	return(m_objectList);
@@ -154,6 +159,11 @@ QList<cObjectDescription*> cScene::objectList()
 void cScene::addPlace(cPlace* lpPlace, cTextDocument* lpDescription)
 {
 	m_placeList.append(new cPlaceDescription(lpPlace, lpDescription));
+}
+
+void cScene::removePlace(cPlaceDescription* lpPlace)
+{
+	m_placeList.removeOne(lpPlace);
 }
 
 QList<cPlaceDescription*> cScene::placeList()
@@ -461,9 +471,31 @@ bool cSceneList::save()
 	objectDelete.prepare("DELETE FROM sceneObject WHERE sceneID=:sceneID;");
 	objectAdd.prepare("INSERT INTO sceneObject (sceneID, objectID, description) VALUES (:sceneID, :objectID, :description);");
 
+	myDebug;
 	for(int x = 0;x < count();x++)
 	{
 		cScene*	lpScene	= at(x);
+
+		characterDelete.bindValue(":sceneID", lpScene->id());
+		if(!characterDelete.exec())
+		{
+			myDebug << characterDelete.lastError().text();
+			return(false);
+		}
+
+		placeDelete.bindValue(":sceneID", lpScene->id());
+		if(!placeDelete.exec())
+		{
+			myDebug << placeDelete.lastError().text();
+			return(false);
+		}
+
+		objectDelete.bindValue(":sceneID", lpScene->id());
+		if(!objectDelete.exec())
+		{
+			myDebug << objectDelete.lastError().text();
+			return(false);
+		}
 
 		if(lpScene->deleted())
 		{
@@ -522,13 +554,6 @@ bool cSceneList::save()
 			lpScene->setID(querySelect.value("id").toInt());
 		}
 
-		characterDelete.bindValue(":sceneID", lpScene->id());
-		if(!characterDelete.exec())
-		{
-			myDebug << characterDelete.lastError().text();
-			return(false);
-		}
-
 		QList<cCharacterDescription*>	character	= lpScene->characterList();
 
 		for(int x = 0;x < character.count();x++)
@@ -538,18 +563,12 @@ bool cSceneList::save()
 			characterAdd.bindValue(":sceneID", lpScene->id());
 			characterAdd.bindValue(":characterID", lpCharacter->character()->id());
 			characterAdd.bindValue(":description", textDocument2Blob(lpCharacter->description()));
+
 			if(!characterAdd.exec())
 			{
 				myDebug << characterAdd.lastError().text();
 				return(false);
 			}
-		}
-
-		placeDelete.bindValue(":sceneID", lpScene->id());
-		if(!placeDelete.exec())
-		{
-			myDebug << placeDelete.lastError().text();
-			return(false);
 		}
 
 		QList<cPlaceDescription*>	place	= lpScene->placeList();
@@ -561,18 +580,12 @@ bool cSceneList::save()
 			placeAdd.bindValue(":sceneID", lpScene->id());
 			placeAdd.bindValue(":placeID", lpPlace->place()->id());
 			placeAdd.bindValue(":description", textDocument2Blob(lpPlace->description()));
+
 			if(!placeAdd.exec())
 			{
 				myDebug << placeAdd.lastError().text();
 				return(false);
 			}
-		}
-
-		objectDelete.bindValue(":sceneID", lpScene->id());
-		if(!objectDelete.exec())
-		{
-			myDebug << objectDelete.lastError().text();
-			return(false);
 		}
 
 		QList<cObjectDescription*>	object	= lpScene->objectList();
@@ -584,6 +597,7 @@ bool cSceneList::save()
 			objectAdd.bindValue(":sceneID", lpScene->id());
 			objectAdd.bindValue(":objectID", lpObject->object()->id());
 			objectAdd.bindValue(":description", textDocument2Blob(lpObject->description()));
+
 			if(!objectAdd.exec())
 			{
 				myDebug << objectAdd.lastError().text();

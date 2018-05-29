@@ -91,14 +91,29 @@ void cRecherche::addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescript
 	m_characterList.append(new cCharacterDescription(lpCharacter, lpDescription));
 }
 
+void cRecherche::removeCharacter(cCharacterDescription* lpCharacter)
+{
+	m_characterList.removeOne(lpCharacter);
+}
+
 void cRecherche::addObject(cObject* lpObject, cTextDocument* lpDescription)
 {
 	m_objectList.append(new cObjectDescription(lpObject, lpDescription));
 }
 
+void cRecherche::removeObject(cObjectDescription* lpObject)
+{
+	m_objectList.removeOne(lpObject);
+}
+
 void cRecherche::addPlace(cPlace* lpPlace, cTextDocument* lpDescription)
 {
 	m_placeList.append(new cPlaceDescription(lpPlace, lpDescription));
+}
+
+void cRecherche::removePlace(cPlaceDescription* lpPlace)
+{
+	m_placeList.removeOne(lpPlace);
 }
 
 QList<cImageDescription*> cRecherche::images()
@@ -340,6 +355,34 @@ bool cRechercheList::save()
 	{
 		cRecherche*	lpRecherche	= at(x);
 
+		imageDelete.bindValue(":rechercheID", lpRecherche->id());
+		if(!imageDelete.exec())
+		{
+			myDebug << imageDelete.lastError().text();
+			return(false);
+		}
+
+		characterDelete.bindValue(":rechercheID", lpRecherche->id());
+		if(!characterDelete.exec())
+		{
+			myDebug << characterDelete.lastError().text();
+			return(false);
+		}
+
+		objectDelete.bindValue(":rechercheID", lpRecherche->id());
+		if(!objectDelete.exec())
+		{
+			myDebug << objectDelete.lastError().text();
+			return(false);
+		}
+
+		placeDelete.bindValue(":rechercheID", lpRecherche->id());
+		if(!placeDelete.exec())
+		{
+			myDebug << placeDelete.lastError().text();
+			return(false);
+		}
+
 		if(lpRecherche->deleted())
 		{
 			queryDelete.bindValue(":id", lpRecherche->id());
@@ -383,34 +426,6 @@ bool cRechercheList::save()
 			}
 			querySelect.next();
 			lpRecherche->setID(querySelect.value("id").toInt());
-		}
-
-		imageDelete.bindValue(":rechercheID", lpRecherche->id());
-		if(!imageDelete.exec())
-		{
-			myDebug << imageDelete.lastError().text();
-			return(false);
-		}
-
-		characterDelete.bindValue(":rechercheID", lpRecherche->id());
-		if(!imageDelete.exec())
-		{
-			myDebug << characterDelete.lastError().text();
-			return(false);
-		}
-
-		objectDelete.bindValue(":rechercheID", lpRecherche->id());
-		if(!imageDelete.exec())
-		{
-			myDebug << objectDelete.lastError().text();
-			return(false);
-		}
-
-		placeDelete.bindValue(":rechercheID", lpRecherche->id());
-		if(!imageDelete.exec())
-		{
-			myDebug << placeDelete.lastError().text();
-			return(false);
 		}
 
 		QList<cImageDescription*>	images	= lpRecherche->images();

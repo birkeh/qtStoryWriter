@@ -40,5 +40,6 @@ QByteArray textDocument2Blob(cTextDocument* lpTextDocument)
 		return(ba);
 
 	ba	= compressText(lpTextDocument->toHtml());
+
 	return(ba);
 }

@@ -1066,8 +1066,8 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 		}
 	}
 
-	cRechercheWindow*		lpRechercheWindow		= new cRechercheWindow(this);
-	lpRechercheWindow->setRecherche(lpRecherche);
+	cRechercheWindow*	lpRechercheWindow	= new cRechercheWindow(this);
+	lpRechercheWindow->setRecherche(lpRecherche, m_lpStoryBook->characterList(), m_lpStoryBook->placeList(), m_lpStoryBook->objectList());
 	cWidget*			lpWidget1			= new cWidget(lpRechercheWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpRechercheWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpRechercheWindow->windowTitle());

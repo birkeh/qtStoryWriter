@@ -10,52 +10,55 @@
 
 #include "cmainwindow.h"
 
+#include "ccharacterselectdialog.h"
+#include "cplaceselectdialog.h"
+#include "cobjectselectdialog.h"
+
 #include "common.h"
 
 #include <QStandardItem>
-
+#include <QMessageBox>
 
 
 cRechercheWindow::cRechercheWindow(QWidget *parent) :
 	cMDISubWindow(parent),
 	ui(new Ui::cRechercheWindow),
 	m_lpMainWindow((cMainWindow*)parent),
-	m_lpRecherche(0)
+	m_lpRecherche(0),
+	m_lpCharacterList(0),
+	m_lpPlaceList(0),
+	m_lpObjectList(0)
 {
 	ui->setupUi(this);
 
 	ui->m_lpTab->setCurrentIndex(0);
 
-	m_lpCharacterModel	= new QStandardItemModel(0, 1);
-	ui->m_lpCharacterList->setModel(m_lpCharacterModel);
+	connect(ui->m_lpName,					&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpName,					&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	m_lpPlaceModel		= new QStandardItemModel(0, 1);
-	ui->m_lpPlaceList->setModel(m_lpPlaceModel);
+	connect(ui->m_lpLink,					&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
+	connect(ui->m_lpLink,					&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
 
-	m_lpObjectModel		= new QStandardItemModel(0, 1);
-	ui->m_lpObjectList->setModel(m_lpObjectModel);
+	connect(ui->m_lpDescription,			&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
+	connect(ui->m_lpDescription,			&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 
-	connect(ui->m_lpCharacterList,	&cTreeView::doubleClicked,		this,					&cRechercheWindow::onCharacterDoubleClicked);
-	connect(ui->m_lpPlaceList,		&cTreeView::doubleClicked,		this,					&cRechercheWindow::onPlaceDoubleClicked);
-	connect(ui->m_lpObjectList,		&cTreeView::doubleClicked,		this,					&cRechercheWindow::onObjectDoubleClicked);
+	connect(ui->m_lpCharacterList,			&cComboBox::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
+	connect(ui->m_lpCharacterList,			&cComboBox::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
 
-	connect(ui->m_lpName,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
-	connect(ui->m_lpName,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+	connect(ui->m_lpPlaceList,				&cComboBox::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
+	connect(ui->m_lpPlaceList,				&cComboBox::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
 
-	connect(ui->m_lpLink,			&cLineEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditGotFocus);
-	connect(ui->m_lpLink,			&cLineEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onLineEditLostFocus);
+	connect(ui->m_lpObjectList,				&cComboBox::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxGotFocus);
+	connect(ui->m_lpObjectList,				&cComboBox::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onComboBoxLostFocus);
 
-	connect(ui->m_lpDescription,	&cTextEdit::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
-	connect(ui->m_lpDescription,	&cTextEdit::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
+	connect(ui->m_lpCaracterAdd,			&QPushButton::clicked,			this,					&cRechercheWindow::onAddCharacterToList);
+	connect(ui->m_lpCharacterRemove,		&QPushButton::clicked,			this,					&cRechercheWindow::onRemoveCharacterFromList);
 
-	connect(ui->m_lpCharacterList,	&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpCharacterList,	&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
+	connect(ui->m_lpPlaceAdd,				&QPushButton::clicked,			this,					&cRechercheWindow::onAddPlaceToList);
+	connect(ui->m_lpPlaceRemove,			&QPushButton::clicked,			this,					&cRechercheWindow::onRemovePlaceFromList);
 
-	connect(ui->m_lpObjectList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpObjectList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
-
-	connect(ui->m_lpPlaceList,		&cTreeView::gotFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewGotFocus);
-	connect(ui->m_lpPlaceList,		&cTreeView::lostFocus,			(cMainWindow*)parent,	&cMainWindow::onTreeViewLostFocus);
+	connect(ui->m_lpObjectAdd,				&QPushButton::clicked,			this,					&cRechercheWindow::onAddObjectToList);
+	connect(ui->m_lpObjectRemove,			&QPushButton::clicked,			this,					&cRechercheWindow::onRemoveObjectFromList);
 }
 
 cRechercheWindow::~cRechercheWindow()
@@ -63,9 +66,12 @@ cRechercheWindow::~cRechercheWindow()
 	delete ui;
 }
 
-void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
+void cRechercheWindow::setRecherche(cRecherche* lpRecherche, cCharacterList* lpCharacterList, cPlaceList* lpPlaceList, cObjectList* lpObjectList)
 {
-	m_lpRecherche	= lpRecherche;
+	m_lpRecherche		= lpRecherche;
+	m_lpCharacterList	= lpCharacterList;
+	m_lpPlaceList		= lpPlaceList;
+	m_lpObjectList		= lpObjectList;
 
 	ui->m_lpName->setText(lpRecherche->name());
 	ui->m_lpLink->setText(lpRecherche->link());
@@ -83,101 +89,13 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 		ui->m_lpLayout->addWidget(lpImageWidget);
 	}
 
-	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	ui->m_lpLayout->addItem(lpSpacer);
+	fillCharacterList();
+	fillPlaceList();
+	fillObjectList();
 
-	QList<cCharacterDescription*>	characterList	= lpRecherche->characterList();
-	QList<cPlaceDescription*>		placeList		= lpRecherche->placeList();
-	QList<cObjectDescription*>		objectList		= lpRecherche->objectList();
-
-	QStringList			headerLabels;
-
-	headerLabels	= QStringList() << tr("name") << tr("creature") << tr("gender") << tr("title");
-	m_lpCharacterModel->setHorizontalHeaderLabels(headerLabels);
-	for(int x = 0;x < characterList.count();x++)
-	{
-		cCharacterDescription*	lpCharacterDescription	= characterList[x];
-		cCharacter*				lpCharacter				= lpCharacterDescription->character();
-		QList<QStandardItem*>	items;
-
-		items.append(new QStandardItem(lpCharacter->name()));
-		items.append(new QStandardItem(lpCharacter->creature()));
-		items.append(new QStandardItem(lpCharacter->genderText()));
-		items.append(new QStandardItem(lpCharacter->title()));
-
-		if(lpCharacter->mainCharacter())
-		{
-			QFont	font	= items[0]->font();
-			font.setBold(true);
-
-			for(int y = 0;y < headerLabels.count();y++)
-				items[y]->setFont(font);
-		}
-
-		for(int y = 0;y < headerLabels.count();y++)
-		{
-			items[y]->setData(QVariant::fromValue(lpCharacter));
-			items[y]->setToolTip(lpCharacter->description()->toPlainText());
-		}
-
-		m_lpCharacterModel->appendRow(items);
-	}
-
-	ui->m_lpCharacterList->header()->setStretchLastSection(true);
-
-	for(int i = 0;i < headerLabels.count();i++)
-		ui->m_lpCharacterList->resizeColumnToContents(i);
-
-	headerLabels	= QStringList() << tr("name") << tr("location") << tr("type");
-	m_lpPlaceModel->setHorizontalHeaderLabels(headerLabels);
-	for(int x = 0;x < placeList.count();x++)
-	{
-		cPlaceDescription*		lpPlaceDescription	= placeList[x];
-		cPlace*					lpPlace				= lpPlaceDescription->place();
-		QList<QStandardItem*>	items;
-
-		items.append(new QStandardItem(lpPlace->name()));
-		items.append(new QStandardItem(lpPlace->location()));
-		items.append(new QStandardItem(lpPlace->type()));
-
-		for(int y = 0;y < headerLabels.count();y++)
-		{
-			items[y]->setData(QVariant::fromValue(lpPlace));
-			items[y]->setToolTip(lpPlace->description()->toPlainText());
-		}
-
-		m_lpPlaceModel->appendRow(items);
-	}
-
-	ui->m_lpPlaceList->header()->setStretchLastSection(true);
-
-	for(int i = 0;i < headerLabels.count();i++)
-		ui->m_lpPlaceList->resizeColumnToContents(i);
-
-	headerLabels	= QStringList() << tr("name") << tr("type");
-	m_lpObjectModel->setHorizontalHeaderLabels(headerLabels);
-	for(int x = 0;x < objectList.count();x++)
-	{
-		cObjectDescription*		lpObjectDescription	= objectList[x];
-		cObject*				lpObject			= lpObjectDescription->object();
-		QList<QStandardItem*>	items;
-
-		items.append(new QStandardItem(lpObject->name()));
-		items.append(new QStandardItem(lpObject->type()));
-
-		for(int y = 0;y < headerLabels.count();y++)
-		{
-			items[y]->setData(QVariant::fromValue(lpObject));
-			items[y]->setToolTip(lpObject->description()->toPlainText());
-		}
-
-		m_lpObjectModel->appendRow(items);
-	}
-
-	ui->m_lpObjectList->header()->setStretchLastSection(true);
-
-	for(int i = 0;i < headerLabels.count();i++)
-		ui->m_lpObjectList->resizeColumnToContents(i);
+	connect(ui->m_lpCharacterList,	QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cRechercheWindow::onCharacterIndexChanged);
+	connect(ui->m_lpPlaceList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cRechercheWindow::onPlaceIndexChanged);
+	connect(ui->m_lpObjectList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cRechercheWindow::onObjectIndexChanged);
 
 	setWindowTitle(tr("[recherche] - ") + lpRecherche->name());
 
@@ -189,30 +107,6 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche)
 cRecherche* cRechercheWindow::recherche()
 {
 	return(m_lpRecherche);
-}
-
-void cRechercheWindow::onCharacterDoubleClicked(const QModelIndex& index)
-{
-	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(index);
-	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
-	if(lpCharacter)
-		showCharacterWindow(lpCharacter);
-}
-
-void cRechercheWindow::onPlaceDoubleClicked(const QModelIndex& index)
-{
-	QStandardItem*	lpItem		= m_lpPlaceModel->itemFromIndex(index);
-	cPlace*			lpPlace		= qvariant_cast<cPlace*>(lpItem->data());
-	if(lpPlace)
-		showPlaceWindow(lpPlace);
-}
-
-void cRechercheWindow::onObjectDoubleClicked(const QModelIndex& index)
-{
-	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(index);
-	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
-	if(lpObject)
-		showObjectWindow(lpObject);
 }
 
 void cRechercheWindow::onNameChanged(const QString& szName)
@@ -242,4 +136,267 @@ void cRechercheWindow::onLinkChanged(const QString& szName)
 void cRechercheWindow::onDescriptionChanged()
 {
 	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onCharacterIndexChanged(int index)
+{
+	ui->m_lpCharacterDetails->setCurrentIndex(index);
+}
+
+void cRechercheWindow::onPlaceIndexChanged(int index)
+{
+	ui->m_lpPlaceDetails->setCurrentIndex(index);
+}
+
+void cRechercheWindow::onObjectIndexChanged(int index)
+{
+	ui->m_lpObjectDetails->setCurrentIndex(index);
+}
+
+void cRechercheWindow::onCharacterDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onPlaceDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onObjectDescriptionChanged()
+{
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onAddCharacterToList()
+{
+	cCharacterSelectDialog*	lpDialog	= new cCharacterSelectDialog(this);
+	lpDialog->setCharacterList(m_lpCharacterList, m_lpRecherche->characterList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cCharacter*	lpCharacterNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpCharacterNew)
+		return;
+
+	m_lpRecherche->addCharacter(lpCharacterNew, new cTextDocument);
+
+	fillCharacterList(lpCharacterNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onRemoveCharacterFromList()
+{
+	cCharacterDescription*	lpCharacterDescription	= qvariant_cast<cCharacterDescription*>(ui->m_lpCharacterList->currentData());
+
+	if(!lpCharacterDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpCharacterDescription->character()->name())) == QMessageBox::No)
+		return;
+
+	m_lpRecherche->removeCharacter(lpCharacterDescription);
+
+	fillCharacterList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onAddPlaceToList()
+{
+	cPlaceSelectDialog*	lpDialog	= new cPlaceSelectDialog(this);
+	lpDialog->setPlaceList(m_lpPlaceList, m_lpRecherche->placeList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cPlace*		lpPlaceNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpPlaceNew)
+		return;
+
+	m_lpRecherche->addPlace(lpPlaceNew, new cTextDocument);
+
+	fillPlaceList(lpPlaceNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onRemovePlaceFromList()
+{
+	cPlaceDescription*	lpPlaceDescription	= qvariant_cast<cPlaceDescription*>(ui->m_lpPlaceList->currentData());
+
+	if(!lpPlaceDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpPlaceDescription->place()->name())) == QMessageBox::No)
+		return;
+
+	m_lpRecherche->removePlace(lpPlaceDescription);
+
+	fillPlaceList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onAddObjectToList()
+{
+	cObjectSelectDialog*	lpDialog	= new cObjectSelectDialog(this);
+	lpDialog->setObjectList(m_lpObjectList, m_lpRecherche->objectList());
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	cObject*	lpObjectNew	= lpDialog->selected();
+	delete lpDialog;
+
+	if(!lpObjectNew)
+		return;
+
+	m_lpRecherche->addObject(lpObjectNew, new cTextDocument);
+
+	fillObjectList(lpObjectNew);
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::onRemoveObjectFromList()
+{
+	cObjectDescription*	lpObjectDescription	= qvariant_cast<cObjectDescription*>(ui->m_lpObjectList->currentData());
+
+	if(!lpObjectDescription)
+		return;
+
+	if(QMessageBox::question(this, "Scene", QString(tr("Do you want to delete \"%1\" from list?")).arg(lpObjectDescription->object()->name())) == QMessageBox::No)
+		return;
+
+	m_lpRecherche->removeObject(lpObjectDescription);
+
+	fillObjectList();
+
+	m_lpMainWindow->somethingChanged();
+}
+
+void cRechercheWindow::fillCharacterList(cCharacter* lpCharacterNew)
+{
+	QList<cCharacterDescription*>	characterList	= m_lpRecherche->characterList();
+
+	ui->m_lpCharacterList->clear();
+
+	for(int x = ui->m_lpCharacterDetails->count()-1;x >= 0;x--)
+		ui->m_lpCharacterDetails->removeWidget(ui->m_lpCharacterDetails->widget(x));
+
+	qint16	index	= 0;
+
+	for(int x = 0;x < characterList.count();x++)
+	{
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
+
+		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
+		lpTextEdit->setDocument(lpCharacterDescription->description());
+		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cRechercheWindow::onCharacterDescriptionChanged);
+
+		if(lpCharacter == lpCharacterNew)
+			index	= x;
+	}
+
+	ui->m_lpCharacterList->setCurrentIndex(index);
+	ui->m_lpCharacterDetails->setCurrentIndex(index);
+
+	ui->m_lpCharacterRemove->setEnabled((ui->m_lpCharacterList->count() > 0));
+	ui->m_lpCharacterShowDetails->setEnabled((ui->m_lpCharacterList->count() > 0));
+}
+
+void cRechercheWindow::fillPlaceList(cPlace* lpPlaceNew)
+{
+	QList<cPlaceDescription*>	placeList	= m_lpRecherche->placeList();
+
+	ui->m_lpPlaceList->clear();
+
+	for(int x = ui->m_lpPlaceDetails->count()-1;x >= 0;x--)
+		ui->m_lpPlaceDetails->removeWidget(ui->m_lpPlaceDetails->widget(x));
+
+	qint16	index	= 0;
+
+	for(int x = 0;x < placeList.count();x++)
+	{
+		cPlaceDescription*		lpPlaceDescription		= placeList[x];
+		cPlace*					lpPlace					= lpPlaceDescription->place();
+
+		ui->m_lpPlaceList->addItem(lpPlace->name(), QVariant::fromValue(lpPlaceDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpPlaceDetails);
+		lpTextEdit->setDocument(lpPlaceDescription->description());
+		ui->m_lpPlaceDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cRechercheWindow::onPlaceDescriptionChanged);
+
+		if(lpPlace == lpPlaceNew)
+			index	= x;
+	}
+
+	ui->m_lpPlaceList->setCurrentIndex(index);
+	ui->m_lpPlaceDetails->setCurrentIndex(index);
+
+	ui->m_lpPlaceRemove->setEnabled((ui->m_lpPlaceList->count() > 0));
+	ui->m_lpPlaceShowDetails->setEnabled((ui->m_lpPlaceList->count() > 0));
+}
+
+void cRechercheWindow::fillObjectList(cObject* lpObjectNew)
+{
+	QList<cObjectDescription*>	objectList	= m_lpRecherche->objectList();
+
+	ui->m_lpObjectList->clear();
+
+	for(int x = ui->m_lpObjectDetails->count()-1;x >= 0;x--)
+		ui->m_lpObjectDetails->removeWidget(ui->m_lpObjectDetails->widget(x));
+
+	qint16	index	= 0;
+
+	for(int x = 0;x < objectList.count();x++)
+	{
+		cObjectDescription*		lpObjectDescription		= objectList[x];
+		cObject*				lpObject				= lpObjectDescription->object();
+
+		ui->m_lpObjectList->addItem(lpObject->name(), QVariant::fromValue(lpObjectDescription));
+		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpObjectDetails);
+		lpTextEdit->setDocument(lpObjectDescription->description());
+		ui->m_lpObjectDetails->addWidget(lpTextEdit);
+
+		connect(lpTextEdit,	&cTextEdit::gotFocus,		m_lpMainWindow,	&cMainWindow::onTextEditGotFocus);
+		connect(lpTextEdit,	&cTextEdit::lostFocus,		m_lpMainWindow,	&cMainWindow::onTextEditLostFocus);
+
+		connect(lpTextEdit,	&cTextEdit::textChanged,	this,			&cRechercheWindow::onObjectDescriptionChanged);
+
+		if(lpObject == lpObjectNew)
+			index	= x;
+	}
+	ui->m_lpObjectList->setCurrentIndex(index);
+	ui->m_lpObjectDetails->setCurrentIndex(index);
+
+	ui->m_lpObjectRemove->setEnabled((ui->m_lpObjectList->count() > 0));
+	ui->m_lpObjectShowDetails->setEnabled((ui->m_lpObjectList->count() > 0));
 }

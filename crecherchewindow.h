@@ -45,7 +45,7 @@ public:
 	 \fn setRecherche
 	 \param lpRecherche
 	*/
-	void					setRecherche(cRecherche* lpRecherche);
+	void					setRecherche(cRecherche* lpRecherche, cCharacterList* lpCharacterList, cPlaceList* lpPlaceList, cObjectList* lpObjectList);
 	/*!
 	 \brief
 
@@ -54,28 +54,30 @@ public:
 	*/
 	cRecherche*				recherche();
 
+private:
+	/*!
+	 \brief
+
+	 \fn fillCharacterList
+	 \param bSelectFirst
+	*/
+	void					fillCharacterList(cCharacter* lpCharacterNew = 0);
+	/*!
+	 \brief
+
+	 \fn fillPlaceList
+	 \param bSelectFirst
+	*/
+	void					fillPlaceList(cPlace* lpPlaceNew = 0);
+	/*!
+	 \brief
+
+	 \fn fillObjectList
+	 \param bSelectFirst
+	*/
+	void					fillObjectList(cObject* lpObjectNew = 0);
+
 private slots:
-	/*!
-	 \brief
-
-	 \fn onCharacterDoubleClicked
-	 \param index
-	*/
-	void					onCharacterDoubleClicked(const QModelIndex& index);
-	/*!
-	 \brief
-
-	 \fn onPlaceDoubleClicked
-	 \param index
-	*/
-	void					onPlaceDoubleClicked(const QModelIndex& index);
-	/*!
-	 \brief
-
-	 \fn onObjectDoubleClicked
-	 \param index
-	*/
-	void					onObjectDoubleClicked(const QModelIndex& index);
 
 	/*!
 	 \brief
@@ -97,6 +99,88 @@ private slots:
 	 \fn onDescriptionChanged
 	*/
 	void					onDescriptionChanged();
+
+	/*!
+	 \brief
+
+	 \fn onCharacterDescriptionChanged
+	*/
+	void					onCharacterDescriptionChanged();
+
+	/*!
+	 \brief
+
+	 \fn onPlaceDescriptionChanged
+	*/
+	void					onPlaceDescriptionChanged();
+
+	/*!
+	 \brief
+
+	 \fn onPlaceDescriptionChanged
+	*/
+	void					onObjectDescriptionChanged();
+
+	/*!
+	 \brief
+
+	 \fn onCharacterIndexChanged
+	 \param index
+	*/
+	void					onCharacterIndexChanged(int index);
+	/*!
+	 \brief
+
+	 \fn onPlaceIndexChanged
+	 \param index
+	*/
+	void					onPlaceIndexChanged(int index);
+	/*!
+	 \brief
+
+	 \fn onObjectIndexChanged
+	 \param index
+	*/
+	void					onObjectIndexChanged(int index);
+
+	/*!
+	 \brief
+
+	 \fn onAddCharacterToList
+	*/
+	void					onAddCharacterToList();
+	/*!
+	 \brief
+
+	 \fn onRemoveCharacterFromList
+	*/
+	void					onRemoveCharacterFromList();
+
+	/*!
+	 \brief
+
+	 \fn onAddPlaceToList
+	*/
+	void					onAddPlaceToList();
+	/*!
+	 \brief
+
+	 \fn onRemovePlaceFromList
+	*/
+	void					onRemovePlaceFromList();
+
+	/*!
+	 \brief
+
+	 \fn onAddObjectToList
+	*/
+	void					onAddObjectToList();
+	/*!
+	 \brief
+
+	 \fn onRemoveObjectFromList
+	*/
+	void					onRemoveObjectFromList();
 
 signals:
 	/*!
@@ -124,10 +208,10 @@ signals:
 private:
 	Ui::cRechercheWindow*	ui;					/*!< TODO: describe */
 	cMainWindow*			m_lpMainWindow;		/*!< TODO: describe */
-	QStandardItemModel*		m_lpCharacterModel;	/*!< TODO: describe */
-	QStandardItemModel*		m_lpPlaceModel;		/*!< TODO: describe */
-	QStandardItemModel*		m_lpObjectModel;	/*!< TODO: describe */
 	cRecherche*				m_lpRecherche;		/*!< TODO: describe */
+	cCharacterList*			m_lpCharacterList;	/*!< TODO: describe */
+	cPlaceList*				m_lpPlaceList;		/*!< TODO: describe */
+	cObjectList*			m_lpObjectList;		/*!< TODO: describe */
 };
 
 #endif // CRECHERCHEWINDOW_H

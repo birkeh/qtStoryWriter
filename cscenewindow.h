@@ -56,6 +56,29 @@ public:
 	*/
 	cScene*				scene();
 
+private:
+	/*!
+	 \brief
+
+	 \fn fillCharacterList
+	 \param bSelectFirst
+	*/
+	void				fillCharacterList(cCharacter* lpCharacterNew = 0);
+	/*!
+	 \brief
+
+	 \fn fillPlaceList
+	 \param bSelectFirst
+	*/
+	void				fillPlaceList(cPlace* lpPlaceNew = 0);
+	/*!
+	 \brief
+
+	 \fn fillObjectList
+	 \param bSelectFirst
+	*/
+	void				fillObjectList(cObject* lpObjectNew = 0);
+
 private slots:
 	/*!
 	 \brief

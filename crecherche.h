@@ -118,6 +118,21 @@ public:
 	/*!
 	 \brief
 
+	 \fn removeCharacter
+	 \param lpCharacter
+	*/
+	void							removeCharacter(cCharacterDescription* lpCharacter);
+	/*!
+	 \brief
+
+	 \fn characterList
+	 \return QList<cCharacter *>
+	*/
+	QList<cCharacterDescription*>	characterList();
+
+	/*!
+	 \brief
+
 	 \fn addObject
 	 \param lpObject
 	 \param lpDescription
@@ -126,11 +141,40 @@ public:
 	/*!
 	 \brief
 
+	 \fn removeObject
+	 \param lpObject
+	*/
+	void							removeObject(cObjectDescription* lpObject);
+	/*!
+	 \brief
+
+	 \fn objectList
+	 \return QList<cObject *>
+	*/
+	QList<cObjectDescription*>		objectList();
+
+	/*!
+	 \brief
+
 	 \fn addPlace
 	 \param lpPlace
 	 \param lpDescription
 	*/
 	void							addPlace(cPlace* lpPlace, cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn removePlace
+	 \param lpPlace
+	*/
+	void							removePlace(cPlaceDescription* lpPlace);
+	/*!
+	 \brief
+
+	 \fn placeList
+	 \return QList<cPlace *>
+	*/
+	QList<cPlaceDescription*>		placeList();
 
 	/*!
 	 \brief
@@ -139,27 +183,6 @@ public:
 	 \return QList<cImageDescription *>
 	*/
 	QList<cImageDescription*>		images();
-	/*!
-	 \brief
-
-	 \fn characterList
-	 \return QList<cCharacterDescription *>
-	*/
-	QList<cCharacterDescription*>	characterList();
-	/*!
-	 \brief
-
-	 \fn objectList
-	 \return QList<cObjectDescription *>
-	*/
-	QList<cObjectDescription*>		objectList();
-	/*!
-	 \brief
-
-	 \fn placeList
-	 \return QList<cPlaceDescription *>
-	*/
-	QList<cPlaceDescription*>		placeList();
 
 	/*!
 	 \brief

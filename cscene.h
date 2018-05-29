@@ -215,9 +215,8 @@ public:
 	/*!
 	 \brief
 
-	 \fn addCharacter
+	 \fn removeCharacter
 	 \param lpCharacter
-	 \param lpDescription
 	*/
 	void							removeCharacter(cCharacterDescription* lpCharacter);
 	/*!
@@ -239,6 +238,13 @@ public:
 	/*!
 	 \brief
 
+	 \fn removeObject
+	 \param lpObject
+	*/
+	void							removeObject(cObjectDescription* lpObject);
+	/*!
+	 \brief
+
 	 \fn objectList
 	 \return QList<cObject *>
 	*/
@@ -252,6 +258,13 @@ public:
 	 \param lpDescription
 	*/
 	void							addPlace(cPlace* lpPlace, cTextDocument* lpDescription);
+	/*!
+	 \brief
+
+	 \fn removePlace
+	 \param lpPlace
+	*/
+	void							removePlace(cPlaceDescription* lpPlace);
 	/*!
 	 \brief
 
