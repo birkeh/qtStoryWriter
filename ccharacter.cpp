@@ -365,12 +365,12 @@ bool cCharacter::deleted()
 	return(m_bDeleted);
 }
 
-void cCharacter::addImage(cImage* lpImage, cTextDocument* lpDescription)
+void cCharacter::addImage(cImage* lpImage)
 {
-	m_imageList.append(new cImageDescription(lpImage, lpDescription));
+	m_imageList.append(lpImage);
 }
 
-QList<cImageDescription *> cCharacter::images()
+QList<cImage*> cCharacter::images()
 {
 	return(m_imageList);
 }
@@ -429,7 +429,7 @@ cCharacter* cCharacterList::find(const qint32& iID)
 	return(0);
 }
 
-bool cCharacterList::load(cImageList *lpImageList)
+bool cCharacterList::load()
 {
 	QSqlQuery	query;
 
@@ -470,7 +470,7 @@ bool cCharacterList::load(cImageList *lpImageList)
 		lpCharacter->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 	}
 
-	query.prepare("SELECT characterID, imageID, description FROM characterImage;");
+	query.prepare("SELECT characterID, name, image, description FROM characterImage;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -482,9 +482,11 @@ bool cCharacterList::load(cImageList *lpImageList)
 		cCharacter*	lpCharacter	= find(query.value("characterID").toInt());
 		if(lpCharacter)
 		{
-			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
-			if(lpImage)
-				lpCharacter->addImage(lpImage, blob2TextDocument(query.value("description").toByteArray()));
+			cImage*	lpImage	= new cImage;
+			lpImage->setName(query.value("name").toString());
+			lpImage->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+			lpImage->setImage(blob2Image(query.value("image").toByteArray()));
+			lpCharacter->addImage(lpImage);
 		}
 	}
 
@@ -507,7 +509,7 @@ bool cCharacterList::save()
 	QSqlQuery	imageAdd;
 
 	imageDelete.prepare("DELETE FROM characterImage WHERE characterID=:characterID;");
-	imageAdd.prepare("INSERT INTO characterImage (characterID, imageID, description) VALUES (:characterID, :imageID, :description);");
+	imageAdd.prepare("INSERT INTO characterImage (characterID, name, description, image) VALUES (:characterID, :name, :description, :image);");
 
 	for(int x = 0;x < count();x++)
 	{
@@ -607,15 +609,16 @@ bool cCharacterList::save()
 			return(false);
 		}
 
-		QList<cImageDescription*>	images	= lpCharacter->images();
+		QList<cImage*>	images	= lpCharacter->images();
 
 		for(int x = 0;x < images.count();x++)
 		{
-			cImageDescription*	lpImage	= images.at(x);
+			cImage*		lpImage	= images.at(x);
 
 			imageAdd.bindValue(":characterID", lpCharacter->id());
-			imageAdd.bindValue(":imageID", lpImage->image()->id());
+			imageAdd.bindValue(":name", lpImage->name());
 			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
 			if(!imageAdd.exec())
 			{
 				myDebug << imageAdd.lastError().text();

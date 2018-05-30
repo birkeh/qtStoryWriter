@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QByteArray>
+#include <QPixmap>
 
 #include <QDebug>
 
@@ -38,6 +39,22 @@ QString			uncompressText(const QByteArray& compressed);
  \return QByteArray
 */
 QByteArray		compressText(const QString& uncompressed);
+/*!
+ \brief
+
+ \fn blob2Image
+ \param ba
+ \return QPixmap
+*/
+QPixmap			blob2Image(const QByteArray& ba);
+/*!
+ \brief
+
+ \fn image2Blob
+ \param image
+ \return QByteArray
+*/
+QByteArray		image2Blob(const QPixmap& image);
 /*!
  \brief
 

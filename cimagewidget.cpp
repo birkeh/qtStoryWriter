@@ -27,10 +27,9 @@ cImageWidget::~cImageWidget()
 	delete ui;
 }
 
-void cImageWidget::setValues(const QString &szName, const QString &szType, cTextDocument* lpDocument, const QPixmap &pixmap)
+void cImageWidget::setValues(const QString &szName, cTextDocument* lpDocument, const QPixmap &pixmap)
 {
 	ui->m_lpName->setTitle(szName);
-	ui->m_lpType->setText(szType);
 	ui->m_lpDescription->setDocument(lpDocument);
 	if(pixmap.width() > 200)
 		ui->m_lpImage->setPixmap(pixmap.scaled(200, 9999, Qt::KeepAspectRatio));

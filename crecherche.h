@@ -106,7 +106,7 @@ public:
 	 \param lpImage
 	 \param lpDescription
 	*/
-	void							addImage(cImage* lpImage, cTextDocument* lpDescription);
+	void							addImage(cImage* lpImage);
 	/*!
 	 \brief
 
@@ -180,9 +180,9 @@ public:
 	 \brief
 
 	 \fn images
-	 \return QList<cImageDescription *>
+	 \return QList<cImage *>
 	*/
-	QList<cImageDescription*>		images();
+	QList<cImage*>					images();
 
 	/*!
 	 \brief
@@ -219,7 +219,7 @@ private:
 	QString							m_szName;			/*!< TODO: describe */
 	QString							m_szLink;			/*!< TODO: describe */
 	cTextDocument*					m_lpDescription;	/*!< TODO: describe */
-	QList<cImageDescription*>		m_imageList;		/*!< TODO: describe */
+	QList<cImage*>					m_imageList;		/*!< TODO: describe */
 	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
 	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
 	QList<cPlaceDescription*>		m_placeList;		/*!< TODO: describe */
@@ -251,7 +251,7 @@ public:
 	 \param lpPlaceList
 	 \return bool
 	*/
-	bool				load(cImageList* lpImageList, cCharacterList* lpCharacterList, cObjectList* lpObjectList, cPlaceList* lpPlaceList);
+	bool				load(cCharacterList* lpCharacterList, cObjectList* lpObjectList, cPlaceList* lpPlaceList);
 	/*!
 	 \brief
 

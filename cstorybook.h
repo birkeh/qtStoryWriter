@@ -325,7 +325,6 @@ private:
 	cPlaceList		m_placeList;		/*!< TODO: describe */
 	cObjectList		m_objectList;		/*!< TODO: describe */
 	cRechercheList	m_rechercheList;	/*!< TODO: describe */
-	cImageList		m_imageList;		/*!< TODO: describe */
 
 	/*!
 	 \brief
@@ -406,13 +405,6 @@ private:
 	 \return bool
 	*/
 	bool			loadRechercheList();
-	/*!
-	 \brief
-
-	 \fn loadImageList
-	 \return bool
-	*/
-	bool			loadImageList();
 
 	/*!
 	 \brief

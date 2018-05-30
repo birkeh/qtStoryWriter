@@ -41,9 +41,6 @@ cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	if(!openDatabase())
 		return;
 
-	if(!loadImageList())
-		return;
-
 	if(!loadCharacterList())
 		return;
 
@@ -83,9 +80,6 @@ bool cStoryBook::save()
 		return(false);
 
 	if(!m_db.isOpen())
-		return(false);
-
-	if(!saveImageList())
 		return(false);
 
 	if(!saveCharacterList())
@@ -132,9 +126,6 @@ bool cStoryBook::saveAs(const QString& szProject)
 
 	if(!openDatabase())
 		return(false);
-
-	for(int x = 0;x < m_imageList.count();x++)
-		m_imageList.at(x)->setID(-1);
 
 	for(int x = 0;x < m_characterList.count();x++)
 		m_characterList.at(x)->setID(-1);
@@ -283,15 +274,6 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE characterImage ( "
 					"    characterID INTEGER REFERENCES character (id), "
-					"    imageID     INTEGER REFERENCES image (id), "
-					"    description BLOB "
-					"); "))
-		return(false);
-
-	if(!createTable("CREATE TABLE image ( "
-					"    id          INTEGER PRIMARY KEY AUTOINCREMENT "
-					"                        UNIQUE, "
-					"    type        TEXT, "
 					"    name        TEXT, "
 					"    description BLOB, "
 					"    image       BLOB "
@@ -309,8 +291,9 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE objectImage ( "
 					"    objectID INTEGER REFERENCES object (id), "
-					"    imageID  INTEGER REFERENCES image (id), "
-					"    description BLOB "
+					"    name        TEXT, "
+					"    description BLOB, "
+					"    image       BLOB "
 					"); "))
 		return(false);
 
@@ -336,8 +319,9 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE placeImage ( "
 					"    placeID INTEGER REFERENCES place (id), "
-					"    imageID INTEGER REFERENCES image (id), "
-					"    description BLOB "
+					"    name        TEXT, "
+					"    description BLOB, "
+					"    image       BLOB "
 					"); "))
 		return(false);
 
@@ -359,8 +343,9 @@ bool cStoryBook::createDatabase()
 
 	if(!createTable("CREATE TABLE rechercheImage ( "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
-					"    imageID     INTEGER REFERENCES image (id), "
-					"    description BLOB "
+					"    name        TEXT, "
+					"    description BLOB, "
+					"    image       BLOB "
 					"); "))
 		return(false);
 
@@ -449,27 +434,22 @@ bool cStoryBook::loadSceneList()
 
 bool cStoryBook::loadCharacterList()
 {
-	return(m_characterList.load(&m_imageList));
+	return(m_characterList.load());
 }
 
 bool cStoryBook::loadPlaceList()
 {
-	return(m_placeList.load(&m_imageList));
+	return(m_placeList.load());
 }
 
 bool cStoryBook::loadObjectList()
 {
-	return(m_objectList.load(&m_imageList));
+	return(m_objectList.load());
 }
 
 bool cStoryBook::loadRechercheList()
 {
-	return(m_rechercheList.load(&m_imageList, &m_characterList, &m_objectList, &m_placeList));
-}
-
-bool cStoryBook::loadImageList()
-{
-	return(m_imageList.load());
+	return(m_rechercheList.load(&m_characterList, &m_objectList, &m_placeList));
 }
 
 bool cStoryBook::saveBook()
@@ -510,11 +490,6 @@ bool cStoryBook::saveObjectList()
 bool cStoryBook::saveRechercheList()
 {
 	return(m_rechercheList.save());
-}
-
-bool cStoryBook::saveImageList()
-{
-	return(m_imageList.save());
 }
 
 QString cStoryBook::title()

@@ -77,15 +77,14 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche, cCharacterList* lpC
 	ui->m_lpLink->setText(lpRecherche->link());
 	ui->m_lpDescription->setDocument(lpRecherche->description());
 
-	QList<cImageDescription*>	images	= lpRecherche->images();
+	QList<cImage*>	images	= lpRecherche->images();
 	for(int x = 0;x < images.count();x++)
 	{
-		cImageDescription*	lpImageDescription	= images[x];
-		cImage*				lpImage				= lpImageDescription->image();
+		cImage*				lpImage				= images[x];
 		QPixmap				pixmap				= lpImage->image();
 		cImageWidget*		lpImageWidget		= new cImageWidget;
 
-		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);
+		lpImageWidget->setValues(lpImage->name(), lpImage->description(), pixmap);
 		ui->m_lpLayout->addWidget(lpImageWidget);
 	}
 

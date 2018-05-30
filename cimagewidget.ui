@@ -19,13 +19,10 @@
      <property name="title">
       <string>GroupBox</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="1">
-         <widget class="cTextEdit" name="m_lpDescription"/>
-        </item>
-        <item row="0" column="0" rowspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
          <widget class="QLabel" name="m_lpImage">
           <property name="frameShape">
            <enum>QFrame::Box</enum>
@@ -38,12 +35,8 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="m_lpType">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
+        <item>
+         <widget class="cTextEdit" name="m_lpDescription"/>
         </item>
        </layout>
       </item>

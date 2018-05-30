@@ -45,11 +45,10 @@ public:
 
 	 \fn setValues
 	 \param szName
-	 \param szType
 	 \param lpDocument
 	 \param pixmap
 	*/
-	void				setValues(const QString& szName, const QString& szType, cTextDocument* lpDocument, const QPixmap& pixmap);
+	void				setValues(const QString& szName, cTextDocument* lpDocument, const QPixmap& pixmap);
 private:
 	Ui::cImageWidget*	ui; /*!< TODO: describe */
 };

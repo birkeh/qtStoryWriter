@@ -46,15 +46,14 @@ void cObjectWindow::setObject(cObject* lpObject)
 	ui->m_lpType->setText(lpObject->type());
 	ui->m_lpDescription->setDocument(lpObject->description());
 
-	QList<cImageDescription*>	images	= lpObject->images();
+	QList<cImage*>	images	= lpObject->images();
 	for(int x = 0;x < images.count();x++)
 	{
-		cImageDescription*	lpImageDescription	= images[x];
-		cImage*				lpImage				= lpImageDescription->image();
+		cImage*				lpImage				= images[x];
 		QPixmap				pixmap				= lpImage->image();
 		cImageWidget*		lpImageWidget		= new cImageWidget;
 
-		lpImageWidget->setValues(lpImage->name(), lpImage->type(), lpImage->description(), pixmap);
+		lpImageWidget->setValues(lpImage->name(), lpImage->description(), pixmap);
 		ui->m_lpLayout->addWidget(lpImageWidget);
 	}
 

@@ -469,14 +469,14 @@ public:
 	 \fn addImage
 	 \param lpImage
 	*/
-	void							addImage(cImage* lpImage, cTextDocument* lpDescription);
+	void							addImage(cImage* lpImage);
 	/*!
 	 \brief
 
 	 \fn images
 	 \return QList<cImage *>
 	*/
-	QList<cImageDescription*>		images();
+	QList<cImage*>					images();
 
 	/*!
 	 \brief
@@ -534,7 +534,7 @@ private:
 	QString							m_szSchool;				/*!< TODO: describe */
 	QString							m_szJob;				/*!< TODO: describe */
 	cTextDocument*					m_lpDescription;		/*!< TODO: describe */
-	QList<cImageDescription*>		m_imageList;			/*!< TODO: describe */
+	QList<cImage*>					m_imageList;			/*!< TODO: describe */
 	QList<QStandardItem*>			m_itemList;				/*!< TODO: describe */
 	bool							m_bDeleted;				/*!< TODO: describe */
 signals:
@@ -604,7 +604,7 @@ public:
 	 \param lpImageList
 	 \return bool
 	*/
-	bool			load(cImageList* lpImageList);
+	bool			load();
 	/*!
 	 \brief
 

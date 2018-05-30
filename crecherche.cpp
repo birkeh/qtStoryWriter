@@ -81,9 +81,9 @@ bool cRecherche::deleted()
 	return(m_bDeleted);
 }
 
-void cRecherche::addImage(cImage* lpImage, cTextDocument* lpDescription)
+void cRecherche::addImage(cImage* lpImage)
 {
-	m_imageList.append(new cImageDescription(lpImage, lpDescription));
+	m_imageList.append(lpImage);
 }
 
 void cRecherche::addCharacter(cCharacter* lpCharacter, cTextDocument* lpDescription)
@@ -116,7 +116,7 @@ void cRecherche::removePlace(cPlaceDescription* lpPlace)
 	m_placeList.removeOne(lpPlace);
 }
 
-QList<cImageDescription*> cRecherche::images()
+QList<cImage*> cRecherche::images()
 {
 	return(m_imageList);
 }
@@ -223,7 +223,7 @@ QList<cRecherche*> cRechercheList::find(cObject* lpObject)
 	return(rechercheList);
 }
 
-bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
+bool cRechercheList::load(cCharacterList *lpCharacterList, cObjectList *lpObjectList, cPlaceList *lpPlaceList)
 {
 	QSqlQuery	query;
 
@@ -243,7 +243,7 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		lpObject->setDescription(blob2TextDocument(query.value("description").toByteArray()));
 	}
 
-	query.prepare("SELECT rechercheID, imageID, description FROM rechercheImage;");
+	query.prepare("SELECT rechercheID, name, image, description FROM rechercheImage;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -255,9 +255,11 @@ bool cRechercheList::load(cImageList *lpImageList, cCharacterList *lpCharacterLi
 		cRecherche*	lpRecherche	= find(query.value("rechercheID").toInt());
 		if(lpRecherche)
 		{
-			cImage*	lpImage		= lpImageList->find(query.value("imageID").toInt());
-			if(lpImage)
-				lpRecherche->addImage(lpImage, blob2TextDocument(query.value("description").toByteArray()));
+			cImage*	lpImage	= new cImage;
+			lpImage->setName(query.value("name").toString());
+			lpImage->setDescription(blob2TextDocument(query.value("description").toByteArray()));
+			lpImage->setImage(blob2Image(query.value("image").toByteArray()));
+			lpRecherche->addImage(lpImage);
 		}
 	}
 
@@ -334,7 +336,7 @@ bool cRechercheList::save()
 	QSqlQuery	imageAdd;
 
 	imageDelete.prepare("DELETE FROM rechercheImage WHERE rechercheID=:rechercheID;");
-	imageAdd.prepare("INSERT INTO rechercheImage (rechercheID, imageID, description) VALUES (:rechercheID, :imageID, :description);");
+	imageAdd.prepare("INSERT INTO rechercheImage (rechercheID, name, description, image) VALUES (:rechercheID, :name, :description, :image);");
 
 	QSqlQuery	characterDelete;
 	QSqlQuery	characterAdd;
@@ -428,16 +430,16 @@ bool cRechercheList::save()
 			lpRecherche->setID(querySelect.value("id").toInt());
 		}
 
-		QList<cImageDescription*>	images	= lpRecherche->images();
+		QList<cImage*>	images	= lpRecherche->images();
 
 		for(int x = 0;x < images.count();x++)
 		{
-			cImageDescription*	lpImageDescription	= images.at(x);
-			cImage*				lpImage				= lpImageDescription->image();
+			cImage*	lpImage	= images.at(x);
 
 			imageAdd.bindValue(":rechercheID", lpRecherche->id());
-			imageAdd.bindValue(":imageID", lpImage->id());
-			imageAdd.bindValue(":description", textDocument2Blob(lpImageDescription->description()));
+			imageAdd.bindValue(":name", lpImage->name());
+			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
 			if(!imageAdd.exec())
 			{
 				myDebug << imageAdd.lastError().text();

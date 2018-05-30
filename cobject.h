@@ -101,16 +101,15 @@ public:
 
 	 \fn addImage
 	 \param lpImage
-	 \param lpDescription
 	*/
-	void						addImage(cImage* lpImage, cTextDocument* lpDescription);
+	void						addImage(cImage* lpImage);
 	/*!
 	 \brief
 
 	 \fn images
-	 \return QList<cImageDescription *>
+	 \return QList<cImage *>
 	*/
-	QList<cImageDescription*>	images();
+	QList<cImage*>				images();
 
 	/*!
 	 \brief
@@ -147,7 +146,7 @@ private:
 	QString						m_szName;			/*!< TODO: describe */
 	QString						m_szType;			/*!< TODO: describe */
 	cTextDocument*				m_lpDescription;	/*!< TODO: describe */
-	QList<cImageDescription*>	m_imageList;		/*!< TODO: describe */
+	QList<cImage*>				m_imageList;		/*!< TODO: describe */
 	QList<QStandardItem*>		m_itemList;			/*!< TODO: describe */
 	bool						m_bDeleted;			/*!< TODO: describe */
 
@@ -218,7 +217,7 @@ public:
 	 \param lpImageList
 	 \return bool
 	*/
-	bool			load(cImageList* lpImageList);
+	bool			load();
 	/*!
 	 \brief
 

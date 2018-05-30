@@ -5,6 +5,9 @@
 
 #include "common.h"
 
+#include <QBuffer>
+
+
 QString uncompressText(const QByteArray& compressed)
 {
 	if(compressed.isNull() || compressed.isEmpty())
@@ -17,6 +20,30 @@ QByteArray compressText(const QString& uncompressed)
 	if(uncompressed.isNull() || uncompressed.isEmpty())
 		return(QByteArray());
 	return(qCompress(uncompressed.toUtf8()));
+}
+
+QPixmap blob2Image(const QByteArray& ba)
+{
+	QPixmap		image;
+
+	if(!ba.isEmpty())
+	{
+		if(!image.loadFromData(ba))
+			myDebug << "image load error.";
+	}
+
+	return(image);
+}
+
+QByteArray image2Blob(const QPixmap &image)
+{
+	QByteArray	ba;
+	QBuffer		buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+	image.save(&buffer, "JPG");
+	buffer.close();
+
+	return(ba);
 }
 
 cTextDocument*	blob2TextDocument(const QByteArray& ba)
