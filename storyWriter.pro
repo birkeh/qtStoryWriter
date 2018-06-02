@@ -39,6 +39,7 @@ unix {
     message("*nix")
 }
 
+RC_ICONS = images/icon.ico
 
 SOURCES += \
         main.cpp \
@@ -138,7 +139,9 @@ FORMS += \
 DISTFILES += \
     Doxyfile \
     resources/splash.png \
-    resources/splash.psd
+    resources/splash.psd \
+    images/icon.ico \
+    resources/icon.png
 
 RESOURCES += \
     storywriter.qrc
