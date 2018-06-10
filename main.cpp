@@ -12,7 +12,7 @@
 
 #include "csplashscreen.h"
 
-//#define SHOW_SPLASH
+#define SHOW_SPLASH
 
 int main(int argc, char *argv[])
 {
@@ -32,7 +32,11 @@ int main(int argc, char *argv[])
 	QString			family		= QFontDatabase::applicationFontFamilies(id).at(0);
 	QFont			splashFont(family);
 
+#ifdef SHOW_SPLASH
+	lpSplash->setMessageRect(QRect(0, 110, 480, 209), Qt::AlignHCenter);
+#else
 	lpSplash->setMessageRect(QRect(0, 20, 480, 299), Qt::AlignHCenter);
+#endif
 
 	splashFont.setPixelSize(18);
 	lpSplash->setFont(splashFont);
