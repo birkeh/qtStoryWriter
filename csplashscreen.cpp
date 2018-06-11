@@ -1,36 +1,35 @@
 #include "csplashscreen.h"
+#include "common.h"
 
 
-cSplashScreen::cSplashScreen(const QPixmap& pixmap) :
+cSplashScreen::cSplashScreen(const QPixmap& pixmap, QFont& font) :
 	QSplashScreen(pixmap)
 {
+	setFont(font);
+	m_textDocument.setDefaultFont(font);
 }
 
 void cSplashScreen::drawContents(QPainter *painter)
 {
-	painter->setPen(m_color);
-	painter->drawText(m_rect, m_iAlignement, m_szMessage);
-}
-
-void cSplashScreen::setStatusMessageColor(const QColor& color)
-{
-	m_color		= color;
+	painter->translate(m_rect.topLeft());
+	m_textDocument.setHtml(m_szMessage);
+	m_textDocument.drawContents(painter);
 }
 
 void cSplashScreen::showStatusMessage(const QString& message)
 {
 	m_szMessage	= message;
-	showMessage(m_szMessage, m_iAlignement, m_color);
+	showMessage(m_szMessage);
 }
 
 void cSplashScreen::addStatusMessage(const QString& message)
 {
 	m_szMessage.append(message);
-	showMessage(m_szMessage, m_iAlignement, m_color);
+	showMessage(m_szMessage);
 }
 
-void cSplashScreen::setMessageRect(QRect rect, int alignement)
+void cSplashScreen::setMessageRect(QRect rect)
 {
 	m_rect			= rect;
-	m_iAlignement	= alignement;
+	m_textDocument.setTextWidth(rect.width());
 }

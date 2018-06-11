@@ -12,7 +12,7 @@
 
 #include "csplashscreen.h"
 
-#define SHOW_SPLASH
+//#define SHOW_SPLASH
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 #else
 	QPixmap			pixmap(":/images/splashEmpty.png");
 #endif
-	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap);
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Stingray.otf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Luna.ttf");
 //	int				id			= QFontDatabase::addApplicationFont(":/fonts/Tomatoes.ttf");
@@ -31,21 +30,20 @@ int main(int argc, char *argv[])
 	int				id			= QFontDatabase::addApplicationFont(":/fonts/Tahu!.ttf");
 	QString			family		= QFontDatabase::applicationFontFamilies(id).at(0);
 	QFont			splashFont(family);
+	splashFont.setPixelSize(24);
+
+	cSplashScreen*	lpSplash	= new cSplashScreen(pixmap, splashFont);
 
 #ifdef SHOW_SPLASH
-	lpSplash->setMessageRect(QRect(0, 110, 480, 209), Qt::AlignHCenter);
+	lpSplash->setMessageRect(QRect(0, 110, 480, 209));
 #else
-	lpSplash->setMessageRect(QRect(0, 20, 480, 299), Qt::AlignHCenter);
+	lpSplash->setMessageRect(QRect(0, 110, 480, 209));
 #endif
-
-	splashFont.setPixelSize(18);
-	lpSplash->setFont(splashFont);
-	lpSplash->setStatusMessageColor(Qt::darkGray);
 
 	lpSplash->show();
 	a.processEvents();
 
-	lpSplash->showStatusMessage(QObject::tr("initializing..."));
+	lpSplash->showStatusMessage(QObject::tr("<center>initializing...</denter>"));
 
 	QCoreApplication::setOrganizationName("WIN-DESIGN");
 	QCoreApplication::setOrganizationDomain("windesign.at");

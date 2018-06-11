@@ -4,23 +4,22 @@
 
 #include <QSplashScreen>
 #include <QPainter>
+#include <QTextDocument>
 
 
 class cSplashScreen : public QSplashScreen
 {
 public:
-	cSplashScreen(const QPixmap& pixmap);
+	cSplashScreen(const QPixmap& pixmap, QFont &font);
 
 	virtual void	drawContents(QPainter *painter);
-	void			setStatusMessageColor(const QColor& color);
 	void			showStatusMessage(const QString &message);
 	void			addStatusMessage(const QString &message);
-	void			setMessageRect(QRect rect, int alignment = Qt::AlignLeft);
+	void			setMessageRect(QRect rect);
 
 private:
+	QTextDocument	m_textDocument;
 	QString			m_szMessage;
-	int				m_iAlignement;
-	QColor			m_color;
 	QRect			m_rect;
 };
 
