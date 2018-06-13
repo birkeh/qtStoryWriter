@@ -4,6 +4,12 @@
 #
 #-------------------------------------------------
 
+VERSION = 0.0.1.0
+QMAKE_TARGET_COMPANY = WIN-DESIGN
+QMAKE_TARGET_PRODUCT = storyWriter
+QMAKE_TARGET_DESCRIPTION = storyWriter
+QMAKE_TARGET_COPYRIGHT = (c) 2018 WIN-DESIGN
+
 QT       += core gui xml sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -17,6 +23,7 @@ qtHaveModule(printsupport): QT += printsupport
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.

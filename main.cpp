@@ -18,6 +18,12 @@ int main(int argc, char *argv[])
 {
 	QApplication	a(argc, argv);
 
+	a.setApplicationVersion(APP_VERSION);
+	a.setApplicationDisplayName("storyWriter");
+	a.setOrganizationName("WIN-DESIGN");
+	a.setOrganizationDomain("windesign.at");
+	a.setApplicationName("storyWriter");
+
 #ifdef SHOW_SPLASH
 	QPixmap			pixmap(":/images/splash.png");
 #else
@@ -44,10 +50,6 @@ int main(int argc, char *argv[])
 	a.processEvents();
 
 	lpSplash->showStatusMessage(QObject::tr("<center>initializing...</denter>"));
-
-	QCoreApplication::setOrganizationName("WIN-DESIGN");
-	QCoreApplication::setOrganizationDomain("windesign.at");
-	QCoreApplication::setApplicationName("storyWriter");
 
 	QSettings	settings;
 
