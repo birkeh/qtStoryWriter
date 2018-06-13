@@ -56,6 +56,9 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QWidget *parent) :
 	m_lpFileMenu(0),
 	m_lpEditMenu(0),
 	m_lpTextMenu(0),
+	m_lpToolsMenu(0),
+	m_lpWindowMenu(0),
+	m_lpHelpMenu(0),
 	m_lpFileToolBar(0),
 	m_lpEditToolBar(0),
 	m_lpTextToolBar(0),
@@ -155,6 +158,8 @@ void cMainWindow::initUI()
 {
 	ui->setupUi(this);
 
+	QIcon::setThemeName("TangoMFK");
+
 	m_lpOutlineModel	= new QStandardItemModel(0, 1);
 	ui->m_lpOutlineList->setModel(m_lpOutlineModel);
 
@@ -195,6 +200,9 @@ void cMainWindow::createActions()
 	createFileActions();
 	createEditActions();
 	createTextActions();
+	createToolsActions();
+	createWindowActions();
+	createHelpActions();
 
 	createContextActions();
 
@@ -222,20 +230,20 @@ void cMainWindow::createFileActions()
 	m_lpFileMenu		= menuBar()->addMenu(tr("&File"));
 	m_lpFileToolBar		= addToolBar(tr("File Actions"));
 
-	const QIcon	newIcon			= QIcon::fromTheme("document-new", QIcon(":/images/mac/filenew.png"));
+	const QIcon	newIcon			= QIcon::fromTheme("document-new");
 	lpAction					= m_lpFileMenu->addAction(newIcon, tr("&New"), this, &cMainWindow::onFileNew);
 	m_lpFileToolBar->addAction(lpAction);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::New);
 
-	const QIcon	openIcon		= QIcon::fromTheme("document-open", QIcon(":/images/mac/fileopen.png"));
+	const QIcon	openIcon		= QIcon::fromTheme("document-open");
 	lpAction					= m_lpFileMenu->addAction(openIcon, tr("&Open..."), this, &cMainWindow::onFileOpen);
 	lpAction->setShortcut(QKeySequence::Open);
 	m_lpFileToolBar->addAction(lpAction);
 
 	m_lpFileMenu->addSeparator();
 
-	const QIcon	saveIcon		= QIcon::fromTheme("document-save", QIcon(":/images/mac/filesave.png"));
+	const QIcon	saveIcon		= QIcon::fromTheme("document-save");
 	m_lpActionSave				= m_lpFileMenu->addAction(saveIcon, tr("&Save"), this, &cMainWindow::onFileSave);
 	m_lpActionSave->setShortcut(QKeySequence::Save);
 	m_lpActionSave->setEnabled(false);
@@ -246,16 +254,16 @@ void cMainWindow::createFileActions()
 	m_lpFileMenu->addSeparator();
 
 #ifndef QT_NO_PRINTER
-	const QIcon	printIcon		= QIcon::fromTheme("document-print", QIcon(":/images/mac/fileprint.png"));
+	const QIcon	printIcon		= QIcon::fromTheme("document-print");
 	lpAction					= m_lpFileMenu->addAction(printIcon, tr("&Print..."), this, &cMainWindow::onFilePrint);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::Print);
 	m_lpFileToolBar->addAction(lpAction);
 
-	const QIcon	filePrintIcon	= QIcon::fromTheme("fileprint", QIcon(":/images/mac/fileprint.png"));
+	const QIcon	filePrintIcon	= QIcon::fromTheme("document-print");
 	m_lpFileMenu->addAction(filePrintIcon, tr("Print Preview..."), this, &cMainWindow::onFilePrintPreview);
 
-	const QIcon	exportPdfIcon	= QIcon::fromTheme("exportpdf", QIcon(":/images/mac/exportpdf.png"));
+	const QIcon	exportPdfIcon	= QIcon::fromTheme("document-pdf");
 	lpAction					= m_lpFileMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(Qt::CTRL + Qt::Key_D);
@@ -287,12 +295,12 @@ void cMainWindow::createEditActions()
 	m_lpEditMenu	= menuBar()->addMenu(tr("&Edit"));
 	m_lpEditToolBar	= addToolBar(tr("Edit Actions"));
 
-	const QIcon	undoIcon	= QIcon::fromTheme("edit-undo", QIcon(":/images/mac/editundo.png"));
+	const QIcon	undoIcon	= QIcon::fromTheme("edit-undo");
 	m_lpActionUndo			= m_lpEditMenu->addAction(undoIcon, tr("&Undo"));
 	m_lpActionUndo->setShortcut(QKeySequence::Undo);
 	m_lpEditToolBar->addAction(m_lpActionUndo);
 
-	const QIcon redoIcon	= QIcon::fromTheme("edit-redo", QIcon(":/images/mac/editredo.png"));
+	const QIcon redoIcon	= QIcon::fromTheme("edit-redo");
 	m_lpActionRedo			= m_lpEditMenu->addAction(redoIcon, tr("&Redo"));
 	m_lpActionRedo->setPriority(QAction::LowPriority);
 	m_lpActionRedo->setShortcut(QKeySequence::Redo);
@@ -300,19 +308,19 @@ void cMainWindow::createEditActions()
 	m_lpEditMenu->addSeparator();
 
 #ifndef QT_NO_CLIPBOARD
-	const QIcon	cutIcon		= QIcon::fromTheme("edit-cut", QIcon(":/images/mac/editcut.png"));
+	const QIcon	cutIcon		= QIcon::fromTheme("edit-cut");
 	m_lpActionCut			= m_lpEditMenu->addAction(cutIcon, tr("Cu&t"));
 	m_lpActionCut->setPriority(QAction::LowPriority);
 	m_lpActionCut->setShortcut(QKeySequence::Cut);
 	m_lpEditToolBar->addAction(m_lpActionCut);
 
-	const QIcon	copyIcon	= QIcon::fromTheme("edit-copy", QIcon(":/images/mac/editcopy.png"));
+	const QIcon	copyIcon	= QIcon::fromTheme("edit-copy");
 	m_lpActionCopy			= m_lpEditMenu->addAction(copyIcon, tr("&Copy"));
 	m_lpActionCopy->setPriority(QAction::LowPriority);
 	m_lpActionCopy->setShortcut(QKeySequence::Copy);
 	m_lpEditToolBar->addAction(m_lpActionCopy);
 
-	const QIcon	pasteIcon	= QIcon::fromTheme("edit-paste", QIcon(":/images/mac/editpaste.png"));
+	const QIcon	pasteIcon	= QIcon::fromTheme("edit-paste");
 	m_lpActionPaste			= m_lpEditMenu->addAction(pasteIcon, tr("&Paste"));
 	m_lpActionPaste->setPriority(QAction::LowPriority);
 	m_lpActionPaste->setShortcut(QKeySequence::Paste);
@@ -327,7 +335,7 @@ void cMainWindow::createTextActions()
 	m_lpTextMenu	= menuBar()->addMenu(tr("F&ormat"));
 	m_lpTextToolBar	= addToolBar(tr("Format Actions"));
 
-	const QIcon boldIcon	= QIcon::fromTheme("format-text-bold", QIcon(":/images/mac/textbold.png"));
+	const QIcon boldIcon	= QIcon::fromTheme("format-text-bold");
 	m_lpActionTextBold		= m_lpTextMenu->addAction(boldIcon, tr("&Bold"));
 	m_lpActionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
 	m_lpActionTextBold->setPriority(QAction::LowPriority);
@@ -337,7 +345,7 @@ void cMainWindow::createTextActions()
 	m_lpTextToolBar->addAction(m_lpActionTextBold);
 	m_lpActionTextBold->setCheckable(true);
 
-	const QIcon	italicIcon	= QIcon::fromTheme("format-text-italic", QIcon(":/images/mac/textitalic.png"));
+	const QIcon	italicIcon	= QIcon::fromTheme("format-text-italic");
 	m_lpActionTextItalic	= m_lpTextMenu->addAction(italicIcon, tr("&Italic"));
 	m_lpActionTextItalic->setPriority(QAction::LowPriority);
 	m_lpActionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
@@ -347,7 +355,7 @@ void cMainWindow::createTextActions()
 	m_lpTextToolBar->addAction(m_lpActionTextItalic);
 	m_lpActionTextItalic->setCheckable(true);
 
-	const QIcon	underlineIcon	= QIcon::fromTheme("format-text-underline", QIcon(":/images/mac/textunder.png"));
+	const QIcon	underlineIcon	= QIcon::fromTheme("format-text-underline");
 	m_lpActionTextUnderline = m_lpTextMenu->addAction(underlineIcon, tr("&Underline"));
 	m_lpActionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
 	m_lpActionTextUnderline->setPriority(QAction::LowPriority);
@@ -359,22 +367,22 @@ void cMainWindow::createTextActions()
 
 	m_lpTextMenu->addSeparator();
 
-	const QIcon	leftIcon	= QIcon::fromTheme("format-justify-left", QIcon(":/images/mac/textleft.png"));
+	const QIcon	leftIcon	= QIcon::fromTheme("format-justify-left");
 	m_lpActionAlignLeft = new QAction(leftIcon, tr("&Left"), this);
 	m_lpActionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
 	m_lpActionAlignLeft->setCheckable(true);
 	m_lpActionAlignLeft->setPriority(QAction::LowPriority);
-	const QIcon	centerIcon	= QIcon::fromTheme("format-justify-center", QIcon(":/images/mac/textcenter.png"));
+	const QIcon	centerIcon	= QIcon::fromTheme("format-justify-center");
 	m_lpActionAlignCenter = new QAction(centerIcon, tr("C&enter"), this);
 	m_lpActionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
 	m_lpActionAlignCenter->setCheckable(true);
 	m_lpActionAlignCenter->setPriority(QAction::LowPriority);
-	const QIcon	rightIcon	= QIcon::fromTheme("format-justify-right", QIcon(":/images/mac/textright.png"));
+	const QIcon	rightIcon	= QIcon::fromTheme("format-justify-right");
 	m_lpActionAlignRight = new QAction(rightIcon, tr("&Right"), this);
 	m_lpActionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
 	m_lpActionAlignRight->setCheckable(true);
 	m_lpActionAlignRight->setPriority(QAction::LowPriority);
-	const QIcon	fillIcon	= QIcon::fromTheme("format-justify-fill", QIcon(":/images/mac/textjustify.png"));
+	const QIcon	fillIcon	= QIcon::fromTheme("format-justify-fill");
 	m_lpActionAlignJustify = new QAction(fillIcon, tr("&Justify"), this);
 	m_lpActionAlignJustify->setShortcut(Qt::CTRL + Qt::Key_J);
 	m_lpActionAlignJustify->setCheckable(true);
@@ -425,6 +433,36 @@ void cMainWindow::createTextActions()
 		m_lpComboSize->addItem(QString::number(size));
 	m_lpComboSize->setCurrentIndex(standardSizes.indexOf(QApplication::font().pointSize()));
 	m_focusException.append(m_lpComboSize);
+}
+
+void cMainWindow::createToolsActions()
+{
+}
+
+void cMainWindow::createWindowActions()
+{
+}
+
+void cMainWindow::createHelpActions()
+{
+	QAction*	lpAction;
+
+	m_lpHelpMenu				= menuBar()->addMenu(tr("&Help"));
+	m_lpHelpToolBar				= addToolBar(tr("Help Actions"));
+
+	const QIcon	contentsIcon	= QIcon::fromTheme("help-contents");
+	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Contents"), this, &cMainWindow::onHelpContents);
+	m_lpHelpToolBar->addAction(lpAction);
+	lpAction->setPriority(QAction::LowPriority);
+	lpAction->setShortcut(QKeySequence::HelpContents);
+
+	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Index"), this, &cMainWindow::onHelpIndex);
+
+	const QIcon	aboutIcon		= QIcon::fromTheme("help-about");
+	lpAction					= m_lpHelpMenu->addAction(aboutIcon, tr("&About"), this, &cMainWindow::onHelpAbout);
+	m_lpHelpToolBar->addAction(lpAction);
+	lpAction->setPriority(QAction::LowPriority);
+	lpAction->setShortcut(QKeySequence::HelpContents);
 }
 
 void cMainWindow::createContextActions()
@@ -1344,6 +1382,21 @@ void cMainWindow::onFilePrintPdf()
 void cMainWindow::onFileProperties()
 {
 	onShowPropertiesWindow();
+}
+
+void cMainWindow::onHelpContents()
+{
+	QMessageBox::information(this, "Help", "Contents");
+}
+
+void cMainWindow::onHelpIndex()
+{
+	QMessageBox::information(this, "Help", "Index");
+}
+
+void cMainWindow::onHelpAbout()
+{
+	QMessageBox::information(this, "Help", "About");
 }
 
 void cMainWindow::onClipboardDataChanged()

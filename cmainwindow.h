@@ -449,6 +449,25 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onHelpContents
+	*/
+	void				onHelpContents();
+	/*!
+	 \brief
+
+	 \fn onHelpIndex
+	*/
+	void				onHelpIndex();
+	/*!
+	 \brief
+
+	 \fn onHelpAbout
+	*/
+	void				onHelpAbout();
+
+	/*!
+	 \brief
+
 	 \fn onClipboardDataChanged
 	*/
 	void				onClipboardDataChanged();
@@ -636,11 +655,15 @@ private:
 	QMenu*				m_lpFileMenu;							/*!< Pointer to the file menu */
 	QMenu*				m_lpEditMenu;							/*!< Pointer to the edit menu */
 	QMenu*				m_lpTextMenu;							/*!< Pointer to the text menu */
+	QMenu*				m_lpToolsMenu;							/*!< Pointer to the text menu */
+	QMenu*				m_lpWindowMenu;							/*!< Pointer to the text menu */
+	QMenu*				m_lpHelpMenu;							/*!< Pointer to the text menu */
 
 	QToolBar*			m_lpFileToolBar;						/*!< Pointer to the file toolbar */
 	QToolBar*			m_lpEditToolBar;						/*!< Pointer to the edit toolbar */
 	QToolBar*			m_lpTextToolBar;						/*!< Pointer to the text toolbar */
 	QToolBar*			m_lpFormatToolBar;						/*!< Pointer to the text format toolbar*/
+	QToolBar*			m_lpHelpToolBar;						/*!< Pointer to the text toolbar */
 
 	QAction*			m_lpActionSave;							/*!< Pointer to the File->Save action */
 	QAction*			m_lpActionUndo;							/*!< Pointer to the Undo action. This action is active for Text Edit widgets only. */
@@ -734,6 +757,24 @@ private:
 	 \fn createTextActions
 	*/
 	void				createTextActions();
+	/*!
+	 \brief
+
+	 \fn createToolsActions
+	*/
+	void				createToolsActions();
+	/*!
+	 \brief
+
+	 \fn createWindowActions
+	*/
+	void				createWindowActions();
+	/*!
+	 \brief
+
+	 \fn createHelpActions
+	*/
+	void				createHelpActions();
 	/*!
 	 \brief
 

@@ -148,7 +148,8 @@ DISTFILES += \
     resources/splash.png \
     resources/splash.psd \
     images/icon.ico \
-    resources/icon.png
+    resources/icon.png \
+    images/tango/32x32/actions/document-pdf.png
 
 RESOURCES += \
     storywriter.qrc
