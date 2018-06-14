@@ -448,19 +448,14 @@ void cMainWindow::createHelpActions()
 	QAction*	lpAction;
 
 	m_lpHelpMenu				= menuBar()->addMenu(tr("&Help"));
-	m_lpHelpToolBar				= addToolBar(tr("Help Actions"));
 
-	const QIcon	contentsIcon	= QIcon::fromTheme("help-contents");
 	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Contents"), this, &cMainWindow::onHelpContents);
-	m_lpHelpToolBar->addAction(lpAction);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::HelpContents);
 
 	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Index"), this, &cMainWindow::onHelpIndex);
 
-	const QIcon	aboutIcon		= QIcon::fromTheme("help-about");
 	lpAction					= m_lpHelpMenu->addAction(aboutIcon, tr("&About"), this, &cMainWindow::onHelpAbout);
-	m_lpHelpToolBar->addAction(lpAction);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::HelpContents);
 }
