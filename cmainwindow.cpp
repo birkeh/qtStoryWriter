@@ -449,13 +449,13 @@ void cMainWindow::createHelpActions()
 
 	m_lpHelpMenu				= menuBar()->addMenu(tr("&Help"));
 
-	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Contents"), this, &cMainWindow::onHelpContents);
+	lpAction					= m_lpHelpMenu->addAction(tr("&Contents"), this, &cMainWindow::onHelpContents);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::HelpContents);
 
-	lpAction					= m_lpHelpMenu->addAction(contentsIcon, tr("&Index"), this, &cMainWindow::onHelpIndex);
+	lpAction					= m_lpHelpMenu->addAction(tr("&Index"), this, &cMainWindow::onHelpIndex);
 
-	lpAction					= m_lpHelpMenu->addAction(aboutIcon, tr("&About"), this, &cMainWindow::onHelpAbout);
+	lpAction					= m_lpHelpMenu->addAction(tr("&About"), this, &cMainWindow::onHelpAbout);
 	lpAction->setPriority(QAction::LowPriority);
 	lpAction->setShortcut(QKeySequence::HelpContents);
 }
