@@ -10,9 +10,17 @@
 #include <QPixmap>
 #include <QThread>
 
+#include <QTranslator>
+#include <QLocale>
+#include <QSettings>
+
+#include <QDir>
+
 #include "csplashscreen.h"
 
+
 #define SHOW_SPLASH
+
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +31,23 @@ int main(int argc, char *argv[])
 	a.setOrganizationName("WIN-DESIGN");
 	a.setOrganizationDomain("windesign.at");
 	a.setApplicationName("storyWriter");
+
+	QSettings		settings;
+	QTranslator		translator;
+	QString			szLanguage	= settings.value("main/language").toString();
+
+	if(!szLanguage.compare("%SYSTEM%"))
+	{
+		QStringList	languageList	= QLocale::system().uiLanguages();
+		if(languageList.count())
+			szLanguage	= languageList[0];
+	}
+
+	if(!szLanguage.isEmpty())
+	{
+		if(translator.load(QString("storyWriter_%1").arg(szLanguage), ":/locale"))
+			a.installTranslator(&translator);
+	}
 
 #ifdef SHOW_SPLASH
 	QPixmap			pixmap(":/images/splash.png");
@@ -50,8 +75,6 @@ int main(int argc, char *argv[])
 	a.processEvents();
 
 	lpSplash->showStatusMessage(QObject::tr("<center>initializing...</denter>"));
-
-	QSettings	settings;
 
 	cMainWindow w(lpSplash);
 

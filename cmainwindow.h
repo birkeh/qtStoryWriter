@@ -234,7 +234,6 @@ public slots:
 	 \param lpComboBox
 	*/
 	void				onComboBoxLostFocus(cComboBox* lpComboBox);
-
 private slots:
 	/*!
 	 \brief
@@ -812,6 +811,7 @@ private:
 	 \brief
 
 	 \fn getProjectSaveName
+	 \param szFileName
 	 \return QString
 	*/
 	QString				getProjectSaveName(const QString& szFileName = QString());
@@ -820,6 +820,7 @@ private:
 	 \brief
 
 	 \fn setCurrentFile
+	 \param szFileName
 	*/
 	void				setCurrentFile(const QString& szFileName);
 
@@ -842,7 +843,7 @@ protected:
 	 \fn closeEvent
 	 \param event
 	*/
-	void				closeEvent(QCloseEvent *event);
+	void				closeEvent(QCloseEvent* event);
 };
 
 #endif // CMAINWINDOW_H

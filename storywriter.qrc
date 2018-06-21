@@ -662,4 +662,7 @@
         <file alias="32x32/weather-storm.png">images/tango/32x32/status/weather-storm.png</file>
         <file alias="index.theme">images/tango/index.theme</file>
     </qresource>
+    <qresource prefix="/locale">
+        <file>storyWriter_de.qm</file>
+    </qresource>
 </RCC>
