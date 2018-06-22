@@ -15,6 +15,8 @@
 
 #include "cwidget.h"
 
+#include "coptionsdialog.h"
+
 #include <QTextDocument>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -437,6 +439,11 @@ void cMainWindow::createTextActions()
 
 void cMainWindow::createToolsActions()
 {
+	QAction*		lpAction;
+
+	m_lpToolsMenu	= menuBar()->addMenu(tr("&Tools"));
+
+	lpAction		= m_lpToolsMenu->addAction(tr("&Options..."), this, &cMainWindow::onToolsOptions);
 }
 
 void cMainWindow::createWindowActions()
@@ -1377,6 +1384,15 @@ void cMainWindow::onFilePrintPdf()
 void cMainWindow::onFileProperties()
 {
 	onShowPropertiesWindow();
+}
+
+void cMainWindow::onToolsOptions()
+{
+	cOptionsDialog*	lpOptionsDialog	= new cOptionsDialog(this);
+
+	lpOptionsDialog->exec();
+
+	delete lpOptionsDialog;
 }
 
 void cMainWindow::onHelpContents()

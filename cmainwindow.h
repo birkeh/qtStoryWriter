@@ -448,6 +448,13 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onToolsOptions
+	*/
+	void				onToolsOptions();
+
+	/*!
+	 \brief
+
 	 \fn onHelpContents
 	*/
 	void				onHelpContents();
@@ -638,7 +645,7 @@ private slots:
 private:
 	Ui::cMainWindow*	ui;										/*!< User Interface */
 
-	cSplashScreen*		m_lpSplashScreen;
+	cSplashScreen*		m_lpSplashScreen;						/*!< Splash Screen */
 
 	QStandardItemModel*	m_lpOutlineModel;						/*!< Item Model for Outline list */
 	QStandardItemModel*	m_lpCharacterModel;						/*!< Item Model for Character list */

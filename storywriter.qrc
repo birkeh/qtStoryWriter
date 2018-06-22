@@ -665,4 +665,7 @@
     <qresource prefix="/locale">
         <file>storyWriter_de.qm</file>
     </qresource>
+    <qresource prefix="/category">
+        <file alias="category_core.png">images/category/category_core.png</file>
+    </qresource>
 </RCC>

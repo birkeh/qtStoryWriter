@@ -88,7 +88,8 @@ SOURCES += \
     ccharacterselectdialog.cpp \
     csplashscreen.cpp \
     cplaceselectdialog.cpp \
-    cobjectselectdialog.cpp
+    cobjectselectdialog.cpp \
+    coptionsdialog.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -128,7 +129,8 @@ HEADERS += \
     ccharacterselectdialog.h \
     csplashscreen.h \
     cplaceselectdialog.h \
-    cobjectselectdialog.h
+    cobjectselectdialog.h \
+    coptionsdialog.h
 
 FORMS += \
         cmainwindow.ui \
@@ -143,7 +145,8 @@ FORMS += \
     cpropertieswindow.ui \
     ccharacterselectdialog.ui \
     cplaceselectdialog.ui \
-    cobjectselectdialog.ui
+    cobjectselectdialog.ui \
+    coptionsdialog.ui
 
 DISTFILES += \
     Doxyfile \
