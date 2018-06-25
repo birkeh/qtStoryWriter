@@ -71,5 +71,12 @@ cTextDocument*	blob2TextDocument(const QByteArray& ba);
  \return QByteArray
 */
 QByteArray		textDocument2Blob(cTextDocument* lpTextDocument);
+/*!
+ \brief
+
+ \fn localePath
+ \return QString
+*/
+QString			localePath();
 
 #endif // COMMON_H

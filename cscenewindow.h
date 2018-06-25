@@ -56,6 +56,13 @@ public:
 	*/
 	cScene*				scene();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private:
 	/*!
 	 \brief

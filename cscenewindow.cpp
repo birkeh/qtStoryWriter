@@ -137,7 +137,7 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	connect(ui->m_lpPlaceList,			QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onPlaceIndexChanged);
 	connect(ui->m_lpObjectList,			QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cSceneWindow::onObjectIndexChanged);
 
-	setWindowTitle(tr("[scene] - ") + lpScene->name());
+	setWindowTitle(windowTitle() + lpScene->name());
 
 	connect(ui->m_lpName,				&cLineEdit::textChanged,								this,	&cSceneWindow::onNameChanged);
 	connect(ui->m_lpDescription,		&cTextEdit::textChanged,								this,	&cSceneWindow::onDescriptionChanged);
@@ -151,6 +151,12 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 cScene* cSceneWindow::scene()
 {
 	return(m_lpScene);
+}
+
+void cSceneWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpScene->name());
 }
 
 void cSceneWindow::onCharacterShowDetails()

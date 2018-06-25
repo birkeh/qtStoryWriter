@@ -54,6 +54,13 @@ public:
 	*/
 	cCharacter*				character();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private slots:
 	/*!
 	 \brief

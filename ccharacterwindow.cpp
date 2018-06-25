@@ -162,7 +162,7 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	ui->m_lpLayout->addItem(lpSpacer);
 
-	setWindowTitle(tr("[character] - ") + lpCharacter->name());
+	setWindowTitle(windowTitle() + lpCharacter->name());
 
 	connect(ui->m_lpFirstName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onFirstNameChanged);
 	connect(ui->m_lpMiddleName,			&cLineEdit::textChanged,								this,	&cCharacterWindow::onMiddleNameChanged);
@@ -195,6 +195,12 @@ void cCharacterWindow::setCharacter(cCharacter* lpCharacter)
 cCharacter* cCharacterWindow::character()
 {
 	return(m_lpCharacter);
+}
+
+void cCharacterWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpCharacter->name());
 }
 
 void cCharacterWindow::onFirstNameChanged(const QString& szText)

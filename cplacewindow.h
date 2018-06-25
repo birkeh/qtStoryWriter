@@ -54,6 +54,13 @@ public:
 	*/
 	cPlace*					place();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private slots:
 	/*!
 	 \brief

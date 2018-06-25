@@ -64,7 +64,7 @@ void cPlaceWindow::setPlace(cPlace* lpPlace)
 	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	ui->m_lpLayout->addItem(lpSpacer);
 
-	setWindowTitle(tr("[place] - ") + lpPlace->name());
+	setWindowTitle(windowTitle() + lpPlace->name());
 
 	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cPlaceWindow::onNameChanged);
 	connect(ui->m_lpType,			&cLineEdit::textChanged,	this,	&cPlaceWindow::onTypeChanged);
@@ -75,6 +75,12 @@ void cPlaceWindow::setPlace(cPlace* lpPlace)
 cPlace* cPlaceWindow::place()
 {
 	return(m_lpPlace);
+}
+
+void cPlaceWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpPlace->name());
 }
 
 void cPlaceWindow::onNameChanged(const QString& szName)

@@ -73,7 +73,7 @@ void cChapterWindow::setChapter(cChapter* lpChapter, cSceneList* lpSceneList)
 
 	ui->m_lpSceneList->resizeColumnToContents(0);
 
-	setWindowTitle(tr("[chapter] - ") + lpChapter->name());
+	setWindowTitle(windowTitle() + lpChapter->name());
 
 	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cChapterWindow::onNameChanged);
 	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cChapterWindow::onDescriptionChanged);
@@ -83,6 +83,12 @@ void cChapterWindow::setChapter(cChapter* lpChapter, cSceneList* lpSceneList)
 cChapter* cChapterWindow::chapter()
 {
 	return(m_lpChapter);
+}
+
+void cChapterWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpChapter->name());
 }
 
 void cChapterWindow::onSceneDoubleClicked(const QModelIndex& index)

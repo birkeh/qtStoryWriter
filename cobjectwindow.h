@@ -54,6 +54,13 @@ public:
 	*/
 	cObject*				object();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private slots:
 	/*!
 	 \brief

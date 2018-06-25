@@ -44,10 +44,11 @@
 #include <QDesktopServices>
 
 
-cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QWidget *parent) :
+cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslator, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
 	m_lpSplashScreen(lpSplashScreen),
+	m_lpTranslator(lpTranslator),
 	m_lpOutlineModel(0),
 	m_lpCharacterModel(0),
 	m_lpPlaceModel(0),
@@ -680,6 +681,96 @@ void cMainWindow::updateWindowTitle()
 	m_lpActionSave->setEnabled(m_bSomethingChanged);
 
 	setWindowTitle(szWindowTitle);
+}
+
+void switchTranslator(QTranslator* lpTranslator, const QString& filename)
+{
+	qApp->removeTranslator(lpTranslator);
+
+	if(lpTranslator->load(filename))
+		qApp->installTranslator(lpTranslator);
+}
+
+void cMainWindow::onLanguageChanged()
+{
+	QSettings	settings;
+	QString		szLanguage	= settings.value("main/language").toString();
+	QLocale		locale		= QLocale(szLanguage);
+
+	QLocale::setDefault(locale);
+	switchTranslator(m_lpTranslator, QString("%1%2storyWriter_%3.qm").arg(localePath()).arg(QDir::separator()).arg(szLanguage));
+//	switchTranslator(m_translatorQt, QString("qt_%1.qm").arg(szLanguage));
+}
+
+void cMainWindow::changeEvent(QEvent* event)
+{
+	if(event)
+	{
+		if(event->type() == QEvent::LanguageChange)
+		{
+			ui->retranslateUi(this);
+			retranslateMenu();
+			retranslateWindows();
+		}
+
+		// this event is send, if the system, language changes
+//		case QEvent::LocaleChange:
+//			{
+//				QString locale = QLocale::system().name();
+//				locale.truncate(locale.lastIndexOf('_'));
+//				loadLanguage(locale);
+//			}
+//			break;
+	}
+	QMainWindow::changeEvent(event);
+}
+
+void cMainWindow::retranslateMenu()
+{
+	QMenuBar*		lpMenu	= menuBar();
+	if(lpMenu)
+		retranslateActions(lpMenu->actions());
+
+	if(m_lpFileMenu)
+		retranslateActions(m_lpFileMenu->actions());
+	if(m_lpEditMenu)
+		retranslateActions(m_lpEditMenu->actions());
+	if(m_lpTextMenu)
+		retranslateActions(m_lpTextMenu->actions());
+	if(m_lpToolsMenu)
+		retranslateActions(m_lpToolsMenu->actions());
+	if(m_lpWindowMenu)
+		retranslateActions(m_lpWindowMenu->actions());
+	if(m_lpHelpMenu)
+		retranslateActions(m_lpHelpMenu->actions());
+
+	if(m_lpFileToolBar)
+		retranslateActions(m_lpFileToolBar->actions());
+	if(m_lpEditToolBar)
+		retranslateActions(m_lpEditToolBar->actions());
+	if(m_lpTextToolBar)
+		retranslateActions(m_lpTextToolBar->actions());
+	if(m_lpFormatToolBar)
+		retranslateActions(m_lpFormatToolBar->actions());
+}
+
+void cMainWindow::retranslateActions(QList<QAction*> actionList)
+{
+	for(int x = 0;x < actionList.count();x++)
+	{
+		QAction*	lpAction	= actionList[x];
+		lpAction->setText(QApplication::translate("cMainWindow", lpAction->text().toUtf8().data()));
+	}
+}
+
+void cMainWindow::retranslateWindows()
+{
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+
+		lpWidget->retranslateUI();
+	}
 }
 
 void cMainWindow::onTextEditGotFocus(cTextEdit* lpTextEdit)
@@ -1390,6 +1481,7 @@ void cMainWindow::onToolsOptions()
 {
 	cOptionsDialog*	lpOptionsDialog	= new cOptionsDialog(this);
 
+	connect(lpOptionsDialog,	&cOptionsDialog::onLanguageChanged,	this,	&cMainWindow::onLanguageChanged);
 	lpOptionsDialog->exec();
 
 	delete lpOptionsDialog;

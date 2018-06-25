@@ -96,7 +96,7 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche, cCharacterList* lpC
 	connect(ui->m_lpPlaceList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cRechercheWindow::onPlaceIndexChanged);
 	connect(ui->m_lpObjectList,		QOverload<int>::of(&cComboBox::currentIndexChanged),	this,	&cRechercheWindow::onObjectIndexChanged);
 
-	setWindowTitle(tr("[recherche] - ") + lpRecherche->name());
+	setWindowTitle(windowTitle() + lpRecherche->name());
 
 	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cRechercheWindow::onNameChanged);
 	connect(ui->m_lpLink,			&cLineEdit::textChanged,	this,	&cRechercheWindow::onLinkChanged);
@@ -106,6 +106,12 @@ void cRechercheWindow::setRecherche(cRecherche* lpRecherche, cCharacterList* lpC
 cRecherche* cRechercheWindow::recherche()
 {
 	return(m_lpRecherche);
+}
+
+void cRechercheWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpRecherche->name());
 }
 
 void cRechercheWindow::onNameChanged(const QString& szName)

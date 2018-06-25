@@ -54,6 +54,13 @@ public:
 	*/
 	cBook*					book();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private slots:
 	/*!
 	 \brief

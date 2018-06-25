@@ -3,6 +3,7 @@
 
 
 #include <QDialog>
+#include <QAbstractButton>
 
 #include <QStandardItemModel>
 
@@ -34,6 +35,19 @@ public:
 	 \fn ~cOptionsDialog
 	*/
 	~cOptionsDialog();
+
+private slots:
+	/*!
+	 \brief
+
+	 \fn onLanguageIndexChanged
+	 \param index
+	*/
+	void				onLanguageIndexChanged(int index);
+
+	void				onButtonClicked(QAbstractButton* button);
+signals:
+	void				onLanguageChanged();
 
 private:
 	Ui::cOptionsDialog*	ui;					/*!< TODO: describe */

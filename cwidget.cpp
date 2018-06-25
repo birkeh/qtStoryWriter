@@ -78,6 +78,61 @@ cWidget::cWidget(QWidget* parent) :
 {
 }
 
+void cWidget::retranslateUI()
+{
+	switch(m_type)
+	{
+	case TYPE_part:
+	{
+		cPartWindow*		lpWindow	= (cPartWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_chapter:
+	{
+		cChapterWindow*		lpWindow	= (cChapterWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_scene:
+	{
+		cSceneWindow*		lpWindow	= (cSceneWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_character:
+	{
+		cCharacterWindow*	lpWindow	= (cCharacterWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_object:
+	{
+		cObjectWindow*		lpWindow	= (cObjectWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_place:
+	{
+		cPlaceWindow*		lpWindow	= (cPlaceWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_recherche:
+	{
+		cRechercheWindow*	lpWindow	= (cRechercheWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	case TYPE_properties:
+	{
+		cPropertiesWindow*	lpWindow	= (cPropertiesWindow*)m_lpWidget;
+		lpWindow->retranslateUI();
+	}
+		break;
+	}
+}
+
 void cWidget::setWindow(QMdiSubWindow* lpWindow)
 {
 	m_lpWindow	= lpWindow;

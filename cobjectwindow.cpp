@@ -60,7 +60,7 @@ void cObjectWindow::setObject(cObject* lpObject)
 	QSpacerItem*	lpSpacer		= new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	ui->m_lpLayout->addItem(lpSpacer);
 
-	setWindowTitle(tr("[object] - ") + lpObject->name());
+	setWindowTitle(windowTitle() + lpObject->name());
 
 	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cObjectWindow::onNameChanged);
 	connect(ui->m_lpType,			&cLineEdit::textChanged,	this,	&cObjectWindow::onTypeChanged);
@@ -70,6 +70,12 @@ void cObjectWindow::setObject(cObject* lpObject)
 cObject* cObjectWindow::object()
 {
 	return(m_lpObject);
+}
+
+void cObjectWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpObject->name());
 }
 
 void cObjectWindow::onNameChanged(const QString& szName)

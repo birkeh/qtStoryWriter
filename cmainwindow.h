@@ -23,6 +23,8 @@
 #include <QMainWindow>
 #include <QMdiSubWindow>
 
+#include <QTranslator>
+
 #include <QStandardItemModel>
 
 #include <QComboBox>
@@ -56,7 +58,7 @@ public:
 	 \param lpSplashScreen
 	 \param parent
 	*/
-	explicit cMainWindow(cSplashScreen* lpSplashScreen, QWidget* parent = 0);
+	explicit cMainWindow(cSplashScreen* lpSplashScreen, QTranslator* lpTranslator, QWidget* parent = 0);
 	/*!
 	 \brief
 
@@ -108,6 +110,12 @@ public:
 	QAction*			actionAlignJustify();
 
 public slots:
+	/*!
+	 \brief
+
+	 \fn onLanguageChanged
+	*/
+	void				onLanguageChanged();
 	/*!
 	 \brief
 
@@ -647,6 +655,7 @@ private:
 
 	cSplashScreen*		m_lpSplashScreen;						/*!< Splash Screen */
 
+	QTranslator*		m_lpTranslator;							/*!< Pointer to the current translator */
 	QStandardItemModel*	m_lpOutlineModel;						/*!< Item Model for Outline list */
 	QStandardItemModel*	m_lpCharacterModel;						/*!< Item Model for Character list */
 	QStandardItemModel*	m_lpPlaceModel;							/*!< Item Model for Place list */
@@ -843,7 +852,37 @@ private:
 	 \fn updateRecentFileActions
 	*/
 	void				updateRecentFileActions();
+
+	/*!
+	 \brief
+
+	 \fn retranslateMenu
+	 \param lpMenu
+	*/
+	void				retranslateMenu();
+
+	/*!
+	 \brief
+
+	 \fn retranslateActions
+	 \param actionList
+	*/
+	void				retranslateActions(QList<QAction*> actionList);
+
+	/*!
+	 \brief
+
+	 \fn retranslateWindows
+	*/
+	void				retranslateWindows();
 protected:
+	/*!
+	 \brief
+
+	 \fn changeEvent
+	 \param event
+	*/
+	void				changeEvent(QEvent* event);
 	/*!
 	 \brief
 

@@ -110,6 +110,13 @@ public:
 	/*!
 	 \brief
 
+	 \fn retranslateUI
+	*/
+	void				retranslateUI();
+
+	/*!
+	 \brief
+
 	 \fn widget
 	 \return QWidget
 	*/

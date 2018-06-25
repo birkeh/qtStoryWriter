@@ -54,6 +54,13 @@ public:
 	*/
 	cRecherche*				recherche();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private:
 	/*!
 	 \brief

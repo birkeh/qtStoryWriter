@@ -58,8 +58,6 @@ void cPropertiesWindow::setBook(cBook* lpBook)
 	ui->m_lpShortDescription->setDocument(lpBook->shortDescription());
 	ui->m_lpDescription->setDocument(lpBook->description());
 
-	setWindowTitle(tr("[book] - properties"));
-
 	connect(ui->m_lpTitle,				&cLineEdit::textChanged,			this,	&cPropertiesWindow::onTitleChanged);
 	connect(ui->m_lpSubTitle,			&cLineEdit::textChanged,			this,	&cPropertiesWindow::onSubTitleChanged);
 	connect(ui->m_lpAuthor,				&cLineEdit::textChanged,			this,	&cPropertiesWindow::onAuthorChanged);
@@ -73,6 +71,11 @@ void cPropertiesWindow::setBook(cBook* lpBook)
 cBook* cPropertiesWindow::book()
 {
 	return(m_lpBook);
+}
+
+void cPropertiesWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
 }
 
 void cPropertiesWindow::onTitleChanged(const QString& szName)

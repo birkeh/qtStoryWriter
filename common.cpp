@@ -6,6 +6,9 @@
 #include "common.h"
 
 #include <QBuffer>
+#include <QSettings>
+#include <QCoreApplication>
+#include <QDir>
 
 
 QString uncompressText(const QByteArray& compressed)
@@ -69,4 +72,12 @@ QByteArray textDocument2Blob(cTextDocument* lpTextDocument)
 	ba	= compressText(lpTextDocument->toHtml());
 
 	return(ba);
+}
+
+QString	 localePath()
+{
+	QSettings	settings;
+	QString		szAppPath	= QCoreApplication::applicationDirPath();
+	QString		szPath		= settings.value("file/locale", QString("%1%2locale").arg(szAppPath).arg(QDir::separator())).toString();
+	return(szPath);
 }

@@ -71,7 +71,7 @@ void cPartWindow::setPart(cPart* lpPart, cChapterList* lpChapterList)
 
 	ui->m_lpChapterList->resizeColumnToContents(0);
 
-	setWindowTitle(tr("[part] - ") + lpPart->name());
+	setWindowTitle(windowTitle() + lpPart->name());
 
 	connect(ui->m_lpName,			&cLineEdit::textChanged,	this,	&cPartWindow::onNameChanged);
 	connect(ui->m_lpDescription,	&cTextEdit::textChanged,	this,	&cPartWindow::onDescriptionChanged);
@@ -81,6 +81,12 @@ void cPartWindow::setPart(cPart* lpPart, cChapterList* lpChapterList)
 cPart* cPartWindow::part()
 {
 	return(m_lpPart);
+}
+
+void cPartWindow::retranslateUI()
+{
+	ui->retranslateUi(this);
+	setWindowTitle(windowTitle() + m_lpPart->name());
 }
 
 void cPartWindow::onChapterDoubleClicked(const QModelIndex& index)

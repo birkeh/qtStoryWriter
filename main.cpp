@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	a.setApplicationName("storyWriter");
 
 	QSettings		settings;
-	QTranslator		translator;
+	QTranslator*	lpTranslator	= new QTranslator;
 	QString			szLanguage	= settings.value("main/language").toString();
 
 	if(!szLanguage.compare("%SYSTEM%"))
@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 
 	if(!szLanguage.isEmpty())
 	{
-		if(translator.load(QString("storyWriter_%1").arg(szLanguage), ":/locale"))
-			a.installTranslator(&translator);
+		if(lpTranslator->load(QString("storyWriter_%1").arg(szLanguage), ":/locale"))
+			a.installTranslator(lpTranslator);
 	}
 
 #ifdef SHOW_SPLASH
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 	lpSplash->showStatusMessage(QObject::tr("<center>initializing...</denter>"));
 
-	cMainWindow w(lpSplash);
+	cMainWindow w(lpSplash, lpTranslator);
 
 	if(settings.value("main/maximized").toBool())
 		w.showMaximized();

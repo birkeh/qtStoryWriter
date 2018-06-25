@@ -56,6 +56,12 @@ public:
 	*/
 	cPart*					part();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
 private slots:
 	/*!
 	 \brief

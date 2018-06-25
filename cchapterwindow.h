@@ -57,6 +57,13 @@ public:
 	*/
 	cChapter*				chapter();
 
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void					retranslateUI();
+
 private slots:
 	/*!
 	 \brief
