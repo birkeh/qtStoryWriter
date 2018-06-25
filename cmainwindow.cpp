@@ -43,6 +43,8 @@
 
 #include <QDesktopServices>
 
+#include <QMenu>
+
 
 cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslator, QWidget *parent) :
 	QMainWindow(parent),
@@ -101,22 +103,22 @@ void cMainWindow::somethingChanged()
 
 QAction* cMainWindow::actionAlignLeft()
 {
-	return(m_lpActionAlignLeft);
+	return(m_lpAlignLeftAction);
 }
 
 QAction* cMainWindow::actionAlignCenter()
 {
-	return(m_lpActionAlignCenter);
+	return(m_lpAlignCenterAction);
 }
 
 QAction* cMainWindow::actionAlignRight()
 {
-	return(m_lpActionAlignRight);
+	return(m_lpAlignRightAction);
 }
 
 QAction* cMainWindow::actionAlignJustify()
 {
-	return(m_lpActionAlignJustify);
+	return(m_lpAlignJustifyAction);
 }
 
 void cMainWindow::closeEvent(QCloseEvent *event)
@@ -228,69 +230,67 @@ void cMainWindow::createActions()
 
 void cMainWindow::createFileActions()
 {
-	QAction*	lpAction;
-
-	m_lpFileMenu		= menuBar()->addMenu(tr("&File"));
-	m_lpFileToolBar		= addToolBar(tr("File Actions"));
+	m_lpFileMenu				= menuBar()->addMenu(tr("&File"));
+	m_lpFileToolBar				= addToolBar(tr("File Actions"));
 
 	const QIcon	newIcon			= QIcon::fromTheme("document-new");
-	lpAction					= m_lpFileMenu->addAction(newIcon, tr("&New"), this, &cMainWindow::onFileNew);
-	m_lpFileToolBar->addAction(lpAction);
-	lpAction->setPriority(QAction::LowPriority);
-	lpAction->setShortcut(QKeySequence::New);
+	m_lpFileNewAction			= m_lpFileMenu->addAction(newIcon, tr("&New"), this, &cMainWindow::onFileNew);
+	m_lpFileToolBar->addAction(m_lpFileNewAction);
+	m_lpFileNewAction->setPriority(QAction::LowPriority);
+	m_lpFileNewAction->setShortcut(QKeySequence::New);
 
 	const QIcon	openIcon		= QIcon::fromTheme("document-open");
-	lpAction					= m_lpFileMenu->addAction(openIcon, tr("&Open..."), this, &cMainWindow::onFileOpen);
-	lpAction->setShortcut(QKeySequence::Open);
-	m_lpFileToolBar->addAction(lpAction);
+	m_lpFileOpenAction			= m_lpFileMenu->addAction(openIcon, tr("&Open..."), this, &cMainWindow::onFileOpen);
+	m_lpFileOpenAction->setShortcut(QKeySequence::Open);
+	m_lpFileToolBar->addAction(m_lpFileOpenAction);
 
 	m_lpFileMenu->addSeparator();
 
 	const QIcon	saveIcon		= QIcon::fromTheme("document-save");
-	m_lpActionSave				= m_lpFileMenu->addAction(saveIcon, tr("&Save"), this, &cMainWindow::onFileSave);
-	m_lpActionSave->setShortcut(QKeySequence::Save);
-	m_lpActionSave->setEnabled(false);
-	m_lpFileToolBar->addAction(m_lpActionSave);
+	m_lpFileSaveAction			= m_lpFileMenu->addAction(saveIcon, tr("&Save"), this, &cMainWindow::onFileSave);
+	m_lpFileSaveAction->setShortcut(QKeySequence::Save);
+	m_lpFileSaveAction->setEnabled(false);
+	m_lpFileToolBar->addAction(m_lpFileSaveAction);
 
-	lpAction					= m_lpFileMenu->addAction(tr("Save &As..."), this, &cMainWindow::onFileSaveAs);
-	lpAction->setPriority(QAction::LowPriority);
+	m_lpFileSaveAsAction		= m_lpFileMenu->addAction(tr("Save &As..."), this, &cMainWindow::onFileSaveAs);
+	m_lpFileSaveAsAction->setPriority(QAction::LowPriority);
 	m_lpFileMenu->addSeparator();
 
 #ifndef QT_NO_PRINTER
 	const QIcon	printIcon		= QIcon::fromTheme("document-print");
-	lpAction					= m_lpFileMenu->addAction(printIcon, tr("&Print..."), this, &cMainWindow::onFilePrint);
-	lpAction->setPriority(QAction::LowPriority);
-	lpAction->setShortcut(QKeySequence::Print);
-	m_lpFileToolBar->addAction(lpAction);
+	m_lpFilePrintAction			= m_lpFileMenu->addAction(printIcon, tr("&Print..."), this, &cMainWindow::onFilePrint);
+	m_lpFilePrintAction->setPriority(QAction::LowPriority);
+	m_lpFilePrintAction->setShortcut(QKeySequence::Print);
+	m_lpFileToolBar->addAction(m_lpFilePrintAction);
 
 	const QIcon	filePrintIcon	= QIcon::fromTheme("document-print");
-	m_lpFileMenu->addAction(filePrintIcon, tr("Print Preview..."), this, &cMainWindow::onFilePrintPreview);
+	m_lpFilePrintPreviewAction	= m_lpFileMenu->addAction(filePrintIcon, tr("Print Preview..."), this, &cMainWindow::onFilePrintPreview);
 
 	const QIcon	exportPdfIcon	= QIcon::fromTheme("document-pdf");
-	lpAction					= m_lpFileMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
-	lpAction->setPriority(QAction::LowPriority);
-	lpAction->setShortcut(Qt::CTRL + Qt::Key_D);
-	m_lpFileToolBar->addAction(lpAction);
+	m_lpFileExportPDFAction		= m_lpFileMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
+	m_lpFileExportPDFAction->setPriority(QAction::LowPriority);
+	m_lpFileExportPDFAction->setShortcut(Qt::CTRL + Qt::Key_D);
+	m_lpFileToolBar->addAction(m_lpFileExportPDFAction);
 
 	m_lpFileMenu->addSeparator();
 #endif
 
-	lpAction					= m_lpFileMenu->addAction(tr("P&roperties..."), this, &cMainWindow::onFileProperties);
-	lpAction->setPriority(QAction::LowPriority);
+	m_lpFilePropertiesAction	= m_lpFileMenu->addAction(tr("P&roperties..."), this, &cMainWindow::onFileProperties);
+	m_lpFilePropertiesAction->setPriority(QAction::LowPriority);
 	m_lpFileMenu->addSeparator();
 
 	for(int i = 0; i < MaxRecentFiles;i++)
 	{
-		m_lpActionRecentFile[i]	= new QAction(this);
-		m_lpActionRecentFile[i]->setVisible(false);
-		m_lpFileMenu->addAction(m_lpActionRecentFile[i]);
-		connect(m_lpActionRecentFile[i], &QAction::triggered, this, &cMainWindow::openRecentFile);
+		m_lpRecentFileAction[i]	= new QAction(this);
+		m_lpRecentFileAction[i]->setVisible(false);
+		m_lpFileMenu->addAction(m_lpRecentFileAction[i]);
+		connect(m_lpRecentFileAction[i], &QAction::triggered, this, &cMainWindow::openRecentFile);
 	}
 	m_lpSeparatorRecent			= m_lpFileMenu->addSeparator();
 	m_lpSeparatorRecent->setVisible(false);
 
-	lpAction					= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
-	lpAction->setShortcut(Qt::CTRL + Qt::Key_Q);
+	m_lpFileQuitAction			= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
+	m_lpFileQuitAction->setShortcut(Qt::CTRL + Qt::Key_Q);
 }
 
 void cMainWindow::createEditActions()
@@ -299,37 +299,37 @@ void cMainWindow::createEditActions()
 	m_lpEditToolBar	= addToolBar(tr("Edit Actions"));
 
 	const QIcon	undoIcon	= QIcon::fromTheme("edit-undo");
-	m_lpActionUndo			= m_lpEditMenu->addAction(undoIcon, tr("&Undo"));
-	m_lpActionUndo->setShortcut(QKeySequence::Undo);
-	m_lpEditToolBar->addAction(m_lpActionUndo);
+	m_lpUndoAction			= m_lpEditMenu->addAction(undoIcon, tr("&Undo"));
+	m_lpUndoAction->setShortcut(QKeySequence::Undo);
+	m_lpEditToolBar->addAction(m_lpUndoAction);
 
 	const QIcon redoIcon	= QIcon::fromTheme("edit-redo");
-	m_lpActionRedo			= m_lpEditMenu->addAction(redoIcon, tr("&Redo"));
-	m_lpActionRedo->setPriority(QAction::LowPriority);
-	m_lpActionRedo->setShortcut(QKeySequence::Redo);
-	m_lpEditToolBar->addAction(m_lpActionRedo);
+	m_lpRedoAction			= m_lpEditMenu->addAction(redoIcon, tr("&Redo"));
+	m_lpRedoAction->setPriority(QAction::LowPriority);
+	m_lpRedoAction->setShortcut(QKeySequence::Redo);
+	m_lpEditToolBar->addAction(m_lpRedoAction);
 	m_lpEditMenu->addSeparator();
 
 #ifndef QT_NO_CLIPBOARD
 	const QIcon	cutIcon		= QIcon::fromTheme("edit-cut");
-	m_lpActionCut			= m_lpEditMenu->addAction(cutIcon, tr("Cu&t"));
-	m_lpActionCut->setPriority(QAction::LowPriority);
-	m_lpActionCut->setShortcut(QKeySequence::Cut);
-	m_lpEditToolBar->addAction(m_lpActionCut);
+	m_lpCutAction			= m_lpEditMenu->addAction(cutIcon, tr("Cu&t"));
+	m_lpCutAction->setPriority(QAction::LowPriority);
+	m_lpCutAction->setShortcut(QKeySequence::Cut);
+	m_lpEditToolBar->addAction(m_lpCutAction);
 
 	const QIcon	copyIcon	= QIcon::fromTheme("edit-copy");
-	m_lpActionCopy			= m_lpEditMenu->addAction(copyIcon, tr("&Copy"));
-	m_lpActionCopy->setPriority(QAction::LowPriority);
-	m_lpActionCopy->setShortcut(QKeySequence::Copy);
-	m_lpEditToolBar->addAction(m_lpActionCopy);
+	m_lpCopyAction			= m_lpEditMenu->addAction(copyIcon, tr("&Copy"));
+	m_lpCopyAction->setPriority(QAction::LowPriority);
+	m_lpCopyAction->setShortcut(QKeySequence::Copy);
+	m_lpEditToolBar->addAction(m_lpCopyAction);
 
 	const QIcon	pasteIcon	= QIcon::fromTheme("edit-paste");
-	m_lpActionPaste			= m_lpEditMenu->addAction(pasteIcon, tr("&Paste"));
-	m_lpActionPaste->setPriority(QAction::LowPriority);
-	m_lpActionPaste->setShortcut(QKeySequence::Paste);
-	m_lpEditToolBar->addAction(m_lpActionPaste);
+	m_lpPasteAction			= m_lpEditMenu->addAction(pasteIcon, tr("&Paste"));
+	m_lpPasteAction->setPriority(QAction::LowPriority);
+	m_lpPasteAction->setShortcut(QKeySequence::Paste);
+	m_lpEditToolBar->addAction(m_lpPasteAction);
 	if(const QMimeData*	md	= QApplication::clipboard()->mimeData())
-		m_lpActionPaste->setEnabled(md->hasText());
+		m_lpPasteAction->setEnabled(md->hasText());
 #endif
 }
 
@@ -339,74 +339,74 @@ void cMainWindow::createTextActions()
 	m_lpTextToolBar	= addToolBar(tr("Format Actions"));
 
 	const QIcon boldIcon	= QIcon::fromTheme("format-text-bold");
-	m_lpActionTextBold		= m_lpTextMenu->addAction(boldIcon, tr("&Bold"));
-	m_lpActionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
-	m_lpActionTextBold->setPriority(QAction::LowPriority);
+	m_lpTextBoldAction		= m_lpTextMenu->addAction(boldIcon, tr("&Bold"));
+	m_lpTextBoldAction->setShortcut(Qt::CTRL + Qt::Key_B);
+	m_lpTextBoldAction->setPriority(QAction::LowPriority);
 	QFont	bold;
 	bold.setBold(true);
-	m_lpActionTextBold->setFont(bold);
-	m_lpTextToolBar->addAction(m_lpActionTextBold);
-	m_lpActionTextBold->setCheckable(true);
+	m_lpTextBoldAction->setFont(bold);
+	m_lpTextToolBar->addAction(m_lpTextBoldAction);
+	m_lpTextBoldAction->setCheckable(true);
 
 	const QIcon	italicIcon	= QIcon::fromTheme("format-text-italic");
-	m_lpActionTextItalic	= m_lpTextMenu->addAction(italicIcon, tr("&Italic"));
-	m_lpActionTextItalic->setPriority(QAction::LowPriority);
-	m_lpActionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
+	m_lpTextItalicAction	= m_lpTextMenu->addAction(italicIcon, tr("&Italic"));
+	m_lpTextItalicAction->setPriority(QAction::LowPriority);
+	m_lpTextItalicAction->setShortcut(Qt::CTRL + Qt::Key_I);
 	QFont	italic;
 	italic.setItalic(true);
-	m_lpActionTextItalic->setFont(italic);
-	m_lpTextToolBar->addAction(m_lpActionTextItalic);
-	m_lpActionTextItalic->setCheckable(true);
+	m_lpTextItalicAction->setFont(italic);
+	m_lpTextToolBar->addAction(m_lpTextItalicAction);
+	m_lpTextItalicAction->setCheckable(true);
 
 	const QIcon	underlineIcon	= QIcon::fromTheme("format-text-underline");
-	m_lpActionTextUnderline = m_lpTextMenu->addAction(underlineIcon, tr("&Underline"));
-	m_lpActionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
-	m_lpActionTextUnderline->setPriority(QAction::LowPriority);
+	m_lpTextUnderlineAction = m_lpTextMenu->addAction(underlineIcon, tr("&Underline"));
+	m_lpTextUnderlineAction->setShortcut(Qt::CTRL + Qt::Key_U);
+	m_lpTextUnderlineAction->setPriority(QAction::LowPriority);
 	QFont underline;
 	underline.setUnderline(true);
-	m_lpActionTextUnderline->setFont(underline);
-	m_lpTextToolBar->addAction(m_lpActionTextUnderline);
-	m_lpActionTextUnderline->setCheckable(true);
+	m_lpTextUnderlineAction->setFont(underline);
+	m_lpTextToolBar->addAction(m_lpTextUnderlineAction);
+	m_lpTextUnderlineAction->setCheckable(true);
 
 	m_lpTextMenu->addSeparator();
 
 	const QIcon	leftIcon	= QIcon::fromTheme("format-justify-left");
-	m_lpActionAlignLeft = new QAction(leftIcon, tr("&Left"), this);
-	m_lpActionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
-	m_lpActionAlignLeft->setCheckable(true);
-	m_lpActionAlignLeft->setPriority(QAction::LowPriority);
+	m_lpAlignLeftAction = new QAction(leftIcon, tr("&Left"), this);
+	m_lpAlignLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
+	m_lpAlignLeftAction->setCheckable(true);
+	m_lpAlignLeftAction->setPriority(QAction::LowPriority);
 	const QIcon	centerIcon	= QIcon::fromTheme("format-justify-center");
-	m_lpActionAlignCenter = new QAction(centerIcon, tr("C&enter"), this);
-	m_lpActionAlignCenter->setShortcut(Qt::CTRL + Qt::Key_E);
-	m_lpActionAlignCenter->setCheckable(true);
-	m_lpActionAlignCenter->setPriority(QAction::LowPriority);
+	m_lpAlignCenterAction = new QAction(centerIcon, tr("C&enter"), this);
+	m_lpAlignCenterAction->setShortcut(Qt::CTRL + Qt::Key_E);
+	m_lpAlignCenterAction->setCheckable(true);
+	m_lpAlignCenterAction->setPriority(QAction::LowPriority);
 	const QIcon	rightIcon	= QIcon::fromTheme("format-justify-right");
-	m_lpActionAlignRight = new QAction(rightIcon, tr("&Right"), this);
-	m_lpActionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
-	m_lpActionAlignRight->setCheckable(true);
-	m_lpActionAlignRight->setPriority(QAction::LowPriority);
+	m_lpAlignRightAction = new QAction(rightIcon, tr("&Right"), this);
+	m_lpAlignRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
+	m_lpAlignRightAction->setCheckable(true);
+	m_lpAlignRightAction->setPriority(QAction::LowPriority);
 	const QIcon	fillIcon	= QIcon::fromTheme("format-justify-fill");
-	m_lpActionAlignJustify = new QAction(fillIcon, tr("&Justify"), this);
-	m_lpActionAlignJustify->setShortcut(Qt::CTRL + Qt::Key_J);
-	m_lpActionAlignJustify->setCheckable(true);
-	m_lpActionAlignJustify->setPriority(QAction::LowPriority);
+	m_lpAlignJustifyAction = new QAction(fillIcon, tr("&Justify"), this);
+	m_lpAlignJustifyAction->setShortcut(Qt::CTRL + Qt::Key_J);
+	m_lpAlignJustifyAction->setCheckable(true);
+	m_lpAlignJustifyAction->setPriority(QAction::LowPriority);
 
 	// Make sure the alignLeft  is always left of the alignRight
 	m_lpAlignGroup	= new QActionGroup(this);
 
 	if(QApplication::isLeftToRight())
 	{
-		m_lpAlignGroup->addAction(m_lpActionAlignLeft);
-		m_lpAlignGroup->addAction(m_lpActionAlignCenter);
-		m_lpAlignGroup->addAction(m_lpActionAlignRight);
+		m_lpAlignGroup->addAction(m_lpAlignLeftAction);
+		m_lpAlignGroup->addAction(m_lpAlignCenterAction);
+		m_lpAlignGroup->addAction(m_lpAlignRightAction);
 	}
 	else
 	{
-		m_lpAlignGroup->addAction(m_lpActionAlignRight);
-		m_lpAlignGroup->addAction(m_lpActionAlignCenter);
-		m_lpAlignGroup->addAction(m_lpActionAlignLeft);
+		m_lpAlignGroup->addAction(m_lpAlignRightAction);
+		m_lpAlignGroup->addAction(m_lpAlignCenterAction);
+		m_lpAlignGroup->addAction(m_lpAlignLeftAction);
 	}
-	m_lpAlignGroup->addAction(m_lpActionAlignJustify);
+	m_lpAlignGroup->addAction(m_lpAlignJustifyAction);
 
 	m_lpTextToolBar->addActions(m_lpAlignGroup->actions());
 	m_lpTextMenu->addActions(m_lpAlignGroup->actions());
@@ -415,8 +415,8 @@ void cMainWindow::createTextActions()
 
 	QPixmap pix(16, 16);
 	pix.fill(Qt::black);
-	m_lpActionTextColor = m_lpTextMenu->addAction(pix, tr("&Color..."));
-	m_lpTextToolBar->addAction(m_lpActionTextColor);
+	m_lpTextColorAction = m_lpTextMenu->addAction(pix, tr("&Color..."));
+	m_lpTextToolBar->addAction(m_lpTextColorAction);
 
 	m_lpFormatToolBar = addToolBar(tr("Format Actions"));
 	m_lpFormatToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
@@ -440,11 +440,8 @@ void cMainWindow::createTextActions()
 
 void cMainWindow::createToolsActions()
 {
-	QAction*		lpAction;
-
-	m_lpToolsMenu	= menuBar()->addMenu(tr("&Tools"));
-
-	lpAction		= m_lpToolsMenu->addAction(tr("&Options..."), this, &cMainWindow::onToolsOptions);
+	m_lpToolsMenu			= menuBar()->addMenu(tr("&Tools"));
+	m_lpToolsOptionsAction	= m_lpToolsMenu->addAction(tr("&Options..."), this, &cMainWindow::onToolsOptions);
 }
 
 void cMainWindow::createWindowActions()
@@ -453,110 +450,108 @@ void cMainWindow::createWindowActions()
 
 void cMainWindow::createHelpActions()
 {
-	QAction*		lpAction;
-
 	m_lpHelpMenu					= menuBar()->addMenu(tr("&Help"));
 
-	lpAction						= m_lpHelpMenu->addAction(tr("&Contents"), this, &cMainWindow::onHelpContents);
-	lpAction->setPriority(QAction::LowPriority);
-	lpAction->setShortcut(QKeySequence::HelpContents);
+	m_lpHelpContentsAction			= m_lpHelpMenu->addAction(tr("&Contents"), this, &cMainWindow::onHelpContents);
+	m_lpHelpContentsAction->setPriority(QAction::LowPriority);
+	m_lpHelpContentsAction->setShortcut(QKeySequence::HelpContents);
 
-	lpAction						= m_lpHelpMenu->addAction(tr("&Index"), this, &cMainWindow::onHelpIndex);
+	m_lpHelpIndexAction				= m_lpHelpMenu->addAction(tr("&Index"), this, &cMainWindow::onHelpIndex);
 
-	lpAction						= m_lpHelpMenu->addAction(tr("&About"), this, &cMainWindow::onHelpAbout);
-	lpAction->setPriority(QAction::LowPriority);
-	lpAction->setShortcut(QKeySequence::HelpContents);
+	m_lpHelpAboutAction				= m_lpHelpMenu->addAction(tr("&About"), this, &cMainWindow::onHelpAbout);
+	m_lpHelpAboutAction->setPriority(QAction::LowPriority);
+	m_lpHelpAboutAction->setShortcut(QKeySequence::HelpContents);
 }
 
 void cMainWindow::createContextActions()
 {
-	m_lpActionPartAdd = new QAction(tr("add part"), this);
-	m_lpActionPartAdd->setStatusTip(tr("add a new part"));
-	connect(m_lpActionPartAdd, &QAction::triggered, this, &cMainWindow::onAddPart);
+	m_lpPartAddAction = new QAction(tr("add part"), this);
+	m_lpPartAddAction->setStatusTip(tr("add a new part"));
+	connect(m_lpPartAddAction, &QAction::triggered, this, &cMainWindow::onAddPart);
 
-	m_lpActionPartEdit = new QAction(tr("edit part"), this);
-	m_lpActionPartEdit->setStatusTip(tr("edit the part"));
-	connect(m_lpActionPartEdit, &QAction::triggered, this, &cMainWindow::onEditPart);
+	m_lpPartEditAction = new QAction(tr("edit part"), this);
+	m_lpPartEditAction->setStatusTip(tr("edit the part"));
+	connect(m_lpPartEditAction, &QAction::triggered, this, &cMainWindow::onEditPart);
 
-	m_lpActionPartDelete = new QAction(tr("delete part"), this);
-	m_lpActionPartDelete->setStatusTip(tr("delete the part"));
-	connect(m_lpActionPartDelete, &QAction::triggered, this, &cMainWindow::onDeletePart);
+	m_lpPartDeleteAction = new QAction(tr("delete part"), this);
+	m_lpPartDeleteAction->setStatusTip(tr("delete the part"));
+	connect(m_lpPartDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePart);
 
-	m_lpActionChapterAdd = new QAction(tr("add chapter"), this);
-	m_lpActionChapterAdd->setStatusTip(tr("add a new chapter"));
-	connect(m_lpActionChapterAdd, &QAction::triggered, this, &cMainWindow::onAddChapter);
+	m_lpChapterAddAction = new QAction(tr("add chapter"), this);
+	m_lpChapterAddAction->setStatusTip(tr("add a new chapter"));
+	connect(m_lpChapterAddAction, &QAction::triggered, this, &cMainWindow::onAddChapter);
 
-	m_lpActionChapterEdit = new QAction(tr("edit chapter"), this);
-	m_lpActionChapterEdit->setStatusTip(tr("edit the chapter"));
-	connect(m_lpActionChapterEdit, &QAction::triggered, this, &cMainWindow::onEditChapter);
+	m_lpChapterEditAction = new QAction(tr("edit chapter"), this);
+	m_lpChapterEditAction->setStatusTip(tr("edit the chapter"));
+	connect(m_lpChapterEditAction, &QAction::triggered, this, &cMainWindow::onEditChapter);
 
-	m_lpActionChapterDelete = new QAction(tr("delete chapter"), this);
-	m_lpActionChapterDelete->setStatusTip(tr("delete the chapter"));
-	connect(m_lpActionChapterDelete, &QAction::triggered, this, &cMainWindow::onDeleteChapter);
+	m_lpChapterDeleteAction = new QAction(tr("delete chapter"), this);
+	m_lpChapterDeleteAction->setStatusTip(tr("delete the chapter"));
+	connect(m_lpChapterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteChapter);
 
-	m_lpActionSceneAdd = new QAction(tr("add scene"), this);
-	m_lpActionSceneAdd->setStatusTip(tr("add a new scene"));
-	connect(m_lpActionSceneAdd, &QAction::triggered, this, &cMainWindow::onAddScene);
+	m_lpSceneAddAction = new QAction(tr("add scene"), this);
+	m_lpSceneAddAction->setStatusTip(tr("add a new scene"));
+	connect(m_lpSceneAddAction, &QAction::triggered, this, &cMainWindow::onAddScene);
 
-	m_lpActionSceneEdit = new QAction(tr("edit scene"), this);
-	m_lpActionSceneEdit->setStatusTip(tr("edit the scene"));
-	connect(m_lpActionSceneEdit, &QAction::triggered, this, &cMainWindow::onEditScene);
+	m_lpSceneEditAction = new QAction(tr("edit scene"), this);
+	m_lpSceneEditAction->setStatusTip(tr("edit the scene"));
+	connect(m_lpSceneEditAction, &QAction::triggered, this, &cMainWindow::onEditScene);
 
-	m_lpActionSceneDelete = new QAction(tr("delete scene"), this);
-	m_lpActionSceneDelete->setStatusTip(tr("delete the scene"));
-	connect(m_lpActionSceneDelete, &QAction::triggered, this, &cMainWindow::onDeleteScene);
+	m_lpSceneDeleteAction = new QAction(tr("delete scene"), this);
+	m_lpSceneDeleteAction->setStatusTip(tr("delete the scene"));
+	connect(m_lpSceneDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteScene);
 
-	m_lpActionCharacterAdd = new QAction(tr("add character"), this);
-	m_lpActionCharacterAdd->setStatusTip(tr("add a new character"));
-	connect(m_lpActionCharacterAdd, &QAction::triggered, this, &cMainWindow::onAddCharacter);
+	m_lpCharacterAddAction = new QAction(tr("add character"), this);
+	m_lpCharacterAddAction->setStatusTip(tr("add a new character"));
+	connect(m_lpCharacterAddAction, &QAction::triggered, this, &cMainWindow::onAddCharacter);
 
-	m_lpActionCharacterEdit = new QAction(tr("edit character"), this);
-	m_lpActionCharacterEdit->setStatusTip(tr("edit the character"));
-	connect(m_lpActionCharacterEdit, &QAction::triggered, this, &cMainWindow::onEditCharacter);
+	m_lpCharacterEditAction = new QAction(tr("edit character"), this);
+	m_lpCharacterEditAction->setStatusTip(tr("edit the character"));
+	connect(m_lpCharacterEditAction, &QAction::triggered, this, &cMainWindow::onEditCharacter);
 
-	m_lpActionCharacterDelete = new QAction(tr("delete character"), this);
-	m_lpActionCharacterDelete->setStatusTip(tr("delete the character"));
-	connect(m_lpActionCharacterDelete, &QAction::triggered, this, &cMainWindow::onDeleteCharacter);
+	m_lpCharacterDeleteAction = new QAction(tr("delete character"), this);
+	m_lpCharacterDeleteAction->setStatusTip(tr("delete the character"));
+	connect(m_lpCharacterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteCharacter);
 
-	m_lpActionPlaceAdd = new QAction(tr("add place"), this);
-	m_lpActionPlaceAdd->setStatusTip(tr("add a new place"));
-	connect(m_lpActionPlaceAdd, &QAction::triggered, this, &cMainWindow::onAddPlace);
+	m_lpPlaceAddAction = new QAction(tr("add place"), this);
+	m_lpPlaceAddAction->setStatusTip(tr("add a new place"));
+	connect(m_lpPlaceAddAction, &QAction::triggered, this, &cMainWindow::onAddPlace);
 
-	m_lpActionPlaceEdit = new QAction(tr("edit place"), this);
-	m_lpActionPlaceEdit->setStatusTip(tr("edit the place"));
-	connect(m_lpActionPlaceEdit, &QAction::triggered, this, &cMainWindow::onEditPlace);
+	m_lpPlaceEditAction = new QAction(tr("edit place"), this);
+	m_lpPlaceEditAction->setStatusTip(tr("edit the place"));
+	connect(m_lpPlaceEditAction, &QAction::triggered, this, &cMainWindow::onEditPlace);
 
-	m_lpActionPlaceDelete = new QAction(tr("delete place"), this);
-	m_lpActionPlaceDelete->setStatusTip(tr("delete the place"));
-	connect(m_lpActionPlaceDelete, &QAction::triggered, this, &cMainWindow::onDeletePlace);
+	m_lpPlaceDeleteAction = new QAction(tr("delete place"), this);
+	m_lpPlaceDeleteAction->setStatusTip(tr("delete the place"));
+	connect(m_lpPlaceDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePlace);
 
-	m_lpActionObjectAdd = new QAction(tr("add object"), this);
-	m_lpActionObjectAdd->setStatusTip(tr("add a new object"));
-	connect(m_lpActionObjectAdd, &QAction::triggered, this, &cMainWindow::onAddObject);
+	m_lpObjectAddAction = new QAction(tr("add object"), this);
+	m_lpObjectAddAction->setStatusTip(tr("add a new object"));
+	connect(m_lpObjectAddAction, &QAction::triggered, this, &cMainWindow::onAddObject);
 
-	m_lpActionObjectEdit = new QAction(tr("edit object"), this);
-	m_lpActionObjectEdit->setStatusTip(tr("edit the object"));
-	connect(m_lpActionObjectEdit, &QAction::triggered, this, &cMainWindow::onEditObject);
+	m_lpObjectEditAction = new QAction(tr("edit object"), this);
+	m_lpObjectEditAction->setStatusTip(tr("edit the object"));
+	connect(m_lpObjectEditAction, &QAction::triggered, this, &cMainWindow::onEditObject);
 
-	m_lpActionObjectDelete = new QAction(tr("delete object"), this);
-	m_lpActionObjectDelete->setStatusTip(tr("delete the object"));
-	connect(m_lpActionObjectDelete, &QAction::triggered, this, &cMainWindow::onDeleteObject);
+	m_lpObjectDeleteAction = new QAction(tr("delete object"), this);
+	m_lpObjectDeleteAction->setStatusTip(tr("delete the object"));
+	connect(m_lpObjectDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteObject);
 
-	m_lpActionRechercheAdd = new QAction(tr("add recherche"), this);
-	m_lpActionRechercheAdd->setStatusTip(tr("add a new recherche"));
-	connect(m_lpActionRechercheAdd, &QAction::triggered, this, &cMainWindow::onAddRecherche);
+	m_lpRechercheAddAction = new QAction(tr("add recherche"), this);
+	m_lpRechercheAddAction->setStatusTip(tr("add a new recherche"));
+	connect(m_lpRechercheAddAction, &QAction::triggered, this, &cMainWindow::onAddRecherche);
 
-	m_lpActionRechercheEdit = new QAction(tr("edit recherche"), this);
-	m_lpActionRechercheEdit->setStatusTip(tr("edit the recherche"));
-	connect(m_lpActionRechercheEdit, &QAction::triggered, this, &cMainWindow::onEditRecherche);
+	m_lpRechercheEditAction = new QAction(tr("edit recherche"), this);
+	m_lpRechercheEditAction->setStatusTip(tr("edit the recherche"));
+	connect(m_lpRechercheEditAction, &QAction::triggered, this, &cMainWindow::onEditRecherche);
 
-	m_lpActionRechercheDelete = new QAction(tr("delete recherche"), this);
-	m_lpActionRechercheDelete->setStatusTip(tr("delete the recherche"));
-	connect(m_lpActionRechercheDelete, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
+	m_lpRechercheDeleteAction = new QAction(tr("delete recherche"), this);
+	m_lpRechercheDeleteAction->setStatusTip(tr("delete the recherche"));
+	connect(m_lpRechercheDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
 
-	m_lpActionRechercheOpenLink	= new QAction(tr("open link"), this);
-	m_lpActionRechercheOpenLink->setStatusTip(tr("open the link"));
-	connect(m_lpActionRechercheOpenLink, &QAction::triggered, this, &cMainWindow::onOpenRechercheLink);
+	m_lpRechercheOpenLinkAction	= new QAction(tr("open link"), this);
+	m_lpRechercheOpenLinkAction->setStatusTip(tr("open the link"));
+	connect(m_lpRechercheOpenLinkAction, &QAction::triggered, this, &cMainWindow::onOpenRechercheLink);
 }
 
 void cMainWindow::disableTextEdit()
@@ -587,29 +582,29 @@ void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
 	if(m_lpOldTextEdit)
 		disconnectTextEdit();
 
-	connect(m_lpActionTextBold,				&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextBold);
-	connect(m_lpActionTextItalic,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextItalic);
-	connect(m_lpActionTextUnderline,		&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextUnderline);
+	connect(m_lpTextBoldAction,				&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextBold);
+	connect(m_lpTextItalicAction,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextItalic);
+	connect(m_lpTextUnderlineAction,		&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextUnderline);
 
-	connect(m_lpActionTextColor,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextColor);
+	connect(m_lpTextColorAction,			&QAction::triggered,			lpTextEdit,				&cTextEdit::onTextColor);
 
-	connect(lpTextEdit->document(),			&cTextDocument::undoAvailable,	m_lpActionUndo,			&QAction::setEnabled);
-	connect(lpTextEdit->document(),			&cTextDocument::redoAvailable,	m_lpActionRedo,			&QAction::setEnabled);
-	m_lpActionUndo->setEnabled(lpTextEdit->document()->isUndoAvailable());
-	m_lpActionRedo->setEnabled(lpTextEdit->document()->isRedoAvailable());
+	connect(lpTextEdit->document(),			&cTextDocument::undoAvailable,	m_lpUndoAction,			&QAction::setEnabled);
+	connect(lpTextEdit->document(),			&cTextDocument::redoAvailable,	m_lpRedoAction,			&QAction::setEnabled);
+	m_lpUndoAction->setEnabled(lpTextEdit->document()->isUndoAvailable());
+	m_lpRedoAction->setEnabled(lpTextEdit->document()->isRedoAvailable());
 
-	connect(m_lpActionUndo,					&QAction::triggered,			lpTextEdit,				&cTextEdit::undo);
-	connect(m_lpActionRedo,					&QAction::triggered,			lpTextEdit,				&cTextEdit::redo);
+	connect(m_lpUndoAction,					&QAction::triggered,			lpTextEdit,				&cTextEdit::undo);
+	connect(m_lpRedoAction,					&QAction::triggered,			lpTextEdit,				&cTextEdit::redo);
 
 #ifndef QT_NO_CLIPBOARD
-	m_lpActionCut->setEnabled(false);
-	m_lpActionCopy->setEnabled(false);
+	m_lpCutAction->setEnabled(false);
+	m_lpCopyAction->setEnabled(false);
 
 	connect(QApplication::clipboard(),		&QClipboard::dataChanged,		this,					&cMainWindow::onClipboardDataChanged);
 
-	connect(m_lpActionCut,					&QAction::triggered,			lpTextEdit,				&cTextEdit::cut);
-	connect(m_lpActionCopy,					&QAction::triggered,			lpTextEdit,				&cTextEdit::copy);
-	connect(m_lpActionPaste,				&QAction::triggered,			lpTextEdit,				&cTextEdit::paste);
+	connect(m_lpCutAction,					&QAction::triggered,			lpTextEdit,				&cTextEdit::cut);
+	connect(m_lpCopyAction,					&QAction::triggered,			lpTextEdit,				&cTextEdit::copy);
+	connect(m_lpPasteAction,				&QAction::triggered,			lpTextEdit,				&cTextEdit::paste);
 #endif
 
 	connect(m_lpAlignGroup,					&QActionGroup::triggered,		lpTextEdit,		&cTextEdit::onTextAlign);
@@ -628,24 +623,24 @@ void cMainWindow::disconnectTextEdit()
 {
 	if(m_lpOldTextEdit)
 	{
-		disconnect(m_lpActionTextBold,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextBold);
-		disconnect(m_lpActionTextItalic,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextItalic);
-		disconnect(m_lpActionTextUnderline,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextUnderline);
+		disconnect(m_lpTextBoldAction,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextBold);
+		disconnect(m_lpTextItalicAction,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextItalic);
+		disconnect(m_lpTextUnderlineAction,		&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextUnderline);
 
-		disconnect(m_lpActionTextColor,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextColor);
+		disconnect(m_lpTextColorAction,			&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::onTextColor);
 
-		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::undoAvailable,	m_lpActionUndo,			&QAction::setEnabled);
-		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::redoAvailable,	m_lpActionRedo,			&QAction::setEnabled);
+		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::undoAvailable,	m_lpUndoAction,			&QAction::setEnabled);
+		disconnect(m_lpOldTextEdit->document(),	&cTextDocument::redoAvailable,	m_lpRedoAction,			&QAction::setEnabled);
 
-		disconnect(m_lpActionUndo,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::undo);
-		disconnect(m_lpActionRedo,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::redo);
+		disconnect(m_lpUndoAction,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::undo);
+		disconnect(m_lpRedoAction,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::redo);
 
 #ifndef QT_NO_CLIPBOARD
 		disconnect(QApplication::clipboard(),	&QClipboard::dataChanged,		this,					&cMainWindow::onClipboardDataChanged);
 
-		disconnect(m_lpActionCut,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::cut);
-		disconnect(m_lpActionCopy,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::copy);
-		disconnect(m_lpActionPaste,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::paste);
+		disconnect(m_lpCutAction,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::cut);
+		disconnect(m_lpCopyAction,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::copy);
+		disconnect(m_lpPasteAction,				&QAction::triggered,			m_lpOldTextEdit,		&cTextEdit::paste);
 #endif
 
 		disconnect(m_lpAlignGroup,				&QActionGroup::triggered,		m_lpOldTextEdit,		&cTextEdit::onTextAlign);
@@ -678,7 +673,7 @@ void cMainWindow::updateWindowTitle()
 	if(m_bSomethingChanged)
 		szWindowTitle.append(" *");
 
-	m_lpActionSave->setEnabled(m_bSomethingChanged);
+	m_lpFileSaveAction->setEnabled(m_bSomethingChanged);
 
 	setWindowTitle(szWindowTitle);
 }
@@ -698,7 +693,7 @@ void cMainWindow::onLanguageChanged()
 	QLocale		locale		= QLocale(szLanguage);
 
 	QLocale::setDefault(locale);
-	switchTranslator(m_lpTranslator, QString("%1%2storyWriter_%3.qm").arg(localePath()).arg(QDir::separator()).arg(szLanguage));
+	switchTranslator(m_lpTranslator, QString(":/locale/storyWriter_%1.qm").arg(szLanguage));
 //	switchTranslator(m_translatorQt, QString("qt_%1.qm").arg(szLanguage));
 }
 
@@ -727,40 +722,53 @@ void cMainWindow::changeEvent(QEvent* event)
 
 void cMainWindow::retranslateMenu()
 {
-	QMenuBar*		lpMenu	= menuBar();
-	if(lpMenu)
-		retranslateActions(lpMenu->actions());
+	m_lpFileMenu->setTitle(tr("&File"));
+	m_lpFileNewAction->setText(tr("&New"));
+	m_lpFileOpenAction->setText(tr("&Open..."));
+	m_lpFileSaveAction->setText(tr("&Save"));
+	m_lpFileSaveAsAction->setText(tr("Save &As..."));
 
-	if(m_lpFileMenu)
-		retranslateActions(m_lpFileMenu->actions());
-	if(m_lpEditMenu)
-		retranslateActions(m_lpEditMenu->actions());
-	if(m_lpTextMenu)
-		retranslateActions(m_lpTextMenu->actions());
-	if(m_lpToolsMenu)
-		retranslateActions(m_lpToolsMenu->actions());
-	if(m_lpWindowMenu)
-		retranslateActions(m_lpWindowMenu->actions());
-	if(m_lpHelpMenu)
-		retranslateActions(m_lpHelpMenu->actions());
+#ifndef QT_NO_PRINTER
+	m_lpFilePrintAction->setText(tr("&Print..."));
+	m_lpFilePrintPreviewAction->setText(tr("Print Preview..."));
+	m_lpFileExportPDFAction->setText(tr("&Export PDF..."));
+#endif
 
-	if(m_lpFileToolBar)
-		retranslateActions(m_lpFileToolBar->actions());
-	if(m_lpEditToolBar)
-		retranslateActions(m_lpEditToolBar->actions());
-	if(m_lpTextToolBar)
-		retranslateActions(m_lpTextToolBar->actions());
-	if(m_lpFormatToolBar)
-		retranslateActions(m_lpFormatToolBar->actions());
-}
+	m_lpFilePropertiesAction->setText(tr("P&roperties..."));
+	m_lpFileQuitAction->setText(tr("&Quit"));
 
-void cMainWindow::retranslateActions(QList<QAction*> actionList)
-{
-	for(int x = 0;x < actionList.count();x++)
-	{
-		QAction*	lpAction	= actionList[x];
-		lpAction->setText(QApplication::translate("cMainWindow", lpAction->text().toUtf8().data()));
-	}
+
+	m_lpEditMenu->setTitle(tr("&Edit"));
+	m_lpUndoAction->setText(tr("&Undo"));
+	m_lpRedoAction->setText( tr("&Redo"));
+
+#ifndef QT_NO_CLIPBOARD
+	m_lpCutAction->setText(tr("Cu&t"));
+	m_lpCopyAction->setText(tr("&Copy"));
+	m_lpPasteAction->setText(tr("&Paste"));
+#endif
+
+
+	m_lpTextMenu->setTitle(tr("F&ormat"));
+	m_lpTextBoldAction->setText(tr("&Bold"));
+	m_lpTextItalicAction->setText(tr("&Italic"));
+	m_lpTextUnderlineAction->setText(tr("&Underline"));
+	m_lpAlignLeftAction->setText(tr("&Left"));
+	m_lpAlignCenterAction->setText(tr("C&enter"));
+	m_lpAlignRightAction->setText(tr("&Right"));
+	m_lpAlignJustifyAction->setText(tr("&Justify"));
+	m_lpTextColorAction->setText(tr("&Color..."));
+
+
+	m_lpToolsMenu->setTitle(tr("&Tools"));
+	m_lpToolsOptionsAction->setText(tr("&Options..."));
+
+//	m_lpWindowMenu;							/*!< Pointer to the window menu */
+
+	m_lpHelpMenu->setTitle(tr("&Help"));
+	m_lpHelpContentsAction->setText(tr("&Contents"));
+	m_lpHelpIndexAction->setText(tr("&Index"));
+	m_lpHelpAboutAction->setText(tr("&About"));
 }
 
 void cMainWindow::retranslateWindows()
@@ -1219,7 +1227,7 @@ void cMainWindow::onOutlineContextMenu(const QPoint& pos)
 	QStandardItem*	lpItem	= m_lpOutlineModel->itemFromIndex(ui->m_lpOutlineList->currentIndex());
 	if(!lpItem)
 	{
-		menu.addAction(m_lpActionPartAdd);
+		menu.addAction(m_lpPartAddAction);
 	}
 	else
 	{
@@ -1229,28 +1237,28 @@ void cMainWindow::onOutlineContextMenu(const QPoint& pos)
 
 		if(lpPart)
 		{
-			menu.addAction(m_lpActionPartAdd);
-			menu.addAction(m_lpActionPartEdit);
-			menu.addAction(m_lpActionPartDelete);
+			menu.addAction(m_lpPartAddAction);
+			menu.addAction(m_lpPartEditAction);
+			menu.addAction(m_lpPartDeleteAction);
 			menu.addSeparator();
-			menu.addAction(m_lpActionChapterAdd);
+			menu.addAction(m_lpChapterAddAction);
 		}
 		else if(lpChapter)
 		{
-			menu.addAction(m_lpActionChapterAdd);
-			menu.addAction(m_lpActionChapterEdit);
-			menu.addAction(m_lpActionChapterDelete);
+			menu.addAction(m_lpChapterAddAction);
+			menu.addAction(m_lpChapterEditAction);
+			menu.addAction(m_lpChapterDeleteAction);
 			menu.addSeparator();
-			menu.addAction(m_lpActionSceneAdd);
+			menu.addAction(m_lpSceneAddAction);
 		}
 		else if(lpScene)
 		{
-			menu.addAction(m_lpActionSceneAdd);
-			menu.addAction(m_lpActionSceneEdit);
-			menu.addAction(m_lpActionSceneDelete);
+			menu.addAction(m_lpSceneAddAction);
+			menu.addAction(m_lpSceneEditAction);
+			menu.addAction(m_lpSceneDeleteAction);
 		}
 		else
-			menu.addAction(m_lpActionPartAdd);
+			menu.addAction(m_lpPartAddAction);
 	}
 
 	menu.exec(ui->m_lpOutlineList->mapToGlobal(pos));
@@ -1263,13 +1271,13 @@ void cMainWindow::onCharacterContextMenu(const QPoint& pos)
 	QStandardItem*	lpItem	= m_lpCharacterModel->itemFromIndex(ui->m_lpCharacterList->currentIndex());
 	if(!lpItem)
 	{
-		menu.addAction(m_lpActionCharacterAdd);
+		menu.addAction(m_lpCharacterAddAction);
 	}
 	else
 	{
-		menu.addAction(m_lpActionCharacterAdd);
-		menu.addAction(m_lpActionCharacterEdit);
-		menu.addAction(m_lpActionCharacterDelete);
+		menu.addAction(m_lpCharacterAddAction);
+		menu.addAction(m_lpCharacterEditAction);
+		menu.addAction(m_lpCharacterDeleteAction);
 	}
 
 	menu.exec(ui->m_lpCharacterList->mapToGlobal(pos));
@@ -1282,13 +1290,13 @@ void cMainWindow::onPlaceContextMenu(const QPoint& pos)
 	QStandardItem*	lpItem	= m_lpPlaceModel->itemFromIndex(ui->m_lpPlaceList->currentIndex());
 	if(!lpItem)
 	{
-		menu.addAction(m_lpActionPlaceAdd);
+		menu.addAction(m_lpPlaceAddAction);
 	}
 	else
 	{
-		menu.addAction(m_lpActionPlaceAdd);
-		menu.addAction(m_lpActionPlaceEdit);
-		menu.addAction(m_lpActionPlaceDelete);
+		menu.addAction(m_lpPlaceAddAction);
+		menu.addAction(m_lpPlaceEditAction);
+		menu.addAction(m_lpPlaceDeleteAction);
 	}
 
 	menu.exec(ui->m_lpPlaceList->mapToGlobal(pos));
@@ -1301,13 +1309,13 @@ void cMainWindow::onObjectContextMenu(const QPoint& pos)
 	QStandardItem*	lpItem	= m_lpObjectModel->itemFromIndex(ui->m_lpObjectList->currentIndex());
 	if(!lpItem)
 	{
-		menu.addAction(m_lpActionObjectAdd);
+		menu.addAction(m_lpObjectAddAction);
 	}
 	else
 	{
-		menu.addAction(m_lpActionObjectAdd);
-		menu.addAction(m_lpActionObjectEdit);
-		menu.addAction(m_lpActionObjectDelete);
+		menu.addAction(m_lpObjectAddAction);
+		menu.addAction(m_lpObjectEditAction);
+		menu.addAction(m_lpObjectDeleteAction);
 	}
 
 	menu.exec(ui->m_lpObjectList->mapToGlobal(pos));
@@ -1320,15 +1328,15 @@ void cMainWindow::onRechercheContextMenu(const QPoint& pos)
 	QStandardItem*	lpItem	= m_lpRechercheModel->itemFromIndex(ui->m_lpRechercheList->currentIndex());
 	if(!lpItem)
 	{
-		menu.addAction(m_lpActionRechercheAdd);
+		menu.addAction(m_lpRechercheAddAction);
 	}
 	else
 	{
-		menu.addAction(m_lpActionRechercheAdd);
-		menu.addAction(m_lpActionRechercheEdit);
-		menu.addAction(m_lpActionRechercheDelete);
+		menu.addAction(m_lpRechercheAddAction);
+		menu.addAction(m_lpRechercheEditAction);
+		menu.addAction(m_lpRechercheDeleteAction);
 		menu.addSeparator();
-		menu.addAction(m_lpActionRechercheOpenLink);
+		menu.addAction(m_lpRechercheOpenLinkAction);
 	}
 
 	menu.exec(ui->m_lpRechercheList->mapToGlobal(pos));
@@ -1506,7 +1514,7 @@ void cMainWindow::onClipboardDataChanged()
 {
 #ifndef QT_NO_CLIPBOARD
 	if(const QMimeData *md = QApplication::clipboard()->mimeData())
-		m_lpActionPaste->setEnabled(md->hasText());
+		m_lpPasteAction->setEnabled(md->hasText());
 #endif
 }
 
@@ -1514,28 +1522,28 @@ void cMainWindow::onFontChanged(const QFont& font)
 {
 	m_lpComboFont->setCurrentIndex(m_lpComboFont->findText(QFontInfo(font).family()));
 	m_lpComboSize->setCurrentIndex(m_lpComboSize->findText(QString::number(font.pointSize())));
-	m_lpActionTextBold->setChecked(font.bold());
-	m_lpActionTextItalic->setChecked(font.italic());
-	m_lpActionTextUnderline->setChecked(font.underline());
+	m_lpTextBoldAction->setChecked(font.bold());
+	m_lpTextItalicAction->setChecked(font.italic());
+	m_lpTextUnderlineAction->setChecked(font.underline());
 }
 
 void cMainWindow::onColorChanged(const QColor& color)
 {
 	QPixmap pix(16, 16);
 	pix.fill(color);
-	m_lpActionTextColor->setIcon(pix);
+	m_lpTextColorAction->setIcon(pix);
 }
 
 void cMainWindow::onAlignmentChanged(const Qt::Alignment &alignment)
 {
 	if(alignment & Qt::AlignLeft)
-		m_lpActionAlignLeft->setChecked(true);
+		m_lpAlignLeftAction->setChecked(true);
 	else if(alignment & Qt::AlignHCenter)
-		m_lpActionAlignCenter->setChecked(true);
+		m_lpAlignCenterAction->setChecked(true);
 	else if(alignment & Qt::AlignRight)
-		m_lpActionAlignRight->setChecked(true);
+		m_lpAlignRightAction->setChecked(true);
 	else if(alignment & Qt::AlignJustify)
-		m_lpActionAlignJustify->setChecked(true);
+		m_lpAlignJustifyAction->setChecked(true);
 }
 
 void cMainWindow::onAddPart()
@@ -2254,13 +2262,13 @@ void cMainWindow::updateRecentFileActions()
 	for(int i = 0; i < numRecentFiles; i++)
 	{
 		QString	text	= tr("&%1 %2").arg(i + 1).arg(QFileInfo(files[i]).fileName());
-		m_lpActionRecentFile[i]->setText(text);
-		m_lpActionRecentFile[i]->setData(files[i]);
-		m_lpActionRecentFile[i]->setVisible(true);
+		m_lpRecentFileAction[i]->setText(text);
+		m_lpRecentFileAction[i]->setData(files[i]);
+		m_lpRecentFileAction[i]->setVisible(true);
 	}
 
 	for(int j = numRecentFiles; j < MaxRecentFiles; j++)
-		m_lpActionRecentFile[j]->setVisible(false);
+		m_lpRecentFileAction[j]->setVisible(false);
 
 	m_lpSeparatorRecent->setVisible(numRecentFiles > 0);
 }

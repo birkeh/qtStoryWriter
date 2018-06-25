@@ -679,58 +679,73 @@ private:
 	QToolBar*			m_lpTextToolBar;						/*!< Pointer to the text toolbar */
 	QToolBar*			m_lpFormatToolBar;						/*!< Pointer to the text format toolbar*/
 
-	QAction*			m_lpActionSave;							/*!< Pointer to the File->Save action */
-	QAction*			m_lpActionUndo;							/*!< Pointer to the Undo action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionRedo;							/*!< Pointer to the Redo action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpFileNewAction;						/*!< TODO: describe */
+	QAction*			m_lpFileOpenAction;						/*!< TODO: describe */
+	QAction*			m_lpFileSaveAction;						/*!< TODO: describe */
+	QAction*			m_lpFileSaveAsAction;					/*!< TODO: describe */
+	QAction*			m_lpFilePrintAction;					/*!< TODO: describe */
+	QAction*			m_lpFilePrintPreviewAction;				/*!< TODO: describe */
+	QAction*			m_lpFileExportPDFAction;				/*!< TODO: describe */
+	QAction*			m_lpFilePropertiesAction;				/*!< TODO: describe */
+	QAction*			m_lpFileQuitAction;						/*!< TODO: describe */
 
-	QAction*			m_lpActionTextBold;						/*!< Pointer to the Bold text format action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionTextItalic;					/*!< Pointer to the Italic text format action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionTextUnderline;				/*!< Pointer to the Unterline text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpUndoAction;							/*!< Pointer to the Undo action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpRedoAction;							/*!< Pointer to the Redo action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionAlignLeft;					/*!< Pointer to the Align Left text format action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionAlignCenter;					/*!< Pointer to the Align Center text format action.  This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionAlignRight;					/*!< Pointer to the Align Right text format action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionAlignJustify;					/*!< Pointer to the Align Justify (Block) text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpTextBoldAction;						/*!< Pointer to the Bold text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpTextItalicAction;					/*!< Pointer to the Italic text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpTextUnderlineAction;				/*!< Pointer to the Unterline text format action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionTextColor;					/*!< Pointer to the Text Color action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpAlignLeftAction;					/*!< Pointer to the Align Left text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpAlignCenterAction;					/*!< Pointer to the Align Center text format action.  This action is active for Text Edit widgets only. */
+	QAction*			m_lpAlignRightAction;					/*!< Pointer to the Align Right text format action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpAlignJustifyAction;					/*!< Pointer to the Align Justify (Block) text format action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionCut;							/*!< Pointer to the Cut Text action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionCopy;							/*!< Pointer to the Copy Text action. This action is active for Text Edit widgets only. */
-	QAction*			m_lpActionPaste;						/*!< pointer to the Paste Text action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpTextColorAction;					/*!< Pointer to the Text Color action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionPartAdd;						/*!< TODO: describe */
-	QAction*			m_lpActionPartEdit;						/*!< TODO: describe */
-	QAction*			m_lpActionPartDelete;					/*!< TODO: describe */
+	QAction*			m_lpCutAction;							/*!< Pointer to the Cut Text action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpCopyAction;							/*!< Pointer to the Copy Text action. This action is active for Text Edit widgets only. */
+	QAction*			m_lpPasteAction;						/*!< pointer to the Paste Text action. This action is active for Text Edit widgets only. */
 
-	QAction*			m_lpActionChapterAdd;					/*!< TODO: describe */
-	QAction*			m_lpActionChapterEdit;					/*!< TODO: describe */
-	QAction*			m_lpActionChapterDelete;				/*!< TODO: describe */
+	QAction*			m_lpHelpContentsAction;					/*!< TODO: describe */
+	QAction*			m_lpHelpIndexAction;					/*!< TODO: describe */
+	QAction*			m_lpHelpAboutAction;					/*!< TODO: describe */
 
-	QAction*			m_lpActionSceneAdd;						/*!< TODO: describe */
-	QAction*			m_lpActionSceneEdit;					/*!< TODO: describe */
-	QAction*			m_lpActionSceneDelete;					/*!< TODO: describe */
+	QAction*			m_lpPartAddAction;						/*!< TODO: describe */
+	QAction*			m_lpPartEditAction;						/*!< TODO: describe */
+	QAction*			m_lpPartDeleteAction;					/*!< TODO: describe */
 
-	QAction*			m_lpActionCharacterAdd;					/*!< TODO: describe */
-	QAction*			m_lpActionCharacterEdit;				/*!< TODO: describe */
-	QAction*			m_lpActionCharacterDelete;				/*!< TODO: describe */
+	QAction*			m_lpChapterAddAction;					/*!< TODO: describe */
+	QAction*			m_lpChapterEditAction;					/*!< TODO: describe */
+	QAction*			m_lpChapterDeleteAction;				/*!< TODO: describe */
 
-	QAction*			m_lpActionPlaceAdd;						/*!< TODO: describe */
-	QAction*			m_lpActionPlaceEdit;					/*!< TODO: describe */
-	QAction*			m_lpActionPlaceDelete;					/*!< TODO: describe */
+	QAction*			m_lpSceneAddAction;						/*!< TODO: describe */
+	QAction*			m_lpSceneEditAction;					/*!< TODO: describe */
+	QAction*			m_lpSceneDeleteAction;					/*!< TODO: describe */
 
-	QAction*			m_lpActionObjectAdd;					/*!< TODO: describe */
-	QAction*			m_lpActionObjectEdit;					/*!< TODO: describe */
-	QAction*			m_lpActionObjectDelete;					/*!< TODO: describe */
+	QAction*			m_lpCharacterAddAction;					/*!< TODO: describe */
+	QAction*			m_lpCharacterEditAction;				/*!< TODO: describe */
+	QAction*			m_lpCharacterDeleteAction;				/*!< TODO: describe */
 
-	QAction*			m_lpActionRechercheAdd;					/*!< TODO: describe */
-	QAction*			m_lpActionRechercheEdit;				/*!< TODO: describe */
-	QAction*			m_lpActionRechercheDelete;				/*!< TODO: describe */
-	QAction*			m_lpActionRechercheOpenLink;			/*!< TODO: describe */
+	QAction*			m_lpPlaceAddAction;						/*!< TODO: describe */
+	QAction*			m_lpPlaceEditAction;					/*!< TODO: describe */
+	QAction*			m_lpPlaceDeleteAction;					/*!< TODO: describe */
+
+	QAction*			m_lpObjectAddAction;					/*!< TODO: describe */
+	QAction*			m_lpObjectEditAction;					/*!< TODO: describe */
+	QAction*			m_lpObjectDeleteAction;					/*!< TODO: describe */
+
+	QAction*			m_lpRechercheAddAction;					/*!< TODO: describe */
+	QAction*			m_lpRechercheEditAction;				/*!< TODO: describe */
+	QAction*			m_lpRechercheDeleteAction;				/*!< TODO: describe */
+	QAction*			m_lpRechercheOpenLinkAction;			/*!< TODO: describe */
+
+	QAction*			m_lpToolsOptionsAction;					/*!< TODO: describe */
 
 	QAction*			m_lpSeparatorRecent;
 
 	enum { MaxRecentFiles = 5 };								/*!< TODO: describe */
-	QAction*			m_lpActionRecentFile[MaxRecentFiles];	/*!< TODO: describe */
+	QAction*			m_lpRecentFileAction[MaxRecentFiles];	/*!< TODO: describe */
 
 	QActionGroup*		m_lpAlignGroup;							/*!< TODO: describe */
 
@@ -861,13 +876,6 @@ private:
 	*/
 	void				retranslateMenu();
 
-	/*!
-	 \brief
-
-	 \fn retranslateActions
-	 \param actionList
-	*/
-	void				retranslateActions(QList<QAction*> actionList);
 
 	/*!
 	 \brief

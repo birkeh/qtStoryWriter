@@ -41,7 +41,7 @@ cOptionsDialog::cOptionsDialog(QWidget *parent) :
 		ui->m_lpLanguage->setCurrentIndex(1);
 
 	QString			szPath		= localePath();
-	QStringList		localeList	= QDir(szPath).entryList(QStringList() << "storyWriter*.qm");
+	QStringList		localeList	= QDir(":/locale").entryList(QStringList() << "storyWriter*.qm");
 
 	for(int z = 0;z < localeList.count();z++)
 	{
