@@ -68,7 +68,8 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 	m_lpEditToolBar(0),
 	m_lpTextToolBar(0),
 	m_lpFormatToolBar(0),
-	m_lpOldTextEdit(0)
+	m_lpOldTextEdit(0),
+	m_lpOptionsDialog(0)
 {
 	initUI();
 	createActions();
@@ -679,12 +680,16 @@ void cMainWindow::updateWindowTitle()
 	setWindowTitle(szWindowTitle);
 }
 
-void switchTranslator(QTranslator* lpTranslator, const QString& filename)
+bool switchTranslator(QTranslator* lpTranslator, const QString& filename)
 {
 	qApp->removeTranslator(lpTranslator);
 
 	if(lpTranslator->load(filename))
+	{
 		qApp->installTranslator(lpTranslator);
+		return(true);
+	}
+	return(false);
 }
 
 void cMainWindow::onLanguageChanged()
@@ -694,7 +699,8 @@ void cMainWindow::onLanguageChanged()
 	QLocale		locale		= QLocale(szLanguage);
 
 	QLocale::setDefault(locale);
-	switchTranslator(m_lpTranslator, QString(":/locale/storyWriter_%1.qm").arg(szLanguage));
+	if(!switchTranslator(m_lpTranslator, QString("%1%2storyWriter_%3.qm").arg(localePath()).arg(QDir::separator()).arg(szLanguage)))
+		switchTranslator(m_lpTranslator, QString(":/locale/storyWriter_%1.qm").arg(szLanguage));
 //	switchTranslator(m_translatorQt, QString("qt_%1.qm").arg(szLanguage));
 }
 
@@ -847,6 +853,9 @@ void cMainWindow::retranslateWindows()
 
 		lpWidget->retranslateUI();
 	}
+
+	if(m_lpOptionsDialog)
+		m_lpOptionsDialog->retranslateUI();
 }
 
 void cMainWindow::onTextEditGotFocus(cTextEdit* lpTextEdit)
@@ -1555,12 +1564,16 @@ void cMainWindow::onFileProperties()
 
 void cMainWindow::onToolsOptions()
 {
-	cOptionsDialog*	lpOptionsDialog	= new cOptionsDialog(this);
+	if(m_lpOptionsDialog)
+		return;
 
-	connect(lpOptionsDialog,	&cOptionsDialog::onLanguageChanged,	this,	&cMainWindow::onLanguageChanged);
-	lpOptionsDialog->exec();
+	m_lpOptionsDialog	= new cOptionsDialog(this);
 
-	delete lpOptionsDialog;
+	connect(m_lpOptionsDialog,	&cOptionsDialog::onLanguageChanged,	this,	&cMainWindow::onLanguageChanged);
+	m_lpOptionsDialog->exec();
+
+	delete m_lpOptionsDialog;
+	m_lpOptionsDialog	= 0;
 }
 
 void cMainWindow::onHelpContents()

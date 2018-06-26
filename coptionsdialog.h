@@ -36,6 +36,14 @@ public:
 	*/
 	~cOptionsDialog();
 
+
+	/*!
+	 \brief
+
+	 \fn retranslateUI
+	*/
+	void				retranslateUI();
+
 private slots:
 	/*!
 	 \brief
@@ -52,6 +60,7 @@ signals:
 private:
 	Ui::cOptionsDialog*	ui;					/*!< TODO: describe */
 	QStandardItemModel*	m_lpCategoryModel;	/*!< TODO: describe */
+	QStandardItem*		m_lpGeneralItem;	/*!< TODO: describe */
 };
 
 #endif // COPTIONSDIALOG_H

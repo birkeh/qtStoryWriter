@@ -12,7 +12,8 @@
 
 cOptionsDialog::cOptionsDialog(QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::cOptionsDialog)
+	ui(new Ui::cOptionsDialog),
+	m_lpGeneralItem(0)
 {
 	ui->setupUi(this);
 
@@ -23,8 +24,8 @@ cOptionsDialog::cOptionsDialog(QWidget *parent) :
 	ui->m_lpCategoryList->setModel(m_lpCategoryModel);
 
 	QIcon			icon(":/category/category_core.png");
-	QStandardItem*	lpItem	= new QStandardItem(icon, tr("General"));
-	m_lpCategoryModel->appendRow(lpItem);
+	m_lpGeneralItem	= new QStandardItem(icon, tr("General"));
+	m_lpCategoryModel->appendRow(m_lpGeneralItem);
 
 	ui->m_lpCategoryList->resizeColumnToContents(0);
 
@@ -51,17 +52,41 @@ cOptionsDialog::cOptionsDialog(QWidget *parent) :
 		szLanguage	= QLocale::languageToString(QLocale(szLocale).language());
 
 		ui->m_lpLanguage->addItem(szLanguage, szLocale);
-		if(!szCur.compare(szLocale, Qt::CaseInsensitive))
-			ui->m_lpLanguage->setCurrentIndex(z+2);
 	}
+
+	localeList	= QDir(szPath).entryList(QStringList() << "storyWriter*.qm");
+
+	for(int z = 0;z < localeList.count();z++)
+	{
+		QString		szLocale	= localeList[z];
+		szLocale.truncate(szLocale.lastIndexOf("."));
+		szLocale.remove(0, szLocale.indexOf('_') + 1);
+		szLanguage	= QLocale::languageToString(QLocale(szLocale).language());
+
+		if(ui->m_lpLanguage->findText(szLanguage) == -1)
+			ui->m_lpLanguage->addItem(szLanguage, szLocale);
+	}
+
+	ui->m_lpLanguage->model()->sort(0);
+	ui->m_lpLanguage->setCurrentText(szCur);
 
 	connect(ui->m_lpLanguage,	QOverload<int>::of(&QComboBox::currentIndexChanged),	this,	&cOptionsDialog::onLanguageIndexChanged);
 	connect(ui->m_lpButtonBox,	QDialogButtonBox::clicked,								this,	&cOptionsDialog::onButtonClicked);
+
+	retranslateUI();
 }
 
 cOptionsDialog::~cOptionsDialog()
 {
 	delete ui;
+}
+
+void cOptionsDialog::retranslateUI()
+{
+	ui->retranslateUi(this);
+
+	m_lpGeneralItem->setText(tr("General"));
+//	setWindowTitle(windowTitle() + m_lpPart->name());
 }
 
 void cOptionsDialog::onLanguageIndexChanged(int /*index*/)

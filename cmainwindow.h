@@ -17,6 +17,7 @@
 #include "cdoublespinbox.h"
 #include "cdatetimeedit.h"
 #include "ccombobox.h"
+#include "coptionsdialog.h"
 
 #include "csplashscreen.h"
 
@@ -755,6 +756,7 @@ private:
 	cTextEdit*			m_lpOldTextEdit;						/*!< TODO: describe */
 	QString				m_szOldPath;							/*!< TODO: describe */
 
+	cOptionsDialog*		m_lpOptionsDialog;						/*!< TODO: describe */
 	/*!
 	 \brief
 

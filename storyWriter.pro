@@ -12,7 +12,7 @@ QMAKE_TARGET_COPYRIGHT = (c) 2018 WIN-DESIGN
 
 QT       += core gui xml sql
 
-TRANSLATIONS	= storyWriter_de.ts
+TRANSLATIONS	= storyWriter_de.ts storyWriter_fr.ts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -155,7 +155,8 @@ DISTFILES += \
     images/icon.ico \
     resources/icon.png \
     images/tango/32x32/actions/document-pdf.png \
-    storyWriter_de.ts
+    storyWriter_de.ts \
+    storyWriter_fr.ts
 
 RESOURCES += \
     storywriter.qrc
