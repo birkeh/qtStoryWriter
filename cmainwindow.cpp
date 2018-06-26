@@ -1555,6 +1555,8 @@ void cMainWindow::onFilePrintPreview()
 
 void cMainWindow::onFilePrintPdf()
 {
+	if(m_lpStoryBook)
+		m_lpStoryBook->printPdf("C:\\Temp\\test.pdf");
 }
 
 void cMainWindow::onFileProperties()

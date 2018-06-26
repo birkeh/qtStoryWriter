@@ -13,6 +13,7 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	m_lpBook(0)
 {
 	ui->setupUi(this);
+	ui->m_lpTab->setCurrentIndex(0);
 
 	connect(ui->m_lpTitle,				&cLineEdit::gotFocus,	(cMainWindow*)parent,		&cMainWindow::onLineEditGotFocus);
 	connect(ui->m_lpTitle,				&cLineEdit::lostFocus,	(cMainWindow*)parent,		&cMainWindow::onLineEditLostFocus);

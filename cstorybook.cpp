@@ -22,6 +22,9 @@
 
 #include <QThread>
 
+#ifndef QT_NO_PRINTER
+#include <QPrinter>
+#endif
 
 
 cStoryBook::cStoryBook(QObject *parent) :
@@ -150,6 +153,82 @@ bool cStoryBook::saveAs(const QString& szProject)
 
 
 	return(save());
+}
+
+bool cStoryBook::printPdf(const QString& szFileName)
+{
+	QPrinter	printer(QPrinter::PrinterResolution);
+
+	printer.setOutputFormat(QPrinter::PdfFormat);
+	printer.setPaperSize(QPrinter::A4);
+	printer.setOutputFileName(szFileName);
+
+//	QMap<qint32, QStandardItem*>	part;
+//	QMap<qint32, QStandardItem*>	chapter;
+//	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
+//	QStandardItem*					lpRootItem		= lpModel->invisibleRootItem();
+//	QFont							fontPart		= lpRootItem->font();
+//	QFont							fontChapter		= lpRootItem->font();
+//	QFont							fontScene		= lpRootItem->font();
+//	QColor							background(241, 241, 241);
+
+//	for(int x = 0;x < m_partList.count();x++)
+//	{
+//		cPart*			lpPart	= m_partList.at(x);
+//		if(lpPart->deleted())
+//			continue;
+
+//		QStandardItem*	lpItem		= new QStandardItem(lpPart->name());
+//		lpItem->setData(QVariant::fromValue(lpPart));
+//		lpItem->setFont(fontPart);
+//		lpItem->setBackground(QBrush(background));
+//		if(lpPart->description())
+//			lpItem->setToolTip(lpPart->description()->toPlainText());
+//		part.insert(lpPart->id(), lpItem);
+//		lpModel->appendRow(lpItem);
+//		lpPart->setItem(lpItem);
+
+//		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpModel->invisibleRootItem()->index(), true);
+//	}
+
+//	for(int x = 0;x < m_chapterList.count();x++)
+//	{
+//		cChapter*		lpChapter	= m_chapterList.at(x);
+
+//		if(lpChapter->deleted())
+//			continue;
+
+//		QStandardItem*	lpRoot		= part.value(lpChapter->part()->id());
+
+//		if(lpRoot)
+//		{
+//			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
+//			lpItem->setData(QVariant::fromValue(lpChapter));
+//			lpItem->setFont(fontChapter);
+//			lpItem->setForeground(QBrush(Qt::darkBlue));
+//			lpItem->setBackground(QBrush(background));
+//			if(lpChapter->description())
+//				lpItem->setToolTip(lpChapter->description()->toPlainText());
+//			chapter.insert(lpChapter->id(), lpItem);
+//			lpRoot->appendRow(lpItem);
+//			lpChapter->setItem(lpItem);
+
+//			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
+//		}
+//	}
+
+	for(int x = 0;x < m_sceneList.count();x++)
+	{
+		cScene*			lpScene		= m_sceneList.at(x);
+
+		if(lpScene->deleted())
+			continue;
+
+		lpScene->text()->setPageSize(printer.pageRect().size());
+		lpScene->text()->print(&printer);
+	}
+
+	return(true);
 }
 
 bool cStoryBook::openDatabase()

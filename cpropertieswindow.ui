@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
-    <height>528</height>
+    <width>836</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,120 +15,460 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0">
-     <item row="3" column="1">
-      <widget class="cDateTimeEdit" name="m_lpStartedAt">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Started at:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Short Description:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Finished at:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Author:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Description:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Title:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Subtitle:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="cDateTimeEdit" name="m_lpFinishedAt">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="4">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Target Date:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" colspan="5">
-      <widget class="cLineEdit" name="m_lpTitle"/>
-     </item>
-     <item row="1" column="1" colspan="5">
-      <widget class="cLineEdit" name="m_lpSubTitle"/>
-     </item>
-     <item row="2" column="1" colspan="5">
-      <widget class="cLineEdit" name="m_lpAuthor"/>
-     </item>
-     <item row="4" column="1" colspan="5">
-      <widget class="cTextEdit" name="m_lpShortDescription"/>
-     </item>
-     <item row="5" column="1" colspan="5">
-      <widget class="cTextEdit" name="m_lpDescription"/>
-     </item>
-     <item row="3" column="5">
-      <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
-     </item>
-    </layout>
+    <widget class="QTabWidget" name="m_lpTab">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="m_lpGeneral">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0,0,0">
+         <item row="0" column="1" colspan="5">
+          <widget class="cLineEdit" name="m_lpTitle"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Author:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Subtitle:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Title:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="5">
+          <widget class="cLineEdit" name="m_lpSubTitle"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Started at:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="cDateTimeEdit" name="m_lpStartedAt">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="5">
+          <widget class="cLineEdit" name="m_lpAuthor"/>
+         </item>
+         <item row="3" column="5">
+          <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Short Description:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="cDateTimeEdit" name="m_lpFinishedAt">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1" colspan="5">
+          <widget class="cTextEdit" name="m_lpShortDescription"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Finished at:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="4">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Target Date:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Description:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1" colspan="5">
+          <widget class="cTextEdit" name="m_lpDescription"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_lpExport">
+      <attribute name="title">
+       <string>Export/Print</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>792</width>
+            <height>707</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_13">
+           <item row="2" column="0">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Chapter</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_10">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_9">
+                  <property name="text">
+                   <string>print name</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkBox_11">
+                  <property name="text">
+                   <string>print text</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkBox_10">
+                  <property name="text">
+                   <string>print description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_10"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_9"/>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_11"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox_9"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QComboBox" name="comboBox_10"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QComboBox" name="comboBox_11"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Part</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_7">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_6">
+                  <property name="text">
+                   <string>print name</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkBox_7">
+                  <property name="text">
+                   <string>print description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkBox_8">
+                  <property name="text">
+                   <string>print text</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_7"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_6"/>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_8"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox_6"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QComboBox" name="comboBox_7"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QComboBox" name="comboBox_8"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string>Scene</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_12">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_12">
+                  <property name="text">
+                   <string>name</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkBox_13">
+                  <property name="text">
+                   <string>description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkBox_14">
+                  <property name="text">
+                   <string>text</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_13"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_12"/>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_14"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox_12"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QComboBox" name="comboBox_13"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QComboBox" name="comboBox_14"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>Book</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_4">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox">
+                  <property name="text">
+                   <string>print title</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkBox_2">
+                  <property name="text">
+                   <string>print subtitle</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkBox_3">
+                  <property name="text">
+                   <string>print short description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="checkBox_4">
+                  <property name="text">
+                   <string>print description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="checkBox_5">
+                  <property name="text">
+                   <string>print author</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_2"/>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox"/>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_3"/>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_4"/>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QFontComboBox" name="fontComboBox_5"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="comboBox"/>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QComboBox" name="comboBox_2"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QComboBox" name="comboBox_3"/>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QComboBox" name="comboBox_4"/>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QComboBox" name="comboBox_5"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Page</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_15">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_14">
+                <item row="0" column="0" colspan="2">
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>paper size:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_11">
+                  <property name="text">
+                   <string>right margin:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>left margin:</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+                </item>
+                <item row="0" column="2" colspan="2">
+                 <widget class="QComboBox" name="comboBox_15"/>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QLabel" name="label_12">
+                  <property name="text">
+                   <string>top margin:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="6">
+                 <widget class="QLabel" name="label_13">
+                  <property name="text">
+                   <string>bottom margin:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="5">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+                </item>
+                <item row="1" column="7">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>

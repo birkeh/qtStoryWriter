@@ -76,6 +76,15 @@ public:
 	/*!
 	 \brief
 
+	 \fn printPdf
+	 \param szFileName
+	 \return bool
+	*/
+	bool			printPdf(const QString& szFileName);
+
+	/*!
+	 \brief
+
 	 \fn openDatabase
 	 \return bool
 	*/
