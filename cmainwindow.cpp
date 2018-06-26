@@ -72,6 +72,7 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 {
 	initUI();
 	createActions();
+	onLanguageChanged();
 
 	disableTextEdit();
 
@@ -769,6 +770,73 @@ void cMainWindow::retranslateMenu()
 	m_lpHelpContentsAction->setText(tr("&Contents"));
 	m_lpHelpIndexAction->setText(tr("&Index"));
 	m_lpHelpAboutAction->setText(tr("&About"));
+
+
+	m_lpPartAddAction->setText(tr("add part"));
+	m_lpPartAddAction->setStatusTip(tr("add a new part"));
+
+	m_lpPartEditAction->setText(tr("edit part"));
+	m_lpPartEditAction->setStatusTip(tr("edit the part"));
+
+	m_lpPartDeleteAction->setText(tr("delete part"));
+	m_lpPartDeleteAction->setStatusTip(tr("delete the part"));
+
+	m_lpChapterAddAction->setText(tr("add chapter"));
+	m_lpChapterAddAction->setStatusTip(tr("add a new chapter"));
+
+	m_lpChapterEditAction->setText(tr("edit chapter"));
+	m_lpChapterEditAction->setStatusTip(tr("edit the chapter"));
+
+	m_lpChapterDeleteAction->setText(tr("delete chapter"));
+	m_lpChapterDeleteAction->setStatusTip(tr("delete the chapter"));
+
+	m_lpSceneAddAction->setText(tr("add scene"));
+	m_lpSceneAddAction->setStatusTip(tr("add a new scene"));
+
+	m_lpSceneEditAction->setText(tr("edit scene"));
+	m_lpSceneEditAction->setStatusTip(tr("edit the scene"));
+
+	m_lpSceneDeleteAction->setText(tr("delete scene"));
+	m_lpSceneDeleteAction->setStatusTip(tr("delete the scene"));
+
+	m_lpCharacterAddAction->setText(tr("add character"));
+	m_lpCharacterAddAction->setStatusTip(tr("add a new character"));
+
+	m_lpCharacterEditAction->setText(tr("edit character"));
+	m_lpCharacterEditAction->setStatusTip(tr("edit the character"));
+
+	m_lpCharacterDeleteAction->setText(tr("delete character"));
+	m_lpCharacterDeleteAction->setStatusTip(tr("delete the character"));
+
+	m_lpPlaceAddAction->setText(tr("add place"));
+	m_lpPlaceAddAction->setStatusTip(tr("add a new place"));
+
+	m_lpPlaceEditAction->setText(tr("edit place"));
+	m_lpPlaceEditAction->setStatusTip(tr("edit the place"));
+
+	m_lpPlaceDeleteAction->setText(tr("delete place"));
+	m_lpPlaceDeleteAction->setStatusTip(tr("delete the place"));
+
+	m_lpObjectAddAction->setText(tr("add object"));
+	m_lpObjectAddAction->setStatusTip(tr("add a new object"));
+
+	m_lpObjectEditAction->setText(tr("edit object"));
+	m_lpObjectEditAction->setStatusTip(tr("edit the object"));
+
+	m_lpObjectDeleteAction->setText(tr("delete object"));
+	m_lpObjectDeleteAction->setStatusTip(tr("delete the object"));
+
+	m_lpRechercheAddAction->setText(tr("add recherche"));
+	m_lpRechercheAddAction->setStatusTip(tr("add a new recherche"));
+
+	m_lpRechercheEditAction->setText(tr("edit recherche"));
+	m_lpRechercheEditAction->setStatusTip(tr("edit the recherche"));
+
+	m_lpRechercheDeleteAction->setText(tr("delete recherche"));
+	m_lpRechercheDeleteAction->setStatusTip(tr("delete the recherche"));
+
+	m_lpRechercheOpenLinkAction->setText(tr("open link"));
+	m_lpRechercheOpenLinkAction->setStatusTip(tr("open the link"));
 }
 
 void cMainWindow::retranslateWindows()
