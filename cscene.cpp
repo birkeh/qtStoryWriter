@@ -471,7 +471,6 @@ bool cSceneList::save()
 	objectDelete.prepare("DELETE FROM sceneObject WHERE sceneID=:sceneID;");
 	objectAdd.prepare("INSERT INTO sceneObject (sceneID, objectID, description) VALUES (:sceneID, :objectID, :description);");
 
-	myDebug;
 	for(int x = 0;x < count();x++)
 	{
 		cScene*	lpScene	= at(x);

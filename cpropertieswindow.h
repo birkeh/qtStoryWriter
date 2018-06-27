@@ -121,6 +121,14 @@ private:
 	Ui::cPropertiesWindow*	ui;				/*!< TODO: describe */
 	cMainWindow*			m_lpMainWindow;	/*!< TODO: describe */
 	cBook*					m_lpBook;		/*!< TODO: describe */
+
+	/*!
+	 \brief
+
+	 \fn fillFontSize
+	 \param lpComboBox
+	*/
+	void					fillFontSize(QComboBox* lpComboBox);
 };
 
 #endif // CPROPERTIESWINDOW_H

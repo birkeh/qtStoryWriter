@@ -323,17 +323,75 @@ public:
 	bool			rechercheInUse(cRecherche* lpRecherche);
 
 private:
-	QString			m_szProject;		/*!< TODO: describe */
-	bool			m_bIsOpen;			/*!< TODO: describe */
-	QSqlDatabase	m_db;				/*!< TODO: describe */
-	cBook			m_book;				/*!< TODO: describe */
-	cPartList		m_partList;			/*!< TODO: describe */
-	cChapterList	m_chapterList;		/*!< TODO: describe */
-	cSceneList		m_sceneList;		/*!< TODO: describe */
-	cCharacterList	m_characterList;	/*!< TODO: describe */
-	cPlaceList		m_placeList;		/*!< TODO: describe */
-	cObjectList		m_objectList;		/*!< TODO: describe */
-	cRechercheList	m_rechercheList;	/*!< TODO: describe */
+	QString			m_szProject;				/*!< TODO: describe */
+	bool			m_bIsOpen;					/*!< TODO: describe */
+	QSqlDatabase	m_db;						/*!< TODO: describe */
+	cBook			m_book;						/*!< TODO: describe */
+	cPartList		m_partList;					/*!< TODO: describe */
+	cChapterList	m_chapterList;				/*!< TODO: describe */
+	cSceneList		m_sceneList;				/*!< TODO: describe */
+	cCharacterList	m_characterList;			/*!< TODO: describe */
+	cPlaceList		m_placeList;				/*!< TODO: describe */
+	cObjectList		m_objectList;				/*!< TODO: describe */
+	cRechercheList	m_rechercheList;			/*!< TODO: describe */
+
+	bool			m_bPrintTitle;				/*!< TODO: describe */
+	QString			m_szTitleFont;				/*!< TODO: describe */
+	qint16			m_iTitleFontSize;			/*!< TODO: describe */
+	bool			m_bTitleBold;				/*!< TODO: describe */
+	bool			m_bTitleItalic;				/*!< TODO: describe */
+	bool			m_bTitleUnderline;			/*!< TODO: describe */
+	qint16			m_iTitleAlign;				/*!< TODO: describe */
+	bool			m_bPrintSubTitle;			/*!< TODO: describe */
+	QString			m_szSubtitleFont;			/*!< TODO: describe */
+	qint16			m_iSubtitleFontSize;		/*!< TODO: describe */
+	bool			m_bSubtitleBold;			/*!< TODO: describe */
+	bool			m_bSubtitleItalic;			/*!< TODO: describe */
+	bool			m_bSubtitleUnderline;		/*!< TODO: describe */
+	qint16			m_iSubtitleAlign;			/*!< TODO: describe */
+	bool			m_bPrintShortDescription;	/*!< TODO: describe */
+	bool			m_bPrintDescription;		/*!< TODO: describe */
+	bool			m_bPrintAuthor;				/*!< TODO: describe */
+	QString			m_szAuthorFont;				/*!< TODO: describe */
+	qint16			m_iAuthorFontSize;			/*!< TODO: describe */
+	bool			m_bAuthorBold;				/*!< TODO: describe */
+	bool			m_bAuthorItalic;			/*!< TODO: describe */
+	bool			m_bAuthorUnderline;			/*!< TODO: describe */
+	qint16			m_iAuthorAlign;				/*!< TODO: describe */
+	bool			m_bPrintPartName;			/*!< TODO: describe */
+	QString			m_szPartFont;				/*!< TODO: describe */
+	qint16			m_iPartFontSize;			/*!< TODO: describe */
+	bool			m_bPartBold;				/*!< TODO: describe */
+	bool			m_bPartItalic;				/*!< TODO: describe */
+	bool			m_bPartUnderline;			/*!< TODO: describe */
+	qint16			m_iPartAlign;				/*!< TODO: describe */
+	bool			m_bPrintPartDescription;	/*!< TODO: describe */
+	bool			m_bPrintPartText;			/*!< TODO: describe */
+	bool			m_bPrintChapterName;		/*!< TODO: describe */
+	QString			m_szChapterFont;			/*!< TODO: describe */
+	qint16			m_iChapterFontSize;			/*!< TODO: describe */
+	bool			m_bChapterBold;				/*!< TODO: describe */
+	bool			m_bChapterItalic;			/*!< TODO: describe */
+	bool			m_bChapterUnderline;		/*!< TODO: describe */
+	qint16			m_iChapterAlign;			/*!< TODO: describe */
+	bool			m_bPrintChapterDescription;	/*!< TODO: describe */
+	bool			m_bPrintChapterText;		/*!< TODO: describe */
+	bool			m_bPrintSceneName;			/*!< TODO: describe */
+	QString			m_szSceneFont;				/*!< TODO: describe */
+	qint16			m_iSceneFontSize;			/*!< TODO: describe */
+	bool			m_bSceneBold;				/*!< TODO: describe */
+	bool			m_bSceneItalic;				/*!< TODO: describe */
+	bool			m_bSceneUnderline;			/*!< TODO: describe */
+	qint16			m_iSceneAlign;				/*!< TODO: describe */
+	bool			m_bPrintSceneDescription;	/*!< TODO: describe */
+	bool			m_bPrintSceneText;			/*!< TODO: describe */
+	QString			m_szPaperSize;				/*!< TODO: describe */
+	qint16			m_iPaperOrientation;		/*!< TODO: describe */
+	qreal			m_dLeftMargin;				/*!< TODO: describe */
+	qreal			m_dRightMargin;				/*!< TODO: describe */
+	qreal			m_dTopMargin;				/*!< TODO: describe */
+	qreal			m_dBottomMargin;			/*!< TODO: describe */
+	qint16			m_iUnit;					/*!< TODO: describe */
 
 	/*!
 	 \brief
@@ -357,6 +415,14 @@ private:
 	 \return bool
 	*/
 	bool			createTable(const QString& szSQL);
+
+	/*!
+	 \brief
+
+	 \fn loadConfig
+	 \return bool
+	*/
+	bool			loadConfig();
 
 	/*!
 	 \brief
@@ -414,6 +480,14 @@ private:
 	 \return bool
 	*/
 	bool			loadRechercheList();
+
+	/*!
+	 \brief
+
+	 \fn saveConfig
+	 \return bool
+	*/
+	bool			saveConfig();
 
 	/*!
 	 \brief

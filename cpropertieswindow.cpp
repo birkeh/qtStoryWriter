@@ -15,6 +15,13 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->m_lpTab->setCurrentIndex(0);
 
+	fillFontSize(ui->m_lpAuthorFontSize);
+	fillFontSize(ui->m_lpChapterNameFontSize);
+	fillFontSize(ui->m_lpPartNameFontSize);
+	fillFontSize(ui->m_lpSceneNameFontSize);
+	fillFontSize(ui->m_lpSubtitleFontSize);
+	fillFontSize(ui->m_lpTitleFontSize);
+
 	connect(ui->m_lpTitle,				&cLineEdit::gotFocus,	(cMainWindow*)parent,		&cMainWindow::onLineEditGotFocus);
 	connect(ui->m_lpTitle,				&cLineEdit::lostFocus,	(cMainWindow*)parent,		&cMainWindow::onLineEditLostFocus);
 
@@ -39,7 +46,6 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	connect(ui->m_lpDescription,		&cTextEdit::gotFocus,	(cMainWindow*)parent,		&cMainWindow::onTextEditGotFocus);
 	connect(ui->m_lpDescription,		&cTextEdit::lostFocus,	(cMainWindow*)parent,		&cMainWindow::onTextEditLostFocus);
 }
-
 
 cPropertiesWindow::~cPropertiesWindow()
 {
@@ -124,4 +130,13 @@ void cPropertiesWindow::onTargetDateChanged(const QDateTime& dateTime)
 void cPropertiesWindow::onDescriptionChanged()
 {
 	m_lpMainWindow->somethingChanged();
+}
+
+void cPropertiesWindow::fillFontSize(QComboBox* lpComboBox)
+{
+	lpComboBox->setEditable(true);
+
+	const QList<int> standardSizes	= QFontDatabase::standardSizes();
+	foreach(int size, standardSizes)
+		lpComboBox->addItem(QString::number(size));
 }

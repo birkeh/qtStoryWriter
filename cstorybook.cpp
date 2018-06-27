@@ -44,6 +44,9 @@ cStoryBook::cStoryBook(const QString &szProject, QObject *parent) :
 	if(!openDatabase())
 		return;
 
+	if(!loadConfig())
+		return;
+
 	if(!loadCharacterList())
 		return;
 
@@ -83,6 +86,9 @@ bool cStoryBook::save()
 		return(false);
 
 	if(!m_db.isOpen())
+		return(false);
+
+	if(!saveConfig())
 		return(false);
 
 	if(!saveCharacterList())
@@ -249,7 +255,7 @@ bool cStoryBook::openDatabase()
 	{
 		QSqlQuery	query;
 
-		query.prepare("SELECT value FROM config WHERE key = 'version';");
+		query.prepare("SELECT version FROM config;");
 		if(!query.exec())
 		{
 			myDebug << query.lastError().text();
@@ -258,7 +264,7 @@ bool cStoryBook::openDatabase()
 		}
 
 		query.first();
-		if(query.value("value").toDouble() < 0.1)
+		if(query.value("version").toDouble() < 0.1)
 			updateDatabase();
 	}
 
@@ -284,14 +290,69 @@ bool cStoryBook::createDatabase()
 	QSqlQuery	query;
 
 	if(!createTable("CREATE TABLE config ( "
-					"    [key] STRING, "
-					"    value STRING "
+					"    version                  REAL, "
+					"    printTitle               BOOLEAN, "
+					"    titleFont                TEXT, "
+					"    titleFontSize            INTEGER, "
+					"    titleBold                BOOLEAN, "
+					"    titleItalic              BOOLEAN, "
+					"    titleUnderline           BOOLEAN, "
+					"    titleAlign               INTEGER, "
+					"    printSubTitle            BOOLEAN, "
+					"    subtitleFont             TEXT, "
+					"    subtitleFontSize         INTEGER, "
+					"    subtitleBold             BOOLEAN, "
+					"    subtitleItalic           BOOLEAN, "
+					"    subtitleUnderline        BOOLEAN, "
+					"    subtitleAlign            INTEGER, "
+					"    printShortDescription    BOOLEAN, "
+					"    printDescription         BOOLEAN, "
+					"    printAuthor              BOOLEAN, "
+					"    authorFont               TEXT, "
+					"    authorFontSize           INTEGER, "
+					"    authorBold               BOOLEAN, "
+					"    authorItalic             BOOLEAN, "
+					"    authorUnderline          BOOLEAN, "
+					"    authorAlign              INTEGER, "
+					"    printPartName            BOOLEAN, "
+					"    partFont                 TEXT, "
+					"    partFontSize             INTEGER, "
+					"    partBold                 BOOLEAN, "
+					"    partItalic               BOOLEAN, "
+					"    partUnderline            BOOLEAN, "
+					"    partAlign                INTEGER, "
+					"    printPartDescription     BOOLEAN, "
+					"    printPartText            BOOLEAN, "
+					"    printChapterName         BOOLEAN, "
+					"    chapterFont              TEXT, "
+					"    chapterFontSize          INTEGER, "
+					"    chapterBold              BOOLEAN, "
+					"    chapterItalic            BOOLEAN, "
+					"    chapterUnderline         BOOLEAN, "
+					"    chapterAlign             INTEGER, "
+					"    printChapterDescription  BOOLEAN, "
+					"    printChapterText         BOOLEAN, "
+					"    printSceneName           BOOLEAN, "
+					"    sceneFont                TEXT, "
+					"    sceneFontSize            INTEGER, "
+					"    sceneBold                BOOLEAN, "
+					"    sceneItalic              BOOLEAN, "
+					"    sceneUnderline           BOOLEAN, "
+					"    sceneAlign               INTEGER, "
+					"    printSceneDescription    BOOLEAN, "
+					"    printSceneText           BOOLEAN, "
+					"    paperSize                TEXT, "
+					"    paperOrientation         INTEGER, "
+					"    leftMargin               REAL, "
+					"    rightMargin              REAL, "
+					"    topMargin                REAL, "
+					"    bottomMargin             REAL, "
+					"    unit                     INTEGER"
 					"); "))
 		return(false);
 
-	query.prepare("INSERT INTO config (key, value) VALUES (:key, :value);");
-	query.bindValue(":key", "version");
-	query.bindValue(":value", 0.1);
+	query.prepare("INSERT INTO config (version) VALUES (:version);");
+	query.bindValue(":version", 0.1);
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -491,6 +552,80 @@ bool cStoryBook::verify()
 	return(true);
 }
 
+bool cStoryBook::loadConfig()
+{
+	QSqlQuery	query;
+
+	query.prepare("SELECT version, printTitle, titleFont, titleFontSize, titleBold, titleItalic, titleUnderline, titleAlign, printSubTitle, subtitleFont, subtitleFontSize, subtitleBold, subtitleItalic, subtitleUnderline, subtitleAlign, printShortDescription, printDescription, printAuthor, authorFont, authorFontSize, authorBold, authorItalic, authorUnderline, authorAlign, printPartName, partFont, partFontSize, partBold, partItalic, partUnderline, partAlign, printPartDescription, printPartText, printChapterName, chapterFont, chapterFontSize, chapterBold, chapterItalic, chapterUnderline, chapterAlign, printChapterDescription, printChapterText, printSceneName, sceneFont, sceneFontSize, sceneBold, sceneItalic, sceneUnderline, sceneAlign, printSceneDescription, printSceneText, paperSize, paperOrientation, leftMargin, rightMargin, topMargin, bottomMargin, unit FROM config;");
+
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	query.first();
+
+	m_bPrintTitle				= query.value("printTitle").toBool();
+	m_szTitleFont				= query.value("titleFont").toString();
+	m_iTitleFontSize			= query.value("titleFontSize").toInt();
+	m_bTitleBold				= query.value("titleBold").toBool();
+	m_bTitleItalic				= query.value("titleItalic").toBool();
+	m_bTitleUnderline			= query.value("titleUnderline").toBool();
+	m_iTitleAlign				= query.value("titleAlign").toInt();
+	m_bPrintSubTitle			= query.value("printSubTitle").toBool();
+	m_szSubtitleFont			= query.value("subtitleFont").toString();
+	m_iSubtitleFontSize			= query.value("subtitleFontSize").toInt();
+	m_bSubtitleBold				= query.value("subtitleBold").toBool();
+	m_bSubtitleItalic			= query.value("subtitleItalic").toBool();
+	m_bSubtitleUnderline		= query.value("subtitleUnderline").toBool();
+	m_iSubtitleAlign			= query.value("subtitleAlign").toInt();
+	m_bPrintShortDescription	= query.value("printShortDescription").toBool();
+	m_bPrintDescription			= query.value("printDescription").toBool();
+	m_bPrintAuthor				= query.value("printAuthor").toBool();
+	m_szAuthorFont				= query.value("authorFont").toString();
+	m_iAuthorFontSize			= query.value("authorFontSize").toInt();
+	m_bAuthorBold				= query.value("authorBold").toBool();
+	m_bAuthorItalic				= query.value("authorItalic").toBool();
+	m_bAuthorUnderline			= query.value("authorUnderline").toBool();
+	m_iAuthorAlign				= query.value("authorAlign").toInt();
+	m_bPrintPartName			= query.value("printPartName").toBool();
+	m_szPartFont				= query.value("partFont").toString();
+	m_iPartFontSize				= query.value("partFontSize").toInt();
+	m_bPartBold					= query.value("partBold").toBool();
+	m_bPartItalic				= query.value("partItalic").toBool();
+	m_bPartUnderline			= query.value("partUnderline").toBool();
+	m_iPartAlign				= query.value("partAlign").toInt();
+	m_bPrintPartDescription		= query.value("printPartDescription").toBool();
+	m_bPrintPartText			= query.value("printPartText").toBool();
+	m_bPrintChapterName			= query.value("printChapterName").toBool();
+	m_szChapterFont				= query.value("chapterFont").toString();
+	m_iChapterFontSize			= query.value("chapterFontSize").toInt();
+	m_bChapterBold				= query.value("chapterBold").toBool();
+	m_bChapterItalic			= query.value("chapterItalic").toBool();
+	m_bChapterUnderline			= query.value("chapterUnderline").toBool();
+	m_iChapterAlign				= query.value("chapterAlign").toInt();
+	m_bPrintChapterDescription	= query.value("printChapterDescription").toBool();
+	m_bPrintChapterText			= query.value("printChapterText").toBool();
+	m_bPrintSceneName			= query.value("printSceneName").toBool();
+	m_szSceneFont				= query.value("sceneFont").toString();
+	m_iSceneFontSize			= query.value("sceneFontSize").toInt();
+	m_bSceneBold				= query.value("sceneBold").toBool();
+	m_bSceneItalic				= query.value("sceneItalic").toBool();
+	m_bSceneUnderline			= query.value("sceneUnderline").toBool();
+	m_iSceneAlign				= query.value("sceneAlign").toInt();
+	m_bPrintSceneDescription	= query.value("printSceneDescription").toBool();
+	m_bPrintSceneText			= query.value("printSceneText").toBool();
+	m_szPaperSize				= query.value("paperSize").toString();
+	m_iPaperOrientation			= query.value("paperOrientation").toInt();
+	m_dLeftMargin				= query.value("leftMargin").toDouble();
+	m_dRightMargin				= query.value("rightMargin").toDouble();
+	m_dTopMargin				= query.value("topMargin").toDouble();
+	m_dBottomMargin				= query.value("bottomMargin").toDouble();
+	m_iUnit						= query.value("unit").toInt();
+
+	return(true);
+}
+
 bool cStoryBook::loadBook()
 {
 	return(m_book.load());
@@ -529,6 +664,84 @@ bool cStoryBook::loadObjectList()
 bool cStoryBook::loadRechercheList()
 {
 	return(m_rechercheList.load(&m_characterList, &m_objectList, &m_placeList));
+}
+
+bool cStoryBook::saveConfig()
+{
+	QSqlQuery	query;
+
+	query.prepare("DELETE FROM config;");
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	query.prepare("INSERT INTO config (version, printTitle, titleFont, titleFontSize, titleBold, titleItalic, titleUnderline, titleAlign, printSubTitle, subtitleFont, subtitleFontSize, subtitleBold, subtitleItalic, subtitleUnderline, subtitleAlign, printShortDescription, printDescription, printAuthor, authorFont, authorFontSize, authorBold, authorItalic, authorUnderline, authorAlign, printPartName, partFont, partFontSize, partBold, partItalic, partUnderline, partAlign, printPartDescription, printPartText, printChapterName, chapterFont, chapterFontSize, chapterBold, chapterItalic, chapterUnderline, chapterAlign, printChapterDescription, printChapterText, printSceneName, sceneFont, sceneFontSize, sceneBold, sceneItalic, sceneUnderline, sceneAlign, printSceneDescription, printSceneText, paperSize, paperOrientation, leftMargin, rightMargin, topMargin, bottomMargin, unit) VALUES (0.1, :printTitle, :titleFont, :titleFontSize, :titleBold, :titleItalic, :titleUnderline, :titleAlign, :printSubTitle, :subtitleFont, :subtitleFontSize, :subtitleBold, :subtitleItalic, :subtitleUnderline, :subtitleAlign, :printShortDescription, :printDescription, :printAuthor, :authorFont, :authorFontSize, :authorBold, :authorItalic, :authorUnderline, :authorAlign, :printPartName, :partFont, :partFontSize, :partBold, :partItalic, :partUnderline, :partAlign, :printPartDescription, :printPartText, :printChapterName, :chapterFont, :chapterFontSize, :chapterBold, :chapterItalic, :chapterUnderline, :chapterAlign, :printChapterDescription, :printChapterText, :printSceneName, :sceneFont, :sceneFontSize, :sceneBold, :sceneItalic, :sceneUnderline, :sceneAlign, :printSceneDescription, :printSceneText, :paperSize, :paperOrientation, :leftMargin, :rightMargin, :topMargin, :bottomMargin, :unit);");
+	query.bindValue("printTitle", m_bPrintTitle);
+	query.bindValue("titleFont", m_szTitleFont);
+	query.bindValue("titleFontSize", m_iTitleFontSize);
+	query.bindValue("titleBold", m_bTitleBold);
+	query.bindValue("titleItalic", m_bTitleItalic);
+	query.bindValue("titleUnderline", m_bTitleUnderline);
+	query.bindValue("titleAlign", m_iTitleAlign);
+	query.bindValue("printSubTitle", m_bPrintSubTitle);
+	query.bindValue("subtitleFont", m_szSubtitleFont);
+	query.bindValue("subtitleFontSize", m_iSubtitleFontSize);
+	query.bindValue("subtitleBold", m_bSubtitleBold);
+	query.bindValue("subtitleItalic", m_bSubtitleItalic);
+	query.bindValue("subtitleUnderline", m_bSubtitleUnderline);
+	query.bindValue("subtitleAlign", m_iSubtitleAlign);
+	query.bindValue("printShortDescription", m_bPrintShortDescription);
+	query.bindValue("printDescription", m_bPrintDescription);
+	query.bindValue("printAuthor", m_bPrintAuthor);
+	query.bindValue("authorFont", m_szAuthorFont);
+	query.bindValue("authorFontSize", m_iAuthorFontSize);
+	query.bindValue("authorBold", m_bAuthorBold);
+	query.bindValue("authorItalic", m_bAuthorItalic);
+	query.bindValue("authorUnderline", m_bAuthorUnderline);
+	query.bindValue("authorAlign", m_iAuthorAlign);
+	query.bindValue("printPartName", m_bPrintPartName);
+	query.bindValue("partFont", m_szPartFont);
+	query.bindValue("partFontSize", m_iPartFontSize);
+	query.bindValue("partBold", m_bPartBold);
+	query.bindValue("partItalic", m_bPartItalic);
+	query.bindValue("partUnderline", m_bPartUnderline);
+	query.bindValue("partAlign", m_iPartAlign);
+	query.bindValue("printPartDescription", m_bPrintPartDescription);
+	query.bindValue("printPartText", m_bPrintPartText);
+	query.bindValue("printChapterName", m_bPrintChapterName);
+	query.bindValue("chapterFont", m_szChapterFont);
+	query.bindValue("chapterFontSize", m_iChapterFontSize);
+	query.bindValue("chapterBold", m_bChapterBold);
+	query.bindValue("chapterItalic", m_bChapterItalic);
+	query.bindValue("chapterUnderline", m_bChapterUnderline);
+	query.bindValue("chapterAlign", m_iChapterAlign);
+	query.bindValue("printChapterDescription", m_bPrintChapterDescription);
+	query.bindValue("printChapterText", m_bPrintChapterText);
+	query.bindValue("printSceneName", m_bPrintSceneName);
+	query.bindValue("sceneFont", m_szSceneFont);
+	query.bindValue("sceneFontSize", m_iSceneFontSize);
+	query.bindValue("sceneBold", m_bSceneBold);
+	query.bindValue("sceneItalic", m_bSceneItalic);
+	query.bindValue("sceneUnderline", m_bSceneUnderline);
+	query.bindValue("sceneAlign", m_iSceneAlign);
+	query.bindValue("printSceneDescription", m_bPrintSceneDescription);
+	query.bindValue("printSceneText", m_bPrintSceneText);
+	query.bindValue("paperSize", m_szPaperSize);
+	query.bindValue("paperOrientation", m_iPaperOrientation);
+	query.bindValue("leftMargin", m_dLeftMargin);
+	query.bindValue("rightMargin", m_dRightMargin);
+	query.bindValue("topMargin", m_dTopMargin);
+	query.bindValue("bottomMargin", m_dBottomMargin);
+	query.bindValue("unit", m_iUnit);
+
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	return(true);
 }
 
 bool cStoryBook::saveBook()
