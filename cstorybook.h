@@ -322,6 +322,177 @@ public:
 	*/
 	bool			rechercheInUse(cRecherche* lpRecherche);
 
+	bool			printTitle();
+	void			setPrintTitle(const bool& value);
+
+	QString			titleFont();
+	void			setTitleFont(const QString& value);
+
+	qint16			titleFontSize();
+	void			setTitleFontSize(const qint16& value);
+
+	bool			titleBold();
+	void			setTitleBold(const bool& value);
+
+	bool			titleItalic();
+	void			setTitleItalic(const bool& value);
+
+	bool			titleUnderline();
+	void			setTitleUnderline(const bool& value);
+
+	qint16			titleAlign();
+	void			setTitleAlign(const qint16& value);
+
+	bool			printSubTitle();
+	void			setPrintSubTitle(const bool& value);
+
+	QString			subtitleFont();
+	void			setSubtitleFont(const QString& value);
+
+	qint16			subtitleFontSize();
+	void			setSubtitleFontSize(const qint16& value);
+
+	bool			subtitleBold();
+	void			setSubtitleBold(const bool& value);
+
+	bool			subtitleItalic();
+	void			setSubtitleItalic(const bool& value);
+
+	bool			subtitleUnderline();
+	void			setSubtitleUnderline(const bool& value);
+
+	qint16			subtitleAlign();
+	void			setSubtitleAlign(const qint16& value);
+
+	bool			printShortDescription();
+	void			setPrintShortDescription(const bool& value);
+
+	bool			printDescription();
+	void			setPrintDescription(const bool& value);
+
+	bool			printAuthor();
+	void			setPrintAuthor(const bool& value);
+
+	QString			authorFont();
+	void			setAuthorFont(const QString& value);
+
+	qint16			authorFontSize();
+	void			setAuthorFontSize(const qint16& value);
+
+	bool			authorBold();
+	void			setAuthorBold(const bool& value);
+
+	bool			authorItalic();
+	void			setAuthorItalic(const bool& value);
+
+	bool			authorUnderline();
+	void			setAuthorUnderline(const bool& value);
+
+	qint16			authorAlign();
+	void			setAuthorAlign(const qint16& value);
+
+	bool			printPartName();
+	void			setPrintPartName(const bool& value);
+
+	QString			partFont();
+	void			setPartFont(const QString& value);
+
+	qint16			partFontSize();
+	void			setPartFontSize(const qint16& value);
+
+	bool			partBold();
+	void			setPartBold(const bool& value);
+
+	bool			partItalic();
+	void			setPartItalic(const bool& value);
+
+	bool			partUnderline();
+	void			setPartUnderline(const bool& value);
+
+	qint16			partAlign();
+	void			setPartAlign(const qint16& value);
+
+	bool			printPartDescription();
+	void			setPrintPartDescription(const bool& value);
+
+	bool			printPartText();
+	void			setPrintPartText(const bool& value);
+
+	bool			printChapterName();
+	void			setPrintChapterName(const bool& value);
+
+	QString			chapterFont();
+	void			setChapterFont(const QString& value);
+
+	qint16			chapterFontSize();
+	void			setChapterFontSize(const qint16& value);
+
+	bool			chapterBold();
+	void			setChapterBold(const bool& value);
+
+	bool			chapterItalic();
+	void			setChapterItalic(const bool& value);
+
+	bool			chapterUnderline();
+	void			setChapterUnderline(const bool& value);
+
+	qint16			chapterAlign();
+	void			setChapterAlign(const qint16& value);
+
+	bool			printChapterDescription();
+	void			setPrintChapterDescription(const bool& value);
+
+	bool			printChapterText();
+	void			setPrintChapterText(const bool& value);
+
+	bool			printSceneName();
+	void			setPrintSceneName(const bool& value);
+
+	QString			sceneFont();
+	void			setSceneFont(const QString& value);
+
+	qint16			sceneFontSize();
+	void			setSceneFontSize(const qint16& value);
+
+	bool			sceneBold();
+	void			setSceneBold(const bool& value);
+
+	bool			sceneItalic();
+	void			setSceneItalic(const bool& value);
+
+	bool			sceneUnderline();
+	void			setSceneUnderline(const bool& value);
+
+	qint16			sceneAlign();
+	void			setSceneAlign(const qint16& value);
+
+	bool			printSceneDescription();
+	void			setPrintSceneDescription(const bool& value);
+
+	bool			printSceneText();
+	void			setPrintSceneText(const bool& value);
+
+	QString			paperSize();
+	void			setPaperSize(const QString& value);
+
+	qint16			paperOrientation();
+	void			setPaperOrientation(const qint16& value);
+
+	qreal			leftMargin();
+	void			setLeftMargin(const qreal& value);
+
+	qreal			rightMargin();
+	void			setRightMargin(const qreal& value);
+
+	qreal			topMargin();
+	void			setTopMargin(const qreal& value);
+
+	qreal			bottomMargin();
+	void			setBottomMargin(const qreal& value);
+
+	qint16			unit();
+	void			setUnit(const qint16& value);
+
 private:
 	QString			m_szProject;				/*!< TODO: describe */
 	bool			m_bIsOpen;					/*!< TODO: describe */

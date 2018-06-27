@@ -15,6 +15,7 @@
 
 #include <QDebug>
 
+
 #ifdef __GNUC__
 	#define myDebug qDebug() << __FILE__ << "(" << __LINE__ << ") - " << __PRETTY_FUNCTION__ << ":"
 #elif __MINGW32__
@@ -22,6 +23,28 @@
 #else
 	#define myDebug qDebug() << __FILE__ << "(" << __LINE__ << ") - " << __FUNCTION__ << ":"
 #endif
+
+
+enum UNIT
+{
+	UNIT_mm		= 1,
+	UNIT_cm		= 1,
+	UNIT_inch	= 3,
+};
+
+enum ALIGN
+{
+	ALIGN_left		= 1,
+	ALIGN_right		= 2,
+	ALIGN_center	= 3,
+	ALIGN_block		= 4,
+};
+
+enum ORIENTATION
+{
+	ORIENTATION_portrait	= 1,
+	ORIENTATION_landscape	= 2,
+};
 
 /*!
  \brief
