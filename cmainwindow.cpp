@@ -939,6 +939,15 @@ void cMainWindow::onComboBoxLostFocus(cComboBox* /*lpComboBox*/)
 {
 }
 
+void cMainWindow::onFontComboBoxGotFocus(cFontComboBox* /*lpComboBox*/)
+{
+	disableTextEdit();
+}
+
+void cMainWindow::onFontComboBoxLostFocus(cFontComboBox* /*lpComboBox*/)
+{
+}
+
 void cMainWindow::onMainTabCurrentChanged(int /*index*/)
 {
 	if(m_bUpdatingTab)
@@ -1073,7 +1082,7 @@ void cMainWindow::onShowPropertiesWindow()
 	}
 
 	cPropertiesWindow*		lpPropertiesWindow		= new cPropertiesWindow(this);
-	lpPropertiesWindow->setBook(m_lpStoryBook->book());
+	lpPropertiesWindow->setBook(m_lpStoryBook);
 	cWidget*			lpWidget1			= new cWidget(lpPropertiesWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPropertiesWindow));
 	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPropertiesWindow->windowTitle());

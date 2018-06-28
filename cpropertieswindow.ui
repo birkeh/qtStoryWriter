@@ -178,7 +178,7 @@
                  </widget>
                 </item>
                 <item row="1" column="3">
-                 <widget class="QDoubleSpinBox" name="m_lpMarginRight"/>
+                 <widget class="cDoubleSpinBox" name="m_lpMarginRight"/>
                 </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_10">
@@ -191,7 +191,7 @@
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QDoubleSpinBox" name="m_lpMarginLeft"/>
+                 <widget class="cDoubleSpinBox" name="m_lpMarginLeft"/>
                 </item>
                 <item row="1" column="4">
                  <widget class="QLabel" name="label_12">
@@ -208,10 +208,10 @@
                  </widget>
                 </item>
                 <item row="1" column="5">
-                 <widget class="QDoubleSpinBox" name="m_lpMarginTop"/>
+                 <widget class="cDoubleSpinBox" name="m_lpMarginTop"/>
                 </item>
                 <item row="1" column="7">
-                 <widget class="QDoubleSpinBox" name="m_lpMarginBottom"/>
+                 <widget class="cDoubleSpinBox" name="m_lpMarginBottom"/>
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_9">
@@ -221,10 +221,10 @@
                  </widget>
                 </item>
                 <item row="0" column="1" colspan="3">
-                 <widget class="QComboBox" name="m_lpPaperSize"/>
+                 <widget class="cComboBox" name="m_lpPaperSize"/>
                 </item>
                 <item row="0" column="4">
-                 <widget class="QRadioButton" name="m_lpOrientationPortrait">
+                 <widget class="cRadioButton" name="m_lpOrientationPortrait">
                   <property name="text">
                    <string>portrait</string>
                   </property>
@@ -234,7 +234,7 @@
                  </widget>
                 </item>
                 <item row="0" column="5">
-                 <widget class="QRadioButton" name="m_lpOrientationLandscape">
+                 <widget class="cRadioButton" name="m_lpOrientationLandscape">
                   <property name="text">
                    <string>landscape</string>
                   </property>
@@ -251,7 +251,7 @@
                  </widget>
                 </item>
                 <item row="0" column="7">
-                 <widget class="QComboBox" name="m_lpUnit"/>
+                 <widget class="cComboBox" name="m_lpUnit"/>
                 </item>
                </layout>
               </item>
@@ -281,35 +281,35 @@
               </widget>
              </item>
              <item row="14" column="0">
-              <widget class="QCheckBox" name="m_lpPrintChapterDescription">
+              <widget class="cCheckBox" name="m_lpPrintChapterDescription">
                <property name="text">
                 <string>print description</string>
                </property>
               </widget>
              </item>
              <item row="10" column="0">
-              <widget class="QCheckBox" name="m_lpPrintPartText">
+              <widget class="cCheckBox" name="m_lpPrintPartText">
                <property name="text">
                 <string>print text</string>
                </property>
               </widget>
              </item>
              <item row="13" column="3">
-              <widget class="QCheckBox" name="m_lpChapterNameBold">
+              <widget class="cCheckBox" name="m_lpChapterNameBold">
                <property name="text">
                 <string>bold</string>
                </property>
               </widget>
              </item>
              <item row="20" column="0">
-              <widget class="QCheckBox" name="m_lpPrintSceneText">
+              <widget class="cCheckBox" name="m_lpPrintSceneText">
                <property name="text">
                 <string>text</string>
                </property>
               </widget>
              </item>
              <item row="18" column="3">
-              <widget class="QCheckBox" name="m_lpSceneNameBold">
+              <widget class="cCheckBox" name="m_lpSceneNameBold">
                <property name="text">
                 <string>bold</string>
                </property>
@@ -323,62 +323,62 @@
               </widget>
              </item>
              <item row="2" column="5">
-              <widget class="QCheckBox" name="m_lpSubtitleUnderline">
+              <widget class="cCheckBox" name="m_lpSubtitleUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="18" column="2">
-              <widget class="QComboBox" name="m_lpSceneNameFontSize"/>
+              <widget class="cComboBox" name="m_lpSceneNameFontSize"/>
              </item>
              <item row="1" column="5">
-              <widget class="QCheckBox" name="m_lpTitleUnderline">
+              <widget class="cCheckBox" name="m_lpTitleUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="19" column="0">
-              <widget class="QCheckBox" name="m_lpPrintSceneDescription">
+              <widget class="cCheckBox" name="m_lpPrintSceneDescription">
                <property name="text">
                 <string>description</string>
                </property>
               </widget>
              </item>
              <item row="13" column="8">
-              <widget class="QRadioButton" name="m_lpChapterNameRight">
+              <widget class="cRadioButton" name="m_lpChapterNameRight">
                <property name="text">
                 <string>right</string>
                </property>
               </widget>
              </item>
              <item row="13" column="4">
-              <widget class="QCheckBox" name="m_lpChapterNameItalic">
+              <widget class="cCheckBox" name="m_lpChapterNameItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="8" column="1">
-              <widget class="QFontComboBox" name="m_lpPartNameFont"/>
+              <widget class="cFontComboBox" name="m_lpPartNameFont"/>
              </item>
              <item row="3" column="0">
-              <widget class="QCheckBox" name="m_lpPrintShortDescription">
+              <widget class="cCheckBox" name="m_lpPrintShortDescription">
                <property name="text">
                 <string>print short description</string>
                </property>
               </widget>
              </item>
              <item row="8" column="5">
-              <widget class="QCheckBox" name="m_lpPartNameUnderline">
+              <widget class="cCheckBox" name="m_lpPartNameUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="1" column="7">
-              <widget class="QRadioButton" name="m_lpTitleCenter">
+              <widget class="cRadioButton" name="m_lpTitleCenter">
                <property name="text">
                 <string>center</string>
                </property>
@@ -388,59 +388,59 @@
               </widget>
              </item>
              <item row="5" column="5">
-              <widget class="QCheckBox" name="m_lpAuthorUnderline">
+              <widget class="cCheckBox" name="m_lpAuthorUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="8" column="4">
-              <widget class="QCheckBox" name="m_lpPartNameItalic">
+              <widget class="cCheckBox" name="m_lpPartNameItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="13" column="6">
-              <widget class="QRadioButton" name="m_lpChapterNameLeft">
+              <widget class="cRadioButton" name="m_lpChapterNameLeft">
                <property name="text">
                 <string>left</string>
                </property>
               </widget>
              </item>
              <item row="8" column="3">
-              <widget class="QCheckBox" name="m_lpPartNameBold">
+              <widget class="cCheckBox" name="m_lpPartNameBold">
                <property name="text">
                 <string>bold</string>
                </property>
               </widget>
              </item>
              <item row="5" column="4">
-              <widget class="QCheckBox" name="m_lpAuthorItalic">
+              <widget class="cCheckBox" name="m_lpAuthorItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QComboBox" name="m_lpTitleFontSize"/>
+              <widget class="cComboBox" name="m_lpTitleFontSize"/>
              </item>
              <item row="13" column="5">
-              <widget class="QCheckBox" name="m_lpChapterNameUnderline">
+              <widget class="cCheckBox" name="m_lpChapterNameUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="4" column="0">
-              <widget class="QCheckBox" name="m_lpPrintDescription">
+              <widget class="cCheckBox" name="m_lpPrintDescription">
                <property name="text">
                 <string>print description</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QFontComboBox" name="m_lpTitleFont"/>
+              <widget class="cFontComboBox" name="m_lpTitleFont"/>
              </item>
              <item row="0" column="0" colspan="9">
               <widget class="QLabel" name="label_14">
@@ -450,24 +450,24 @@
               </widget>
              </item>
              <item row="8" column="7">
-              <widget class="QRadioButton" name="m_lpPartNameCenter">
+              <widget class="cRadioButton" name="m_lpPartNameCenter">
                <property name="text">
                 <string>center</string>
                </property>
               </widget>
              </item>
              <item row="1" column="4">
-              <widget class="QCheckBox" name="m_lpTitleItalic">
+              <widget class="cCheckBox" name="m_lpTitleItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="8" column="2">
-              <widget class="QComboBox" name="m_lpPartNameFontSize"/>
+              <widget class="cComboBox" name="m_lpPartNameFontSize"/>
              </item>
              <item row="5" column="8">
-              <widget class="QRadioButton" name="m_lpAuthorRight">
+              <widget class="cRadioButton" name="m_lpAuthorRight">
                <property name="text">
                 <string>right</string>
                </property>
@@ -477,69 +477,69 @@
               </widget>
              </item>
              <item row="18" column="5">
-              <widget class="QCheckBox" name="m_lpSceneNameUnderline">
+              <widget class="cCheckBox" name="m_lpSceneNameUnderline">
                <property name="text">
                 <string>underline</string>
                </property>
               </widget>
              </item>
              <item row="13" column="0">
-              <widget class="QCheckBox" name="m_lpPrintChapterName">
+              <widget class="cCheckBox" name="m_lpPrintChapterName">
                <property name="text">
                 <string>print name</string>
                </property>
               </widget>
              </item>
              <item row="8" column="6">
-              <widget class="QRadioButton" name="m_lpPartNameLeft">
+              <widget class="cRadioButton" name="m_lpPartNameLeft">
                <property name="text">
                 <string>left</string>
                </property>
               </widget>
              </item>
              <item row="18" column="1">
-              <widget class="QFontComboBox" name="m_lpSceneNameFont"/>
+              <widget class="cFontComboBox" name="m_lpSceneNameFont"/>
              </item>
              <item row="18" column="6">
-              <widget class="QRadioButton" name="m_lpSceneNameLeft">
+              <widget class="cRadioButton" name="m_lpSceneNameLeft">
                <property name="text">
                 <string>left</string>
                </property>
               </widget>
              </item>
              <item row="18" column="4">
-              <widget class="QCheckBox" name="m_lpSceneNameItalic">
+              <widget class="cCheckBox" name="m_lpSceneNameItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="18" column="7">
-              <widget class="QRadioButton" name="m_lpSceneNameCenter">
+              <widget class="cRadioButton" name="m_lpSceneNameCenter">
                <property name="text">
                 <string>center</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QCheckBox" name="m_lpPrintSubtitle">
+              <widget class="cCheckBox" name="m_lpPrintSubtitle">
                <property name="text">
                 <string>print subtitle</string>
                </property>
               </widget>
              </item>
              <item row="2" column="2">
-              <widget class="QComboBox" name="m_lpSubtitleFontSize"/>
+              <widget class="cComboBox" name="m_lpSubtitleFontSize"/>
              </item>
              <item row="8" column="0">
-              <widget class="QCheckBox" name="m_lpPrintPartName">
+              <widget class="cCheckBox" name="m_lpPrintPartName">
                <property name="text">
                 <string>print name</string>
                </property>
               </widget>
              </item>
              <item row="1" column="8">
-              <widget class="QRadioButton" name="m_lpTitleRight">
+              <widget class="cRadioButton" name="m_lpTitleRight">
                <property name="text">
                 <string>right</string>
                </property>
@@ -549,14 +549,14 @@
               </widget>
              </item>
              <item row="8" column="8">
-              <widget class="QRadioButton" name="m_lpPartNameRight">
+              <widget class="cRadioButton" name="m_lpPartNameRight">
                <property name="text">
                 <string>right</string>
                </property>
               </widget>
              </item>
              <item row="5" column="7">
-              <widget class="QRadioButton" name="m_lpAuthorCenter">
+              <widget class="cRadioButton" name="m_lpAuthorCenter">
                <property name="text">
                 <string>center</string>
                </property>
@@ -566,21 +566,21 @@
               </widget>
              </item>
              <item row="9" column="0">
-              <widget class="QCheckBox" name="m_lpPrintPartDescription">
+              <widget class="cCheckBox" name="m_lpPrintPartDescription">
                <property name="text">
                 <string>print description</string>
                </property>
               </widget>
              </item>
              <item row="15" column="0">
-              <widget class="QCheckBox" name="m_lpPrintChapterText">
+              <widget class="cCheckBox" name="m_lpPrintChapterText">
                <property name="text">
                 <string>print text</string>
                </property>
               </widget>
              </item>
              <item row="2" column="8">
-              <widget class="QRadioButton" name="m_lpSubtitleRight">
+              <widget class="cRadioButton" name="m_lpSubtitleRight">
                <property name="text">
                 <string>right</string>
                </property>
@@ -590,31 +590,31 @@
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QCheckBox" name="m_lpPrintAuthor">
+              <widget class="cCheckBox" name="m_lpPrintAuthor">
                <property name="text">
                 <string>print author</string>
                </property>
               </widget>
              </item>
              <item row="13" column="2">
-              <widget class="QComboBox" name="m_lpChapterNameFontSize"/>
+              <widget class="cComboBox" name="m_lpChapterNameFontSize"/>
              </item>
              <item row="1" column="3">
-              <widget class="QCheckBox" name="m_lpTitleBold">
+              <widget class="cCheckBox" name="m_lpTitleBold">
                <property name="text">
                 <string>bold</string>
                </property>
               </widget>
              </item>
              <item row="5" column="3">
-              <widget class="QCheckBox" name="m_lpAuthorBold">
+              <widget class="cCheckBox" name="m_lpAuthorBold">
                <property name="text">
                 <string>bold</string>
                </property>
               </widget>
              </item>
              <item row="2" column="6">
-              <widget class="QRadioButton" name="m_lpSubtitleLeft">
+              <widget class="cRadioButton" name="m_lpSubtitleLeft">
                <property name="text">
                 <string>left</string>
                </property>
@@ -624,7 +624,7 @@
               </widget>
              </item>
              <item row="5" column="2">
-              <widget class="QComboBox" name="m_lpAuthorFontSize"/>
+              <widget class="cComboBox" name="m_lpAuthorFontSize"/>
              </item>
              <item row="12" column="0" colspan="9">
               <widget class="QLabel" name="label_16">
@@ -634,38 +634,38 @@
               </widget>
              </item>
              <item row="2" column="3">
-              <widget class="QCheckBox" name="m_lpSubtitleBold">
+              <widget class="cCheckBox" name="m_lpSubtitleBold">
                <property name="text">
                 <string>bold</string>
                </property>
               </widget>
              </item>
              <item row="18" column="0">
-              <widget class="QCheckBox" name="m_lpPrintSceneName">
+              <widget class="cCheckBox" name="m_lpPrintSceneName">
                <property name="text">
                 <string>name</string>
                </property>
               </widget>
              </item>
              <item row="2" column="4">
-              <widget class="QCheckBox" name="m_lpSubtitleItalic">
+              <widget class="cCheckBox" name="m_lpSubtitleItalic">
                <property name="text">
                 <string>italic</string>
                </property>
               </widget>
              </item>
              <item row="5" column="1">
-              <widget class="QFontComboBox" name="m_lpAuthorFont"/>
+              <widget class="cFontComboBox" name="m_lpAuthorFont"/>
              </item>
              <item row="13" column="7">
-              <widget class="QRadioButton" name="m_lpChapterNameCenter">
+              <widget class="cRadioButton" name="m_lpChapterNameCenter">
                <property name="text">
                 <string>center</string>
                </property>
               </widget>
              </item>
              <item row="5" column="6">
-              <widget class="QRadioButton" name="m_lpAuthorLeft">
+              <widget class="cRadioButton" name="m_lpAuthorLeft">
                <property name="text">
                 <string>left</string>
                </property>
@@ -682,10 +682,10 @@
               </widget>
              </item>
              <item row="13" column="1">
-              <widget class="QFontComboBox" name="m_lpChapterNameFont"/>
+              <widget class="cFontComboBox" name="m_lpChapterNameFont"/>
              </item>
              <item row="2" column="7">
-              <widget class="QRadioButton" name="m_lpSubtitleCenter">
+              <widget class="cRadioButton" name="m_lpSubtitleCenter">
                <property name="text">
                 <string>center</string>
                </property>
@@ -695,14 +695,14 @@
               </widget>
              </item>
              <item row="18" column="8">
-              <widget class="QRadioButton" name="m_lpSceneNameRight">
+              <widget class="cRadioButton" name="m_lpSceneNameRight">
                <property name="text">
                 <string>right</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QCheckBox" name="m_lpPrintTitle">
+              <widget class="cCheckBox" name="m_lpPrintTitle">
                <property name="text">
                 <string>print title</string>
                </property>
@@ -723,7 +723,7 @@
               </widget>
              </item>
              <item row="1" column="6">
-              <widget class="QRadioButton" name="m_lpTitleLeft">
+              <widget class="cRadioButton" name="m_lpTitleLeft">
                <property name="text">
                 <string>left</string>
                </property>
@@ -733,7 +733,7 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QFontComboBox" name="m_lpSubtitleFont"/>
+              <widget class="cFontComboBox" name="m_lpSubtitleFont"/>
              </item>
              <item row="21" column="0" colspan="9">
               <widget class="Line" name="line_4">
@@ -782,6 +782,31 @@
    <class>cDateTimeEdit</class>
    <extends>QDateTimeEdit</extends>
    <header>cdatetimeedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cCheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>ccheckbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cFontComboBox</class>
+   <extends>QFontComboBox</extends>
+   <header>cfontcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cComboBox</class>
+   <extends>QComboBox</extends>
+   <header>ccombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cRadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>cradiobutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>cDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>cdoublespinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

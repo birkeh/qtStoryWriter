@@ -18,6 +18,7 @@
 #include "cdatetimeedit.h"
 #include "ccombobox.h"
 #include "coptionsdialog.h"
+#include "cfontcombobox.h"
 
 #include "csplashscreen.h"
 
@@ -243,6 +244,20 @@ public slots:
 	 \param lpComboBox
 	*/
 	void				onComboBoxLostFocus(cComboBox* lpComboBox);
+	/*!
+	 \brief
+
+	 \fn onFontComboBoxGotFocus
+	 \param lpComboBox
+	*/
+	void				onFontComboBoxGotFocus(cFontComboBox* lpComboBox);
+	/*!
+	 \brief
+
+	 \fn onFontComboBoxLostFocus
+	 \param lpComboBox
+	*/
+	void				onFontComboBoxLostFocus(cFontComboBox* lpComboBox);
 private slots:
 	/*!
 	 \brief

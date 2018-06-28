@@ -89,7 +89,8 @@ SOURCES += \
     csplashscreen.cpp \
     cplaceselectdialog.cpp \
     cobjectselectdialog.cpp \
-    coptionsdialog.cpp
+    coptionsdialog.cpp \
+    cfontcombobox.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -130,7 +131,8 @@ HEADERS += \
     csplashscreen.h \
     cplaceselectdialog.h \
     cobjectselectdialog.h \
-    coptionsdialog.h
+    coptionsdialog.h \
+    cfontcombobox.h
 
 FORMS += \
         cmainwindow.ui \
