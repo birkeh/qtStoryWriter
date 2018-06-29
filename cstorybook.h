@@ -16,6 +16,7 @@
 #include "cobject.h"
 #include "crecherche.h"
 #include "cimage.h"
+#include "common.h"
 
 #include <QString>
 #include <QObject>
@@ -24,6 +25,9 @@
 #include <QStandardItemModel>
 
 #include <QSqlDatabase>
+
+#include <QPrinter>
+#include <QPagedPaintDevice>
 
 
 /*!
@@ -63,7 +67,7 @@ public:
 	 \fn save
 	 \return bool
 	*/
-	bool			save();
+	bool						save();
 	/*!
 	 \brief
 
@@ -71,7 +75,7 @@ public:
 	 \param szProject
 	 \return bool
 	*/
-	bool			saveAs(const QString& szProject);
+	bool						saveAs(const QString& szProject);
 
 	/*!
 	 \brief
@@ -80,7 +84,7 @@ public:
 	 \param szFileName
 	 \return bool
 	*/
-	bool			printPdf(const QString& szFileName);
+	bool						printPdf(const QString& szFileName);
 
 	/*!
 	 \brief
@@ -88,14 +92,14 @@ public:
 	 \fn openDatabase
 	 \return bool
 	*/
-	bool			openDatabase();
+	bool						openDatabase();
 	/*!
 	 \brief
 
 	 \fn verify
 	 \return bool
 	*/
-	bool			verify();
+	bool						verify();
 
 	/*!
 	 \brief
@@ -103,14 +107,14 @@ public:
 	 \fn title
 	 \return QString
 	*/
-	QString			title();
+	QString						title();
 	/*!
 	 \brief
 
 	 \fn author
 	 \return QString
 	*/
-	QString			author();
+	QString						author();
 
 	/*!
 	 \brief
@@ -119,7 +123,7 @@ public:
 	 \param lpView
 	 \return bool
 	*/
-	bool			fillOutlineList(QTreeView* lpView);
+	bool						fillOutlineList(QTreeView* lpView);
 	/*!
 	 \brief
 
@@ -127,7 +131,7 @@ public:
 	 \param lpView
 	 \return bool
 	*/
-	bool			fillCharacterList(QTreeView* lpView);
+	bool						fillCharacterList(QTreeView* lpView);
 	/*!
 	 \brief
 
@@ -135,7 +139,7 @@ public:
 	 \param lpView
 	 \return bool
 	*/
-	bool			fillPlaceList(QTreeView* lpView);
+	bool						fillPlaceList(QTreeView* lpView);
 	/*!
 	 \brief
 
@@ -143,7 +147,7 @@ public:
 	 \param lpView
 	 \return bool
 	*/
-	bool			fillObjectList(QTreeView* lpView);
+	bool						fillObjectList(QTreeView* lpView);
 	/*!
 	 \brief
 
@@ -151,7 +155,7 @@ public:
 	 \param lpView
 	 \return bool
 	*/
-	bool			fillRechercheList(QTreeView* lpView);
+	bool						fillRechercheList(QTreeView* lpView);
 
 	/*!
 	 \brief
@@ -159,49 +163,49 @@ public:
 	 \fn project
 	 \return QString
 	*/
-	QString			project();
+	QString						project();
 	/*!
 	 \brief
 
 	 \fn book
 	 \return cBook
 	*/
-	cBook*			book();
+	cBook*						book();
 	/*!
 	 \brief
 
 	 \fn chapterList
 	 \return cChapterList
 	*/
-	cChapterList*	chapterList();
+	cChapterList*				chapterList();
 	/*!
 	 \brief
 
 	 \fn sceneList
 	 \return cSceneList
 	*/
-	cSceneList*		sceneList();
+	cSceneList*					sceneList();
 	/*!
 	 \brief
 
 	 \fn characterList
 	 \return cCharacterList
 	*/
-	cCharacterList*	characterList();
+	cCharacterList*				characterList();
 	/*!
 	 \brief
 
 	 \fn placeList
 	 \return cPlaceList
 	*/
-	cPlaceList*		placeList();
+	cPlaceList*					placeList();
 	/*!
 	 \brief
 
 	 \fn objectList
 	 \return cObjectList
 	*/
-	cObjectList*	objectList();
+	cObjectList*				objectList();
 
 	/*!
 	 \brief
@@ -210,7 +214,7 @@ public:
 	 \param szPartName
 	 \return bool
 	*/
-	bool			addPart(const QString& szPartName);
+	bool						addPart(const QString& szPartName);
 
 	/*!
 	 \brief
@@ -220,7 +224,7 @@ public:
 	 \param szChapterName
 	 \return bool
 	*/
-	bool			addChapter(cPart* lpPart, const QString& szChapterName);
+	bool						addChapter(cPart* lpPart, const QString& szChapterName);
 
 	/*!
 	 \brief
@@ -230,7 +234,7 @@ public:
 	 \param szSceneName
 	 \return bool
 	*/
-	bool			addScene(cChapter* lpChapter, const QString& szSceneName);
+	bool						addScene(cChapter* lpChapter, const QString& szSceneName);
 
 	/*!
 	 \brief
@@ -239,7 +243,7 @@ public:
 	 \param szCharacterName
 	 \return bool
 	*/
-	bool			addCharacter(const QString& szCharacterName);
+	bool						addCharacter(const QString& szCharacterName);
 
 	/*!
 	 \brief
@@ -248,7 +252,7 @@ public:
 	 \param szPlaceName
 	 \return bool
 	*/
-	bool			addPlace(const QString& szPlaceName);
+	bool						addPlace(const QString& szPlaceName);
 
 	/*!
 	 \brief
@@ -257,7 +261,7 @@ public:
 	 \param szObjectName
 	 \return bool
 	*/
-	bool			addObject(const QString& szObjectName);
+	bool						addObject(const QString& szObjectName);
 
 	/*!
 	 \brief
@@ -266,7 +270,7 @@ public:
 	 \param szRechercheName
 	 \return bool
 	*/
-	bool			addRecherche(const QString& szRechercheName);
+	bool						addRecherche(const QString& szRechercheName);
 
 	/*!
 	 \brief
@@ -275,7 +279,7 @@ public:
 	 \param lpPart
 	 \return bool
 	*/
-	bool			hasChapter(cPart* lpPart);
+	bool						hasChapter(cPart* lpPart);
 
 	/*!
 	 \brief
@@ -284,7 +288,7 @@ public:
 	 \param lpChapter
 	 \return bool
 	*/
-	bool			hasScene(cChapter* lpChapter);
+	bool						hasScene(cChapter* lpChapter);
 
 	/*!
 	 \brief
@@ -293,7 +297,7 @@ public:
 	 \param lpCharacter
 	 \return bool
 	*/
-	bool			characterInUse(cCharacter* lpCharacter);
+	bool						characterInUse(cCharacter* lpCharacter);
 
 	/*!
 	 \brief
@@ -302,7 +306,7 @@ public:
 	 \param lpPlace
 	 \return bool
 	*/
-	bool			placeInUse(cPlace* lpPlace);
+	bool						placeInUse(cPlace* lpPlace);
 
 	/*!
 	 \brief
@@ -311,7 +315,7 @@ public:
 	 \param lpObject
 	 \return bool
 	*/
-	bool			objectInUse(cObject* lpObject);
+	bool						objectInUse(cObject* lpObject);
 
 	/*!
 	 \brief
@@ -320,249 +324,249 @@ public:
 	 \param lpRecherche
 	 \return bool
 	*/
-	bool			rechercheInUse(cRecherche* lpRecherche);
+	bool						rechercheInUse(cRecherche* lpRecherche);
 
-	bool			printTitle();
-	void			setPrintTitle(const bool& value);
+	bool						printTitle();
+	void						setPrintTitle(const bool& value);
 
-	QString			titleFont();
-	void			setTitleFont(const QString& value);
+	QString						titleFont();
+	void						setTitleFont(const QString& value);
 
-	qint16			titleFontSize();
-	void			setTitleFontSize(const qint16& value);
+	qint16						titleFontSize();
+	void						setTitleFontSize(const qint16& value);
 
-	bool			titleBold();
-	void			setTitleBold(const bool& value);
+	bool						titleBold();
+	void						setTitleBold(const bool& value);
 
-	bool			titleItalic();
-	void			setTitleItalic(const bool& value);
+	bool						titleItalic();
+	void						setTitleItalic(const bool& value);
 
-	bool			titleUnderline();
-	void			setTitleUnderline(const bool& value);
+	bool						titleUnderline();
+	void						setTitleUnderline(const bool& value);
 
-	qint16			titleAlign();
-	void			setTitleAlign(const qint16& value);
+	ALIGN						titleAlign();
+	void						setTitleAlign(const ALIGN& value);
 
-	bool			printSubTitle();
-	void			setPrintSubTitle(const bool& value);
+	bool						printSubTitle();
+	void						setPrintSubTitle(const bool& value);
 
-	QString			subtitleFont();
-	void			setSubtitleFont(const QString& value);
+	QString						subtitleFont();
+	void						setSubtitleFont(const QString& value);
 
-	qint16			subtitleFontSize();
-	void			setSubtitleFontSize(const qint16& value);
+	qint16						subtitleFontSize();
+	void						setSubtitleFontSize(const qint16& value);
 
-	bool			subtitleBold();
-	void			setSubtitleBold(const bool& value);
+	bool						subtitleBold();
+	void						setSubtitleBold(const bool& value);
 
-	bool			subtitleItalic();
-	void			setSubtitleItalic(const bool& value);
+	bool						subtitleItalic();
+	void						setSubtitleItalic(const bool& value);
 
-	bool			subtitleUnderline();
-	void			setSubtitleUnderline(const bool& value);
+	bool						subtitleUnderline();
+	void						setSubtitleUnderline(const bool& value);
 
-	qint16			subtitleAlign();
-	void			setSubtitleAlign(const qint16& value);
+	ALIGN						subtitleAlign();
+	void						setSubtitleAlign(const ALIGN& value);
 
-	bool			printShortDescription();
-	void			setPrintShortDescription(const bool& value);
+	bool						printShortDescription();
+	void						setPrintShortDescription(const bool& value);
 
-	bool			printDescription();
-	void			setPrintDescription(const bool& value);
+	bool						printDescription();
+	void						setPrintDescription(const bool& value);
 
-	bool			printAuthor();
-	void			setPrintAuthor(const bool& value);
+	bool						printAuthor();
+	void						setPrintAuthor(const bool& value);
 
-	QString			authorFont();
-	void			setAuthorFont(const QString& value);
+	QString						authorFont();
+	void						setAuthorFont(const QString& value);
 
-	qint16			authorFontSize();
-	void			setAuthorFontSize(const qint16& value);
+	qint16						authorFontSize();
+	void						setAuthorFontSize(const qint16& value);
 
-	bool			authorBold();
-	void			setAuthorBold(const bool& value);
+	bool						authorBold();
+	void						setAuthorBold(const bool& value);
 
-	bool			authorItalic();
-	void			setAuthorItalic(const bool& value);
+	bool						authorItalic();
+	void						setAuthorItalic(const bool& value);
 
-	bool			authorUnderline();
-	void			setAuthorUnderline(const bool& value);
+	bool						authorUnderline();
+	void						setAuthorUnderline(const bool& value);
 
-	qint16			authorAlign();
-	void			setAuthorAlign(const qint16& value);
+	ALIGN						authorAlign();
+	void						setAuthorAlign(const ALIGN& value);
 
-	bool			printPartName();
-	void			setPrintPartName(const bool& value);
+	bool						printPartName();
+	void						setPrintPartName(const bool& value);
 
-	QString			partFont();
-	void			setPartFont(const QString& value);
+	QString						partFont();
+	void						setPartFont(const QString& value);
 
-	qint16			partFontSize();
-	void			setPartFontSize(const qint16& value);
+	qint16						partFontSize();
+	void						setPartFontSize(const qint16& value);
 
-	bool			partBold();
-	void			setPartBold(const bool& value);
+	bool						partBold();
+	void						setPartBold(const bool& value);
 
-	bool			partItalic();
-	void			setPartItalic(const bool& value);
+	bool						partItalic();
+	void						setPartItalic(const bool& value);
 
-	bool			partUnderline();
-	void			setPartUnderline(const bool& value);
+	bool						partUnderline();
+	void						setPartUnderline(const bool& value);
 
-	qint16			partAlign();
-	void			setPartAlign(const qint16& value);
+	ALIGN						partAlign();
+	void						setPartAlign(const ALIGN& value);
 
-	bool			printPartDescription();
-	void			setPrintPartDescription(const bool& value);
+	bool						printPartDescription();
+	void						setPrintPartDescription(const bool& value);
 
-	bool			printPartText();
-	void			setPrintPartText(const bool& value);
+	bool						printPartText();
+	void						setPrintPartText(const bool& value);
 
-	bool			printChapterName();
-	void			setPrintChapterName(const bool& value);
+	bool						printChapterName();
+	void						setPrintChapterName(const bool& value);
 
-	QString			chapterFont();
-	void			setChapterFont(const QString& value);
+	QString						chapterFont();
+	void						setChapterFont(const QString& value);
 
-	qint16			chapterFontSize();
-	void			setChapterFontSize(const qint16& value);
+	qint16						chapterFontSize();
+	void						setChapterFontSize(const qint16& value);
 
-	bool			chapterBold();
-	void			setChapterBold(const bool& value);
+	bool						chapterBold();
+	void						setChapterBold(const bool& value);
 
-	bool			chapterItalic();
-	void			setChapterItalic(const bool& value);
+	bool						chapterItalic();
+	void						setChapterItalic(const bool& value);
 
-	bool			chapterUnderline();
-	void			setChapterUnderline(const bool& value);
+	bool						chapterUnderline();
+	void						setChapterUnderline(const bool& value);
 
-	qint16			chapterAlign();
-	void			setChapterAlign(const qint16& value);
+	ALIGN						chapterAlign();
+	void						setChapterAlign(const ALIGN& value);
 
-	bool			printChapterDescription();
-	void			setPrintChapterDescription(const bool& value);
+	bool						printChapterDescription();
+	void						setPrintChapterDescription(const bool& value);
 
-	bool			printChapterText();
-	void			setPrintChapterText(const bool& value);
+	bool						printChapterText();
+	void						setPrintChapterText(const bool& value);
 
-	bool			printSceneName();
-	void			setPrintSceneName(const bool& value);
+	bool						printSceneName();
+	void						setPrintSceneName(const bool& value);
 
-	QString			sceneFont();
-	void			setSceneFont(const QString& value);
+	QString						sceneFont();
+	void						setSceneFont(const QString& value);
 
-	qint16			sceneFontSize();
-	void			setSceneFontSize(const qint16& value);
+	qint16						sceneFontSize();
+	void						setSceneFontSize(const qint16& value);
 
-	bool			sceneBold();
-	void			setSceneBold(const bool& value);
+	bool						sceneBold();
+	void						setSceneBold(const bool& value);
 
-	bool			sceneItalic();
-	void			setSceneItalic(const bool& value);
+	bool						sceneItalic();
+	void						setSceneItalic(const bool& value);
 
-	bool			sceneUnderline();
-	void			setSceneUnderline(const bool& value);
+	bool						sceneUnderline();
+	void						setSceneUnderline(const bool& value);
 
-	qint16			sceneAlign();
-	void			setSceneAlign(const qint16& value);
+	ALIGN						sceneAlign();
+	void						setSceneAlign(const ALIGN& value);
 
-	bool			printSceneDescription();
-	void			setPrintSceneDescription(const bool& value);
+	bool						printSceneDescription();
+	void						setPrintSceneDescription(const bool& value);
 
-	bool			printSceneText();
-	void			setPrintSceneText(const bool& value);
+	bool						printSceneText();
+	void						setPrintSceneText(const bool& value);
 
-	QString			paperSize();
-	void			setPaperSize(const QString& value);
+	QPagedPaintDevice::PageSize	paperSize();
+	void						setPaperSize(const QPagedPaintDevice::PageSize& value);
 
-	qint16			paperOrientation();
-	void			setPaperOrientation(const qint16& value);
+	QPrinter::Orientation		paperOrientation();
+	void						setPaperOrientation(const QPrinter::Orientation& value);
 
-	qreal			leftMargin();
-	void			setLeftMargin(const qreal& value);
+	qreal						leftMargin();
+	void						setLeftMargin(const qreal& value);
 
-	qreal			rightMargin();
-	void			setRightMargin(const qreal& value);
+	qreal						rightMargin();
+	void						setRightMargin(const qreal& value);
 
-	qreal			topMargin();
-	void			setTopMargin(const qreal& value);
+	qreal						topMargin();
+	void						setTopMargin(const qreal& value);
 
-	qreal			bottomMargin();
-	void			setBottomMargin(const qreal& value);
+	qreal						bottomMargin();
+	void						setBottomMargin(const qreal& value);
 
-	qint16			unit();
-	void			setUnit(const qint16& value);
+	QPrinter::Unit				unit();
+	void						setUnit(const QPrinter::Unit& value);
 
 private:
-	QString			m_szProject;				/*!< TODO: describe */
-	bool			m_bIsOpen;					/*!< TODO: describe */
-	QSqlDatabase	m_db;						/*!< TODO: describe */
-	cBook			m_book;						/*!< TODO: describe */
-	cPartList		m_partList;					/*!< TODO: describe */
-	cChapterList	m_chapterList;				/*!< TODO: describe */
-	cSceneList		m_sceneList;				/*!< TODO: describe */
-	cCharacterList	m_characterList;			/*!< TODO: describe */
-	cPlaceList		m_placeList;				/*!< TODO: describe */
-	cObjectList		m_objectList;				/*!< TODO: describe */
-	cRechercheList	m_rechercheList;			/*!< TODO: describe */
+	QString						m_szProject;				/*!< TODO: describe */
+	bool						m_bIsOpen;					/*!< TODO: describe */
+	QSqlDatabase				m_db;						/*!< TODO: describe */
+	cBook						m_book;						/*!< TODO: describe */
+	cPartList					m_partList;					/*!< TODO: describe */
+	cChapterList				m_chapterList;				/*!< TODO: describe */
+	cSceneList					m_sceneList;				/*!< TODO: describe */
+	cCharacterList				m_characterList;			/*!< TODO: describe */
+	cPlaceList					m_placeList;				/*!< TODO: describe */
+	cObjectList					m_objectList;				/*!< TODO: describe */
+	cRechercheList				m_rechercheList;			/*!< TODO: describe */
 
-	bool			m_bPrintTitle;				/*!< TODO: describe */
-	QString			m_szTitleFont;				/*!< TODO: describe */
-	qint16			m_iTitleFontSize;			/*!< TODO: describe */
-	bool			m_bTitleBold;				/*!< TODO: describe */
-	bool			m_bTitleItalic;				/*!< TODO: describe */
-	bool			m_bTitleUnderline;			/*!< TODO: describe */
-	qint16			m_iTitleAlign;				/*!< TODO: describe */
-	bool			m_bPrintSubTitle;			/*!< TODO: describe */
-	QString			m_szSubtitleFont;			/*!< TODO: describe */
-	qint16			m_iSubtitleFontSize;		/*!< TODO: describe */
-	bool			m_bSubtitleBold;			/*!< TODO: describe */
-	bool			m_bSubtitleItalic;			/*!< TODO: describe */
-	bool			m_bSubtitleUnderline;		/*!< TODO: describe */
-	qint16			m_iSubtitleAlign;			/*!< TODO: describe */
-	bool			m_bPrintShortDescription;	/*!< TODO: describe */
-	bool			m_bPrintDescription;		/*!< TODO: describe */
-	bool			m_bPrintAuthor;				/*!< TODO: describe */
-	QString			m_szAuthorFont;				/*!< TODO: describe */
-	qint16			m_iAuthorFontSize;			/*!< TODO: describe */
-	bool			m_bAuthorBold;				/*!< TODO: describe */
-	bool			m_bAuthorItalic;			/*!< TODO: describe */
-	bool			m_bAuthorUnderline;			/*!< TODO: describe */
-	qint16			m_iAuthorAlign;				/*!< TODO: describe */
-	bool			m_bPrintPartName;			/*!< TODO: describe */
-	QString			m_szPartFont;				/*!< TODO: describe */
-	qint16			m_iPartFontSize;			/*!< TODO: describe */
-	bool			m_bPartBold;				/*!< TODO: describe */
-	bool			m_bPartItalic;				/*!< TODO: describe */
-	bool			m_bPartUnderline;			/*!< TODO: describe */
-	qint16			m_iPartAlign;				/*!< TODO: describe */
-	bool			m_bPrintPartDescription;	/*!< TODO: describe */
-	bool			m_bPrintPartText;			/*!< TODO: describe */
-	bool			m_bPrintChapterName;		/*!< TODO: describe */
-	QString			m_szChapterFont;			/*!< TODO: describe */
-	qint16			m_iChapterFontSize;			/*!< TODO: describe */
-	bool			m_bChapterBold;				/*!< TODO: describe */
-	bool			m_bChapterItalic;			/*!< TODO: describe */
-	bool			m_bChapterUnderline;		/*!< TODO: describe */
-	qint16			m_iChapterAlign;			/*!< TODO: describe */
-	bool			m_bPrintChapterDescription;	/*!< TODO: describe */
-	bool			m_bPrintChapterText;		/*!< TODO: describe */
-	bool			m_bPrintSceneName;			/*!< TODO: describe */
-	QString			m_szSceneFont;				/*!< TODO: describe */
-	qint16			m_iSceneFontSize;			/*!< TODO: describe */
-	bool			m_bSceneBold;				/*!< TODO: describe */
-	bool			m_bSceneItalic;				/*!< TODO: describe */
-	bool			m_bSceneUnderline;			/*!< TODO: describe */
-	qint16			m_iSceneAlign;				/*!< TODO: describe */
-	bool			m_bPrintSceneDescription;	/*!< TODO: describe */
-	bool			m_bPrintSceneText;			/*!< TODO: describe */
-	QString			m_szPaperSize;				/*!< TODO: describe */
-	qint16			m_iPaperOrientation;		/*!< TODO: describe */
-	qreal			m_dLeftMargin;				/*!< TODO: describe */
-	qreal			m_dRightMargin;				/*!< TODO: describe */
-	qreal			m_dTopMargin;				/*!< TODO: describe */
-	qreal			m_dBottomMargin;			/*!< TODO: describe */
-	qint16			m_iUnit;					/*!< TODO: describe */
+	bool						m_bPrintTitle;				/*!< TODO: describe */
+	QString						m_szTitleFont;				/*!< TODO: describe */
+	qint16						m_iTitleFontSize;			/*!< TODO: describe */
+	bool						m_bTitleBold;				/*!< TODO: describe */
+	bool						m_bTitleItalic;				/*!< TODO: describe */
+	bool						m_bTitleUnderline;			/*!< TODO: describe */
+	ALIGN						m_iTitleAlign;				/*!< TODO: describe */
+	bool						m_bPrintSubTitle;			/*!< TODO: describe */
+	QString						m_szSubtitleFont;			/*!< TODO: describe */
+	qint16						m_iSubtitleFontSize;		/*!< TODO: describe */
+	bool						m_bSubtitleBold;			/*!< TODO: describe */
+	bool						m_bSubtitleItalic;			/*!< TODO: describe */
+	bool						m_bSubtitleUnderline;		/*!< TODO: describe */
+	ALIGN						m_iSubtitleAlign;			/*!< TODO: describe */
+	bool						m_bPrintShortDescription;	/*!< TODO: describe */
+	bool						m_bPrintDescription;		/*!< TODO: describe */
+	bool						m_bPrintAuthor;				/*!< TODO: describe */
+	QString						m_szAuthorFont;				/*!< TODO: describe */
+	qint16						m_iAuthorFontSize;			/*!< TODO: describe */
+	bool						m_bAuthorBold;				/*!< TODO: describe */
+	bool						m_bAuthorItalic;			/*!< TODO: describe */
+	bool						m_bAuthorUnderline;			/*!< TODO: describe */
+	ALIGN						m_iAuthorAlign;				/*!< TODO: describe */
+	bool						m_bPrintPartName;			/*!< TODO: describe */
+	QString						m_szPartFont;				/*!< TODO: describe */
+	qint16						m_iPartFontSize;			/*!< TODO: describe */
+	bool						m_bPartBold;				/*!< TODO: describe */
+	bool						m_bPartItalic;				/*!< TODO: describe */
+	bool						m_bPartUnderline;			/*!< TODO: describe */
+	ALIGN						m_iPartAlign;				/*!< TODO: describe */
+	bool						m_bPrintPartDescription;	/*!< TODO: describe */
+	bool						m_bPrintPartText;			/*!< TODO: describe */
+	bool						m_bPrintChapterName;		/*!< TODO: describe */
+	QString						m_szChapterFont;			/*!< TODO: describe */
+	qint16						m_iChapterFontSize;			/*!< TODO: describe */
+	bool						m_bChapterBold;				/*!< TODO: describe */
+	bool						m_bChapterItalic;			/*!< TODO: describe */
+	bool						m_bChapterUnderline;		/*!< TODO: describe */
+	ALIGN						m_iChapterAlign;			/*!< TODO: describe */
+	bool						m_bPrintChapterDescription;	/*!< TODO: describe */
+	bool						m_bPrintChapterText;		/*!< TODO: describe */
+	bool						m_bPrintSceneName;			/*!< TODO: describe */
+	QString						m_szSceneFont;				/*!< TODO: describe */
+	qint16						m_iSceneFontSize;			/*!< TODO: describe */
+	bool						m_bSceneBold;				/*!< TODO: describe */
+	bool						m_bSceneItalic;				/*!< TODO: describe */
+	bool						m_bSceneUnderline;			/*!< TODO: describe */
+	ALIGN						m_iSceneAlign;				/*!< TODO: describe */
+	bool						m_bPrintSceneDescription;	/*!< TODO: describe */
+	bool						m_bPrintSceneText;			/*!< TODO: describe */
+	QPagedPaintDevice::PageSize	m_paperSize;				/*!< TODO: describe */
+	QPrinter::Orientation		m_iPaperOrientation;		/*!< TODO: describe */
+	qreal						m_dLeftMargin;				/*!< TODO: describe */
+	qreal						m_dRightMargin;				/*!< TODO: describe */
+	qreal						m_dTopMargin;				/*!< TODO: describe */
+	qreal						m_dBottomMargin;			/*!< TODO: describe */
+	QPrinter::Unit				m_iUnit;					/*!< TODO: describe */
 
 	/*!
 	 \brief

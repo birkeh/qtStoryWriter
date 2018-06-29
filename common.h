@@ -14,6 +14,8 @@
 #include <QPixmap>
 
 #include <QDebug>
+#include <QPrinter>
+#include <QPagedPaintDevice>
 
 
 #ifdef __GNUC__
@@ -25,25 +27,12 @@
 #endif
 
 
-enum UNIT
-{
-	UNIT_mm		= 1,
-	UNIT_cm		= 1,
-	UNIT_inch	= 3,
-};
-
 enum ALIGN
 {
 	ALIGN_left		= 1,
 	ALIGN_right		= 2,
 	ALIGN_center	= 3,
 	ALIGN_block		= 4,
-};
-
-enum ORIENTATION
-{
-	ORIENTATION_portrait	= 1,
-	ORIENTATION_landscape	= 2,
 };
 
 /*!
@@ -101,5 +90,13 @@ QByteArray		textDocument2Blob(cTextDocument* lpTextDocument);
  \return QString
 */
 QString			localePath();
+
+QString paperName(QPagedPaintDevice::PageSize paperSize);
+QPagedPaintDevice::PageSize paperKey(const QString& szPaperSize);
+QMap<QPagedPaintDevice::PageSize, QString> paperList();
+
+QString unitName(QPrinter::Unit unit);
+QPrinter::Unit unitKey(const QString& szUnit);
+QMap<QPrinter::Unit, QString> unitList();
 
 #endif // COMMON_H

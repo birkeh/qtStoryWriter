@@ -15,6 +15,18 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->m_lpTab->setCurrentIndex(0);
 
+	QMap<QPagedPaintDevice::PageSize, QString>				paperLst	= paperList();
+	QMap<QPagedPaintDevice::PageSize, QString>::iterator	i;
+
+	for(i = paperLst.begin();i != paperLst.end();i++)
+		ui->m_lpPaperSize->addItem(i.value(), QVariant::fromValue((int)i.key()));
+
+	QMap<QPrinter::Unit, QString>							unitLst		= unitList();
+	QMap<QPrinter::Unit, QString>::iterator					iUnit;
+
+	for(iUnit = unitLst.begin();iUnit != unitLst.end();iUnit++)
+		ui->m_lpUnit->addItem(iUnit.value(), QVariant::fromValue((int)iUnit.key()));
+
 	fillFontSize(ui->m_lpAuthorFontSize);
 	fillFontSize(ui->m_lpChapterNameFontSize);
 	fillFontSize(ui->m_lpPartNameFontSize);
@@ -262,6 +274,24 @@ cPropertiesWindow::~cPropertiesWindow()
 	delete ui;
 }
 
+void setAlign(ALIGN align, cRadioButton* lpLeft, cRadioButton* lpCenter, cRadioButton* lpRight)
+{
+	switch(align)
+	{
+	case ALIGN_left:
+		lpLeft->setChecked(true);
+		break;
+	case ALIGN_center:
+		lpCenter->setChecked(true);
+		break;
+	case ALIGN_right:
+		lpRight->setChecked(true);
+		break;
+	case ALIGN_block:
+		break;
+	}
+}
+
 void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 {
 	m_lpStoryBook	= lpStoryBook;
@@ -281,18 +311,14 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpTitleBold->setChecked(lpStoryBook->titleBold());
 	ui->m_lpTitleItalic->setChecked(lpStoryBook->titleItalic());
 	ui->m_lpTitleUnderline->setChecked(lpStoryBook->titleUnderline());
-	ui->m_lpTitleLeft->setChecked(lpStoryBook->titleAlign() == ALIGN_left);
-	ui->m_lpTitleCenter->setChecked(lpStoryBook->titleAlign() == ALIGN_center);
-	ui->m_lpTitleRight->setChecked(lpStoryBook->titleAlign() == ALIGN_right);
+	setAlign(lpStoryBook->titleAlign(), ui->m_lpTitleLeft, ui->m_lpTitleCenter, ui->m_lpTitleRight);
 	ui->m_lpPrintSubtitle->setChecked(lpStoryBook->printSubTitle());
 	ui->m_lpSubtitleFont->setCurrentText(lpStoryBook->subtitleFont());
 	ui->m_lpSubtitleFontSize->setCurrentText(QString("%1").arg(lpStoryBook->subtitleFontSize()));
 	ui->m_lpSubtitleBold->setChecked(lpStoryBook->subtitleBold());
 	ui->m_lpSubtitleItalic->setChecked(lpStoryBook->subtitleItalic());
 	ui->m_lpSubtitleUnderline->setChecked(lpStoryBook->subtitleUnderline());
-	ui->m_lpSubtitleLeft->setChecked(lpStoryBook->subtitleAlign() == ALIGN_left);
-	ui->m_lpSubtitleCenter->setChecked(lpStoryBook->subtitleAlign() == ALIGN_center);
-	ui->m_lpSubtitleRight->setChecked(lpStoryBook->subtitleAlign() == ALIGN_right);
+	setAlign(lpStoryBook->subtitleAlign(), ui->m_lpSubtitleLeft, ui->m_lpSubtitleCenter, ui->m_lpSubtitleRight);
 	ui->m_lpPrintShortDescription->setChecked(lpStoryBook->printShortDescription());
 	ui->m_lpPrintDescription->setChecked(lpStoryBook->printDescription());
 	ui->m_lpPrintAuthor->setChecked(lpStoryBook->printAuthor());
@@ -301,18 +327,14 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpAuthorBold->setChecked(lpStoryBook->authorBold());
 	ui->m_lpAuthorItalic->setChecked(lpStoryBook->authorItalic());
 	ui->m_lpAuthorUnderline->setChecked(lpStoryBook->authorUnderline());
-	ui->m_lpAuthorLeft->setChecked(lpStoryBook->authorAlign() == ALIGN_left);
-	ui->m_lpAuthorCenter->setChecked(lpStoryBook->authorAlign() == ALIGN_center);
-	ui->m_lpAuthorRight->setChecked(lpStoryBook->authorAlign() == ALIGN_right);
+	setAlign(lpStoryBook->authorAlign(), ui->m_lpAuthorLeft, ui->m_lpAuthorCenter, ui->m_lpAuthorRight);
 	ui->m_lpPrintPartName->setChecked(lpStoryBook->printPartName());
 	ui->m_lpPartNameFont->setCurrentText(lpStoryBook->partFont());
 	ui->m_lpPartNameFontSize->setCurrentText(QString("%1").arg(lpStoryBook->partFontSize()));
 	ui->m_lpPartNameBold->setChecked(lpStoryBook->partBold());
 	ui->m_lpPartNameItalic->setChecked(lpStoryBook->partItalic());
 	ui->m_lpPartNameUnderline->setChecked(lpStoryBook->partUnderline());
-	ui->m_lpPartNameLeft->setChecked(lpStoryBook->partAlign() == ALIGN_left);
-	ui->m_lpPartNameCenter->setChecked(lpStoryBook->partAlign() == ALIGN_center);
-	ui->m_lpPartNameRight->setChecked(lpStoryBook->partAlign() == ALIGN_right);
+	setAlign(lpStoryBook->partAlign(), ui->m_lpPartNameLeft, ui->m_lpPartNameCenter, ui->m_lpPartNameRight);
 	ui->m_lpPrintPartDescription->setChecked(lpStoryBook->printPartDescription());
 	ui->m_lpPrintPartText->setChecked(lpStoryBook->printPartText());
 	ui->m_lpPrintChapterName->setChecked(lpStoryBook->printChapterName());
@@ -321,9 +343,7 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpChapterNameBold->setChecked(lpStoryBook->chapterBold());
 	ui->m_lpChapterNameItalic->setChecked(lpStoryBook->chapterItalic());
 	ui->m_lpChapterNameUnderline->setChecked(lpStoryBook->chapterUnderline());
-	ui->m_lpChapterNameLeft->setChecked(lpStoryBook->chapterAlign() == ALIGN_left);
-	ui->m_lpChapterNameCenter->setChecked(lpStoryBook->chapterAlign() == ALIGN_center);
-	ui->m_lpChapterNameRight->setChecked(lpStoryBook->chapterAlign() == ALIGN_right);
+	setAlign(lpStoryBook->chapterAlign(), ui->m_lpChapterNameLeft, ui->m_lpChapterNameCenter, ui->m_lpChapterNameRight);
 	ui->m_lpPrintChapterDescription->setChecked(lpStoryBook->printChapterDescription());
 	ui->m_lpPrintChapterText->setChecked(lpStoryBook->printChapterText());
 	ui->m_lpPrintSceneName->setChecked(lpStoryBook->printSceneName());
@@ -332,14 +352,12 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpSceneNameBold->setChecked(lpStoryBook->sceneBold());
 	ui->m_lpSceneNameItalic->setChecked(lpStoryBook->sceneItalic());
 	ui->m_lpSceneNameUnderline->setChecked(lpStoryBook->sceneUnderline());
-	ui->m_lpSceneNameLeft->setChecked(lpStoryBook->sceneAlign() == ALIGN_left);
-	ui->m_lpSceneNameCenter->setChecked(lpStoryBook->sceneAlign() == ALIGN_center);
-	ui->m_lpSceneNameRight->setChecked(lpStoryBook->sceneAlign() == ALIGN_right);
+	setAlign(lpStoryBook->sceneAlign(), ui->m_lpSceneNameLeft, ui->m_lpSceneNameCenter, ui->m_lpSceneNameRight);
 	ui->m_lpPrintSceneDescription->setChecked(lpStoryBook->printSceneDescription());
 	ui->m_lpPrintSceneText->setChecked(lpStoryBook->printSceneText());
-	ui->m_lpPaperSize->setCurrentText(lpStoryBook->paperSize());
-	ui->m_lpOrientationPortrait->setChecked(lpStoryBook->paperOrientation() == ORIENTATION_portrait);
-	ui->m_lpOrientationLandscape->setChecked(lpStoryBook->paperOrientation() == ORIENTATION_landscape);
+	ui->m_lpPaperSize->setCurrentText(paperName(lpStoryBook->paperSize()));
+	ui->m_lpOrientationPortrait->setChecked(lpStoryBook->paperOrientation() == QPrinter::Portrait);
+	ui->m_lpOrientationLandscape->setChecked(lpStoryBook->paperOrientation() == QPrinter::Landscape);
 	ui->m_lpUnit->setCurrentText(QString("%1").arg(lpStoryBook->unit()));
 	ui->m_lpMarginLeft->setValue(lpStoryBook->leftMargin());
 	ui->m_lpMarginRight->setValue(lpStoryBook->rightMargin());
@@ -885,27 +903,27 @@ void cPropertiesWindow::onPrintSceneTextChanged(bool checked)
 
 void cPropertiesWindow::onPaperSizeChanged(const QString &text)
 {
-	m_lpStoryBook->setPaperSize(text);
+	m_lpStoryBook->setPaperSize(paperKey(text));
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onOrientationPortraitChanged(bool checked)
 {
 	if(checked)
-		m_lpStoryBook->setPaperOrientation(ORIENTATION_portrait);
+		m_lpStoryBook->setPaperOrientation(QPrinter::Portrait);
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onOrientationLandscapeChanged(bool checked)
 {
 	if(checked)
-		m_lpStoryBook->setPaperOrientation(ORIENTATION_landscape);
+		m_lpStoryBook->setPaperOrientation(QPrinter::Landscape);
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onUnitChanged(const QString &text)
 {
-	m_lpStoryBook->setUnit(text.toInt());
+	m_lpStoryBook->setUnit(unitKey(text));
 	m_lpMainWindow->somethingChanged();
 }
 

@@ -32,7 +32,64 @@
 cStoryBook::cStoryBook(QObject *parent) :
 	QObject(parent),
 	m_szProject(""),
-	m_bIsOpen(false)
+	m_bIsOpen(false),
+	m_bPrintTitle(true),
+	m_szTitleFont(""),
+	m_iTitleFontSize(8),
+	m_bTitleBold(true),
+	m_bTitleItalic(true),
+	m_bTitleUnderline(true),
+	m_iTitleAlign(ALIGN_left),
+	m_bPrintSubTitle(true),
+	m_szSubtitleFont(""),
+	m_iSubtitleFontSize(8),
+	m_bSubtitleBold(true),
+	m_bSubtitleItalic(true),
+	m_bSubtitleUnderline(true),
+	m_iSubtitleAlign(ALIGN_left),
+	m_bPrintShortDescription(true),
+	m_bPrintDescription(true),
+	m_bPrintAuthor(true),
+	m_szAuthorFont(""),
+	m_iAuthorFontSize(8),
+	m_bAuthorBold(true),
+	m_bAuthorItalic(true),
+	m_bAuthorUnderline(true),
+	m_iAuthorAlign(ALIGN_left),
+	m_bPrintPartName(true),
+	m_szPartFont(""),
+	m_iPartFontSize(8),
+	m_bPartBold(true),
+	m_bPartItalic(true),
+	m_bPartUnderline(true),
+	m_iPartAlign(ALIGN_left),
+	m_bPrintPartDescription(true),
+	m_bPrintPartText(true),
+	m_bPrintChapterName(true),
+	m_szChapterFont(""),
+	m_iChapterFontSize(8),
+	m_bChapterBold(true),
+	m_bChapterItalic(true),
+	m_bChapterUnderline(true),
+	m_iChapterAlign(ALIGN_left),
+	m_bPrintChapterDescription(true),
+	m_bPrintChapterText(true),
+	m_bPrintSceneName(true),
+	m_szSceneFont(""),
+	m_iSceneFontSize(8),
+	m_bSceneBold(true),
+	m_bSceneItalic(true),
+	m_bSceneUnderline(true),
+	m_iSceneAlign(ALIGN_left),
+	m_bPrintSceneDescription(true),
+	m_bPrintSceneText(true),
+	m_paperSize(QPagedPaintDevice::A4),
+	m_iPaperOrientation(QPrinter::Portrait),
+	m_dLeftMargin(10),
+	m_dRightMargin(10),
+	m_dTopMargin(10),
+	m_dBottomMargin(10),
+	m_iUnit(QPrinter::Millimeter)
 {
 	m_book.setTitle("untitled");
 	m_bIsOpen	= true;
@@ -343,7 +400,7 @@ bool cStoryBook::createDatabase()
 					"    sceneAlign               INTEGER, "
 					"    printSceneDescription    BOOLEAN, "
 					"    printSceneText           BOOLEAN, "
-					"    paperSize                TEXT, "
+					"    paperSize                INTEGER, "
 					"    paperOrientation         INTEGER, "
 					"    leftMargin               REAL, "
 					"    rightMargin              REAL, "
@@ -409,13 +466,13 @@ bool cStoryBook::createDatabase()
 	query.bindValue(":sceneAlign", ALIGN_left);
 	query.bindValue(":printSceneDescription", true);
 	query.bindValue(":printSceneText", true);
-	query.bindValue(":paperSize", "A4");
-	query.bindValue(":paperOrientation", ORIENTATION_portrait);
+	query.bindValue(":paperSize", QPagedPaintDevice::A4);
+	query.bindValue(":paperOrientation", QPrinter::Portrait);
 	query.bindValue(":leftMargin", 10);
 	query.bindValue(":rightMargin", 10);
 	query.bindValue(":topMargin", 10);
 	query.bindValue(":bottomMargin", 10);
-	query.bindValue(":unit", UNIT_mm);
+	query.bindValue(":unit", QPrinter::Millimeter);
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -634,14 +691,14 @@ bool cStoryBook::loadConfig()
 	m_bTitleBold				= query.value("titleBold").toBool();
 	m_bTitleItalic				= query.value("titleItalic").toBool();
 	m_bTitleUnderline			= query.value("titleUnderline").toBool();
-	m_iTitleAlign				= query.value("titleAlign").toInt();
+	m_iTitleAlign				= (ALIGN)query.value("titleAlign").toInt();
 	m_bPrintSubTitle			= query.value("printSubTitle").toBool();
 	m_szSubtitleFont			= query.value("subtitleFont").toString();
 	m_iSubtitleFontSize			= query.value("subtitleFontSize").toInt();
 	m_bSubtitleBold				= query.value("subtitleBold").toBool();
 	m_bSubtitleItalic			= query.value("subtitleItalic").toBool();
 	m_bSubtitleUnderline		= query.value("subtitleUnderline").toBool();
-	m_iSubtitleAlign			= query.value("subtitleAlign").toInt();
+	m_iSubtitleAlign			= (ALIGN)query.value("subtitleAlign").toInt();
 	m_bPrintShortDescription	= query.value("printShortDescription").toBool();
 	m_bPrintDescription			= query.value("printDescription").toBool();
 	m_bPrintAuthor				= query.value("printAuthor").toBool();
@@ -650,14 +707,14 @@ bool cStoryBook::loadConfig()
 	m_bAuthorBold				= query.value("authorBold").toBool();
 	m_bAuthorItalic				= query.value("authorItalic").toBool();
 	m_bAuthorUnderline			= query.value("authorUnderline").toBool();
-	m_iAuthorAlign				= query.value("authorAlign").toInt();
+	m_iAuthorAlign				= (ALIGN)query.value("authorAlign").toInt();
 	m_bPrintPartName			= query.value("printPartName").toBool();
 	m_szPartFont				= query.value("partFont").toString();
 	m_iPartFontSize				= query.value("partFontSize").toInt();
 	m_bPartBold					= query.value("partBold").toBool();
 	m_bPartItalic				= query.value("partItalic").toBool();
 	m_bPartUnderline			= query.value("partUnderline").toBool();
-	m_iPartAlign				= query.value("partAlign").toInt();
+	m_iPartAlign				= (ALIGN)query.value("partAlign").toInt();
 	m_bPrintPartDescription		= query.value("printPartDescription").toBool();
 	m_bPrintPartText			= query.value("printPartText").toBool();
 	m_bPrintChapterName			= query.value("printChapterName").toBool();
@@ -666,7 +723,7 @@ bool cStoryBook::loadConfig()
 	m_bChapterBold				= query.value("chapterBold").toBool();
 	m_bChapterItalic			= query.value("chapterItalic").toBool();
 	m_bChapterUnderline			= query.value("chapterUnderline").toBool();
-	m_iChapterAlign				= query.value("chapterAlign").toInt();
+	m_iChapterAlign				= (ALIGN)query.value("chapterAlign").toInt();
 	m_bPrintChapterDescription	= query.value("printChapterDescription").toBool();
 	m_bPrintChapterText			= query.value("printChapterText").toBool();
 	m_bPrintSceneName			= query.value("printSceneName").toBool();
@@ -675,16 +732,16 @@ bool cStoryBook::loadConfig()
 	m_bSceneBold				= query.value("sceneBold").toBool();
 	m_bSceneItalic				= query.value("sceneItalic").toBool();
 	m_bSceneUnderline			= query.value("sceneUnderline").toBool();
-	m_iSceneAlign				= query.value("sceneAlign").toInt();
+	m_iSceneAlign				= (ALIGN)query.value("sceneAlign").toInt();
 	m_bPrintSceneDescription	= query.value("printSceneDescription").toBool();
 	m_bPrintSceneText			= query.value("printSceneText").toBool();
-	m_szPaperSize				= query.value("paperSize").toString();
-	m_iPaperOrientation			= query.value("paperOrientation").toInt();
+	m_paperSize					= (QPagedPaintDevice::PageSize)query.value("paperSize").toInt();
+	m_iPaperOrientation			= (QPrinter::Orientation)query.value("paperOrientation").toInt();
 	m_dLeftMargin				= query.value("leftMargin").toDouble();
 	m_dRightMargin				= query.value("rightMargin").toDouble();
 	m_dTopMargin				= query.value("topMargin").toDouble();
 	m_dBottomMargin				= query.value("bottomMargin").toDouble();
-	m_iUnit						= query.value("unit").toInt();
+	m_iUnit						= (QPrinter::Unit)query.value("unit").toInt();
 
 	return(true);
 }
@@ -792,7 +849,7 @@ bool cStoryBook::saveConfig()
 	query.bindValue(":sceneAlign", m_iSceneAlign);
 	query.bindValue(":printSceneDescription", m_bPrintSceneDescription);
 	query.bindValue(":printSceneText", m_bPrintSceneText);
-	query.bindValue(":paperSize", m_szPaperSize);
+	query.bindValue(":paperSize", m_paperSize);
 	query.bindValue(":paperOrientation", m_iPaperOrientation);
 	query.bindValue(":leftMargin", m_dLeftMargin);
 	query.bindValue(":rightMargin", m_dRightMargin);
@@ -1383,12 +1440,12 @@ void cStoryBook::setTitleUnderline(const bool& value)
 	m_bTitleUnderline = value;
 }
 
-qint16 cStoryBook::titleAlign()
+ALIGN cStoryBook::titleAlign()
 {
 	return(m_iTitleAlign);
 }
 
-void cStoryBook::setTitleAlign(const qint16& value)
+void cStoryBook::setTitleAlign(const ALIGN& value)
 {
 	m_iTitleAlign = value;
 }
@@ -1453,12 +1510,12 @@ void cStoryBook::setSubtitleUnderline(const bool& value)
 	m_bSubtitleUnderline = value;
 }
 
-qint16 cStoryBook::subtitleAlign()
+ALIGN cStoryBook::subtitleAlign()
 {
 	return(m_iSubtitleAlign);
 }
 
-void cStoryBook::setSubtitleAlign(const qint16& value)
+void cStoryBook::setSubtitleAlign(const ALIGN& value)
 {
 	m_iSubtitleAlign = value;
 }
@@ -1543,12 +1600,12 @@ void cStoryBook::setAuthorUnderline(const bool& value)
 	m_bAuthorUnderline = value;
 }
 
-qint16 cStoryBook::authorAlign()
+ALIGN cStoryBook::authorAlign()
 {
 	return(m_iAuthorAlign);
 }
 
-void cStoryBook::setAuthorAlign(const qint16& value)
+void cStoryBook::setAuthorAlign(const ALIGN& value)
 {
 	m_iAuthorAlign = value;
 }
@@ -1613,12 +1670,12 @@ void cStoryBook::setPartUnderline(const bool& value)
 	m_bPartUnderline = value;
 }
 
-qint16 cStoryBook::partAlign()
+ALIGN cStoryBook::partAlign()
 {
 	return(m_iPartAlign);
 }
 
-void cStoryBook::setPartAlign(const qint16& value)
+void cStoryBook::setPartAlign(const ALIGN& value)
 {
 	m_iPartAlign = value;
 }
@@ -1703,12 +1760,12 @@ void cStoryBook::setChapterUnderline(const bool& value)
 	m_bChapterUnderline = value;
 }
 
-qint16 cStoryBook::chapterAlign()
+ALIGN cStoryBook::chapterAlign()
 {
 	return(m_iChapterAlign);
 }
 
-void cStoryBook::setChapterAlign(const qint16& value)
+void cStoryBook::setChapterAlign(const ALIGN& value)
 {
 	m_iChapterAlign = value;
 }
@@ -1793,12 +1850,12 @@ void cStoryBook::setSceneUnderline(const bool& value)
 	m_bSceneUnderline = value;
 }
 
-qint16 cStoryBook::sceneAlign()
+ALIGN cStoryBook::sceneAlign()
 {
 	return(m_iSceneAlign);
 }
 
-void cStoryBook::setSceneAlign(const qint16& value)
+void cStoryBook::setSceneAlign(const ALIGN& value)
 {
 	m_iSceneAlign = value;
 }
@@ -1823,22 +1880,22 @@ void cStoryBook::setPrintSceneText(const bool& value)
 	m_bPrintSceneText = value;
 }
 
-QString cStoryBook::paperSize()
+QPagedPaintDevice::PageSize cStoryBook::paperSize()
 {
-	return(m_szPaperSize);
+	return(m_paperSize);
 }
 
-void cStoryBook::setPaperSize(const QString& value)
+void cStoryBook::setPaperSize(const QPagedPaintDevice::PageSize& value)
 {
-	m_szPaperSize = value;
+	m_paperSize = value;
 }
 
-qint16 cStoryBook::paperOrientation()
+QPrinter::Orientation cStoryBook::paperOrientation()
 {
 	return(m_iPaperOrientation);
 }
 
-void cStoryBook::setPaperOrientation(const qint16& value)
+void cStoryBook::setPaperOrientation(const QPrinter::Orientation& value)
 {
 	m_iPaperOrientation = value;
 }
@@ -1883,12 +1940,12 @@ void cStoryBook::setBottomMargin(const qreal& value)
 	m_dBottomMargin = value;
 }
 
-qint16 cStoryBook::unit()
+QPrinter::Unit cStoryBook::unit()
 {
 	return(m_iUnit);
 }
 
-void cStoryBook::setUnit(const qint16& value)
+void cStoryBook::setUnit(const QPrinter::Unit& value)
 {
 	m_iUnit = value;
 }
