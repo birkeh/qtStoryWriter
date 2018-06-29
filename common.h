@@ -27,6 +27,11 @@
 #endif
 
 
+/*!
+ \brief
+
+ \enum ALIGN
+*/
 enum ALIGN
 {
 	ALIGN_left		= 1,
@@ -92,11 +97,44 @@ QByteArray		textDocument2Blob(cTextDocument* lpTextDocument);
 QString			localePath();
 
 QString paperName(QPagedPaintDevice::PageSize paperSize);
+/*!
+ \brief
+
+ \fn paperKey
+ \param szPaperSize
+ \return QPagedPaintDevice::PageSize
+*/
 QPagedPaintDevice::PageSize paperKey(const QString& szPaperSize);
+/*!
+ \brief
+
+ \fn paperList
+ \return QMap<QPagedPaintDevice::PageSize, QString>
+*/
 QMap<QPagedPaintDevice::PageSize, QString> paperList();
 
+/*!
+ \brief
+
+ \fn unitName
+ \param unit
+ \return QString
+*/
 QString unitName(QPrinter::Unit unit);
+/*!
+ \brief
+
+ \fn unitKey
+ \param szUnit
+ \return QPrinter::Unit
+*/
 QPrinter::Unit unitKey(const QString& szUnit);
+/*!
+ \brief
+
+ \fn unitList
+ \return QMap<QPrinter::Unit, QString>
+*/
 QMap<QPrinter::Unit, QString> unitList();
 
 #endif // COMMON_H

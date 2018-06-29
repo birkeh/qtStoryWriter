@@ -53,8 +53,19 @@ private slots:
 	*/
 	void				onLanguageIndexChanged(int index);
 
+	/*!
+	 \brief
+
+	 \fn onButtonClicked
+	 \param button
+	*/
 	void				onButtonClicked(QAbstractButton* button);
 signals:
+	/*!
+	 \brief
+
+	 \fn onLanguageChanged
+	*/
 	void				onLanguageChanged();
 
 private:

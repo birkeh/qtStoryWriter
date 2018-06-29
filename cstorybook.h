@@ -327,174 +327,852 @@ public:
 	bool						rechercheInUse(cRecherche* lpRecherche);
 
 	bool						printTitle();
+	/*!
+	 \brief
+
+	 \fn setPrintTitle
+	 \param value
+	*/
 	void						setPrintTitle(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn titleFont
+	 \return QString
+	*/
 	QString						titleFont();
+	/*!
+	 \brief
+
+	 \fn setTitleFont
+	 \param value
+	*/
 	void						setTitleFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn titleFontSize
+	 \return qint16
+	*/
 	qint16						titleFontSize();
+	/*!
+	 \brief
+
+	 \fn setTitleFontSize
+	 \param value
+	*/
 	void						setTitleFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn titleBold
+	 \return bool
+	*/
 	bool						titleBold();
+	/*!
+	 \brief
+
+	 \fn setTitleBold
+	 \param value
+	*/
 	void						setTitleBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn titleItalic
+	 \return bool
+	*/
 	bool						titleItalic();
+	/*!
+	 \brief
+
+	 \fn setTitleItalic
+	 \param value
+	*/
 	void						setTitleItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn titleUnderline
+	 \return bool
+	*/
 	bool						titleUnderline();
+	/*!
+	 \brief
+
+	 \fn setTitleUnderline
+	 \param value
+	*/
 	void						setTitleUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn titleAlign
+	 \return ALIGN
+	*/
 	ALIGN						titleAlign();
+	/*!
+	 \brief
+
+	 \fn setTitleAlign
+	 \param value
+	*/
 	void						setTitleAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printSubTitle
+	 \return bool
+	*/
 	bool						printSubTitle();
+	/*!
+	 \brief
+
+	 \fn setPrintSubTitle
+	 \param value
+	*/
 	void						setPrintSubTitle(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleFont
+	 \return QString
+	*/
 	QString						subtitleFont();
+	/*!
+	 \brief
+
+	 \fn setSubtitleFont
+	 \param value
+	*/
 	void						setSubtitleFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleFontSize
+	 \return qint16
+	*/
 	qint16						subtitleFontSize();
+	/*!
+	 \brief
+
+	 \fn setSubtitleFontSize
+	 \param value
+	*/
 	void						setSubtitleFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleBold
+	 \return bool
+	*/
 	bool						subtitleBold();
+	/*!
+	 \brief
+
+	 \fn setSubtitleBold
+	 \param value
+	*/
 	void						setSubtitleBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleItalic
+	 \return bool
+	*/
 	bool						subtitleItalic();
+	/*!
+	 \brief
+
+	 \fn setSubtitleItalic
+	 \param value
+	*/
 	void						setSubtitleItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleUnderline
+	 \return bool
+	*/
 	bool						subtitleUnderline();
+	/*!
+	 \brief
+
+	 \fn setSubtitleUnderline
+	 \param value
+	*/
 	void						setSubtitleUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn subtitleAlign
+	 \return ALIGN
+	*/
 	ALIGN						subtitleAlign();
+	/*!
+	 \brief
+
+	 \fn setSubtitleAlign
+	 \param value
+	*/
 	void						setSubtitleAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printShortDescription
+	 \return bool
+	*/
 	bool						printShortDescription();
+	/*!
+	 \brief
+
+	 \fn setPrintShortDescription
+	 \param value
+	*/
 	void						setPrintShortDescription(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printDescription
+	 \return bool
+	*/
 	bool						printDescription();
+	/*!
+	 \brief
+
+	 \fn setPrintDescription
+	 \param value
+	*/
 	void						setPrintDescription(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printAuthor
+	 \return bool
+	*/
 	bool						printAuthor();
+	/*!
+	 \brief
+
+	 \fn setPrintAuthor
+	 \param value
+	*/
 	void						setPrintAuthor(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn authorFont
+	 \return QString
+	*/
 	QString						authorFont();
+	/*!
+	 \brief
+
+	 \fn setAuthorFont
+	 \param value
+	*/
 	void						setAuthorFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn authorFontSize
+	 \return qint16
+	*/
 	qint16						authorFontSize();
+	/*!
+	 \brief
+
+	 \fn setAuthorFontSize
+	 \param value
+	*/
 	void						setAuthorFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn authorBold
+	 \return bool
+	*/
 	bool						authorBold();
+	/*!
+	 \brief
+
+	 \fn setAuthorBold
+	 \param value
+	*/
 	void						setAuthorBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn authorItalic
+	 \return bool
+	*/
 	bool						authorItalic();
+	/*!
+	 \brief
+
+	 \fn setAuthorItalic
+	 \param value
+	*/
 	void						setAuthorItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn authorUnderline
+	 \return bool
+	*/
 	bool						authorUnderline();
+	/*!
+	 \brief
+
+	 \fn setAuthorUnderline
+	 \param value
+	*/
 	void						setAuthorUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn authorAlign
+	 \return ALIGN
+	*/
 	ALIGN						authorAlign();
+	/*!
+	 \brief
+
+	 \fn setAuthorAlign
+	 \param value
+	*/
 	void						setAuthorAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printPartName
+	 \return bool
+	*/
 	bool						printPartName();
+	/*!
+	 \brief
+
+	 \fn setPrintPartName
+	 \param value
+	*/
 	void						setPrintPartName(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn partFont
+	 \return QString
+	*/
 	QString						partFont();
+	/*!
+	 \brief
+
+	 \fn setPartFont
+	 \param value
+	*/
 	void						setPartFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn partFontSize
+	 \return qint16
+	*/
 	qint16						partFontSize();
+	/*!
+	 \brief
+
+	 \fn setPartFontSize
+	 \param value
+	*/
 	void						setPartFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn partBold
+	 \return bool
+	*/
 	bool						partBold();
+	/*!
+	 \brief
+
+	 \fn setPartBold
+	 \param value
+	*/
 	void						setPartBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn partItalic
+	 \return bool
+	*/
 	bool						partItalic();
+	/*!
+	 \brief
+
+	 \fn setPartItalic
+	 \param value
+	*/
 	void						setPartItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn partUnderline
+	 \return bool
+	*/
 	bool						partUnderline();
+	/*!
+	 \brief
+
+	 \fn setPartUnderline
+	 \param value
+	*/
 	void						setPartUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn partAlign
+	 \return ALIGN
+	*/
 	ALIGN						partAlign();
+	/*!
+	 \brief
+
+	 \fn setPartAlign
+	 \param value
+	*/
 	void						setPartAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printPartDescription
+	 \return bool
+	*/
 	bool						printPartDescription();
+	/*!
+	 \brief
+
+	 \fn setPrintPartDescription
+	 \param value
+	*/
 	void						setPrintPartDescription(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printPartText
+	 \return bool
+	*/
 	bool						printPartText();
+	/*!
+	 \brief
+
+	 \fn setPrintPartText
+	 \param value
+	*/
 	void						setPrintPartText(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printChapterName
+	 \return bool
+	*/
 	bool						printChapterName();
+	/*!
+	 \brief
+
+	 \fn setPrintChapterName
+	 \param value
+	*/
 	void						setPrintChapterName(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterFont
+	 \return QString
+	*/
 	QString						chapterFont();
+	/*!
+	 \brief
+
+	 \fn setChapterFont
+	 \param value
+	*/
 	void						setChapterFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterFontSize
+	 \return qint16
+	*/
 	qint16						chapterFontSize();
+	/*!
+	 \brief
+
+	 \fn setChapterFontSize
+	 \param value
+	*/
 	void						setChapterFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterBold
+	 \return bool
+	*/
 	bool						chapterBold();
+	/*!
+	 \brief
+
+	 \fn setChapterBold
+	 \param value
+	*/
 	void						setChapterBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterItalic
+	 \return bool
+	*/
 	bool						chapterItalic();
+	/*!
+	 \brief
+
+	 \fn setChapterItalic
+	 \param value
+	*/
 	void						setChapterItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterUnderline
+	 \return bool
+	*/
 	bool						chapterUnderline();
+	/*!
+	 \brief
+
+	 \fn setChapterUnderline
+	 \param value
+	*/
 	void						setChapterUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn chapterAlign
+	 \return ALIGN
+	*/
 	ALIGN						chapterAlign();
+	/*!
+	 \brief
+
+	 \fn setChapterAlign
+	 \param value
+	*/
 	void						setChapterAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printChapterDescription
+	 \return bool
+	*/
 	bool						printChapterDescription();
+	/*!
+	 \brief
+
+	 \fn setPrintChapterDescription
+	 \param value
+	*/
 	void						setPrintChapterDescription(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printChapterText
+	 \return bool
+	*/
 	bool						printChapterText();
+	/*!
+	 \brief
+
+	 \fn setPrintChapterText
+	 \param value
+	*/
 	void						setPrintChapterText(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printSceneName
+	 \return bool
+	*/
 	bool						printSceneName();
+	/*!
+	 \brief
+
+	 \fn setPrintSceneName
+	 \param value
+	*/
 	void						setPrintSceneName(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneFont
+	 \return QString
+	*/
 	QString						sceneFont();
+	/*!
+	 \brief
+
+	 \fn setSceneFont
+	 \param value
+	*/
 	void						setSceneFont(const QString& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneFontSize
+	 \return qint16
+	*/
 	qint16						sceneFontSize();
+	/*!
+	 \brief
+
+	 \fn setSceneFontSize
+	 \param value
+	*/
 	void						setSceneFontSize(const qint16& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneBold
+	 \return bool
+	*/
 	bool						sceneBold();
+	/*!
+	 \brief
+
+	 \fn setSceneBold
+	 \param value
+	*/
 	void						setSceneBold(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneItalic
+	 \return bool
+	*/
 	bool						sceneItalic();
+	/*!
+	 \brief
+
+	 \fn setSceneItalic
+	 \param value
+	*/
 	void						setSceneItalic(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneUnderline
+	 \return bool
+	*/
 	bool						sceneUnderline();
+	/*!
+	 \brief
+
+	 \fn setSceneUnderline
+	 \param value
+	*/
 	void						setSceneUnderline(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn sceneAlign
+	 \return ALIGN
+	*/
 	ALIGN						sceneAlign();
+	/*!
+	 \brief
+
+	 \fn setSceneAlign
+	 \param value
+	*/
 	void						setSceneAlign(const ALIGN& value);
 
+	/*!
+	 \brief
+
+	 \fn printSceneDescription
+	 \return bool
+	*/
 	bool						printSceneDescription();
+	/*!
+	 \brief
+
+	 \fn setPrintSceneDescription
+	 \param value
+	*/
 	void						setPrintSceneDescription(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn printSceneText
+	 \return bool
+	*/
 	bool						printSceneText();
+	/*!
+	 \brief
+
+	 \fn setPrintSceneText
+	 \param value
+	*/
 	void						setPrintSceneText(const bool& value);
 
+	/*!
+	 \brief
+
+	 \fn paperSize
+	 \return QPagedPaintDevice::PageSize
+	*/
 	QPagedPaintDevice::PageSize	paperSize();
+	/*!
+	 \brief
+
+	 \fn setPaperSize
+	 \param value
+	*/
 	void						setPaperSize(const QPagedPaintDevice::PageSize& value);
 
+	/*!
+	 \brief
+
+	 \fn paperOrientation
+	 \return QPrinter::Orientation
+	*/
 	QPrinter::Orientation		paperOrientation();
+	/*!
+	 \brief
+
+	 \fn setPaperOrientation
+	 \param value
+	*/
 	void						setPaperOrientation(const QPrinter::Orientation& value);
 
+	/*!
+	 \brief
+
+	 \fn leftMargin
+	 \return qreal
+	*/
 	qreal						leftMargin();
+	/*!
+	 \brief
+
+	 \fn setLeftMargin
+	 \param value
+	*/
 	void						setLeftMargin(const qreal& value);
 
+	/*!
+	 \brief
+
+	 \fn rightMargin
+	 \return qreal
+	*/
 	qreal						rightMargin();
+	/*!
+	 \brief
+
+	 \fn setRightMargin
+	 \param value
+	*/
 	void						setRightMargin(const qreal& value);
 
+	/*!
+	 \brief
+
+	 \fn topMargin
+	 \return qreal
+	*/
 	qreal						topMargin();
+	/*!
+	 \brief
+
+	 \fn setTopMargin
+	 \param value
+	*/
 	void						setTopMargin(const qreal& value);
 
+	/*!
+	 \brief
+
+	 \fn bottomMargin
+	 \return qreal
+	*/
 	qreal						bottomMargin();
+	/*!
+	 \brief
+
+	 \fn setBottomMargin
+	 \param value
+	*/
 	void						setBottomMargin(const qreal& value);
 
+	/*!
+	 \brief
+
+	 \fn unit
+	 \return QPrinter::Unit
+	*/
 	QPrinter::Unit				unit();
+	/*!
+	 \brief
+
+	 \fn setUnit
+	 \param value
+	*/
 	void						setUnit(const QPrinter::Unit& value);
 
 private:
