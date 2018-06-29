@@ -364,6 +364,8 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpMarginTop->setValue(lpStoryBook->topMargin());
 	ui->m_lpMarginBottom->setValue(lpStoryBook->bottomMargin());
 
+	enablePrintTitle(lpStoryBook->printTitle());
+
 	connect(ui->m_lpTitle,						&cLineEdit::textChanged,								this,	&cPropertiesWindow::onTitleChanged);
 	connect(ui->m_lpSubTitle,					&cLineEdit::textChanged,								this,	&cPropertiesWindow::onSubTitleChanged);
 	connect(ui->m_lpAuthor,						&cLineEdit::textChanged,								this,	&cPropertiesWindow::onAuthorChanged);
@@ -514,6 +516,8 @@ void cPropertiesWindow::fillFontSize(QComboBox* lpComboBox)
 void cPropertiesWindow::onPrintTitleChanged(bool checked)
 {
 	m_lpStoryBook->setPrintTitle(checked);
+	enablePrintTitle(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -949,4 +953,16 @@ void cPropertiesWindow::onMarginBottomChanged(double d)
 {
 	m_lpStoryBook->setBottomMargin(d);
 	m_lpMainWindow->somethingChanged();
+}
+
+void cPropertiesWindow::enablePrintTitle(bool enable)
+{
+	ui->m_lpTitleFont->setEnabled(enable);
+	ui->m_lpTitleFontSize->setEnabled(enable);
+	ui->m_lpTitleBold->setEnabled(enable);
+	ui->m_lpTitleItalic->setEnabled(enable);
+	ui->m_lpTitleUnderline->setEnabled(enable);
+	ui->m_lpTitleLeft->setEnabled(enable);
+	ui->m_lpTitleCenter->setEnabled(enable);
+	ui->m_lpTitleRight->setEnabled(enable);
 }

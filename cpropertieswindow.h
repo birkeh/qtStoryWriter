@@ -614,6 +614,8 @@ private:
 	 \param lpComboBox
 	*/
 	void					fillFontSize(QComboBox* lpComboBox);
+
+	void					enablePrintTitle(bool enable);
 };
 
 #endif // CPROPERTIESWINDOW_H

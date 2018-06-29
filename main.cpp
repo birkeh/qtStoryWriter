@@ -19,7 +19,7 @@
 #include "csplashscreen.h"
 
 
-//#define SHOW_SPLASH
+#define SHOW_SPLASH
 
 
 int main(int argc, char *argv[])
