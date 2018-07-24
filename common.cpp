@@ -227,29 +227,28 @@ QMap<QPagedPaintDevice::PageSize, QString> paperList()
 	return(list);
 }
 
-QString unitName(QPrinter::Unit unit)
+QString unitName(QPageLayout::Unit unit)
 {
-	QMap<QPrinter::Unit, QString>	list	= unitList();
+	QMap<QPageLayout::Unit, QString>	list	= unitList();
 	return(list.value(unit));
 }
 
-QPrinter::Unit unitKey(const QString& szUnit)
+QPageLayout::Unit unitKey(const QString& szUnit)
 {
-	QMap<QPrinter::Unit, QString>	list	= unitList();
+	QMap<QPageLayout::Unit, QString>	list	= unitList();
 	return(list.key(szUnit));
 }
 
-QMap<QPrinter::Unit, QString> unitList()
+QMap<QPageLayout::Unit, QString> unitList()
 {
-	QMap<QPrinter::Unit, QString>	list;
+	QMap<QPageLayout::Unit, QString>	list;
 
-	list.insert(QPrinter::Millimeter, QObject::tr("Millimeter"));
-	list.insert(QPrinter::Point, QObject::tr("Point"));
-	list.insert(QPrinter::Inch, QObject::tr("Inch"));
-	list.insert(QPrinter::Pica, QObject::tr("Pica"));
-	list.insert(QPrinter::Didot, QObject::tr("Didot"));
-	list.insert(QPrinter::Cicero, QObject::tr("Cicero"));
-	list.insert(QPrinter::DevicePixel, QObject::tr("DevicePixel"));
+	list.insert(QPageLayout::Millimeter, QObject::tr("Millimeter"));
+	list.insert(QPageLayout::Point, QObject::tr("Point"));
+	list.insert(QPageLayout::Inch, QObject::tr("Inch"));
+	list.insert(QPageLayout::Pica, QObject::tr("Pica"));
+	list.insert(QPageLayout::Didot, QObject::tr("Didot"));
+	list.insert(QPageLayout::Cicero, QObject::tr("Cicero"));
 
 	return(list);
 }

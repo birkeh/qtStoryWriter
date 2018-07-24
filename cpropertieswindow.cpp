@@ -21,8 +21,8 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	for(i = paperLst.begin();i != paperLst.end();i++)
 		ui->m_lpPaperSize->addItem(i.value(), QVariant::fromValue((int)i.key()));
 
-	QMap<QPrinter::Unit, QString>							unitLst		= unitList();
-	QMap<QPrinter::Unit, QString>::iterator					iUnit;
+	QMap<QPageLayout::Unit, QString>						unitLst		= unitList();
+	QMap<QPageLayout::Unit, QString>::iterator				iUnit;
 
 	for(iUnit = unitLst.begin();iUnit != unitLst.end();iUnit++)
 		ui->m_lpUnit->addItem(iUnit.value(), QVariant::fromValue((int)iUnit.key()));

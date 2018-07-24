@@ -120,21 +120,21 @@ QMap<QPagedPaintDevice::PageSize, QString> paperList();
  \param unit
  \return QString
 */
-QString unitName(QPrinter::Unit unit);
+QString unitName(QPageLayout::Unit unit);
 /*!
  \brief
 
  \fn unitKey
  \param szUnit
- \return QPrinter::Unit
+ \return QPageLayout::Unit
 */
-QPrinter::Unit unitKey(const QString& szUnit);
+QPageLayout::Unit unitKey(const QString& szUnit);
 /*!
  \brief
 
  \fn unitList
- \return QMap<QPrinter::Unit, QString>
+ \return QMap<QPageLayout::Unit, QString>
 */
-QMap<QPrinter::Unit, QString> unitList();
+QMap<QPageLayout::Unit, QString> unitList();
 
 #endif // COMMON_H

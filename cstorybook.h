@@ -1164,16 +1164,16 @@ public:
 	 \brief
 
 	 \fn unit
-	 \return QPrinter::Unit
+	 \return QPageLayout::Unit
 	*/
-	QPrinter::Unit				unit();
+	QPageLayout::Unit			unit();
 	/*!
 	 \brief
 
 	 \fn setUnit
 	 \param value
 	*/
-	void						setUnit(const QPrinter::Unit& value);
+	void						setUnit(const QPageLayout::Unit& value);
 
 private:
 	QString						m_szProject;				/*!< TODO: describe */
@@ -1244,7 +1244,7 @@ private:
 	qreal						m_dRightMargin;				/*!< TODO: describe */
 	qreal						m_dTopMargin;				/*!< TODO: describe */
 	qreal						m_dBottomMargin;			/*!< TODO: describe */
-	QPrinter::Unit				m_iUnit;					/*!< TODO: describe */
+	QPageLayout::Unit			m_iUnit;					/*!< TODO: describe */
 
 	/*!
 	 \brief
@@ -1405,6 +1405,30 @@ private:
 	 \return bool
 	*/
 	bool			saveImageList();
+
+	/*!
+	 \brief
+
+	 \fn printDocument
+	 \param printer
+	 \return bool
+	*/
+	bool			printDocument(QPrinter &printer);
+	/*!
+	 \brief
+
+	 \fn configPrinter
+	 \param printer
+	*/
+	void			configPrinter(QPrinter &printer);
+
+	/*!
+	 \brief
+
+	 \fn configPrinter
+	 \param printer
+	*/
+	void			printBlock(QTextCursor& cursor, const QString& szText, const QString& szFont, const qint16& iFontSize, const ALIGN align, const bool& bold, const bool& italic, const bool& underline);
 };
 
 #endif // CSTORYBOOK_H

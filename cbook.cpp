@@ -82,13 +82,13 @@ bool cBook::save()
 	QByteArray	ba;
 
 	if(description())
-		ba	= description()->toHtml().toUtf8();
+		ba	= shortDescription()->toHtml().toUtf8();
 	else
 		ba	= QString("").toUtf8();
 	query.bindValue(":shortDescription", qCompress(ba));
 
 	if(shortDescription())
-		ba	= shortDescription()->toHtml().toUtf8();
+		ba	= description()->toHtml().toUtf8();
 	else
 		ba	= QString("").toUtf8();
 	query.bindValue(":description", qCompress(ba));

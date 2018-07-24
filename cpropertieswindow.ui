@@ -837,21 +837,93 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_lpTitle</tabstop>
-  <tabstop>m_lpSubTitle</tabstop>
-  <tabstop>m_lpAuthor</tabstop>
-  <tabstop>m_lpStartedAt</tabstop>
-  <tabstop>m_lpFinishedAt</tabstop>
-  <tabstop>m_lpTargetDate</tabstop>
-  <tabstop>m_lpShortDescription</tabstop>
+  <tabstop>m_lpTitleFont</tabstop>
+  <tabstop>m_lpTitleFontSize</tabstop>
+  <tabstop>m_lpTitleBold</tabstop>
+  <tabstop>m_lpTitleItalic</tabstop>
+  <tabstop>m_lpTitleUnderline</tabstop>
+  <tabstop>m_lpTitleLeft</tabstop>
+  <tabstop>m_lpTitleCenter</tabstop>
+  <tabstop>m_lpTitleRight</tabstop>
+  <tabstop>m_lpSubtitleFont</tabstop>
+  <tabstop>m_lpSubtitleFontSize</tabstop>
+  <tabstop>m_lpSubtitleBold</tabstop>
+  <tabstop>m_lpSubtitleItalic</tabstop>
+  <tabstop>m_lpSubtitleUnderline</tabstop>
+  <tabstop>m_lpSubtitleLeft</tabstop>
+  <tabstop>m_lpSubtitleCenter</tabstop>
+  <tabstop>m_lpSubtitleRight</tabstop>
+  <tabstop>m_lpAuthorFont</tabstop>
+  <tabstop>m_lpAuthorFontSize</tabstop>
+  <tabstop>m_lpAuthorBold</tabstop>
+  <tabstop>m_lpAuthorItalic</tabstop>
+  <tabstop>m_lpAuthorUnderline</tabstop>
+  <tabstop>m_lpAuthorLeft</tabstop>
+  <tabstop>m_lpAuthorCenter</tabstop>
+  <tabstop>m_lpAuthorRight</tabstop>
+  <tabstop>m_lpPartNameFont</tabstop>
+  <tabstop>m_lpPartNameFontSize</tabstop>
+  <tabstop>m_lpPartNameBold</tabstop>
+  <tabstop>m_lpPartNameItalic</tabstop>
+  <tabstop>m_lpPartNameUnderline</tabstop>
+  <tabstop>m_lpPartNameLeft</tabstop>
+  <tabstop>m_lpPartNameCenter</tabstop>
+  <tabstop>m_lpPartNameRight</tabstop>
+  <tabstop>m_lpChapterNameFont</tabstop>
+  <tabstop>m_lpChapterNameFontSize</tabstop>
+  <tabstop>m_lpChapterNameBold</tabstop>
+  <tabstop>m_lpChapterNameItalic</tabstop>
+  <tabstop>m_lpChapterNameUnderline</tabstop>
+  <tabstop>m_lpChapterNameLeft</tabstop>
+  <tabstop>m_lpChapterNameCenter</tabstop>
+  <tabstop>m_lpChapterNameRight</tabstop>
+  <tabstop>m_lpSceneNameFont</tabstop>
+  <tabstop>m_lpSceneNameFontSize</tabstop>
+  <tabstop>m_lpSceneNameBold</tabstop>
+  <tabstop>m_lpSceneNameItalic</tabstop>
+  <tabstop>m_lpSceneNameUnderline</tabstop>
+  <tabstop>m_lpSceneNameLeft</tabstop>
+  <tabstop>m_lpSceneNameCenter</tabstop>
+  <tabstop>m_lpSceneNameRight</tabstop>
+  <tabstop>m_lpPaperSize</tabstop>
+  <tabstop>m_lpOrientationPortrait</tabstop>
+  <tabstop>m_lpOrientationLandscape</tabstop>
+  <tabstop>m_lpUnit</tabstop>
+  <tabstop>m_lpMarginLeft</tabstop>
+  <tabstop>m_lpMarginRight</tabstop>
+  <tabstop>m_lpMarginTop</tabstop>
+  <tabstop>m_lpMarginBottom</tabstop>
   <tabstop>m_lpDescription</tabstop>
+  <tabstop>m_lpPrintPartText</tabstop>
+  <tabstop>m_lpPrintShortDescription</tabstop>
+  <tabstop>m_lpPrintPartDescription</tabstop>
+  <tabstop>m_lpPrintChapterText</tabstop>
+  <tabstop>m_lpPrintDescription</tabstop>
+  <tabstop>m_lpPrintAuthor</tabstop>
+  <tabstop>m_lpPrintSceneDescription</tabstop>
+  <tabstop>m_lpAuthor</tabstop>
+  <tabstop>m_lpPrintChapterDescription</tabstop>
+  <tabstop>m_lpPrintPartName</tabstop>
+  <tabstop>m_lpStartedAt</tabstop>
+  <tabstop>m_lpPrintSubtitle</tabstop>
+  <tabstop>m_lpPrintSceneName</tabstop>
+  <tabstop>m_lpFinishedAt</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>m_lpSubTitle</tabstop>
+  <tabstop>m_lpPrintSceneText</tabstop>
+  <tabstop>m_lpShortDescription</tabstop>
+  <tabstop>m_lpTitle</tabstop>
+  <tabstop>m_lpPrintChapterName</tabstop>
+  <tabstop>m_lpPrintTitle</tabstop>
+  <tabstop>m_lpTargetDate</tabstop>
+  <tabstop>m_lpTab</tabstop>
  </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="m_lpOrientation"/>
   <buttongroup name="m_lpTitleAlign"/>
   <buttongroup name="m_lpSubtitleAlign"/>
+  <buttongroup name="m_lpOrientation"/>
   <buttongroup name="m_lpAuthorAlign"/>
   <buttongroup name="m_lpPartAlign"/>
   <buttongroup name="m_lpSceneAlign"/>

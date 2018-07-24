@@ -24,6 +24,10 @@
 
 #include <QThread>
 
+#include <QTextCursor>
+#include <QTextBlockFormat>
+#include <QMarginsF>
+
 #ifndef QT_NO_PRINTER
 #include <QPrinter>
 #endif
@@ -89,7 +93,7 @@ cStoryBook::cStoryBook(QObject *parent) :
 	m_dRightMargin(10),
 	m_dTopMargin(10),
 	m_dBottomMargin(10),
-	m_iUnit(QPrinter::Millimeter)
+	m_iUnit(QPageLayout::Millimeter)
 {
 	m_book.setTitle("untitled");
 	m_bIsOpen	= true;
@@ -225,9 +229,13 @@ bool cStoryBook::printPdf(const QString& szFileName)
 	QPrinter	printer(QPrinter::PrinterResolution);
 
 	printer.setOutputFormat(QPrinter::PdfFormat);
-	printer.setPaperSize(QPrinter::A4);
 	printer.setOutputFileName(szFileName);
 
+	return(printDocument(printer));
+}
+
+bool cStoryBook::printDocument(QPrinter& printer)
+{
 //	QMap<qint32, QStandardItem*>	part;
 //	QMap<qint32, QStandardItem*>	chapter;
 //	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
@@ -282,18 +290,110 @@ bool cStoryBook::printPdf(const QString& szFileName)
 //		}
 //	}
 
+	configPrinter(printer);
+
+	QTextDocument	doc;
+	QTextCursor		cursor(&doc);
+	bool			bNewPage	= false;
+
+	if(printTitle())
+	{
+		printBlock(cursor, title(), titleFont(), titleFontSize(), titleAlign(), titleBold(), titleItalic(), titleUnderline());
+		bNewPage	= true;
+	}
+
+	if(printSubTitle())
+	{
+		printBlock(cursor, m_book.subTitle(), subtitleFont(), subtitleFontSize(), subtitleAlign(), subtitleBold(), subtitleItalic(), subtitleUnderline());
+		bNewPage	= true;
+	}
+
+	if(printShortDescription())
+	{
+		cursor.insertHtml(m_book.shortDescription()->toHtml() + "<br>");
+		bNewPage	= true;
+	}
+
+	if(printDescription())
+	{
+		cursor.insertHtml(m_book.description()->toHtml());
+		bNewPage	= true;
+	}
+
+	if(bNewPage)
+	{
+		QTextBlockFormat	blockFormat;
+		blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+		cursor.insertBlock(blockFormat);
+	}
+
 	for(int x = 0;x < m_sceneList.count();x++)
 	{
-		cScene*			lpScene		= m_sceneList.at(x);
+		if(x)
+		{
+			QTextBlockFormat	blockFormat;
+			blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+			cursor.insertBlock(blockFormat);
+		}
+
+		cScene*				lpScene		= m_sceneList.at(x);
 
 		if(lpScene->deleted())
 			continue;
 
-		lpScene->text()->setPageSize(printer.pageRect().size());
-		lpScene->text()->print(&printer);
+		cursor.insertHtml(lpScene->text()->toHtml());
 	}
 
+	doc.setPageSize(printer.pageRect().size());
+	doc.print(&printer);
+
 	return(true);
+}
+
+void cStoryBook::configPrinter(QPrinter& printer)
+{
+	printer.setPaperSize(paperSize());
+	printer.setOrientation(paperOrientation());
+
+	QMarginsF	marginsF(leftMargin(), topMargin(), rightMargin(), bottomMargin());
+	printer.setPageMargins(marginsF, unit());
+}
+
+void cStoryBook::printBlock(QTextCursor& cursor, const QString& szText, const QString& szFont, const qint16& iFontSize, const ALIGN align, const bool& bold, const bool& italic, const bool& underline)
+{
+	QString		szHTML("");
+	szHTML.append(QString("<p style=\"font-family:'%1'; font-size:%2px").arg(szFont).arg(iFontSize));
+
+	switch(align)
+	{
+	case ALIGN::ALIGN_left:
+		szHTML.append("; text-align: left");
+		break;
+	case ALIGN::ALIGN_right:
+		szHTML.append("; text-align: right");
+		break;
+	case ALIGN::ALIGN_center:
+		szHTML.append("; text-align: center");
+		break;
+	case ALIGN::ALIGN_block:
+		szHTML.append("; text-align: justify");
+		break;
+	}
+
+	if(bold)
+		szHTML.append("; font-weight: bold");
+
+	if(italic)
+		szHTML.append("; font-style:italic");
+
+	if(underline)
+		szHTML.append("; text-decoration: underline");
+
+	szHTML.append("\">");
+	szHTML.append(szText);
+	szHTML.append("<br></p>");
+
+	cursor.insertHtml(szHTML);
 }
 
 bool cStoryBook::openDatabase()
@@ -472,7 +572,7 @@ bool cStoryBook::createDatabase()
 	query.bindValue(":rightMargin", 10);
 	query.bindValue(":topMargin", 10);
 	query.bindValue(":bottomMargin", 10);
-	query.bindValue(":unit", QPrinter::Millimeter);
+	query.bindValue(":unit", QPageLayout::Millimeter);
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -741,7 +841,7 @@ bool cStoryBook::loadConfig()
 	m_dRightMargin				= query.value("rightMargin").toDouble();
 	m_dTopMargin				= query.value("topMargin").toDouble();
 	m_dBottomMargin				= query.value("bottomMargin").toDouble();
-	m_iUnit						= (QPrinter::Unit)query.value("unit").toInt();
+	m_iUnit						= (QPageLayout::Unit)query.value("unit").toInt();
 
 	return(true);
 }
@@ -1940,12 +2040,12 @@ void cStoryBook::setBottomMargin(const qreal& value)
 	m_dBottomMargin = value;
 }
 
-QPrinter::Unit cStoryBook::unit()
+QPageLayout::Unit cStoryBook::unit()
 {
 	return(m_iUnit);
 }
 
-void cStoryBook::setUnit(const QPrinter::Unit& value)
+void cStoryBook::setUnit(const QPageLayout::Unit& value)
 {
 	m_iUnit = value;
 }
