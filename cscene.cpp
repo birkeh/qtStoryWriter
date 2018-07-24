@@ -450,7 +450,7 @@ bool cSceneList::save()
 
 	queryUpdate.prepare("UPDATE scene SET name=:name, chapterID=:chapterID, sortOrder=:sortOrder, description=:description, state=:state, startedAt=:startedAt, finishedAt=:finishedAt, targetDate=:targetDate, text=:text WHERE id=:id;");
 	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :text);");
-	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
+	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM scene);");
 	queryDelete.prepare("DELETE FROM scene WHERE id=:id;");
 
 	QSqlQuery	characterDelete;
@@ -471,7 +471,7 @@ bool cSceneList::save()
 	objectDelete.prepare("DELETE FROM sceneObject WHERE sceneID=:sceneID;");
 	objectAdd.prepare("INSERT INTO sceneObject (sceneID, objectID, description) VALUES (:sceneID, :objectID, :description);");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cScene*	lpScene	= at(x);
 

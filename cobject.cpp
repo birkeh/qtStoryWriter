@@ -206,7 +206,7 @@ bool cObjectList::save()
 	imageDelete.prepare("DELETE FROM objectImage WHERE objectID=:objectID;");
 	imageAdd.prepare("INSERT INTO objectImage (objectID, name, description, image) VALUES (:objectID, :name, :description, :image);");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cObject*	lpObject	= at(x);
 

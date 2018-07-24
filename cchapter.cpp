@@ -192,7 +192,7 @@ bool cChapterList::save()
 	querySelect.prepare("SELECT id FROM chapter WHERE _rowid_=(SELECT MAX(_rowid_) FROM chapter);");
 	queryDelete.prepare("DELETE FROM chapter WHERE id=:id;");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cChapter*	lpChapter	= at(x);
 

@@ -353,7 +353,7 @@ bool cRechercheList::save()
 	placeDelete.prepare("DELETE FROM recherchePlace WHERE rechercheID=:rechercheID;");
 	placeAdd.prepare("INSERT INTO recherchePlace (rechercheID, placeID, description) VALUES (:rechercheID, :placeID, :description);");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cRecherche*	lpRecherche	= at(x);
 

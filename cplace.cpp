@@ -218,7 +218,7 @@ bool cPlaceList::save()
 	imageDelete.prepare("DELETE FROM placeImage WHERE placeID=:placeID;");
 	imageAdd.prepare("INSERT INTO placeImage (placeID, name, description, image) VALUES (:placeID, :name, :description, :image);");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cPlace*	lpPlace	= at(x);
 

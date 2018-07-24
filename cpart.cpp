@@ -167,7 +167,7 @@ bool cPartList::save()
 	querySelect.prepare("SELECT id FROM part WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
 	queryDelete.prepare("DELETE FROM part WHERE id=:id;");
 
-	for(int x = 0;x < count();x++)
+	for(int x = count()-1;x >= 0;x--)
 	{
 		cPart*	lpPart	= at(x);
 
