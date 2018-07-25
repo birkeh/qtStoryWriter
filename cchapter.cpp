@@ -192,9 +192,11 @@ bool cChapterList::save()
 	querySelect.prepare("SELECT id FROM chapter WHERE _rowid_=(SELECT MAX(_rowid_) FROM chapter);");
 	queryDelete.prepare("DELETE FROM chapter WHERE id=:id;");
 
-	for(int x = count()-1;x >= 0;x--)
+	cChapterList::iterator	chapterIterator	= begin();
+
+	while(chapterIterator != end())
 	{
-		cChapter*	lpChapter	= at(x);
+		cChapter*	lpChapter	= *chapterIterator;
 
 		if(lpChapter->deleted())
 		{
@@ -205,7 +207,7 @@ bool cChapterList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpChapter);
+			lpChapter	= 0;
 		}
 		else if(lpChapter->id() != -1)
 		{
@@ -244,6 +246,11 @@ bool cChapterList::save()
 			querySelect.next();
 			lpChapter->setID(querySelect.value("id").toInt());
 		}
+
+		if(!lpChapter)
+			chapterIterator	= erase(chapterIterator);
+		else
+			chapterIterator++;
 	}
 
 	return(true);

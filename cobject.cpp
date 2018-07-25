@@ -206,9 +206,11 @@ bool cObjectList::save()
 	imageDelete.prepare("DELETE FROM objectImage WHERE objectID=:objectID;");
 	imageAdd.prepare("INSERT INTO objectImage (objectID, name, description, image) VALUES (:objectID, :name, :description, :image);");
 
-	for(int x = count()-1;x >= 0;x--)
+	cObjectList::iterator	objectIterator	= begin();
+
+	while(objectIterator != end())
 	{
-		cObject*	lpObject	= at(x);
+		cObject*	lpObject	= *objectIterator;
 
 		if(lpObject->deleted())
 		{
@@ -219,7 +221,7 @@ bool cObjectList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpObject);
+			lpObject	= 0;
 		}
 		else if(lpObject->id() != -1)
 		{
@@ -255,28 +257,34 @@ bool cObjectList::save()
 			lpObject->setID(querySelect.value("id").toInt());
 		}
 
-		imageDelete.bindValue(":objectID", lpObject->id());
-		if(!imageDelete.exec())
+		if(!lpObject)
+			objectIterator	= erase(objectIterator);
+		else
 		{
-			myDebug << imageDelete.lastError().text();
-			return(false);
-		}
-
-		QList<cImage*>	images	= lpObject->images();
-
-		for(int x = 0;x < images.count();x++)
-		{
-			cImage*		lpImage	= images.at(x);
-
-			imageAdd.bindValue(":objectID", lpObject->id());
-			imageAdd.bindValue(":name", lpImage->name());
-			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
-			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
-			if(!imageAdd.exec())
+			imageDelete.bindValue(":objectID", lpObject->id());
+			if(!imageDelete.exec())
 			{
-				myDebug << imageAdd.lastError().text();
+				myDebug << imageDelete.lastError().text();
 				return(false);
 			}
+
+			QList<cImage*>	images	= lpObject->images();
+
+			for(int x = 0;x < images.count();x++)
+			{
+				cImage*		lpImage	= images.at(x);
+
+				imageAdd.bindValue(":objectID", lpObject->id());
+				imageAdd.bindValue(":name", lpImage->name());
+				imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+				imageAdd.bindValue(":image", image2Blob(lpImage->image()));
+				if(!imageAdd.exec())
+				{
+					myDebug << imageAdd.lastError().text();
+					return(false);
+				}
+			}
+			objectIterator++;
 		}
 	}
 

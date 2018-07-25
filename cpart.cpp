@@ -167,9 +167,11 @@ bool cPartList::save()
 	querySelect.prepare("SELECT id FROM part WHERE _rowid_=(SELECT MAX(_rowid_) FROM part);");
 	queryDelete.prepare("DELETE FROM part WHERE id=:id;");
 
-	for(int x = count()-1;x >= 0;x--)
+	cPartList::iterator	partIterator	= begin();
+
+	while(partIterator != end())
 	{
-		cPart*	lpPart	= at(x);
+		cPart*	lpPart	= *partIterator;
 
 		if(lpPart->deleted())
 		{
@@ -180,7 +182,7 @@ bool cPartList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpPart);
+			lpPart	= 0;
 		}
 		else if(lpPart->id() != -1)
 		{
@@ -217,6 +219,11 @@ bool cPartList::save()
 			querySelect.next();
 			lpPart->setID(querySelect.value("id").toInt());
 		}
+
+		if(!lpPart)
+			partIterator	= erase(partIterator);
+		else
+			partIterator++;
 	}
 
 	return(true);

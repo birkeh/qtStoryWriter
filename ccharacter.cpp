@@ -511,9 +511,11 @@ bool cCharacterList::save()
 	imageDelete.prepare("DELETE FROM characterImage WHERE characterID=:characterID;");
 	imageAdd.prepare("INSERT INTO characterImage (characterID, name, description, image) VALUES (:characterID, :name, :description, :image);");
 
-	for(int x = 0;x < count();x++)
+	cCharacterList::iterator	characterIterator	= begin();
+
+	while(characterIterator != end())
 	{
-		cCharacter*	lpCharacter	= at(x);
+		cCharacter*	lpCharacter	= *characterIterator;
 
 		if(lpCharacter->deleted())
 		{
@@ -524,7 +526,7 @@ bool cCharacterList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpCharacter);
+			lpCharacter	= 0;
 		}
 		else if(lpCharacter->id() != -1)
 		{
@@ -602,28 +604,34 @@ bool cCharacterList::save()
 			lpCharacter->setID(querySelect.value("id").toInt());
 		}
 
-		imageDelete.bindValue(":characterID", lpCharacter->id());
-		if(!imageDelete.exec())
+		if(!lpCharacter)
+			characterIterator	= erase(characterIterator);
+		else
 		{
-			myDebug << imageDelete.lastError().text();
-			return(false);
-		}
-
-		QList<cImage*>	images	= lpCharacter->images();
-
-		for(int x = 0;x < images.count();x++)
-		{
-			cImage*		lpImage	= images.at(x);
-
-			imageAdd.bindValue(":characterID", lpCharacter->id());
-			imageAdd.bindValue(":name", lpImage->name());
-			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
-			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
-			if(!imageAdd.exec())
+			imageDelete.bindValue(":characterID", lpCharacter->id());
+			if(!imageDelete.exec())
 			{
-				myDebug << imageAdd.lastError().text();
+				myDebug << imageDelete.lastError().text();
 				return(false);
 			}
+
+			QList<cImage*>	images	= lpCharacter->images();
+
+			for(int x = 0;x < images.count();x++)
+			{
+				cImage*		lpImage	= images.at(x);
+
+				imageAdd.bindValue(":characterID", lpCharacter->id());
+				imageAdd.bindValue(":name", lpImage->name());
+				imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+				imageAdd.bindValue(":image", image2Blob(lpImage->image()));
+				if(!imageAdd.exec())
+				{
+					myDebug << imageAdd.lastError().text();
+					return(false);
+				}
+			}
+			characterIterator++;
 		}
 	}
 

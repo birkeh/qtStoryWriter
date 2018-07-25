@@ -218,9 +218,11 @@ bool cPlaceList::save()
 	imageDelete.prepare("DELETE FROM placeImage WHERE placeID=:placeID;");
 	imageAdd.prepare("INSERT INTO placeImage (placeID, name, description, image) VALUES (:placeID, :name, :description, :image);");
 
-	for(int x = count()-1;x >= 0;x--)
+	cPlaceList::iterator	placeIterator	= begin();
+
+	while(placeIterator != end())
 	{
-		cPlace*	lpPlace	= at(x);
+		cPlace*	lpPlace	= *placeIterator;
 
 		if(lpPlace->deleted())
 		{
@@ -231,7 +233,7 @@ bool cPlaceList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpPlace);
+			lpPlace	= 0;
 		}
 		else if(lpPlace->id() != -1)
 		{
@@ -269,28 +271,34 @@ bool cPlaceList::save()
 			lpPlace->setID(querySelect.value("id").toInt());
 		}
 
-		imageDelete.bindValue(":placeID", lpPlace->id());
-		if(!imageDelete.exec())
+		if(!lpPlace)
+			placeIterator	= erase(placeIterator);
+		else
 		{
-			myDebug << imageDelete.lastError().text();
-			return(false);
-		}
-
-		QList<cImage*>	images	= lpPlace->images();
-
-		for(int x = 0;x < images.count();x++)
-		{
-			cImage*	lpImage	= images.at(x);
-
-			imageAdd.bindValue(":placeID", lpPlace->id());
-			imageAdd.bindValue(":name", lpImage->name());
-			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
-			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
-			if(!imageAdd.exec())
+			imageDelete.bindValue(":placeID", lpPlace->id());
+			if(!imageDelete.exec())
 			{
-				myDebug << imageAdd.lastError().text();
+				myDebug << imageDelete.lastError().text();
 				return(false);
 			}
+
+			QList<cImage*>	images	= lpPlace->images();
+
+			for(int x = 0;x < images.count();x++)
+			{
+				cImage*	lpImage	= images.at(x);
+
+				imageAdd.bindValue(":placeID", lpPlace->id());
+				imageAdd.bindValue(":name", lpImage->name());
+				imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+				imageAdd.bindValue(":image", image2Blob(lpImage->image()));
+				if(!imageAdd.exec())
+				{
+					myDebug << imageAdd.lastError().text();
+					return(false);
+				}
+			}
+			placeIterator++;
 		}
 	}
 

@@ -353,9 +353,11 @@ bool cRechercheList::save()
 	placeDelete.prepare("DELETE FROM recherchePlace WHERE rechercheID=:rechercheID;");
 	placeAdd.prepare("INSERT INTO recherchePlace (rechercheID, placeID, description) VALUES (:rechercheID, :placeID, :description);");
 
-	for(int x = count()-1;x >= 0;x--)
+	cRechercheList::iterator	rechercheIterator	= begin();
+
+	while(rechercheIterator != end())
 	{
-		cRecherche*	lpRecherche	= at(x);
+		cRecherche*	lpRecherche	= *rechercheIterator;
 
 		imageDelete.bindValue(":rechercheID", lpRecherche->id());
 		if(!imageDelete.exec())
@@ -394,7 +396,7 @@ bool cRechercheList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpRecherche);
+			lpRecherche	= 0;
 		}
 		else if(lpRecherche->id() != -1)
 		{
@@ -430,72 +432,78 @@ bool cRechercheList::save()
 			lpRecherche->setID(querySelect.value("id").toInt());
 		}
 
-		QList<cImage*>	images	= lpRecherche->images();
-
-		for(int x = 0;x < images.count();x++)
+		if(!lpRecherche)
+			rechercheIterator	= erase(rechercheIterator);
+		else
 		{
-			cImage*	lpImage	= images.at(x);
+			QList<cImage*>	images	= lpRecherche->images();
 
-			imageAdd.bindValue(":rechercheID", lpRecherche->id());
-			imageAdd.bindValue(":name", lpImage->name());
-			imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
-			imageAdd.bindValue(":image", image2Blob(lpImage->image()));
-			if(!imageAdd.exec())
+			for(int x = 0;x < images.count();x++)
 			{
-				myDebug << imageAdd.lastError().text();
-				return(false);
+				cImage*	lpImage	= images.at(x);
+
+				imageAdd.bindValue(":rechercheID", lpRecherche->id());
+				imageAdd.bindValue(":name", lpImage->name());
+				imageAdd.bindValue(":description", textDocument2Blob(lpImage->description()));
+				imageAdd.bindValue(":image", image2Blob(lpImage->image()));
+				if(!imageAdd.exec())
+				{
+					myDebug << imageAdd.lastError().text();
+					return(false);
+				}
 			}
-		}
 
-		QList<cCharacterDescription*>	characters	= lpRecherche->characterList();
+			QList<cCharacterDescription*>	characters	= lpRecherche->characterList();
 
-		for(int x = 0;x < characters.count();x++)
-		{
-			cCharacterDescription*	lpCharacterDescription	= characters.at(x);
-			cCharacter*				lpCharacter				= lpCharacterDescription->character();
-
-			characterAdd.bindValue(":rechercheID", lpRecherche->id());
-			characterAdd.bindValue(":characterID", lpCharacter->id());
-			characterAdd.bindValue(":description", textDocument2Blob(lpCharacterDescription->description()));
-			if(!characterAdd.exec())
+			for(int x = 0;x < characters.count();x++)
 			{
-				myDebug << characterAdd.lastError().text();
-				return(false);
+				cCharacterDescription*	lpCharacterDescription	= characters.at(x);
+				cCharacter*				lpCharacter				= lpCharacterDescription->character();
+
+				characterAdd.bindValue(":rechercheID", lpRecherche->id());
+				characterAdd.bindValue(":characterID", lpCharacter->id());
+				characterAdd.bindValue(":description", textDocument2Blob(lpCharacterDescription->description()));
+				if(!characterAdd.exec())
+				{
+					myDebug << characterAdd.lastError().text();
+					return(false);
+				}
 			}
-		}
 
-		QList<cObjectDescription*>	objects	= lpRecherche->objectList();
+			QList<cObjectDescription*>	objects	= lpRecherche->objectList();
 
-		for(int x = 0;x < objects.count();x++)
-		{
-			cObjectDescription*	lpObjectDescription	= objects.at(x);
-			cObject*			lpObject			= lpObjectDescription->object();
-
-			objectAdd.bindValue(":rechercheID", lpRecherche->id());
-			objectAdd.bindValue(":objectID", lpObject->id());
-			objectAdd.bindValue(":description", textDocument2Blob(lpObjectDescription->description()));
-			if(!objectAdd.exec())
+			for(int x = 0;x < objects.count();x++)
 			{
-				myDebug << objectAdd.lastError().text();
-				return(false);
+				cObjectDescription*	lpObjectDescription	= objects.at(x);
+				cObject*			lpObject			= lpObjectDescription->object();
+
+				objectAdd.bindValue(":rechercheID", lpRecherche->id());
+				objectAdd.bindValue(":objectID", lpObject->id());
+				objectAdd.bindValue(":description", textDocument2Blob(lpObjectDescription->description()));
+				if(!objectAdd.exec())
+				{
+					myDebug << objectAdd.lastError().text();
+					return(false);
+				}
 			}
-		}
 
-		QList<cPlaceDescription*>	places	= lpRecherche->placeList();
+			QList<cPlaceDescription*>	places	= lpRecherche->placeList();
 
-		for(int x = 0;x < places.count();x++)
-		{
-			cPlaceDescription*	lpPlaceDescription	= places.at(x);
-			cPlace*				lpPlace				= lpPlaceDescription->place();
-
-			placeAdd.bindValue(":rechercheID", lpRecherche->id());
-			placeAdd.bindValue(":placeID", lpPlace->id());
-			placeAdd.bindValue(":description", textDocument2Blob(lpPlaceDescription->description()));
-			if(!placeAdd.exec())
+			for(int x = 0;x < places.count();x++)
 			{
-				myDebug << placeAdd.lastError().text();
-				return(false);
+				cPlaceDescription*	lpPlaceDescription	= places.at(x);
+				cPlace*				lpPlace				= lpPlaceDescription->place();
+
+				placeAdd.bindValue(":rechercheID", lpRecherche->id());
+				placeAdd.bindValue(":placeID", lpPlace->id());
+				placeAdd.bindValue(":description", textDocument2Blob(lpPlaceDescription->description()));
+				if(!placeAdd.exec())
+				{
+					myDebug << placeAdd.lastError().text();
+					return(false);
+				}
 			}
+			rechercheIterator++;
 		}
 	}
 

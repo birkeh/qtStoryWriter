@@ -10,6 +10,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include <QMutableListIterator>
+
 
 cScene::cScene(qint32 iID, QObject *parent) :
 	QObject(parent),
@@ -471,9 +473,11 @@ bool cSceneList::save()
 	objectDelete.prepare("DELETE FROM sceneObject WHERE sceneID=:sceneID;");
 	objectAdd.prepare("INSERT INTO sceneObject (sceneID, objectID, description) VALUES (:sceneID, :objectID, :description);");
 
-	for(int x = count()-1;x >= 0;x--)
+	cSceneList::iterator	sceneIterator	= begin();
+
+	while(sceneIterator != end())
 	{
-		cScene*	lpScene	= at(x);
+		cScene*	lpScene		= *sceneIterator;
 
 		characterDelete.bindValue(":sceneID", lpScene->id());
 		if(!characterDelete.exec())
@@ -505,7 +509,7 @@ bool cSceneList::save()
 				myDebug << queryDelete.lastError().text();
 				return(false);
 			}
-			this->removeOne(lpScene);
+			lpScene	= 0;
 		}
 		else if(lpScene->id() != -1)
 		{
@@ -553,55 +557,61 @@ bool cSceneList::save()
 			lpScene->setID(querySelect.value("id").toInt());
 		}
 
-		QList<cCharacterDescription*>	character	= lpScene->characterList();
-
-		for(int x = 0;x < character.count();x++)
+		if(!lpScene)
+			sceneIterator	= erase(sceneIterator);
+		else
 		{
-			cCharacterDescription*	lpCharacter	= character.at(x);
+			QList<cCharacterDescription*>	character	= lpScene->characterList();
 
-			characterAdd.bindValue(":sceneID", lpScene->id());
-			characterAdd.bindValue(":characterID", lpCharacter->character()->id());
-			characterAdd.bindValue(":description", textDocument2Blob(lpCharacter->description()));
-
-			if(!characterAdd.exec())
+			for(int x = 0;x < character.count();x++)
 			{
-				myDebug << characterAdd.lastError().text();
-				return(false);
+				cCharacterDescription*	lpCharacter	= character.at(x);
+
+				characterAdd.bindValue(":sceneID", lpScene->id());
+				characterAdd.bindValue(":characterID", lpCharacter->character()->id());
+				characterAdd.bindValue(":description", textDocument2Blob(lpCharacter->description()));
+
+				if(!characterAdd.exec())
+				{
+					myDebug << characterAdd.lastError().text();
+					return(false);
+				}
 			}
-		}
 
-		QList<cPlaceDescription*>	place	= lpScene->placeList();
+			QList<cPlaceDescription*>	place	= lpScene->placeList();
 
-		for(int x = 0;x < place.count();x++)
-		{
-			cPlaceDescription*	lpPlace = place.at(x);
-
-			placeAdd.bindValue(":sceneID", lpScene->id());
-			placeAdd.bindValue(":placeID", lpPlace->place()->id());
-			placeAdd.bindValue(":description", textDocument2Blob(lpPlace->description()));
-
-			if(!placeAdd.exec())
+			for(int x = 0;x < place.count();x++)
 			{
-				myDebug << placeAdd.lastError().text();
-				return(false);
+				cPlaceDescription*	lpPlace = place.at(x);
+
+				placeAdd.bindValue(":sceneID", lpScene->id());
+				placeAdd.bindValue(":placeID", lpPlace->place()->id());
+				placeAdd.bindValue(":description", textDocument2Blob(lpPlace->description()));
+
+				if(!placeAdd.exec())
+				{
+					myDebug << placeAdd.lastError().text();
+					return(false);
+				}
 			}
-		}
 
-		QList<cObjectDescription*>	object	= lpScene->objectList();
+			QList<cObjectDescription*>	object	= lpScene->objectList();
 
-		for(int x = 0;x < object.count();x++)
-		{
-			cObjectDescription*	lpObject	= object.at(x);
-
-			objectAdd.bindValue(":sceneID", lpScene->id());
-			objectAdd.bindValue(":objectID", lpObject->object()->id());
-			objectAdd.bindValue(":description", textDocument2Blob(lpObject->description()));
-
-			if(!objectAdd.exec())
+			for(int x = 0;x < object.count();x++)
 			{
-				myDebug << objectAdd.lastError().text();
-				return(false);
+				cObjectDescription*	lpObject	= object.at(x);
+
+				objectAdd.bindValue(":sceneID", lpScene->id());
+				objectAdd.bindValue(":objectID", lpObject->object()->id());
+				objectAdd.bindValue(":description", textDocument2Blob(lpObject->description()));
+
+				if(!objectAdd.exec())
+				{
+					myDebug << objectAdd.lastError().text();
+					return(false);
+				}
 			}
+			sceneIterator++;
 		}
 	}
 
