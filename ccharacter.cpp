@@ -38,7 +38,7 @@ cCharacter::cCharacter(qint32 iID, QObject *parent) :
 	m_szSkin(QString("")),
 	m_szSchool(QString("")),
 	m_szJob(QString("")),
-	m_lpDescription(0),
+	m_lpDescription(new cTextDocument(parent)),
 	m_bDeleted(false)
 {
 }

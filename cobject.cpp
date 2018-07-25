@@ -16,7 +16,7 @@ cObject::cObject(qint32 iID, QObject *parent) :
 	m_iID(iID),
 	m_szName(""),
 	m_szType(""),
-	m_lpDescription(0),
+	m_lpDescription(new cTextDocument(parent)),
 	m_bDeleted(false)
 {
 }

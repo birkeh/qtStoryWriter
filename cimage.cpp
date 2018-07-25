@@ -13,7 +13,9 @@
 
 
 cImage::cImage(QObject *parent) :
-	QObject(parent)
+	QObject(parent),
+	m_szName(""),
+	m_lpDescription(new cTextDocument(parent))
 {
 }
 

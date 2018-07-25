@@ -19,9 +19,9 @@ cScene::cScene(qint32 iID, QObject *parent) :
 	m_lpChapter(0),
 	m_szName(""),
 	m_iSortOrder(-1),
-	m_lpDescription(0),
+	m_lpDescription(new cTextDocument(parent)),
 	m_state(STATE::STATE_unknown),
-	m_lpText(0),
+	m_lpText(new cTextDocument(parent)),
 	m_lpItem(0),
 	m_lpStateItem(0),
 	m_bDeleted(false)
