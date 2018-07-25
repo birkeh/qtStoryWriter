@@ -1194,8 +1194,6 @@ bool cStoryBook::rechercheInUse(cRecherche* /*lpRecherche*/)
 
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
-	QMap<qint32, QStandardItem*>	part;
-	QMap<qint32, QStandardItem*>	chapter;
 	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
 	QStandardItem*					lpRootItem		= lpModel->invisibleRootItem();
 	QFont							fontPart		= lpRootItem->font();
@@ -1223,7 +1221,6 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		lpItem->setBackground(QBrush(background));
 		if(lpPart->description())
 			lpItem->setToolTip(lpPart->description()->toPlainText());
-		part.insert(lpPart->id(), lpItem);
 		lpModel->appendRow(lpItem);
 		lpPart->setItem(lpItem);
 
@@ -1237,8 +1234,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		if(lpChapter->deleted())
 			continue;
 
-		QStandardItem*	lpRoot		= part.value(lpChapter->part()->id());
-
+		QStandardItem*	lpRoot		= lpChapter->part()->item();
 		if(lpRoot)
 		{
 			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
@@ -1248,7 +1244,6 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItem->setBackground(QBrush(background));
 			if(lpChapter->description())
 				lpItem->setToolTip(lpChapter->description()->toPlainText());
-			chapter.insert(lpChapter->id(), lpItem);
 			lpRoot->appendRow(lpItem);
 			lpChapter->setItem(lpItem);
 
@@ -1263,8 +1258,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		if(lpScene->deleted())
 			continue;
 
-		QStandardItem*	lpChapterItem	= chapter.value(lpScene->chapter()->id());
-
+		QStandardItem*	lpChapterItem	= lpScene->chapter()->item();
 		if(lpChapterItem)
 		{
 			QList<QStandardItem*>	lpItems;
