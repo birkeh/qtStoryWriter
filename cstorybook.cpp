@@ -28,6 +28,10 @@
 #include <QTextBlockFormat>
 #include <QMarginsF>
 
+#include <QFile>
+#include <QTextStream>
+
+
 #ifndef QT_NO_PRINTER
 #include <QPrinter>
 #endif
@@ -236,60 +240,6 @@ bool cStoryBook::printPdf(const QString& szFileName)
 
 bool cStoryBook::printDocument(QPrinter& printer)
 {
-//	QMap<qint32, QStandardItem*>	part;
-//	QMap<qint32, QStandardItem*>	chapter;
-//	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
-//	QStandardItem*					lpRootItem		= lpModel->invisibleRootItem();
-//	QFont							fontPart		= lpRootItem->font();
-//	QFont							fontChapter		= lpRootItem->font();
-//	QFont							fontScene		= lpRootItem->font();
-//	QColor							background(241, 241, 241);
-
-//	for(int x = 0;x < m_partList.count();x++)
-//	{
-//		cPart*			lpPart	= m_partList.at(x);
-//		if(lpPart->deleted())
-//			continue;
-
-//		QStandardItem*	lpItem		= new QStandardItem(lpPart->name());
-//		lpItem->setData(QVariant::fromValue(lpPart));
-//		lpItem->setFont(fontPart);
-//		lpItem->setBackground(QBrush(background));
-//		if(lpPart->description())
-//			lpItem->setToolTip(lpPart->description()->toPlainText());
-//		part.insert(lpPart->id(), lpItem);
-//		lpModel->appendRow(lpItem);
-//		lpPart->setItem(lpItem);
-
-//		lpView->setFirstColumnSpanned(lpModel->rowCount()-1, lpModel->invisibleRootItem()->index(), true);
-//	}
-
-//	for(int x = 0;x < m_chapterList.count();x++)
-//	{
-//		cChapter*		lpChapter	= m_chapterList.at(x);
-
-//		if(lpChapter->deleted())
-//			continue;
-
-//		QStandardItem*	lpRoot		= part.value(lpChapter->part()->id());
-
-//		if(lpRoot)
-//		{
-//			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
-//			lpItem->setData(QVariant::fromValue(lpChapter));
-//			lpItem->setFont(fontChapter);
-//			lpItem->setForeground(QBrush(Qt::darkBlue));
-//			lpItem->setBackground(QBrush(background));
-//			if(lpChapter->description())
-//				lpItem->setToolTip(lpChapter->description()->toPlainText());
-//			chapter.insert(lpChapter->id(), lpItem);
-//			lpRoot->appendRow(lpItem);
-//			lpChapter->setItem(lpItem);
-
-//			lpView->setFirstColumnSpanned(lpRoot->rowCount()-1, lpRoot->index(), true);
-//		}
-//	}
-
 	configPrinter(printer);
 
 	QTextDocument	doc;
@@ -310,13 +260,13 @@ bool cStoryBook::printDocument(QPrinter& printer)
 
 	if(printShortDescription())
 	{
-		cursor.insertHtml(m_book.shortDescription()->toHtml() + "<br>");
+		cursor.insertHtml(m_book.shortDescription()->toHtml() + "<br />");
 		bNewPage	= true;
 	}
 
 	if(printDescription())
 	{
-		cursor.insertHtml(m_book.description()->toHtml());
+		cursor.insertHtml(m_book.description()->toHtml() + "<br />");
 		bNewPage	= true;
 	}
 
@@ -327,21 +277,72 @@ bool cStoryBook::printDocument(QPrinter& printer)
 		cursor.insertBlock(blockFormat);
 	}
 
-	for(int x = 0;x < m_sceneList.count();x++)
+	cPartList::iterator	partIterator	= m_partList.begin();
+	while(partIterator != m_partList.end())
 	{
-		if(x)
+		cPart*	lpPart	= *partIterator;
+
+		if(!lpPart->deleted())
 		{
-			QTextBlockFormat	blockFormat;
-			blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-			cursor.insertBlock(blockFormat);
+			if(printPartName())
+				printBlock(cursor, lpPart->name(), partFont(), partFontSize(), partAlign(), partBold(), partItalic(), partUnderline());
+
+			if(printPartDescription())
+				cursor.insertHtml(lpPart->description()->toHtml() + "<br />");
+
+			if(printPartText())
+				cursor.insertHtml(lpPart->text()->toHtml() + "<br />");
+
+			QList<cChapter*>			chapterList		= m_chapterList.find(lpPart);
+			QList<cChapter*>::iterator	chapterIterator	= chapterList.begin();
+			while(chapterIterator != chapterList.end())
+			{
+				cChapter*		lpChapter	= *chapterIterator;
+
+				if(!lpChapter->deleted())
+				{
+					if(printChapterName())
+						printBlock(cursor, lpChapter->name(), chapterFont(), chapterFontSize(), chapterAlign(), chapterBold(), chapterItalic(), chapterUnderline());
+
+					if(printChapterDescription())
+						cursor.insertHtml(lpChapter->description()->toHtml() + "<br />");
+
+					if(printChapterText())
+						cursor.insertHtml(lpChapter->text()->toHtml() + "<br />");
+
+					QList<cScene*>				sceneList		= m_sceneList.find(lpChapter);
+					QList<cScene*>::iterator	sceneIterator	= sceneList.begin();
+					while(sceneIterator != sceneList.end())
+					{
+						cScene*	lpScene	= *sceneIterator;
+
+						if(!lpScene->deleted())
+						{
+							if(printSceneName())
+								printBlock(cursor, lpScene->name(), sceneFont(), sceneFontSize(), sceneAlign(), sceneBold(), sceneItalic(), sceneUnderline());
+
+							if(printSceneDescription())
+								cursor.insertHtml(lpScene->description()->toHtml() + "<br />");
+
+							if(printSceneText())
+								cursor.insertHtml(lpScene->text()->toHtml() + "<br />");
+						}
+						sceneIterator++;
+					}
+				}
+				chapterIterator++;
+			}
 		}
 
-		cScene*				lpScene		= m_sceneList.at(x);
+		partIterator++;
+	}
 
-		if(lpScene->deleted())
-			continue;
-
-		cursor.insertHtml(lpScene->text()->toHtml());
+	QFile	file("C:\\Temp\\test.html");
+	if(file.open(QIODevice::WriteOnly))
+	{
+		QTextStream	stream(&file);
+		stream << doc.toHtml();
+		file.close();
 	}
 
 	doc.setPageSize(printer.pageRect().size());
@@ -361,22 +362,28 @@ void cStoryBook::configPrinter(QPrinter& printer)
 
 void cStoryBook::printBlock(QTextCursor& cursor, const QString& szText, const QString& szFont, const qint16& iFontSize, const ALIGN align, const bool& bold, const bool& italic, const bool& underline)
 {
-	QString		szHTML("");
+	QString			szHTML("");
+	Qt::Alignment	align1;
+
 	szHTML.append(QString("<p style=\"font-family:'%1'; font-size:%2px").arg(szFont).arg(iFontSize));
 
 	switch(align)
 	{
 	case ALIGN::ALIGN_left:
 		szHTML.append("; text-align: left");
+		align1	= Qt::AlignLeft;
 		break;
 	case ALIGN::ALIGN_right:
 		szHTML.append("; text-align: right");
+		align1	= Qt::AlignRight;
 		break;
 	case ALIGN::ALIGN_center:
 		szHTML.append("; text-align: center");
+		align1	= Qt::AlignHCenter;
 		break;
 	case ALIGN::ALIGN_block:
 		szHTML.append("; text-align: justify");
+		align1	= Qt::AlignJustify;
 		break;
 	}
 
@@ -389,10 +396,13 @@ void cStoryBook::printBlock(QTextCursor& cursor, const QString& szText, const QS
 	if(underline)
 		szHTML.append("; text-decoration: underline");
 
+	QTextBlockFormat	format	= cursor.blockFormat();
+	format.setAlignment(align1);
+	cursor.setBlockFormat(format);
+
 	szHTML.append("\">");
 	szHTML.append(szText);
-	szHTML.append("<br></p>");
-
+	szHTML.append("</p><br />");
 	cursor.insertHtml(szHTML);
 }
 

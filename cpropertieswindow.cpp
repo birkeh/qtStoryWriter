@@ -365,6 +365,19 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpMarginBottom->setValue(lpStoryBook->bottomMargin());
 
 	enablePrintTitle(lpStoryBook->printTitle());
+	enablePrintSubtitle(lpStoryBook->printSubTitle());
+	enablePrintShortDescription(lpStoryBook->printShortDescription());
+	enablePrintDescription(lpStoryBook->printDescription());
+	enablePrintAuthor(lpStoryBook->printAuthor());
+	enablePrintPartName(lpStoryBook->printPartName());
+	enablePrintPartDescription(lpStoryBook->printPartDescription());
+	enablePrintPartText(lpStoryBook->printPartText());
+	enablePrintChapterName(lpStoryBook->printChapterName());
+	enablePrintChapterDescription(lpStoryBook->printChapterDescription());
+	enablePrintChapterText(lpStoryBook->printChapterText());
+	enablePrintSceneName(lpStoryBook->printSceneName());
+	enablePrintSceneDescription(lpStoryBook->printSceneDescription());
+	enablePrintSceneText(lpStoryBook->printSceneText());
 
 	connect(ui->m_lpTitle,						&cLineEdit::textChanged,								this,	&cPropertiesWindow::onTitleChanged);
 	connect(ui->m_lpSubTitle,					&cLineEdit::textChanged,								this,	&cPropertiesWindow::onSubTitleChanged);
@@ -575,6 +588,8 @@ void cPropertiesWindow::onTitleRightChanged(bool checked)
 void cPropertiesWindow::onPrintSubtitleChanged(bool checked)
 {
 	m_lpStoryBook->setPrintSubTitle(checked);
+	enablePrintSubtitle(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -632,18 +647,24 @@ void cPropertiesWindow::onSubtitleRightChanged(bool checked)
 void cPropertiesWindow::onPrintShortDescriptionChanged(bool checked)
 {
 	m_lpStoryBook->setPrintShortDescription(checked);
+	enablePrintShortDescription(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintDescriptionChanged(bool checked)
 {
 	m_lpStoryBook->setPrintDescription(checked);
+	enablePrintDescription(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintAuthorChanged(bool checked)
 {
 	m_lpStoryBook->setPrintAuthor(checked);
+	enablePrintAuthor(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -701,6 +722,8 @@ void cPropertiesWindow::onAuthorRightChanged(bool checked)
 void cPropertiesWindow::onPrintPartNameChanged(bool checked)
 {
 	m_lpStoryBook->setPrintPartName(checked);
+	enablePrintPartName(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -758,18 +781,24 @@ void cPropertiesWindow::onPartNameRightChanged(bool checked)
 void cPropertiesWindow::onPrintPartDescriptionChanged(bool checked)
 {
 	m_lpStoryBook->setPrintPartDescription(checked);
+	enablePrintPartDescription(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintPartTextChanged(bool checked)
 {
 	m_lpStoryBook->setPrintPartText(checked);
+	enablePrintPartText(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintChapterNameChanged(bool checked)
 {
 	m_lpStoryBook->setPrintChapterName(checked);
+	enablePrintChapterName(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -827,18 +856,24 @@ void cPropertiesWindow::onChapterNameRightChanged(bool checked)
 void cPropertiesWindow::onPrintChapterDescriptionChanged(bool checked)
 {
 	m_lpStoryBook->setPrintChapterDescription(checked);
+	enablePrintChapterDescription(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintChapterTextChanged(bool checked)
 {
 	m_lpStoryBook->setPrintChapterText(checked);
+	enablePrintChapterText(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintSceneNameChanged(bool checked)
 {
 	m_lpStoryBook->setPrintSceneName(checked);
+	enablePrintSceneName(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -896,12 +931,16 @@ void cPropertiesWindow::onSceneNameRightChanged(bool checked)
 void cPropertiesWindow::onPrintSceneDescriptionChanged(bool checked)
 {
 	m_lpStoryBook->setPrintSceneDescription(checked);
+	enablePrintSceneDescription(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onPrintSceneTextChanged(bool checked)
 {
 	m_lpStoryBook->setPrintSceneText(checked);
+	enablePrintSceneText(checked);
+
 	m_lpMainWindow->somethingChanged();
 }
 
@@ -965,4 +1004,96 @@ void cPropertiesWindow::enablePrintTitle(bool enable)
 	ui->m_lpTitleLeft->setEnabled(enable);
 	ui->m_lpTitleCenter->setEnabled(enable);
 	ui->m_lpTitleRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintSubtitle(bool enable)
+{
+	ui->m_lpSubtitleFont->setEnabled(enable);
+	ui->m_lpSubtitleFontSize->setEnabled(enable);
+	ui->m_lpSubtitleBold->setEnabled(enable);
+	ui->m_lpSubtitleItalic->setEnabled(enable);
+	ui->m_lpSubtitleUnderline->setEnabled(enable);
+	ui->m_lpSubtitleLeft->setEnabled(enable);
+	ui->m_lpSubtitleCenter->setEnabled(enable);
+	ui->m_lpSubtitleRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintShortDescription(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintDescription(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintAuthor(bool enable)
+{
+	ui->m_lpAuthorFont->setEnabled(enable);
+	ui->m_lpAuthorFontSize->setEnabled(enable);
+	ui->m_lpAuthorBold->setEnabled(enable);
+	ui->m_lpAuthorItalic->setEnabled(enable);
+	ui->m_lpAuthorUnderline->setEnabled(enable);
+	ui->m_lpAuthorLeft->setEnabled(enable);
+	ui->m_lpAuthorCenter->setEnabled(enable);
+	ui->m_lpAuthorRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintPartName(bool enable)
+{
+	ui->m_lpPartNameFont->setEnabled(enable);
+	ui->m_lpPartNameFontSize->setEnabled(enable);
+	ui->m_lpPartNameBold->setEnabled(enable);
+	ui->m_lpPartNameItalic->setEnabled(enable);
+	ui->m_lpPartNameUnderline->setEnabled(enable);
+	ui->m_lpPartNameLeft->setEnabled(enable);
+	ui->m_lpPartNameCenter->setEnabled(enable);
+	ui->m_lpPartNameRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintPartDescription(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintPartText(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintChapterName(bool enable)
+{
+	ui->m_lpChapterNameFont->setEnabled(enable);
+	ui->m_lpChapterNameFontSize->setEnabled(enable);
+	ui->m_lpChapterNameBold->setEnabled(enable);
+	ui->m_lpChapterNameItalic->setEnabled(enable);
+	ui->m_lpChapterNameUnderline->setEnabled(enable);
+	ui->m_lpChapterNameLeft->setEnabled(enable);
+	ui->m_lpChapterNameCenter->setEnabled(enable);
+	ui->m_lpChapterNameRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintChapterDescription(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintChapterText(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintSceneName(bool enable)
+{
+	ui->m_lpSceneNameFont->setEnabled(enable);
+	ui->m_lpSceneNameFontSize->setEnabled(enable);
+	ui->m_lpSceneNameBold->setEnabled(enable);
+	ui->m_lpSceneNameItalic->setEnabled(enable);
+	ui->m_lpSceneNameUnderline->setEnabled(enable);
+	ui->m_lpSceneNameLeft->setEnabled(enable);
+	ui->m_lpSceneNameCenter->setEnabled(enable);
+	ui->m_lpSceneNameRight->setEnabled(enable);
+}
+
+void cPropertiesWindow::enablePrintSceneDescription(bool /*enable*/)
+{
+}
+
+void cPropertiesWindow::enablePrintSceneText(bool /*enable*/)
+{
 }

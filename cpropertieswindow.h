@@ -616,6 +616,19 @@ private:
 	void					fillFontSize(QComboBox* lpComboBox);
 
 	void					enablePrintTitle(bool enable);
+	void					enablePrintSubtitle(bool enable);
+	void					enablePrintShortDescription(bool enable);
+	void					enablePrintDescription(bool enable);
+	void					enablePrintAuthor(bool enable);
+	void					enablePrintPartName(bool enable);
+	void					enablePrintPartDescription(bool enable);
+	void					enablePrintPartText(bool enable);
+	void					enablePrintChapterName(bool enable);
+	void					enablePrintChapterDescription(bool enable);
+	void					enablePrintChapterText(bool enable);
+	void					enablePrintSceneName(bool enable);
+	void					enablePrintSceneDescription(bool enable);
+	void					enablePrintSceneText(bool enable);
 };
 
 #endif // CPROPERTIESWINDOW_H
