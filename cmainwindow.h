@@ -694,6 +694,7 @@ private:
 	QToolBar*			m_lpEditToolBar;						/*!< Pointer to the edit toolbar */
 	QToolBar*			m_lpTextToolBar;						/*!< Pointer to the text toolbar */
 	QToolBar*			m_lpFormatToolBar;						/*!< Pointer to the text format toolbar*/
+	QToolBar*			m_lpViewToolBar;						/*!< Pointer to the text view toolbar*/
 
 	QAction*			m_lpFileNewAction;						/*!< TODO: describe */
 	QAction*			m_lpFileOpenAction;						/*!< TODO: describe */

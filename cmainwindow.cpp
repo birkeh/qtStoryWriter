@@ -68,6 +68,7 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 	m_lpEditToolBar(0),
 	m_lpTextToolBar(0),
 	m_lpFormatToolBar(0),
+	m_lpViewToolBar(0),
 	m_lpOldTextEdit(0),
 	m_lpOptionsDialog(0)
 {
@@ -438,6 +439,10 @@ void cMainWindow::createTextActions()
 		m_lpComboSize->addItem(QString::number(size));
 	m_lpComboSize->setCurrentIndex(standardSizes.indexOf(QApplication::font().pointSize()));
 	m_focusException.append(m_lpComboSize);
+
+	m_lpViewToolBar = addToolBar(tr("Format Actions"));
+	m_lpViewToolBar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+	addToolBar(m_lpViewToolBar);
 }
 
 void cMainWindow::createToolsActions()
@@ -609,14 +614,14 @@ void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
 	connect(m_lpPasteAction,				&QAction::triggered,			lpTextEdit,				&cTextEdit::paste);
 #endif
 
-	connect(m_lpAlignGroup,					&QActionGroup::triggered,		lpTextEdit,		&cTextEdit::onTextAlign);
+	connect(m_lpAlignGroup,					&QActionGroup::triggered,		lpTextEdit,				&cTextEdit::onTextAlign);
 
 	connect(m_lpComboFont,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextFamily);
 	connect(m_lpComboSize,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextSize);
 
-	connect(lpTextEdit,						&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
-	connect(lpTextEdit,						&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
-	connect(lpTextEdit,						&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
+	connect(lpTextEdit,						&cTextEdit::fontChanged,		this,					&cMainWindow::onFontChanged);
+	connect(lpTextEdit,						&cTextEdit::colorChanged,		this,					&cMainWindow::onColorChanged);
+	connect(lpTextEdit,						&cTextEdit::alignmentChanged,	this,					&cMainWindow::onAlignmentChanged);
 
 	m_lpOldTextEdit	= lpTextEdit;
 }
@@ -650,9 +655,9 @@ void cMainWindow::disconnectTextEdit()
 		disconnect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextFamily);
 		disconnect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextSize);
 
-		disconnect(m_lpOldTextEdit,				&cTextEdit::fontChanged,		this,			&cMainWindow::onFontChanged);
-		disconnect(m_lpOldTextEdit,				&cTextEdit::colorChanged,		this,			&cMainWindow::onColorChanged);
-		disconnect(m_lpOldTextEdit,				&cTextEdit::alignmentChanged,	this,			&cMainWindow::onAlignmentChanged);
+		disconnect(m_lpOldTextEdit,				&cTextEdit::fontChanged,		this,					&cMainWindow::onFontChanged);
+		disconnect(m_lpOldTextEdit,				&cTextEdit::colorChanged,		this,					&cMainWindow::onColorChanged);
+		disconnect(m_lpOldTextEdit,				&cTextEdit::alignmentChanged,	this,					&cMainWindow::onAlignmentChanged);
 	}
 }
 
