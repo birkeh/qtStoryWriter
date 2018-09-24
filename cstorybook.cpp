@@ -186,6 +186,7 @@ bool cStoryBook::save()
 	query.prepare("VACUUM;");
 	if(!query.exec())
 		myDebug << query.lastError().text();
+	query.finish();
 
 	return(true);
 }
@@ -433,8 +434,11 @@ bool cStoryBook::openDatabase()
 		}
 
 		query.first();
-		if(query.value("version").toDouble() < 0.1)
-			updateDatabase();
+		if(query.value("version").toDouble() < 1.0)
+			updateDatabase01();
+		else
+			updateDatabase(query.value("version").toInt());
+		query.finish();
 	}
 
 	return(true);
@@ -451,6 +455,8 @@ bool cStoryBook::createTable(const QString& szSQL)
 		myDebug << szSQL << "\n" << query.lastError().text();
 		return(false);
 	}
+	query.finish();
+
 	return(true);
 }
 
@@ -459,7 +465,7 @@ bool cStoryBook::createDatabase()
 	QSqlQuery	query;
 
 	if(!createTable("CREATE TABLE config ( "
-					"    version                  REAL, "
+					"    version                  INTEGER, "
 					"    printTitle               BOOLEAN, "
 					"    titleFont                TEXT, "
 					"    titleFontSize            INTEGER, "
@@ -519,6 +525,7 @@ bool cStoryBook::createDatabase()
 					"    unit                     INTEGER"
 					"); "))
 		return(false);
+	query.finish();
 
 	QFont	font;
 	QString	szDefaultFont		= font.family();
@@ -588,6 +595,7 @@ bool cStoryBook::createDatabase()
 		myDebug << query.lastError().text();
 		return(false);
 	}
+	query.finish();
 
 	if(!createTable("CREATE TABLE book ( "
 					"    title            TEXT, "
@@ -741,6 +749,7 @@ bool cStoryBook::createDatabase()
 					"    sortOrder   INTEGER, "
 					"    description BLOB, "
 					"    state       INTEGER, "
+					"    sceneDate   DATETIME, "
 					"    startedAt   DATETIME, "
 					"    finishedAt  DATETIME, "
 					"    targetDate  DATETIME, "
@@ -772,8 +781,180 @@ bool cStoryBook::createDatabase()
 	return(true);
 }
 
-bool cStoryBook::updateDatabase()
+bool cStoryBook::updateDatabase(qint32 version)
 {
+	if(version < 2)
+		updateDatabase1();
+
+	return(true);
+}
+
+bool cStoryBook::updateDatabase01()
+{
+	QSqlQuery	query;
+
+	if(!query.exec("ALTER TABLE config RENAME TO config_old;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	query.finish();
+
+	if(!createTable("CREATE TABLE config ( "
+					"    version                  INTEGER, "
+					"    printTitle               BOOLEAN, "
+					"    titleFont                TEXT, "
+					"    titleFontSize            INTEGER, "
+					"    titleBold                BOOLEAN, "
+					"    titleItalic              BOOLEAN, "
+					"    titleUnderline           BOOLEAN, "
+					"    titleAlign               INTEGER, "
+					"    printSubTitle            BOOLEAN, "
+					"    subtitleFont             TEXT, "
+					"    subtitleFontSize         INTEGER, "
+					"    subtitleBold             BOOLEAN, "
+					"    subtitleItalic           BOOLEAN, "
+					"    subtitleUnderline        BOOLEAN, "
+					"    subtitleAlign            INTEGER, "
+					"    printShortDescription    BOOLEAN, "
+					"    printDescription         BOOLEAN, "
+					"    printAuthor              BOOLEAN, "
+					"    authorFont               TEXT, "
+					"    authorFontSize           INTEGER, "
+					"    authorBold               BOOLEAN, "
+					"    authorItalic             BOOLEAN, "
+					"    authorUnderline          BOOLEAN, "
+					"    authorAlign              INTEGER, "
+					"    printPartName            BOOLEAN, "
+					"    partFont                 TEXT, "
+					"    partFontSize             INTEGER, "
+					"    partBold                 BOOLEAN, "
+					"    partItalic               BOOLEAN, "
+					"    partUnderline            BOOLEAN, "
+					"    partAlign                INTEGER, "
+					"    printPartDescription     BOOLEAN, "
+					"    printPartText            BOOLEAN, "
+					"    printChapterName         BOOLEAN, "
+					"    chapterFont              TEXT, "
+					"    chapterFontSize          INTEGER, "
+					"    chapterBold              BOOLEAN, "
+					"    chapterItalic            BOOLEAN, "
+					"    chapterUnderline         BOOLEAN, "
+					"    chapterAlign             INTEGER, "
+					"    printChapterDescription  BOOLEAN, "
+					"    printChapterText         BOOLEAN, "
+					"    printSceneName           BOOLEAN, "
+					"    sceneFont                TEXT, "
+					"    sceneFontSize            INTEGER, "
+					"    sceneBold                BOOLEAN, "
+					"    sceneItalic              BOOLEAN, "
+					"    sceneUnderline           BOOLEAN, "
+					"    sceneAlign               INTEGER, "
+					"    printSceneDescription    BOOLEAN, "
+					"    printSceneText           BOOLEAN, "
+					"    paperSize                INTEGER, "
+					"    paperOrientation         INTEGER, "
+					"    leftMargin               REAL, "
+					"    rightMargin              REAL, "
+					"    topMargin                REAL, "
+					"    bottomMargin             REAL, "
+					"    unit                     INTEGER"
+					"); "))
+		return(false);
+
+	if(!query.exec("INSERT INTO config "
+				  "SELECT						  1,"
+					"    printTitle               BOOLEAN, "
+					"    titleFont                TEXT, "
+					"    titleFontSize            INTEGER, "
+					"    titleBold                BOOLEAN, "
+					"    titleItalic              BOOLEAN, "
+					"    titleUnderline           BOOLEAN, "
+					"    titleAlign               INTEGER, "
+					"    printSubTitle            BOOLEAN, "
+					"    subtitleFont             TEXT, "
+					"    subtitleFontSize         INTEGER, "
+					"    subtitleBold             BOOLEAN, "
+					"    subtitleItalic           BOOLEAN, "
+					"    subtitleUnderline        BOOLEAN, "
+					"    subtitleAlign            INTEGER, "
+					"    printShortDescription    BOOLEAN, "
+					"    printDescription         BOOLEAN, "
+					"    printAuthor              BOOLEAN, "
+					"    authorFont               TEXT, "
+					"    authorFontSize           INTEGER, "
+					"    authorBold               BOOLEAN, "
+					"    authorItalic             BOOLEAN, "
+					"    authorUnderline          BOOLEAN, "
+					"    authorAlign              INTEGER, "
+					"    printPartName            BOOLEAN, "
+					"    partFont                 TEXT, "
+					"    partFontSize             INTEGER, "
+					"    partBold                 BOOLEAN, "
+					"    partItalic               BOOLEAN, "
+					"    partUnderline            BOOLEAN, "
+					"    partAlign                INTEGER, "
+					"    printPartDescription     BOOLEAN, "
+					"    printPartText            BOOLEAN, "
+					"    printChapterName         BOOLEAN, "
+					"    chapterFont              TEXT, "
+					"    chapterFontSize          INTEGER, "
+					"    chapterBold              BOOLEAN, "
+					"    chapterItalic            BOOLEAN, "
+					"    chapterUnderline         BOOLEAN, "
+					"    chapterAlign             INTEGER, "
+					"    printChapterDescription  BOOLEAN, "
+					"    printChapterText         BOOLEAN, "
+					"    printSceneName           BOOLEAN, "
+					"    sceneFont                TEXT, "
+					"    sceneFontSize            INTEGER, "
+					"    sceneBold                BOOLEAN, "
+					"    sceneItalic              BOOLEAN, "
+					"    sceneUnderline           BOOLEAN, "
+					"    sceneAlign               INTEGER, "
+					"    printSceneDescription    BOOLEAN, "
+					"    printSceneText           BOOLEAN, "
+					"    paperSize                INTEGER, "
+					"    paperOrientation         INTEGER, "
+					"    leftMargin               REAL, "
+					"    rightMargin              REAL, "
+					"    topMargin                REAL, "
+					"    bottomMargin             REAL, "
+					"    unit                     INTEGER"
+					" FROM config_old;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	query.finish();
+
+	query.exec("DROP TABLE config_old;");
+	query.finish();
+
+	return(updateDatabase(1));
+}
+
+bool cStoryBook::updateDatabase1()
+{
+	QSqlQuery	query;
+
+	query.exec("DROP TABLE config_old;");
+	query.finish();
+
+	if(!query.exec("ALTER TABLE scene ADD sceneDate DATETIME;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	query.finish();
+
+	if(!query.exec("UPDATE config SET version=2;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+	query.finish();
+
 	return(true);
 }
 
@@ -852,6 +1033,7 @@ bool cStoryBook::loadConfig()
 	m_dTopMargin				= query.value("topMargin").toDouble();
 	m_dBottomMargin				= query.value("bottomMargin").toDouble();
 	m_iUnit						= (QPageLayout::Unit)query.value("unit").toInt();
+	query.finish();
 
 	return(true);
 }
@@ -972,6 +1154,8 @@ bool cStoryBook::saveConfig()
 		myDebug << query.lastError().text();
 		return(false);
 	}
+	query.finish();
+
 	return(true);
 }
 

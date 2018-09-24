@@ -2314,7 +2314,7 @@ QString cMainWindow::getProjectLoadName()
 {
 	QString		szPath	= m_szOldPath;
 
-	QString		szProjectName	= QFileDialog::getOpenFileName(this, tr("Save Project"), m_szOldPath, tr("StoryWriter Files (*.storyWriter)"));
+	QString		szProjectName	= QFileDialog::getOpenFileName(this, tr("Open Project"), m_szOldPath, tr("StoryWriter Files (*.storyWriter)"));
 	QFileInfo	fileInfo(szProjectName);
 	m_szOldPath	= fileInfo.absolutePath();
 

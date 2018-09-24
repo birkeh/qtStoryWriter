@@ -1257,9 +1257,24 @@ private:
 	 \brief
 
 	 \fn updateDatabase
+	 \param version
 	 \return bool
 	*/
-	bool			updateDatabase();
+	bool			updateDatabase(qint32 version);
+	/*!
+	 \brief
+
+	 \fn updateDatabase01
+	 \return bool
+	*/
+	bool			updateDatabase01();
+	/*!
+	 \brief
+
+	 \fn updateDatabase1
+	 \return bool
+	*/
+	bool			updateDatabase1();
 	/*!
 	 \brief
 
