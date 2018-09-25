@@ -262,6 +262,29 @@ void cSceneWindow::onSceneDateChanged(const QDateTime& dateTime)
 {
 	m_lpScene->setSceneDate(dateTime);
 	m_lpMainWindow->somethingChanged();
+
+	QList<cCharacterDescription*>	characterList	= m_lpScene->characterList();
+
+	for(int x = 0;x < characterList.count();x++)
+	{
+		cCharacterDescription*	lpCharacterDescription	= characterList[x];
+		cCharacter*				lpCharacter				= lpCharacterDescription->character();
+
+		if(m_lpScene->sceneDate() != QDateTime(QDate(1900, 1, 1)) &&
+				lpCharacter->dateOfBirth() != QDate(1900, 1, 1))
+		{
+			qint32 years	= m_lpScene->sceneDate().date().year() - lpCharacter->dateOfBirth().year();
+			if(lpCharacter->dateOfBirth().month() < m_lpScene->sceneDate().date().year())
+				years--;
+			else if(lpCharacter->dateOfBirth().month() == m_lpScene->sceneDate().date().month() &&
+					lpCharacter->dateOfBirth().day() > m_lpScene->sceneDate().date().day())
+				years--;
+
+			ui->m_lpCharacterList->setItemText(x, QString("%1 (age: %2 years)").arg(lpCharacter->name()).arg(years));
+		}
+		else
+			ui->m_lpCharacterList->setItemText(x, lpCharacter->name());
+	}
 }
 
 void cSceneWindow::onTextChanged()
@@ -440,7 +463,20 @@ void cSceneWindow::fillCharacterList(cCharacter* lpCharacterNew)
 		cCharacterDescription*	lpCharacterDescription	= characterList[x];
 		cCharacter*				lpCharacter				= lpCharacterDescription->character();
 
-		ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
+		if(m_lpScene->sceneDate() != QDateTime(QDate(1900, 1, 1)) &&
+				lpCharacter->dateOfBirth() != QDate(1900, 1, 1))
+		{
+			qint32 years	= m_lpScene->sceneDate().date().year() - lpCharacter->dateOfBirth().year();
+			if(lpCharacter->dateOfBirth().month() < m_lpScene->sceneDate().date().year())
+				years--;
+			else if(lpCharacter->dateOfBirth().month() == m_lpScene->sceneDate().date().month() &&
+					lpCharacter->dateOfBirth().day() > m_lpScene->sceneDate().date().day())
+				years--;
+
+			ui->m_lpCharacterList->addItem(QString("%1 (age: %2 years)").arg(lpCharacter->name()).arg(years), QVariant::fromValue(lpCharacterDescription));
+		}
+		else
+			ui->m_lpCharacterList->addItem(lpCharacter->name(), QVariant::fromValue(lpCharacterDescription));
 		cTextEdit*				lpTextEdit				= new cTextEdit(ui->m_lpCharacterDetails);
 		lpTextEdit->setDocument(lpCharacterDescription->description());
 		ui->m_lpCharacterDetails->addWidget(lpTextEdit);
