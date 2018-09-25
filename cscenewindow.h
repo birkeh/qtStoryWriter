@@ -152,6 +152,13 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onSceneDateChanged
+	 \param dateTime
+	*/
+	void				onSceneDateChanged(const QDateTime& dateTime);
+	/*!
+	 \brief
+
 	 \fn onTextChanged
 	*/
 	void				onTextChanged();

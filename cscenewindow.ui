@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
+    <width>740</width>
     <height>528</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QTabWidget" name="m_lpTab">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="m_lpTabBasic">
         <attribute name="title">
@@ -28,6 +28,89 @@
         <layout class="QGridLayout" name="gridLayout_8">
          <item row="0" column="0">
           <layout class="QGridLayout" name="gridLayout_7">
+           <item row="3" column="6">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Target Date:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>State:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="7">
+            <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="cComboBox" name="m_lpState"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Part:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="cDateTimeEdit" name="m_lpFinishedAt">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="7">
+            <widget class="cLineEdit" name="m_lpPart">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="7">
+            <widget class="cLineEdit" name="m_lpName"/>
+           </item>
+           <item row="1" column="1" colspan="7">
+            <widget class="cLineEdit" name="m_lpChapter">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Description:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" colspan="7">
+            <widget class="cTextEdit" name="m_lpDescription"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Chapter:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="3">
             <widget class="cDateTimeEdit" name="m_lpStartedAt">
              <property name="readOnly">
@@ -35,10 +118,10 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_2">
+           <item row="3" column="2">
+            <widget class="QLabel" name="m_lpStartedLabel">
              <property name="text">
-              <string>Chapter:</string>
+              <string>Started:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -65,88 +148,18 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="m_lpStartedLabel">
-             <property name="text">
-              <string>Started:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>State:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="cComboBox" name="m_lpState"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Part:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="7">
-            <widget class="cDateTimeEdit" name="m_lpTargetDate"/>
-           </item>
-           <item row="3" column="6">
-            <widget class="QLabel" name="label_4">
-             <property name="text">
-              <string>Target Date:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="5">
-            <widget class="cDateTimeEdit" name="m_lpFinishedAt">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="7">
-            <widget class="cLineEdit" name="m_lpPart">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="7">
-            <widget class="cLineEdit" name="m_lpChapter">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" colspan="7">
-            <widget class="cLineEdit" name="m_lpName"/>
-           </item>
-           <item row="4" column="1" colspan="7">
-            <widget class="cTextEdit" name="m_lpDescription"/>
-           </item>
            <item row="4" column="0">
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>Description:</string>
+              <string>Scene Date:</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="cDateTimeEdit" name="m_lpSceneDate"/>
            </item>
           </layout>
          </item>
@@ -317,6 +330,31 @@
    <header>cdatetimeedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>m_lpTab</tabstop>
+  <tabstop>m_lpPart</tabstop>
+  <tabstop>m_lpChapter</tabstop>
+  <tabstop>m_lpName</tabstop>
+  <tabstop>m_lpState</tabstop>
+  <tabstop>m_lpStartedAt</tabstop>
+  <tabstop>m_lpFinishedAt</tabstop>
+  <tabstop>m_lpTargetDate</tabstop>
+  <tabstop>m_lpSceneDate</tabstop>
+  <tabstop>m_lpDescription</tabstop>
+  <tabstop>m_lpText</tabstop>
+  <tabstop>m_lpCaracterAdd</tabstop>
+  <tabstop>m_lpCharacterRemove</tabstop>
+  <tabstop>m_lpPlaceList</tabstop>
+  <tabstop>m_lpPlaceShowDetails</tabstop>
+  <tabstop>m_lpPlaceAdd</tabstop>
+  <tabstop>m_lpPlaceRemove</tabstop>
+  <tabstop>m_lpObjectList</tabstop>
+  <tabstop>m_lpObjectShowDetails</tabstop>
+  <tabstop>m_lpObjectAdd</tabstop>
+  <tabstop>m_lpObjectRemove</tabstop>
+  <tabstop>m_lpCharacterShowDetails</tabstop>
+  <tabstop>m_lpCharacterList</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

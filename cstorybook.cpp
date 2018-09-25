@@ -186,7 +186,6 @@ bool cStoryBook::save()
 	query.prepare("VACUUM;");
 	if(!query.exec())
 		myDebug << query.lastError().text();
-	query.finish();
 
 	return(true);
 }
@@ -438,7 +437,6 @@ bool cStoryBook::openDatabase()
 			updateDatabase01();
 		else
 			updateDatabase(query.value("version").toInt());
-		query.finish();
 	}
 
 	return(true);
@@ -455,7 +453,6 @@ bool cStoryBook::createTable(const QString& szSQL)
 		myDebug << szSQL << "\n" << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	return(true);
 }
@@ -525,7 +522,6 @@ bool cStoryBook::createDatabase()
 					"    unit                     INTEGER"
 					"); "))
 		return(false);
-	query.finish();
 
 	QFont	font;
 	QString	szDefaultFont		= font.family();
@@ -595,7 +591,6 @@ bool cStoryBook::createDatabase()
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	if(!createTable("CREATE TABLE book ( "
 					"    title            TEXT, "
@@ -798,7 +793,6 @@ bool cStoryBook::updateDatabase01()
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	if(!createTable("CREATE TABLE config ( "
 					"    version                  INTEGER, "
@@ -926,10 +920,8 @@ bool cStoryBook::updateDatabase01()
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	query.exec("DROP TABLE config_old;");
-	query.finish();
 
 	return(updateDatabase(1));
 }
@@ -939,21 +931,18 @@ bool cStoryBook::updateDatabase1()
 	QSqlQuery	query;
 
 	query.exec("DROP TABLE config_old;");
-	query.finish();
 
 	if(!query.exec("ALTER TABLE scene ADD sceneDate DATETIME;"))
 	{
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	if(!query.exec("UPDATE config SET version=2;"))
 	{
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	return(true);
 }
@@ -1033,7 +1022,6 @@ bool cStoryBook::loadConfig()
 	m_dTopMargin				= query.value("topMargin").toDouble();
 	m_dBottomMargin				= query.value("bottomMargin").toDouble();
 	m_iUnit						= (QPageLayout::Unit)query.value("unit").toInt();
-	query.finish();
 
 	return(true);
 }
@@ -1154,7 +1142,6 @@ bool cStoryBook::saveConfig()
 		myDebug << query.lastError().text();
 		return(false);
 	}
-	query.finish();
 
 	return(true);
 }

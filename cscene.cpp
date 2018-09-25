@@ -118,6 +118,16 @@ QDateTime cScene::targetDate()
 	return(m_targetDate);
 }
 
+void cScene::setSceneDate(const QDateTime& sceneDate)
+{
+	m_sceneDate	= sceneDate;
+}
+
+QDateTime cScene::sceneDate()
+{
+	return(m_sceneDate);
+}
+
 void cScene::setText(cTextDocument* lpText)
 {
 	m_lpText	= lpText;
@@ -364,7 +374,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 {
 	QSqlQuery	query;
 
-	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, text FROM scene ORDER BY sortOrder;");
+	query.prepare("SELECT id, chapterID, name, sortOrder, description, state, startedAt, finishedAt, targetDate, sceneDate, text FROM scene ORDER BY sortOrder;");
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
@@ -383,6 +393,7 @@ bool cSceneList::load(cChapterList* lpChapterList, cCharacterList *lpCharacterLi
 		lpScene->setStartedAt(query.value("startedAt").toDateTime());
 		lpScene->setFinishedAt(query.value("finishedAt").toDateTime());
 		lpScene->setTargetDate(query.value("targetDate").toDateTime());
+		lpScene->setSceneDate(query.value("sceneDate").toDateTime());
 		lpScene->setText(blob2TextDocument(query.value("text").toByteArray()));
 	}
 
@@ -450,8 +461,8 @@ bool cSceneList::save()
 	QSqlQuery	querySelect;
 	QSqlQuery	queryDelete;
 
-	queryUpdate.prepare("UPDATE scene SET name=:name, chapterID=:chapterID, sortOrder=:sortOrder, description=:description, state=:state, startedAt=:startedAt, finishedAt=:finishedAt, targetDate=:targetDate, text=:text WHERE id=:id;");
-	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :text);");
+	queryUpdate.prepare("UPDATE scene SET name=:name, chapterID=:chapterID, sortOrder=:sortOrder, description=:description, state=:state, startedAt=:startedAt, finishedAt=:finishedAt, targetDate=:targetDate, sceneDate=:sceneDate, text=:text WHERE id=:id;");
+	queryInsert.prepare("INSERT INTO scene (name, chapterID, sortOrder, description, state, startedAt, finishedAt, targetDate, sceneDate, text) VALUES (:name, :chapterID, :sortOrder, :description, :state, :startedAt, :finishedAt, :targetDate, :sceneDate, :text);");
 	querySelect.prepare("SELECT id FROM scene WHERE _rowid_=(SELECT MAX(_rowid_) FROM scene);");
 	queryDelete.prepare("DELETE FROM scene WHERE id=:id;");
 
@@ -522,6 +533,7 @@ bool cSceneList::save()
 			queryUpdate.bindValue(":startedAt", lpScene->startedAt());
 			queryUpdate.bindValue(":finishedAt", lpScene->finishedAt());
 			queryUpdate.bindValue(":targetDate", lpScene->targetDate());
+			queryUpdate.bindValue(":sceneDate", lpScene->sceneDate());
 			queryUpdate.bindValue(":text",  textDocument2Blob(lpScene->text()));
 
 			if(!queryUpdate.exec())
@@ -540,6 +552,7 @@ bool cSceneList::save()
 			queryInsert.bindValue(":startedAt", lpScene->startedAt());
 			queryInsert.bindValue(":finishedAt", lpScene->finishedAt());
 			queryInsert.bindValue(":targetDate", lpScene->targetDate());
+			queryInsert.bindValue(":sceneDate", lpScene->sceneDate());
 			queryInsert.bindValue(":text",  textDocument2Blob(lpScene->text()));
 
 			if(!queryInsert.exec())

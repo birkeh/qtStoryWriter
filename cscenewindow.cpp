@@ -73,6 +73,9 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	connect(ui->m_lpTargetDate,				&cDateTimeEdit::gotFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
 	connect(ui->m_lpTargetDate,				&cDateTimeEdit::lostFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
 
+	connect(ui->m_lpSceneDate,				&cDateTimeEdit::gotFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditGotFocus);
+	connect(ui->m_lpSceneDate,				&cDateTimeEdit::lostFocus,				(cMainWindow*)parent,	&cMainWindow::onDateTimeEditLostFocus);
+
 	connect(ui->m_lpText,					&cTextEdit::gotFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditGotFocus);
 	connect(ui->m_lpText,					&cTextEdit::lostFocus,					(cMainWindow*)parent,	&cMainWindow::onTextEditLostFocus);
 
@@ -127,6 +130,7 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 		ui->m_lpFinishedAt->setVisible(false);
 	}
 	ui->m_lpTargetDate->setDateTime(lpScene->targetDate());
+	ui->m_lpSceneDate->setDateTime(lpScene->sceneDate());
 	ui->m_lpText->setDocument(lpScene->text());
 
 	fillCharacterList();
@@ -145,6 +149,7 @@ void cSceneWindow::setScene(cScene* lpScene, cCharacterList* lpCharacterList, cP
 	connect(ui->m_lpStartedAt,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onStartedChanged);
 	connect(ui->m_lpFinishedAt,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onFinishedChanged);
 	connect(ui->m_lpTargetDate,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onTargetDateChanged);
+	connect(ui->m_lpSceneDate,			&cDateEdit::dateTimeChanged,							this,	&cSceneWindow::onSceneDateChanged);
 	connect(ui->m_lpText,				&cTextEdit::textChanged,								this,	&cSceneWindow::onTextChanged);
 }
 
@@ -250,6 +255,12 @@ void cSceneWindow::onFinishedChanged(const QDateTime& dateTime)
 void cSceneWindow::onTargetDateChanged(const QDateTime& dateTime)
 {
 	m_lpScene->setTargetDate(dateTime);
+	m_lpMainWindow->somethingChanged();
+}
+
+void cSceneWindow::onSceneDateChanged(const QDateTime& dateTime)
+{
+	m_lpScene->setSceneDate(dateTime);
 	m_lpMainWindow->somethingChanged();
 }
 

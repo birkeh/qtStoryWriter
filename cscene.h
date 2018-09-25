@@ -192,6 +192,21 @@ public:
 	/*!
 	 \brief
 
+	 \fn setSceneDate
+	 \param sceneDate
+	*/
+	void							setSceneDate(const QDateTime& sceneDate);
+	/*!
+	 \brief
+
+	 \fn sceneDate
+	 \return QDateTime
+	*/
+	QDateTime						sceneDate();
+
+	/*!
+	 \brief
+
 	 \fn setText
 	 \param lpText
 	*/
@@ -359,6 +374,7 @@ private:
 	QDateTime						m_startedAt;		/*!< TODO: describe */
 	QDateTime						m_finishedAt;		/*!< TODO: describe */
 	QDateTime						m_targetDate;		/*!< TODO: describe */
+	QDateTime						m_sceneDate;		/*!< TODO: describe */
 	cTextDocument*					m_lpText;			/*!< TODO: describe */
 	QList<cCharacterDescription*>	m_characterList;	/*!< TODO: describe */
 	QList<cObjectDescription*>		m_objectList;		/*!< TODO: describe */
