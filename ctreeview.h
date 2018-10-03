@@ -44,6 +44,13 @@ signals:
 	 \param lpTreeView
 	*/
 	void		lostFocus(cTreeView* lpTreeView);
+	/*!
+	 \brief
+
+	 \fn dropped
+	 \param lpTreeView
+	*/
+	void		dropped(cTreeView* lpTreeView, QModelIndex from, QModelIndex to);
 
 protected:
 	/*!
@@ -60,6 +67,13 @@ protected:
 	 \param event
 	*/
 	void		focusOutEvent(QFocusEvent *event);
+	/*!
+	 \brief
+
+	 \fn dropEvent
+	 \param event
+	*/
+	void		dropEvent(QDropEvent *event);
 };
 
 Q_DECLARE_METATYPE(cTreeView*)

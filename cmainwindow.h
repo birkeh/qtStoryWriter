@@ -258,6 +258,13 @@ public slots:
 	 \param lpComboBox
 	*/
 	void				onFontComboBoxLostFocus(cFontComboBox* lpComboBox);
+	/*!
+	 \brief
+
+	 \fn onOutlineDropped
+	 \param lpTreeView
+	*/
+	void				onOutlineDropped(cTreeView* lpTreeView, QModelIndex from, QModelIndex to);
 private slots:
 	/*!
 	 \brief

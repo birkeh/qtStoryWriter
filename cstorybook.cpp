@@ -788,6 +788,7 @@ bool cStoryBook::updateDatabase01()
 {
 	QSqlQuery	query;
 
+	query.exec("DROP TABLE config_old;");
 	if(!query.exec("ALTER TABLE config RENAME TO config_old;"))
 	{
 		myDebug << query.lastError().text();

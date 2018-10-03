@@ -46,6 +46,42 @@
 #include <QMenu>
 
 
+QDataStream&	operator<<(QDataStream& out, cPart* const &rhs)
+{
+	out.writeRawData(reinterpret_cast<const char*>(&rhs), sizeof(rhs));
+	return out;
+}
+
+QDataStream&	operator>>(QDataStream& in, cPart* &rhs)
+{
+	in.readRawData(reinterpret_cast<char*>(&rhs), sizeof(rhs));
+	return in;
+}
+
+QDataStream&	operator<<(QDataStream& out, cChapter* const &rhs)
+{
+	out.writeRawData(reinterpret_cast<const char*>(&rhs), sizeof(rhs));
+	return out;
+}
+
+QDataStream&	operator>>(QDataStream& in, cChapter* &rhs)
+{
+	in.readRawData(reinterpret_cast<char*>(&rhs), sizeof(rhs));
+	return in;
+}
+
+QDataStream&	operator<<(QDataStream& out, cScene* const &rhs)
+{
+	out.writeRawData(reinterpret_cast<const char*>(&rhs), sizeof(rhs));
+	return out;
+}
+
+QDataStream&	operator>>(QDataStream& in, cScene* &rhs)
+{
+	in.readRawData(reinterpret_cast<char*>(&rhs), sizeof(rhs));
+	return in;
+}
+
 cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslator, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
@@ -72,6 +108,10 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 	m_lpOldTextEdit(0),
 	m_lpOptionsDialog(0)
 {
+	qRegisterMetaTypeStreamOperators<cPart*>("cPart*");
+	qRegisterMetaTypeStreamOperators<cChapter*>("cChapter*");
+	qRegisterMetaTypeStreamOperators<cScene*>("cScene*");
+
 	initUI();
 	createActions();
 	onLanguageChanged();
@@ -229,6 +269,8 @@ void cMainWindow::createActions()
 	connect(ui->m_lpPlaceList,		&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onPlaceContextMenu);
 	connect(ui->m_lpObjectList,		&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onObjectContextMenu);
 	connect(ui->m_lpRechercheList,	&QTreeView::customContextMenuRequested,	this,	&cMainWindow::onRechercheContextMenu);
+
+	connect(ui->m_lpOutlineList,	&cTreeView::dropped,					this,	&cMainWindow::onOutlineDropped);
 }
 
 void cMainWindow::createFileActions()
@@ -951,6 +993,48 @@ void cMainWindow::onFontComboBoxGotFocus(cFontComboBox* /*lpComboBox*/)
 
 void cMainWindow::onFontComboBoxLostFocus(cFontComboBox* /*lpComboBox*/)
 {
+}
+
+void cMainWindow::onOutlineDropped(cTreeView* /*lpTreeView*/, QModelIndex from, QModelIndex /*to*/)
+{
+	qint32	parts	= m_lpOutlineModel->rowCount(QModelIndex());
+
+	for(qint32 part = 0;part < parts;part++)
+	{
+		QModelIndex		partIndex	= m_lpOutlineModel->index(part, 0, QModelIndex());
+		cPart*			lpPart		= qvariant_cast<cPart*>(m_lpOutlineModel->itemFromIndex(partIndex)->data());
+		qint32			chapters	= m_lpOutlineModel->rowCount(partIndex);
+
+		if(partIndex != from)
+			lpPart->setSortOrder(part);
+
+		for(qint32 chapter = 0;chapter < chapters;chapter++)
+		{
+			QModelIndex		chapterIndex	= m_lpOutlineModel->index(chapter, 0, partIndex);
+			cChapter*		lpChapter		= qvariant_cast<cChapter*>(m_lpOutlineModel->itemFromIndex(chapterIndex)->data());
+			qint32			scenes			= m_lpOutlineModel->rowCount(chapterIndex);
+
+			if(chapterIndex != from)
+			{
+				lpChapter->setPart(lpPart);
+				lpChapter->setSortOrder(chapter);
+			}
+
+			lpChapter = lpChapter;
+			for(qint32 scene = 0;scene < scenes;scene++)
+			{
+				QModelIndex	sceneIndex		= m_lpOutlineModel->index(scene, 0, chapterIndex);
+				cScene*		lpScene			= qvariant_cast<cScene*>(m_lpOutlineModel->itemFromIndex(sceneIndex)->data());
+
+				if(sceneIndex != from)
+				{
+					lpScene->setChapter(lpChapter);
+					lpScene->setSortOrder(scene);
+				}
+			}
+		}
+	}
+	somethingChanged();
 }
 
 void cMainWindow::onMainTabCurrentChanged(int /*index*/)
