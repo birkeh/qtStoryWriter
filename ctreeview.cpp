@@ -45,24 +45,28 @@ qint16 level(QModelIndex index)
 
 void cTreeView::dropEvent(QDropEvent* event)
 {
-	QModelIndex	fromIndex		= selectedIndexes()[0];
-	QModelIndex	droppedIndex	= indexAt(event->pos());
+	QStandardItemModel*		lpModel			= (QStandardItemModel*)model();
+	QModelIndex				fromIndex		= selectedIndexes()[0];
+	QStandardItem*			lpFromItem		= lpModel->itemFromIndex(fromIndex);
+	QModelIndex				droppedIndex	= indexAt(event->pos());
+	DropIndicatorPosition	pos	= dropIndicatorPosition();
 
 	qint16		fromLevel		= level(fromIndex);
 	qint16		droppedLevel	= level(droppedIndex);
 
-//	QStandardItemModel*	lpModel	= (QStandardItemModel*)this->model();
-//	QStandardItem*	lpToItem	= lpModel->itemFromIndex(droppedIndex);
-
-//	if(droppedLevel < fromLevel-1)
-//		return;
-//	else if(droppedLevel > fromLevel)
-//		return;
-
-	if(fromLevel != droppedLevel)
+	if(droppedLevel < fromLevel-1)
+		return;
+	else if(droppedLevel > fromLevel)
+		return;
+	else if(droppedLevel == fromLevel && pos == DropIndicatorPosition::OnItem)
+		return;
+	else if(droppedLevel == fromLevel-1 && pos == DropIndicatorPosition::BelowItem)
 		return;
 
 	QTreeView::dropEvent(event);
-	QModelIndex	toIndex			= selectedIndexes()[0];
-	dropped(this, fromIndex, toIndex);
+
+	QModelIndex				toIndex			= selectedIndexes()[0];
+	lpFromItem->setData(toIndex.row(), Qt::UserRole+2);
+
+	dropped(this);
 }

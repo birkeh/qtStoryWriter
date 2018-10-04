@@ -45,6 +45,8 @@
 
 #include <QMenu>
 
+#include <QStandardItem>
+
 
 QDataStream&	operator<<(QDataStream& out, cPart* const &rhs)
 {
@@ -995,44 +997,54 @@ void cMainWindow::onFontComboBoxLostFocus(cFontComboBox* /*lpComboBox*/)
 {
 }
 
-void cMainWindow::onOutlineDropped(cTreeView* /*lpTreeView*/, QModelIndex from, QModelIndex /*to*/)
+void cMainWindow::onOutlineDropped(cTreeView* /*lpTreeView*/)
 {
 	qint32	parts	= m_lpOutlineModel->rowCount(QModelIndex());
 
 	for(qint32 part = 0;part < parts;part++)
 	{
 		QModelIndex		partIndex	= m_lpOutlineModel->index(part, 0, QModelIndex());
+		QStandardItem*	lpPartItem	= m_lpOutlineModel->itemFromIndex(partIndex);
 		cPart*			lpPart		= qvariant_cast<cPart*>(m_lpOutlineModel->itemFromIndex(partIndex)->data());
 		qint32			chapters	= m_lpOutlineModel->rowCount(partIndex);
 
-		if(partIndex != from)
+		if(lpPartItem->data(Qt::UserRole+2).toInt() == -1)
+		{
 			lpPart->setSortOrder(part);
 
-		for(qint32 chapter = 0;chapter < chapters;chapter++)
-		{
-			QModelIndex		chapterIndex	= m_lpOutlineModel->index(chapter, 0, partIndex);
-			cChapter*		lpChapter		= qvariant_cast<cChapter*>(m_lpOutlineModel->itemFromIndex(chapterIndex)->data());
-			qint32			scenes			= m_lpOutlineModel->rowCount(chapterIndex);
-
-			if(chapterIndex != from)
+			for(qint32 chapter = 0;chapter < chapters;chapter++)
 			{
-				lpChapter->setPart(lpPart);
-				lpChapter->setSortOrder(chapter);
-			}
+				QModelIndex		chapterIndex	= m_lpOutlineModel->index(chapter, 0, partIndex);
+				QStandardItem*	lpChapterItem	= m_lpOutlineModel->itemFromIndex(chapterIndex);
+				cChapter*		lpChapter		= qvariant_cast<cChapter*>(m_lpOutlineModel->itemFromIndex(chapterIndex)->data());
+				qint32			scenes			= m_lpOutlineModel->rowCount(chapterIndex);
 
-			lpChapter = lpChapter;
-			for(qint32 scene = 0;scene < scenes;scene++)
-			{
-				QModelIndex	sceneIndex		= m_lpOutlineModel->index(scene, 0, chapterIndex);
-				cScene*		lpScene			= qvariant_cast<cScene*>(m_lpOutlineModel->itemFromIndex(sceneIndex)->data());
-
-				if(sceneIndex != from)
+				if(lpChapterItem->data(Qt::UserRole+2).toInt() == -1)
 				{
-					lpScene->setChapter(lpChapter);
-					lpScene->setSortOrder(scene);
+					lpChapter->setPart(lpPart);
+					lpChapter->setSortOrder(chapter);
+
+					for(qint32 scene = 0;scene < scenes;scene++)
+					{
+						QModelIndex		sceneIndex		= m_lpOutlineModel->index(scene, 0, chapterIndex);
+						QStandardItem*	lpSceneItem		= m_lpOutlineModel->itemFromIndex(sceneIndex);
+						cScene*			lpScene			= qvariant_cast<cScene*>(m_lpOutlineModel->itemFromIndex(sceneIndex)->data());
+
+						if(lpSceneItem->data(Qt::UserRole+2).toInt() == -1)
+						{
+							lpScene->setChapter(lpChapter);
+							lpScene->setSortOrder(scene);
+						}
+						else
+							lpSceneItem->setData(-1, Qt::UserRole+2);
+					}
 				}
+				else
+					lpChapterItem->setData(-1, Qt::UserRole+2);
 			}
 		}
+		else
+			lpPartItem->setData(-1, Qt::UserRole+2);
 	}
 	somethingChanged();
 }

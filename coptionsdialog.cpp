@@ -71,7 +71,7 @@ cOptionsDialog::cOptionsDialog(QWidget *parent) :
 	ui->m_lpLanguage->setCurrentText(szCur);
 
 	connect(ui->m_lpLanguage,	QOverload<int>::of(&QComboBox::currentIndexChanged),	this,	&cOptionsDialog::onLanguageIndexChanged);
-	connect(ui->m_lpButtonBox,	&QDialogButtonBox::clicked,								this,	&cOptionsDialog::onButtonClicked);
+	connect(ui->m_lpButtonBox,	QDialogButtonBox::clicked,								this,	&cOptionsDialog::onButtonClicked);
 
 	retranslateUI();
 }

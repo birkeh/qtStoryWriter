@@ -264,7 +264,7 @@ public slots:
 	 \fn onOutlineDropped
 	 \param lpTreeView
 	*/
-	void				onOutlineDropped(cTreeView* lpTreeView, QModelIndex from, QModelIndex to);
+	void				onOutlineDropped(cTreeView* lpTreeView);
 private slots:
 	/*!
 	 \brief

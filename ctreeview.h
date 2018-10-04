@@ -10,6 +10,8 @@
 #include <QTreeView>
 #include <QMetaType>
 
+#include <QStandardItem>
+
 
 /*!
  \brief
@@ -50,7 +52,7 @@ signals:
 	 \fn dropped
 	 \param lpTreeView
 	*/
-	void		dropped(cTreeView* lpTreeView, QModelIndex from, QModelIndex to);
+	void		dropped(cTreeView* lpTreeView);
 
 protected:
 	/*!

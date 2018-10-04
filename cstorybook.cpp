@@ -1399,6 +1399,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 
 		QStandardItem*	lpItem		= new QStandardItem(lpPart->name());
 		lpItem->setData(QVariant::fromValue(lpPart));
+		lpItem->setData(-1, Qt::UserRole+2);
 		lpItem->setFont(fontPart);
 		lpItem->setBackground(QBrush(background));
 		if(lpPart->description())
@@ -1421,6 +1422,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 		{
 			QStandardItem*	lpItem		= new QStandardItem(lpChapter->name());
 			lpItem->setData(QVariant::fromValue(lpChapter));
+			lpItem->setData(-1, Qt::UserRole+2);
 			lpItem->setFont(fontChapter);
 			lpItem->setForeground(QBrush(Qt::darkBlue));
 			lpItem->setBackground(QBrush(background));
@@ -1449,12 +1451,14 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 			lpItems << new QStandardItem(lpScene->stateText());
 
 			lpItems[0]->setData(QVariant::fromValue(lpScene));
+			lpItems[0]->setData(-1, Qt::UserRole+2);
 			lpItems[0]->setFont(fontScene);
 			lpItems[0]->setForeground(QBrush(Qt::blue));
 			if(lpScene->description())
 				lpItems[0]->setToolTip(lpScene->description()->toPlainText());
 
 			lpItems[1]->setData(QVariant::fromValue(lpScene));
+			lpItems[1]->setData(-1, Qt::UserRole+2);
 			lpItems[1]->setBackground(QBrush(lpScene->stateColor()));
 			lpItems[1]->setTextAlignment(Qt::AlignCenter);
 			if(lpScene->description())
