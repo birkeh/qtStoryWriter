@@ -432,11 +432,12 @@ bool cStoryBook::openDatabase()
 			return(false);
 		}
 
-		query.first();
+		query.next();
 		if(query.value("version").toDouble() < 1.0)
 			updateDatabase01();
 		else
 			updateDatabase(query.value("version").toInt());
+		query.finish();
 	}
 
 	return(true);
@@ -788,7 +789,6 @@ bool cStoryBook::updateDatabase01()
 {
 	QSqlQuery	query;
 
-	query.exec("DROP TABLE config_old;");
 	if(!query.exec("ALTER TABLE config RENAME TO config_old;"))
 	{
 		myDebug << query.lastError().text();
@@ -922,6 +922,8 @@ bool cStoryBook::updateDatabase01()
 		return(false);
 	}
 
+	m_db.close();
+	m_db.open();
 	query.exec("DROP TABLE config_old;");
 
 	return(updateDatabase(1));
@@ -930,8 +932,6 @@ bool cStoryBook::updateDatabase01()
 bool cStoryBook::updateDatabase1()
 {
 	QSqlQuery	query;
-
-	query.exec("DROP TABLE config_old;");
 
 	if(!query.exec("ALTER TABLE scene ADD sceneDate DATETIME;"))
 	{
