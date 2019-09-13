@@ -89,26 +89,26 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 	ui(new Ui::cMainWindow),
 	m_lpSplashScreen(lpSplashScreen),
 	m_lpTranslator(lpTranslator),
-	m_lpOutlineModel(0),
-	m_lpCharacterModel(0),
-	m_lpPlaceModel(0),
-	m_lpObjectModel(0),
+	m_lpOutlineModel(nullptr),
+	m_lpCharacterModel(nullptr),
+	m_lpPlaceModel(nullptr),
+	m_lpObjectModel(nullptr),
 	m_bUpdatingTab(false),
 	m_bSomethingChanged(false),
-	m_lpStoryBook(0),
-	m_lpFileMenu(0),
-	m_lpEditMenu(0),
-	m_lpTextMenu(0),
-	m_lpToolsMenu(0),
-	m_lpWindowMenu(0),
-	m_lpHelpMenu(0),
-	m_lpFileToolBar(0),
-	m_lpEditToolBar(0),
-	m_lpTextToolBar(0),
-	m_lpFormatToolBar(0),
-	m_lpViewToolBar(0),
-	m_lpOldTextEdit(0),
-	m_lpOptionsDialog(0)
+	m_lpStoryBook(nullptr),
+	m_lpFileMenu(nullptr),
+	m_lpEditMenu(nullptr),
+	m_lpTextMenu(nullptr),
+	m_lpToolsMenu(nullptr),
+	m_lpWindowMenu(nullptr),
+	m_lpHelpMenu(nullptr),
+	m_lpFileToolBar(nullptr),
+	m_lpEditToolBar(nullptr),
+	m_lpTextToolBar(nullptr),
+	m_lpFormatToolBar(nullptr),
+	m_lpViewToolBar(nullptr),
+	m_lpOldTextEdit(nullptr),
+	m_lpOptionsDialog(nullptr)
 {
 	qRegisterMetaTypeStreamOperators<cPart*>("cPart*");
 	qRegisterMetaTypeStreamOperators<cChapter*>("cChapter*");
@@ -226,12 +226,12 @@ void cMainWindow::initUI()
 	ui->m_lpRechercheList->setModel(m_lpRechercheModel);
 
 	QSettings	settings;
-	qint16		iX			= settings.value("main/x", QVariant::fromValue(-1)).toInt();
-	qint16		iY			= settings.value("main/y", QVariant::fromValue(-1)).toInt();
-	qint16		iWidth		= settings.value("main/width", QVariant::fromValue(-1)).toInt();
-	qint16		iHeight		= settings.value("main/height", QVariant::fromValue(-1)).toInt();
-	qint16		iSplitter1	= settings.value("main/splitter1", QVariant::fromValue(-1)).toInt();
-	qint16		iSplitter2	= settings.value("main/splitter2", QVariant::fromValue(-1)).toInt();
+	qint32		iX			= settings.value("main/x", QVariant::fromValue(-1)).toInt();
+	qint32		iY			= settings.value("main/y", QVariant::fromValue(-1)).toInt();
+	qint32		iWidth		= settings.value("main/width", QVariant::fromValue(-1)).toInt();
+	qint32		iHeight		= settings.value("main/height", QVariant::fromValue(-1)).toInt();
+	qint32		iSplitter1	= settings.value("main/splitter1", QVariant::fromValue(-1)).toInt();
+	qint32		iSplitter2	= settings.value("main/splitter2", QVariant::fromValue(-1)).toInt();
 
 	if(iWidth != -1 && iHeight != -1)
 		resize(iWidth, iHeight);
@@ -249,6 +249,13 @@ void cMainWindow::createActions()
 	setToolButtonStyle(Qt::ToolButtonFollowStyle);
 	createFileActions();
 	createEditActions();
+	createPartActions();
+	createChapterActions();
+	createSceneActions();
+	createCharacterActions();
+	createPlaceActions();
+	createObjectActions();
+	createRechercheActions();
 	createTextActions();
 	createToolsActions();
 	createWindowActions();
@@ -259,6 +266,12 @@ void cMainWindow::createActions()
 	connect(ui->m_lpMainTab,		&QTabWidget::currentChanged,			this,	&cMainWindow::onMainTabCurrentChanged);
 	connect(ui->m_lpMainTab,		&QTabWidget::tabCloseRequested,			this,	&cMainWindow::onMainTabTabCloseRequested);
 	connect(ui->m_lpMdiArea,		&QMdiArea::subWindowActivated,			this,	&cMainWindow::onMdiAreaSubWindowActivated);
+
+	connect(ui->m_lpOutlineList,	&QTreeView::clicked,					this,	&cMainWindow::onOutlineClicked);
+	connect(ui->m_lpCharacterList,	&QTreeView::clicked,					this,	&cMainWindow::onCharacterClicked);
+	connect(ui->m_lpPlaceList,		&QTreeView::clicked,					this,	&cMainWindow::onPlaceClicked);
+	connect(ui->m_lpObjectList,		&QTreeView::clicked,					this,	&cMainWindow::onObjectClicked);
+	connect(ui->m_lpRechercheList,	&QTreeView::clicked,					this,	&cMainWindow::onRechercheClicked);
 
 	connect(ui->m_lpOutlineList,	&QTreeView::doubleClicked,				this,	&cMainWindow::onOutlineDoubleClicked);
 	connect(ui->m_lpCharacterList,	&QTreeView::doubleClicked,				this,	&cMainWindow::onCharacterDoubleClicked);
@@ -378,6 +391,118 @@ void cMainWindow::createEditActions()
 	if(const QMimeData*	md	= QApplication::clipboard()->mimeData())
 		m_lpPasteAction->setEnabled(md->hasText());
 #endif
+}
+
+void cMainWindow::createPartActions()
+{
+	m_lpPartMenu		= menuBar()->addMenu(tr("&Part"));
+	m_lpPartAddAction	= m_lpPartMenu->addAction(tr("add part"));
+	m_lpPartAddAction->setStatusTip(tr("add a new part"));
+	connect(m_lpPartAddAction, &QAction::triggered, this, &cMainWindow::onAddPart);
+
+	m_lpPartEditAction = m_lpPartMenu->addAction(tr("edit part"));
+	m_lpPartEditAction->setStatusTip(tr("edit the part"));
+	connect(m_lpPartEditAction, &QAction::triggered, this, &cMainWindow::onEditPart);
+
+	m_lpPartDeleteAction = m_lpPartMenu->addAction(tr("delete part"));
+	m_lpPartDeleteAction->setStatusTip(tr("delete the part"));
+	connect(m_lpPartDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePart);
+}
+
+void cMainWindow::createChapterActions()
+{
+	m_lpChapterMenu			= menuBar()->addMenu(tr("&Chapter"));
+	m_lpChapterAddAction	= m_lpChapterMenu->addAction(tr("add chapter"));
+	m_lpChapterAddAction->setStatusTip(tr("add a new chapter"));
+	connect(m_lpChapterAddAction, &QAction::triggered, this, &cMainWindow::onAddChapter);
+
+	m_lpChapterEditAction	= m_lpChapterMenu->addAction(tr("edit chapter"));
+	m_lpChapterEditAction->setStatusTip(tr("edit the chapter"));
+	connect(m_lpChapterEditAction, &QAction::triggered, this, &cMainWindow::onEditChapter);
+
+	m_lpChapterDeleteAction	= m_lpChapterMenu->addAction(tr("delete chapter"));
+	m_lpChapterDeleteAction->setStatusTip(tr("delete the chapter"));
+	connect(m_lpChapterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteChapter);
+}
+
+void cMainWindow::createSceneActions()
+{
+	m_lpSceneMenu			= menuBar()->addMenu(tr("&Scene"));
+	m_lpSceneAddAction		= m_lpSceneMenu->addAction(tr("add scene"));
+	m_lpSceneAddAction->setStatusTip(tr("add a new scene"));
+	connect(m_lpSceneAddAction, &QAction::triggered, this, &cMainWindow::onAddScene);
+
+	m_lpSceneEditAction		= m_lpSceneMenu->addAction(tr("edit scene"));
+	m_lpSceneEditAction->setStatusTip(tr("edit the scene"));
+	connect(m_lpSceneEditAction, &QAction::triggered, this, &cMainWindow::onEditScene);
+
+	m_lpSceneDeleteAction	= m_lpSceneMenu->addAction(tr("delete scene"));
+	m_lpSceneDeleteAction->setStatusTip(tr("delete the scene"));
+	connect(m_lpSceneDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteScene);
+}
+
+void cMainWindow::createCharacterActions()
+{
+	m_lpCharacterMenu			= menuBar()->addMenu(tr("&Character"));
+	m_lpCharacterAddAction		= m_lpCharacterMenu->addAction(tr("add character"));
+	m_lpCharacterAddAction->setStatusTip(tr("add a new character"));
+	connect(m_lpCharacterAddAction, &QAction::triggered, this, &cMainWindow::onAddCharacter);
+
+	m_lpCharacterEditAction		= m_lpCharacterMenu->addAction(tr("edit character"));
+	m_lpCharacterEditAction->setStatusTip(tr("edit the character"));
+	connect(m_lpCharacterEditAction, &QAction::triggered, this, &cMainWindow::onEditCharacter);
+
+	m_lpCharacterDeleteAction	= m_lpCharacterMenu->addAction(tr("delete character"));
+	m_lpCharacterDeleteAction->setStatusTip(tr("delete the character"));
+	connect(m_lpCharacterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteCharacter);
+}
+
+void cMainWindow::createPlaceActions()
+{
+	m_lpPlaceMenu			= menuBar()->addMenu(tr("&Place"));
+	m_lpPlaceAddAction		= m_lpPlaceMenu->addAction(tr("add place"));
+	m_lpPlaceAddAction->setStatusTip(tr("add a new place"));
+	connect(m_lpPlaceAddAction, &QAction::triggered, this, &cMainWindow::onAddPlace);
+
+	m_lpPlaceEditAction		= m_lpPlaceMenu->addAction(tr("edit place"));
+	m_lpPlaceEditAction->setStatusTip(tr("edit the place"));
+	connect(m_lpPlaceEditAction, &QAction::triggered, this, &cMainWindow::onEditPlace);
+
+	m_lpPlaceDeleteAction	= m_lpPlaceMenu->addAction(tr("delete place"));
+	m_lpPlaceDeleteAction->setStatusTip(tr("delete the place"));
+	connect(m_lpPlaceDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePlace);
+}
+
+void cMainWindow::createObjectActions()
+{
+	m_lpObjectMenu			= menuBar()->addMenu(tr("&Object"));
+	m_lpObjectAddAction		= m_lpObjectMenu->addAction(tr("add object"));
+	m_lpObjectAddAction->setStatusTip(tr("add a new object"));
+	connect(m_lpObjectAddAction, &QAction::triggered, this, &cMainWindow::onAddObject);
+
+	m_lpObjectEditAction	= m_lpObjectMenu->addAction(tr("edit object"));
+	m_lpObjectEditAction->setStatusTip(tr("edit the object"));
+	connect(m_lpObjectEditAction, &QAction::triggered, this, &cMainWindow::onEditObject);
+
+	m_lpObjectDeleteAction	= m_lpObjectMenu->addAction(tr("delete object"));
+	m_lpObjectDeleteAction->setStatusTip(tr("delete the object"));
+	connect(m_lpObjectDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteObject);
+}
+
+void cMainWindow::createRechercheActions()
+{
+	m_lpRechercheMenu			= menuBar()->addMenu(tr("&Recherche"));
+	m_lpRechercheAddAction		= m_lpRechercheMenu->addAction(tr("add recherche"));
+	m_lpRechercheAddAction->setStatusTip(tr("add a new recherche"));
+	connect(m_lpRechercheAddAction, &QAction::triggered, this, &cMainWindow::onAddRecherche);
+
+	m_lpRechercheEditAction		= m_lpRechercheMenu->addAction(tr("edit recherche"));
+	m_lpRechercheEditAction->setStatusTip(tr("edit the recherche"));
+	connect(m_lpRechercheEditAction, &QAction::triggered, this, &cMainWindow::onEditRecherche);
+
+	m_lpRechercheDeleteAction	= m_lpRechercheMenu->addAction(tr("delete recherche"));
+	m_lpRechercheDeleteAction->setStatusTip(tr("delete the recherche"));
+	connect(m_lpRechercheDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
 }
 
 void cMainWindow::createTextActions()
@@ -516,93 +641,269 @@ void cMainWindow::createHelpActions()
 
 void cMainWindow::createContextActions()
 {
-	m_lpPartAddAction = new QAction(tr("add part"), this);
-	m_lpPartAddAction->setStatusTip(tr("add a new part"));
-	connect(m_lpPartAddAction, &QAction::triggered, this, &cMainWindow::onAddPart);
-
-	m_lpPartEditAction = new QAction(tr("edit part"), this);
-	m_lpPartEditAction->setStatusTip(tr("edit the part"));
-	connect(m_lpPartEditAction, &QAction::triggered, this, &cMainWindow::onEditPart);
-
-	m_lpPartDeleteAction = new QAction(tr("delete part"), this);
-	m_lpPartDeleteAction->setStatusTip(tr("delete the part"));
-	connect(m_lpPartDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePart);
-
-	m_lpChapterAddAction = new QAction(tr("add chapter"), this);
-	m_lpChapterAddAction->setStatusTip(tr("add a new chapter"));
-	connect(m_lpChapterAddAction, &QAction::triggered, this, &cMainWindow::onAddChapter);
-
-	m_lpChapterEditAction = new QAction(tr("edit chapter"), this);
-	m_lpChapterEditAction->setStatusTip(tr("edit the chapter"));
-	connect(m_lpChapterEditAction, &QAction::triggered, this, &cMainWindow::onEditChapter);
-
-	m_lpChapterDeleteAction = new QAction(tr("delete chapter"), this);
-	m_lpChapterDeleteAction->setStatusTip(tr("delete the chapter"));
-	connect(m_lpChapterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteChapter);
-
-	m_lpSceneAddAction = new QAction(tr("add scene"), this);
-	m_lpSceneAddAction->setStatusTip(tr("add a new scene"));
-	connect(m_lpSceneAddAction, &QAction::triggered, this, &cMainWindow::onAddScene);
-
-	m_lpSceneEditAction = new QAction(tr("edit scene"), this);
-	m_lpSceneEditAction->setStatusTip(tr("edit the scene"));
-	connect(m_lpSceneEditAction, &QAction::triggered, this, &cMainWindow::onEditScene);
-
-	m_lpSceneDeleteAction = new QAction(tr("delete scene"), this);
-	m_lpSceneDeleteAction->setStatusTip(tr("delete the scene"));
-	connect(m_lpSceneDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteScene);
-
-	m_lpCharacterAddAction = new QAction(tr("add character"), this);
-	m_lpCharacterAddAction->setStatusTip(tr("add a new character"));
-	connect(m_lpCharacterAddAction, &QAction::triggered, this, &cMainWindow::onAddCharacter);
-
-	m_lpCharacterEditAction = new QAction(tr("edit character"), this);
-	m_lpCharacterEditAction->setStatusTip(tr("edit the character"));
-	connect(m_lpCharacterEditAction, &QAction::triggered, this, &cMainWindow::onEditCharacter);
-
-	m_lpCharacterDeleteAction = new QAction(tr("delete character"), this);
-	m_lpCharacterDeleteAction->setStatusTip(tr("delete the character"));
-	connect(m_lpCharacterDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteCharacter);
-
-	m_lpPlaceAddAction = new QAction(tr("add place"), this);
-	m_lpPlaceAddAction->setStatusTip(tr("add a new place"));
-	connect(m_lpPlaceAddAction, &QAction::triggered, this, &cMainWindow::onAddPlace);
-
-	m_lpPlaceEditAction = new QAction(tr("edit place"), this);
-	m_lpPlaceEditAction->setStatusTip(tr("edit the place"));
-	connect(m_lpPlaceEditAction, &QAction::triggered, this, &cMainWindow::onEditPlace);
-
-	m_lpPlaceDeleteAction = new QAction(tr("delete place"), this);
-	m_lpPlaceDeleteAction->setStatusTip(tr("delete the place"));
-	connect(m_lpPlaceDeleteAction, &QAction::triggered, this, &cMainWindow::onDeletePlace);
-
-	m_lpObjectAddAction = new QAction(tr("add object"), this);
-	m_lpObjectAddAction->setStatusTip(tr("add a new object"));
-	connect(m_lpObjectAddAction, &QAction::triggered, this, &cMainWindow::onAddObject);
-
-	m_lpObjectEditAction = new QAction(tr("edit object"), this);
-	m_lpObjectEditAction->setStatusTip(tr("edit the object"));
-	connect(m_lpObjectEditAction, &QAction::triggered, this, &cMainWindow::onEditObject);
-
-	m_lpObjectDeleteAction = new QAction(tr("delete object"), this);
-	m_lpObjectDeleteAction->setStatusTip(tr("delete the object"));
-	connect(m_lpObjectDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteObject);
-
-	m_lpRechercheAddAction = new QAction(tr("add recherche"), this);
-	m_lpRechercheAddAction->setStatusTip(tr("add a new recherche"));
-	connect(m_lpRechercheAddAction, &QAction::triggered, this, &cMainWindow::onAddRecherche);
-
-	m_lpRechercheEditAction = new QAction(tr("edit recherche"), this);
-	m_lpRechercheEditAction->setStatusTip(tr("edit the recherche"));
-	connect(m_lpRechercheEditAction, &QAction::triggered, this, &cMainWindow::onEditRecherche);
-
-	m_lpRechercheDeleteAction = new QAction(tr("delete recherche"), this);
-	m_lpRechercheDeleteAction->setStatusTip(tr("delete the recherche"));
-	connect(m_lpRechercheDeleteAction, &QAction::triggered, this, &cMainWindow::onDeleteRecherche);
-
 	m_lpRechercheOpenLinkAction	= new QAction(tr("open link"), this);
 	m_lpRechercheOpenLinkAction->setStatusTip(tr("open the link"));
 	connect(m_lpRechercheOpenLinkAction, &QAction::triggered, this, &cMainWindow::onOpenRechercheLink);
+}
+
+void cMainWindow::initOutlineActions(cPart* lpPart, cChapter* lpChapter, cScene* lpScene, cCharacter* lpCharacter, cPlace* lpPlace, cObject* lpObject, cRecherche* lpRecherche)
+{
+	if(lpPart)
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction << m_lpPartEditAction << m_lpPartDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+		enableMenu(m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpChapter)
+	{
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+		enableMenu(m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpScene)
+	{
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpCharacter)
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction << m_lpCharacterEditAction << m_lpCharacterDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpPlace)
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction << m_lpPlaceEditAction << m_lpPlaceDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpObject)
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction << m_lpObjectEditAction << m_lpObjectDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
+	else if(lpRecherche)
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction << m_lpRechercheEditAction << m_lpRechercheDeleteAction,
+				   nullptr,
+				   QList<QAction*>());
+	}
+	else
+	{
+		enableMenu(m_lpPartMenu,
+				   QList<QAction*>() << m_lpPartAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPartEditAction << m_lpPartDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpChapterMenu,
+				   QList<QAction*>() << m_lpChapterAddAction << m_lpChapterEditAction << m_lpChapterDeleteAction);
+		enableMenu(nullptr,
+				   QList<QAction*>(),
+				   m_lpSceneMenu,
+				   QList<QAction*>() << m_lpSceneAddAction << m_lpSceneEditAction << m_lpSceneDeleteAction);
+
+		enableMenu(m_lpCharacterMenu,
+				   QList<QAction*>() << m_lpCharacterAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpCharacterEditAction << m_lpCharacterDeleteAction);
+		enableMenu(m_lpPlaceMenu,
+				   QList<QAction*>() << m_lpPlaceAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpPlaceEditAction << m_lpPlaceDeleteAction);
+		enableMenu(m_lpObjectMenu,
+				   QList<QAction*>() << m_lpObjectAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpObjectEditAction << m_lpObjectDeleteAction);
+		enableMenu(m_lpRechercheMenu,
+				   QList<QAction*>() << m_lpRechercheAddAction,
+				   nullptr,
+				   QList<QAction*>() << m_lpRechercheEditAction << m_lpRechercheDeleteAction);
+	}
 }
 
 void cMainWindow::disableTextEdit()
@@ -616,7 +917,7 @@ void cMainWindow::disableTextEdit()
 	if(m_lpOldTextEdit)
 		disconnectTextEdit();
 
-	m_lpOldTextEdit	= 0;
+	m_lpOldTextEdit	= nullptr;
 }
 
 void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
@@ -898,7 +1199,7 @@ void cMainWindow::retranslateWindows()
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 
 		lpWidget->retranslateUI();
 	}
@@ -1055,7 +1356,7 @@ void cMainWindow::onMainTabCurrentChanged(int /*index*/)
 		return;
 
 	m_bUpdatingTab	= true;
-	cWidget*		lpWidget	= (cWidget*)ui->m_lpMainTab->currentWidget();
+	cWidget*		lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->currentWidget());
 	QMdiSubWindow*	lpWindow	= lpWidget->window();
 	ui->m_lpMdiArea->setActiveSubWindow(lpWindow);
 	m_bUpdatingTab	= false;
@@ -1068,8 +1369,8 @@ void cMainWindow::onMainTabTabCloseRequested(int index)
 
 	m_bUpdatingTab	= true;
 	disconnectTextEdit();
-	m_lpOldTextEdit	= 0;
-	cWidget*		lpWidget	= (cWidget*)ui->m_lpMainTab->currentWidget();
+	m_lpOldTextEdit	= nullptr;
+	cWidget*		lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->currentWidget());
 	QMdiSubWindow*	lpWindow	= lpWidget->window();
 	ui->m_lpMainTab->removeTab(index);
 	ui->m_lpMdiArea->removeSubWindow(lpWindow);
@@ -1086,7 +1387,7 @@ void cMainWindow::onMdiAreaSubWindowActivated(QMdiSubWindow *arg1)
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->window() == arg1)
 		{
 			ui->m_lpMainTab->setCurrentIndex(x);
@@ -1104,11 +1405,11 @@ void cMainWindow::onSubWindowClosed(QWidget* lpSubWindow)
 
 	m_bUpdatingTab	= true;
 	disconnectTextEdit();
-	m_lpOldTextEdit	= 0;
+	m_lpOldTextEdit	= nullptr;
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->widget() == lpSubWindow)
 		{
 			ui->m_lpMainTab->removeTab(x);
@@ -1117,6 +1418,48 @@ void cMainWindow::onSubWindowClosed(QWidget* lpSubWindow)
 		}
 	}
 	m_bUpdatingTab	= false;
+}
+
+void cMainWindow::onOutlineClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpOutlineModel->itemFromIndex(index);
+	cPart*			lpPart		= qvariant_cast<cPart*>(lpItem->data());
+	cChapter*		lpChapter	= qvariant_cast<cChapter*>(lpItem->data());
+	cScene*			lpScene		= qvariant_cast<cScene*>(lpItem->data());
+
+	initOutlineActions(lpPart, lpChapter, lpScene);
+}
+
+void cMainWindow::onCharacterClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpCharacterModel->itemFromIndex(index);
+	cCharacter*		lpCharacter	= qvariant_cast<cCharacter*>(lpItem->data());
+
+	initOutlineActions(nullptr, nullptr, nullptr, lpCharacter);
+}
+
+void cMainWindow::onPlaceClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpPlaceModel->itemFromIndex(index);
+	cPlace*			lpPlace		= qvariant_cast<cPlace*>(lpItem->data());
+
+	initOutlineActions(nullptr, nullptr, nullptr, nullptr, lpPlace);
+}
+
+void cMainWindow::onObjectClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpObjectModel->itemFromIndex(index);
+	cObject*		lpObject	= qvariant_cast<cObject*>(lpItem->data());
+
+	initOutlineActions(nullptr, nullptr, nullptr, nullptr, nullptr, lpObject);
+}
+
+void cMainWindow::onRechercheClicked(const QModelIndex& index)
+{
+	QStandardItem*	lpItem		= m_lpRechercheModel->itemFromIndex(index);
+	cRecherche*		lpRecherche	= qvariant_cast<cRecherche*>(lpItem->data());
+
+	initOutlineActions(nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, lpRecherche);
 }
 
 void cMainWindow::onOutlineDoubleClicked(const QModelIndex& index)
@@ -1172,7 +1515,7 @@ void cMainWindow::onShowPropertiesWindow()
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_properties)
 		{
 			ui->m_lpMainTab->setCurrentIndex(x);
@@ -1186,7 +1529,7 @@ void cMainWindow::onShowPropertiesWindow()
 	lpPropertiesWindow->setBook(m_lpStoryBook);
 	cWidget*			lpWidget1			= new cWidget(lpPropertiesWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPropertiesWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPropertiesWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpPropertiesWindow->windowTitle());
 
 	connect(lpPropertiesWindow,	&cPropertiesWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
 
@@ -1197,10 +1540,10 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_part)
 		{
-			cPartWindow*	lpPartWindow	= (cPartWindow*)lpWidget->widget();
+			cPartWindow*	lpPartWindow	= static_cast<cPartWindow*>(lpWidget->widget());
 			if(lpPartWindow->part() == lpPart)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1215,7 +1558,7 @@ void cMainWindow::onShowPartWindow(cPart* lpPart)
 	lpPartWindow->setPart(lpPart, m_lpStoryBook->chapterList());
 	cWidget*			lpWidget1			= new cWidget(lpPartWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPartWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPartWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpPartWindow->windowTitle());
 
 	connect(lpPartWindow,	&cPartWindow::showChapterWindow,	this,	&cMainWindow::onShowChapterWindow);
 	connect(lpPartWindow,	&cPartWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
@@ -1227,10 +1570,10 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_chapter)
 		{
-			cChapterWindow*	lpChapterWindow	= (cChapterWindow*)lpWidget->widget();
+			cChapterWindow*	lpChapterWindow	= static_cast<cChapterWindow*>(lpWidget->widget());
 			if(lpChapterWindow->chapter() == lpChapter)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1245,7 +1588,7 @@ void cMainWindow::onShowChapterWindow(cChapter* lpChapter)
 	lpChapterWindow->setChapter(lpChapter, m_lpStoryBook->sceneList());
 	cWidget*			lpWidget1			= new cWidget(lpChapterWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpChapterWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpChapterWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpChapterWindow->windowTitle());
 
 	connect(lpChapterWindow,	&cChapterWindow::showSceneWindow,	this,	&cMainWindow::onShowSceneWindow);
 	connect(lpChapterWindow,	&cChapterWindow::subWindowClosed,	this,	&cMainWindow::onSubWindowClosed);
@@ -1257,10 +1600,10 @@ void cMainWindow::onShowSceneWindow(cScene* lpScene)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_scene)
 		{
-			cSceneWindow*	lpSceneWindow	= (cSceneWindow*)lpWidget->widget();
+			cSceneWindow*	lpSceneWindow	= static_cast<cSceneWindow*>(lpWidget->widget());
 			if(lpSceneWindow->scene() == lpScene)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1276,7 +1619,7 @@ void cMainWindow::onShowSceneWindow(cScene* lpScene)
 
 	cWidget*			lpWidget1			= new cWidget(lpSceneWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpSceneWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpSceneWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpSceneWindow->windowTitle());
 
 	connect(lpSceneWindow,	&cSceneWindow::showCharacterWindow,	this,	&cMainWindow::onShowCharacterWindow);
 	connect(lpSceneWindow,	&cSceneWindow::showPlaceWindow,		this,	&cMainWindow::onShowPlaceWindow);
@@ -1291,10 +1634,10 @@ void cMainWindow::onShowCharacterWindow(cCharacter* lpCharacter)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_character)
 		{
-			cCharacterWindow*	lpCharacterWindow	= (cCharacterWindow*)lpWidget->widget();
+			cCharacterWindow*	lpCharacterWindow	= static_cast<cCharacterWindow*>(lpWidget->widget());
 			if(lpCharacterWindow->character() == lpCharacter)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1309,7 +1652,7 @@ void cMainWindow::onShowCharacterWindow(cCharacter* lpCharacter)
 	lpCharacterWindow->setCharacter(lpCharacter);
 	cWidget*			lpWidget1			= new cWidget(lpCharacterWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpCharacterWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpCharacterWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpCharacterWindow->windowTitle());
 
 	connect(lpCharacterWindow,	&cSceneWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
@@ -1320,10 +1663,10 @@ void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_place)
 		{
-			cPlaceWindow*	lpPlaceWindow	= (cPlaceWindow*)lpWidget->widget();
+			cPlaceWindow*	lpPlaceWindow	= static_cast<cPlaceWindow*>(lpWidget->widget());
 			if(lpPlaceWindow->place() == lpPlace)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1338,7 +1681,7 @@ void cMainWindow::onShowPlaceWindow(cPlace* lpPlace)
 	lpPlaceWindow->setPlace(lpPlace);
 	cWidget*			lpWidget1			= new cWidget(lpPlaceWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpPlaceWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpPlaceWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpPlaceWindow->windowTitle());
 
 	connect(lpPlaceWindow,	&cPlaceWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
@@ -1349,10 +1692,10 @@ void cMainWindow::onShowObjectWindow(cObject* lpObject)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_object)
 		{
-			cObjectWindow*	lpObjectWindow	= (cObjectWindow*)lpWidget->widget();
+			cObjectWindow*	lpObjectWindow	= static_cast<cObjectWindow*>(lpWidget->widget());
 			if(lpObjectWindow->object() == lpObject)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1367,7 +1710,7 @@ void cMainWindow::onShowObjectWindow(cObject* lpObject)
 	lpObjectWindow->setObject(lpObject);
 	cWidget*			lpWidget1			= new cWidget(lpObjectWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpObjectWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpObjectWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpObjectWindow->windowTitle());
 
 	connect(lpObjectWindow,	&cObjectWindow::subWindowClosed,		this,	&cMainWindow::onSubWindowClosed);
 
@@ -1378,10 +1721,10 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 {
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_recherche)
 		{
-			cRechercheWindow*	lpRechercheWindow	= (cRechercheWindow*)lpWidget->widget();
+			cRechercheWindow*	lpRechercheWindow	= static_cast<cRechercheWindow*>(lpWidget->widget());
 			if(lpRechercheWindow->recherche() == lpRecherche)
 			{
 				ui->m_lpMainTab->setCurrentIndex(x);
@@ -1396,7 +1739,7 @@ void cMainWindow::onShowRechercheWindow(cRecherche* lpRecherche)
 	lpRechercheWindow->setRecherche(lpRecherche, m_lpStoryBook->characterList(), m_lpStoryBook->placeList(), m_lpStoryBook->objectList());
 	cWidget*			lpWidget1			= new cWidget(lpRechercheWindow);
 	lpWidget1->setWindow(ui->m_lpMdiArea->addSubWindow(lpRechercheWindow));
-	ui->m_lpMainTab->addTab((QWidget*)lpWidget1, lpRechercheWindow->windowTitle());
+	ui->m_lpMainTab->addTab(static_cast<QWidget*>(lpWidget1), lpRechercheWindow->windowTitle());
 
 	connect(lpRechercheWindow,	&cRechercheWindow::showCharacterWindow,	this,	&cMainWindow::onShowCharacterWindow);
 	connect(lpRechercheWindow,	&cRechercheWindow::showPlaceWindow,		this,	&cMainWindow::onShowPlaceWindow);
@@ -1562,6 +1905,8 @@ void cMainWindow::onFileNew()
 	m_lpStoryBook->fillRechercheList(ui->m_lpRechercheList);
 
 	updateWindowTitle();
+
+	initOutlineActions();
 }
 
 void cMainWindow::onFileOpen()
@@ -1605,6 +1950,8 @@ void cMainWindow::onFileOpen()
 
 	setCurrentFile(szProjectName);
 	updateWindowTitle();
+
+	initOutlineActions();
 }
 
 bool cMainWindow::onFileSave()
@@ -1685,7 +2032,7 @@ void cMainWindow::onToolsOptions()
 	m_lpOptionsDialog->exec();
 
 	delete m_lpOptionsDialog;
-	m_lpOptionsDialog	= 0;
+	m_lpOptionsDialog	= nullptr;
 }
 
 void cMainWindow::onHelpContents()
@@ -1815,10 +2162,10 @@ void cMainWindow::onDeletePart()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_part)
 		{
-			cPartWindow*	lpPartWindow	= (cPartWindow*)lpWidget->widget();
+			cPartWindow*	lpPartWindow	= static_cast<cPartWindow*>(lpWidget->widget());
 			if(lpPartWindow->part() == lpPart)
 			{
 				onMainTabTabCloseRequested(x);
@@ -1917,10 +2264,10 @@ void cMainWindow::onDeleteChapter()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_chapter)
 		{
-			cChapterWindow*	lpChapterWindow	= (cChapterWindow*)lpWidget->widget();
+			cChapterWindow*	lpChapterWindow	= static_cast<cChapterWindow*>(lpWidget->widget());
 			if(lpChapterWindow->chapter() == lpChapter)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2018,10 +2365,10 @@ void cMainWindow::onDeleteScene()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_scene)
 		{
-			cSceneWindow*	lpSceneWindow	= (cSceneWindow*)lpWidget->widget();
+			cSceneWindow*	lpSceneWindow	= static_cast<cSceneWindow*>(lpWidget->widget());
 			if(lpSceneWindow->scene() == lpScene)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2107,10 +2454,10 @@ void cMainWindow::onDeleteCharacter()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_character)
 		{
-			cCharacterWindow*	lpCharacterWindow	= (cCharacterWindow*)lpWidget->widget();
+			cCharacterWindow*	lpCharacterWindow	= static_cast<cCharacterWindow*>(lpWidget->widget());
 			if(lpCharacterWindow->character() == lpCharacter)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2196,10 +2543,10 @@ void cMainWindow::onDeletePlace()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_place)
 		{
-			cPlaceWindow*	lpPlaceWindow	= (cPlaceWindow*)lpWidget->widget();
+			cPlaceWindow*	lpPlaceWindow	= static_cast<cPlaceWindow*>(lpWidget->widget());
 			if(lpPlaceWindow->place() == lpPlace)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2285,10 +2632,10 @@ void cMainWindow::onDeleteObject()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_object)
 		{
-			cObjectWindow*	lpObjectWindow	= (cObjectWindow*)lpWidget->widget();
+			cObjectWindow*	lpObjectWindow	= static_cast<cObjectWindow*>(lpWidget->widget());
 			if(lpObjectWindow->object() == lpObject)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2374,10 +2721,10 @@ void cMainWindow::onDeleteRecherche()
 
 	for(int x = 0;x < ui->m_lpMainTab->count();x++)
 	{
-		cWidget*	lpWidget	= (cWidget*)ui->m_lpMainTab->widget(x);
+		cWidget*	lpWidget	= static_cast<cWidget*>(ui->m_lpMainTab->widget(x));
 		if(lpWidget->type() == cWidget::TYPE_recherche)
 		{
-			cRechercheWindow*	lpRechercheWindow	= (cRechercheWindow*)lpWidget->widget();
+			cRechercheWindow*	lpRechercheWindow	= static_cast<cRechercheWindow*>(lpWidget->widget());
 			if(lpRechercheWindow->recherche() == lpRecherche)
 			{
 				onMainTabTabCloseRequested(x);
@@ -2450,7 +2797,7 @@ void cMainWindow::updateRecentFileActions()
 	QSettings	settings;
 	QStringList	files			= settings.value("file/recentFiles").toStringList();
 
-	int			numRecentFiles	= qMin(files.size(), (int)MaxRecentFiles);
+	int			numRecentFiles	= qMin(files.size(), static_cast<int>(MaxRecentFiles));
 
 	for(int i = 0; i < numRecentFiles; i++)
 	{
@@ -2508,4 +2855,19 @@ void cMainWindow::openRecentFile()
 		setCurrentFile(szProjectName);
 		updateWindowTitle();
 	}
+}
+
+void cMainWindow::enableMenu(QMenu* lpMenuEnable, QList<QAction*>actionListEnable, QMenu* lpMenuDisable, QList<QAction*> actionListDisable)
+{
+	if(lpMenuEnable)
+		lpMenuEnable->setEnabled(true);
+
+	for(int x = 0;x < actionListEnable.count();x++)
+		actionListEnable[x]->setEnabled(true);
+
+	if(lpMenuDisable)
+		lpMenuDisable->setEnabled(false);
+
+	for(int x = 0;x < actionListDisable.count();x++)
+		actionListDisable[x]->setEnabled(false);
 }

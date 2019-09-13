@@ -299,10 +299,24 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onOutlineClicked
+	 \param index
+	*/
+	void				onOutlineClicked(const QModelIndex& index);
+	/*!
+	 \brief
+
 	 \fn onOutlineDoubleClicked
 	 \param index
 	*/
 	void				onOutlineDoubleClicked(const QModelIndex& index);
+	/*!
+	 \brief
+
+	 \fn onCharacterClicked
+	 \param index
+	*/
+	void				onCharacterClicked(const QModelIndex& index);
 	/*!
 	 \brief
 
@@ -313,6 +327,13 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onPlaceClicked
+	 \param index
+	*/
+	void				onPlaceClicked(const QModelIndex& index);
+	/*!
+	 \brief
+
 	 \fn onPlaceDoubleClicked
 	 \param index
 	*/
@@ -320,10 +341,24 @@ private slots:
 	/*!
 	 \brief
 
+	 \fn onObjectClicked
+	 \param index
+	*/
+	void				onObjectClicked(const QModelIndex& index);
+	/*!
+	 \brief
+
 	 \fn onObjectDoubleClicked
 	 \param index
 	*/
 	void				onObjectDoubleClicked(const QModelIndex& index);
+	/*!
+	 \brief
+
+	 \fn onRechercheClicked
+	 \param index
+	*/
+	void				onRechercheClicked(const QModelIndex& index);
 	/*!
 	 \brief
 
@@ -692,6 +727,13 @@ private:
 
 	QMenu*				m_lpFileMenu;							/*!< Pointer to the file menu */
 	QMenu*				m_lpEditMenu;							/*!< Pointer to the edit menu */
+	QMenu*				m_lpPartMenu;							/*!< TODO: describe */
+	QMenu*				m_lpChapterMenu;						/*!< TODO: describe */
+	QMenu*				m_lpSceneMenu;							/*!< TODO: describe */
+	QMenu*				m_lpCharacterMenu;						/*!< TODO: describe */
+	QMenu*				m_lpPlaceMenu;							/*!< TODO: describe */
+	QMenu*				m_lpObjectMenu;							/*!< TODO: describe */
+	QMenu*				m_lpRechercheMenu;						/*!< TODO: describe */
 	QMenu*				m_lpTextMenu;							/*!< Pointer to the text menu */
 	QMenu*				m_lpToolsMenu;							/*!< Pointer to the tools menu */
 	QMenu*				m_lpWindowMenu;							/*!< Pointer to the window menu */
@@ -808,6 +850,49 @@ private:
 	/*!
 	 \brief
 
+	 \fn createPartActions
+	*/
+	void				createPartActions();
+	/*!
+	 \brief
+
+	 \fn createChapterActions
+	*/
+	void				createChapterActions();
+
+	/*!
+	 \brief
+
+	 \fn createSceneActions
+	*/
+	void				createSceneActions();
+	/*!
+	 \brief
+
+	 \fn createCharacterActions
+	*/
+	void				createCharacterActions();
+	/*!
+	 \brief
+
+	 \fn createPlaceActions
+	*/
+	void				createPlaceActions();
+	/*!
+	 \brief
+
+	 \fn createObjectActions
+	*/
+	void				createObjectActions();
+	/*!
+	 \brief
+
+	 \fn createRechercheActions
+	*/
+	void				createRechercheActions();
+	/*!
+	 \brief
+
 	 \fn createTextActions
 	*/
 	void				createTextActions();
@@ -835,6 +920,13 @@ private:
 	 \fn createContextActions
 	*/
 	void				createContextActions();
+
+	/*!
+	 \brief
+
+	 \fn initOutlineActions
+	*/
+	void				initOutlineActions(cPart* lpPart = nullptr, cChapter* lpChapter = nullptr, cScene* lpScene = nullptr, cCharacter* lpCharacter = nullptr, cPlace* lpPlace = nullptr, cObject* lpObject = nullptr, cRecherche* lpRecherche = nullptr);
 
 	/*!
 	 \brief
@@ -908,6 +1000,14 @@ private:
 	 \fn retranslateWindows
 	*/
 	void				retranslateWindows();
+
+	/*!
+	 \brief
+
+	 \fn enableMenu
+	 \param lpMenu
+	*/
+	void				enableMenu(QMenu* lpMenuEnable, QList<QAction*>actionListEnable, QMenu* lpMenuDisable, QList<QAction*>actionListDisable);
 protected:
 	/*!
 	 \brief
