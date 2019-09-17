@@ -1278,6 +1278,13 @@ private:
 	/*!
 	 \brief
 
+	 \fn updateDatabase2
+	 \return bool
+	*/
+	bool			updateDatabase2();
+	/*!
+	 \brief
+
 	 \fn createTable
 	 \param szSQL
 	 \return bool

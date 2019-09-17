@@ -526,7 +526,7 @@ bool cStoryBook::createDatabase()
 
 	QFont	font;
 	QString	szDefaultFont		= font.family();
-	qint16	iDefaultFontSize	= font.pointSize();
+	qint16	iDefaultFontSize	= static_cast<qint16>(font.pointSize());
 
 	query.prepare("INSERT INTO config (version, printTitle, titleFont, titleFontSize, titleBold, titleItalic, titleUnderline, titleAlign, printSubTitle, subtitleFont, subtitleFontSize, subtitleBold, subtitleItalic, subtitleUnderline, subtitleAlign, printShortDescription, printDescription, printAuthor, authorFont, authorFontSize, authorBold, authorItalic, authorUnderline, authorAlign, printPartName, partFont, partFontSize, partBold, partItalic, partUnderline, partAlign, printPartDescription, printPartText, printChapterName, chapterFont, chapterFontSize, chapterBold, chapterItalic, chapterUnderline, chapterAlign, printChapterDescription, printChapterText, printSceneName, sceneFont, sceneFontSize, sceneBold, sceneItalic, sceneUnderline, sceneAlign, printSceneDescription, printSceneText, paperSize, paperOrientation, leftMargin, rightMargin, topMargin, bottomMargin, unit) VALUES (:version, :printTitle, :titleFont, :titleFontSize, :titleBold, :titleItalic, :titleUnderline, :titleAlign, :printSubTitle, :subtitleFont, :subtitleFontSize, :subtitleBold, :subtitleItalic, :subtitleUnderline, :subtitleAlign, :printShortDescription, :printDescription, :printAuthor, :authorFont, :authorFontSize, :authorBold, :authorItalic, :authorUnderline, :authorAlign, :printPartName, :partFont, :partFontSize, :partBold, :partItalic, :partUnderline, :partAlign, :printPartDescription, :printPartText, :printChapterName, :chapterFont, :chapterFontSize, :chapterBold, :chapterItalic, :chapterUnderline, :chapterAlign, :printChapterDescription, :printChapterText, :printSceneName, :sceneFont, :sceneFontSize, :sceneBold, :sceneItalic, :sceneUnderline, :sceneAlign, :printSceneDescription, :printSceneText, :paperSize, :paperOrientation, :leftMargin, :rightMargin, :topMargin, :bottomMargin, :unit);");
 	query.bindValue(":version", 0.1);
@@ -647,6 +647,7 @@ bool cStoryBook::createDatabase()
 		return(false);
 
 	if(!createTable("CREATE TABLE characterImage ( "
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
 					"    characterID INTEGER REFERENCES character (id), "
 					"    name        TEXT, "
 					"    description BLOB, "
@@ -664,7 +665,8 @@ bool cStoryBook::createDatabase()
 		return(false);
 
 	if(!createTable("CREATE TABLE objectImage ( "
-					"    objectID INTEGER REFERENCES object (id), "
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
+					"    objectID    INTEGER REFERENCES object (id), "
 					"    name        TEXT, "
 					"    description BLOB, "
 					"    image       BLOB "
@@ -692,7 +694,8 @@ bool cStoryBook::createDatabase()
 		return(false);
 
 	if(!createTable("CREATE TABLE placeImage ( "
-					"    placeID INTEGER REFERENCES place (id), "
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
+					"    placeID     INTEGER REFERENCES place (id), "
 					"    name        TEXT, "
 					"    description BLOB, "
 					"    image       BLOB "
@@ -716,6 +719,7 @@ bool cStoryBook::createDatabase()
 		return(false);
 
 	if(!createTable("CREATE TABLE rechercheImage ( "
+					"    id          INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, "
 					"    rechercheID INTEGER REFERENCES recherche (id), "
 					"    name        TEXT, "
 					"    description BLOB, "
@@ -781,6 +785,9 @@ bool cStoryBook::updateDatabase(qint32 version)
 {
 	if(version < 2)
 		updateDatabase1();
+
+	if(version < 3)
+		updateDatabase2();
 
 	return(true);
 }
@@ -948,6 +955,223 @@ bool cStoryBook::updateDatabase1()
 	return(true);
 }
 
+bool cStoryBook::updateDatabase2()
+{
+	QSqlQuery	query;
+
+	if(!query.exec("PRAGMA foreign_keys = 0;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+
+	if(!query.exec("CREATE TABLE temp_table AS SELECT * FROM characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("CREATE TABLE characterImage ( "
+			   "id           INTEGER PRIMARY KEY AUTOINCREMENT "
+			   "                     UNIQUE "
+			   "             characterID INTEGER REFERENCES character (id), "
+			   "             name        TEXT, "
+			   "             description BLOB, "
+			   "             image       BLOB, "
+			   "); "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("INSERT INTO characterImage ( "
+			   "            characterID, "
+			   "            name, "
+			   "            description, "
+			   "            image "
+			   ") "
+			   "            SELECT characterID, "
+			   "                   name, "
+			   "                   description, "
+			   "                   image "
+			   "            FROM   sqlitestudio_temp_table; "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE temp_table;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+
+	if(!query.exec("CREATE TABLE temp_table AS SELECT * FROM characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("CREATE TABLE objectImage ( "
+			   "id           INTEGER PRIMARY KEY AUTOINCREMENT "
+			   "                     UNIQUE "
+			   "             objectID INTEGER REFERENCES object (id), "
+			   "             name        TEXT, "
+			   "             description BLOB, "
+			   "             image       BLOB, "
+			   "); "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("INSERT INTO objectImage ( "
+			   "            objectID, "
+			   "            name, "
+			   "            description, "
+			   "            image "
+			   ") "
+			   "            SELECT objectID, "
+			   "                   name, "
+			   "                   description, "
+			   "                   image "
+			   "            FROM   temp_table; "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE temp_table;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+
+	if(!query.exec("CREATE TABLE temp_table AS SELECT * FROM placeImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE placeImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("CREATE TABLE placeImage ( "
+			   "id           INTEGER PRIMARY KEY AUTOINCREMENT "
+			   "                     UNIQUE "
+			   "             placeID INTEGER REFERENCES place (id), "
+			   "             name        TEXT, "
+			   "             description BLOB, "
+			   "             image       BLOB, "
+			   "); "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("INSERT INTO placeImage ( "
+			   "            placeID, "
+			   "            name, "
+			   "            description, "
+			   "            image "
+			   ") "
+			   "            SELECT placeID, "
+			   "                   name, "
+			   "                   description, "
+			   "                   image "
+			   "            FROM   temp_table; "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE temp_table;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+
+	if(!query.exec("CREATE TABLE sqlitestudio_temp_table AS SELECT * FROM characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE characterImage;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("CREATE TABLE characterImage ( "
+			   "id           INTEGER PRIMARY KEY AUTOINCREMENT "
+			   "                     UNIQUE "
+			   "             rechercheID INTEGER REFERENCES recherche (id), "
+			   "             name        TEXT, "
+			   "             description BLOB, "
+			   "             image       BLOB, "
+			   "); "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("INSERT INTO rechercheImage ( "
+			   "            rechercheID, "
+			   "            name, "
+			   "            description, "
+			   "            image "
+			   ") "
+			   "            SELECT rechercheID, "
+			   "                   name, "
+			   "                   description, "
+			   "                   image "
+			   "            FROM   temp_table; "))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("DROP TABLE temp_table;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("PRAGMA foreign_keys = 1;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	if(!query.exec("UPDATE config SET version=3;"))
+	{
+		myDebug << query.lastError().text();
+		return(false);
+	}
+
+	return(true);
+}
+
 bool cStoryBook::verify()
 {
 	return(true);
@@ -968,61 +1192,61 @@ bool cStoryBook::loadConfig()
 
 	m_bPrintTitle				= query.value("printTitle").toBool();
 	m_szTitleFont				= query.value("titleFont").toString();
-	m_iTitleFontSize			= query.value("titleFontSize").toInt();
+	m_iTitleFontSize			= static_cast<qint16>(query.value("titleFontSize").toInt());
 	m_bTitleBold				= query.value("titleBold").toBool();
 	m_bTitleItalic				= query.value("titleItalic").toBool();
 	m_bTitleUnderline			= query.value("titleUnderline").toBool();
-	m_iTitleAlign				= (ALIGN)query.value("titleAlign").toInt();
+	m_iTitleAlign				= static_cast<ALIGN>(query.value("titleAlign").toInt());
 	m_bPrintSubTitle			= query.value("printSubTitle").toBool();
 	m_szSubtitleFont			= query.value("subtitleFont").toString();
-	m_iSubtitleFontSize			= query.value("subtitleFontSize").toInt();
+	m_iSubtitleFontSize			= static_cast<qint16>(query.value("subtitleFontSize").toInt());
 	m_bSubtitleBold				= query.value("subtitleBold").toBool();
 	m_bSubtitleItalic			= query.value("subtitleItalic").toBool();
 	m_bSubtitleUnderline		= query.value("subtitleUnderline").toBool();
-	m_iSubtitleAlign			= (ALIGN)query.value("subtitleAlign").toInt();
+	m_iSubtitleAlign			= static_cast<ALIGN>(query.value("subtitleAlign").toInt());
 	m_bPrintShortDescription	= query.value("printShortDescription").toBool();
 	m_bPrintDescription			= query.value("printDescription").toBool();
 	m_bPrintAuthor				= query.value("printAuthor").toBool();
 	m_szAuthorFont				= query.value("authorFont").toString();
-	m_iAuthorFontSize			= query.value("authorFontSize").toInt();
+	m_iAuthorFontSize			= static_cast<qint16>(query.value("authorFontSize").toInt());
 	m_bAuthorBold				= query.value("authorBold").toBool();
 	m_bAuthorItalic				= query.value("authorItalic").toBool();
 	m_bAuthorUnderline			= query.value("authorUnderline").toBool();
-	m_iAuthorAlign				= (ALIGN)query.value("authorAlign").toInt();
+	m_iAuthorAlign				= static_cast<ALIGN>(query.value("authorAlign").toInt());
 	m_bPrintPartName			= query.value("printPartName").toBool();
 	m_szPartFont				= query.value("partFont").toString();
-	m_iPartFontSize				= query.value("partFontSize").toInt();
+	m_iPartFontSize				= static_cast<qint16>(query.value("partFontSize").toInt());
 	m_bPartBold					= query.value("partBold").toBool();
 	m_bPartItalic				= query.value("partItalic").toBool();
 	m_bPartUnderline			= query.value("partUnderline").toBool();
-	m_iPartAlign				= (ALIGN)query.value("partAlign").toInt();
+	m_iPartAlign				= static_cast<ALIGN>(query.value("partAlign").toInt());
 	m_bPrintPartDescription		= query.value("printPartDescription").toBool();
 	m_bPrintPartText			= query.value("printPartText").toBool();
 	m_bPrintChapterName			= query.value("printChapterName").toBool();
 	m_szChapterFont				= query.value("chapterFont").toString();
-	m_iChapterFontSize			= query.value("chapterFontSize").toInt();
+	m_iChapterFontSize			= static_cast<qint16>(query.value("chapterFontSize").toInt());
 	m_bChapterBold				= query.value("chapterBold").toBool();
 	m_bChapterItalic			= query.value("chapterItalic").toBool();
 	m_bChapterUnderline			= query.value("chapterUnderline").toBool();
-	m_iChapterAlign				= (ALIGN)query.value("chapterAlign").toInt();
+	m_iChapterAlign				= static_cast<ALIGN>(query.value("chapterAlign").toInt());
 	m_bPrintChapterDescription	= query.value("printChapterDescription").toBool();
 	m_bPrintChapterText			= query.value("printChapterText").toBool();
 	m_bPrintSceneName			= query.value("printSceneName").toBool();
 	m_szSceneFont				= query.value("sceneFont").toString();
-	m_iSceneFontSize			= query.value("sceneFontSize").toInt();
+	m_iSceneFontSize			= static_cast<qint16>(query.value("sceneFontSize").toInt());
 	m_bSceneBold				= query.value("sceneBold").toBool();
 	m_bSceneItalic				= query.value("sceneItalic").toBool();
 	m_bSceneUnderline			= query.value("sceneUnderline").toBool();
-	m_iSceneAlign				= (ALIGN)query.value("sceneAlign").toInt();
+	m_iSceneAlign				= static_cast<ALIGN>(query.value("sceneAlign").toInt());
 	m_bPrintSceneDescription	= query.value("printSceneDescription").toBool();
 	m_bPrintSceneText			= query.value("printSceneText").toBool();
-	m_paperSize					= (QPagedPaintDevice::PageSize)query.value("paperSize").toInt();
-	m_iPaperOrientation			= (QPrinter::Orientation)query.value("paperOrientation").toInt();
+	m_paperSize					= static_cast<QPagedPaintDevice::PageSize>(query.value("paperSize").toInt());
+	m_iPaperOrientation			= static_cast<QPrinter::Orientation>(query.value("paperOrientation").toInt());
 	m_dLeftMargin				= query.value("leftMargin").toDouble();
 	m_dRightMargin				= query.value("rightMargin").toDouble();
 	m_dTopMargin				= query.value("topMargin").toDouble();
 	m_dBottomMargin				= query.value("bottomMargin").toDouble();
-	m_iUnit						= (QPageLayout::Unit)query.value("unit").toInt();
+	m_iUnit						= static_cast<QPageLayout::Unit>(query.value("unit").toInt());
 
 	return(true);
 }
@@ -1376,7 +1600,7 @@ bool cStoryBook::rechercheInUse(cRecherche* /*lpRecherche*/)
 
 bool cStoryBook::fillOutlineList(QTreeView* lpView)
 {
-	QStandardItemModel*				lpModel			= (QStandardItemModel*)lpView->model();
+	QStandardItemModel*				lpModel			= static_cast<QStandardItemModel*>(lpView->model());
 	QStandardItem*					lpRootItem		= lpModel->invisibleRootItem();
 	QFont							fontPart		= lpRootItem->font();
 	QFont							fontChapter		= lpRootItem->font();
@@ -1485,7 +1709,7 @@ bool cStoryBook::fillOutlineList(QTreeView* lpView)
 
 bool cStoryBook::fillCharacterList(QTreeView* lpView)
 {
-	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+	QStandardItemModel*				lpModel					= static_cast<QStandardItemModel*>(lpView->model());
 	QStandardItem*					lpRootItem				= lpModel->invisibleRootItem();
 	QFont							fontMainCharacter		= lpRootItem->font();
 	QFont							fontNonMainCharacter	= lpRootItem->font();
@@ -1538,7 +1762,7 @@ bool cStoryBook::fillCharacterList(QTreeView* lpView)
 
 bool cStoryBook::fillPlaceList(QTreeView* lpView)
 {
-	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+	QStandardItemModel*				lpModel					= static_cast<QStandardItemModel*>(lpView->model());
 
 	lpModel->clear();
 
@@ -1580,7 +1804,7 @@ bool cStoryBook::fillPlaceList(QTreeView* lpView)
 
 bool cStoryBook::fillObjectList(QTreeView* lpView)
 {
-	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+	QStandardItemModel*				lpModel					= static_cast<QStandardItemModel*>(lpView->model());
 
 	lpModel->clear();
 
@@ -1621,7 +1845,7 @@ bool cStoryBook::fillObjectList(QTreeView* lpView)
 
 bool cStoryBook::fillRechercheList(QTreeView* lpView)
 {
-	QStandardItemModel*				lpModel					= (QStandardItemModel*)lpView->model();
+	QStandardItemModel*				lpModel					= static_cast<QStandardItemModel*>(lpView->model());
 
 	lpModel->clear();
 

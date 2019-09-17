@@ -12,11 +12,22 @@
 #include <QBuffer>
 
 
-cImage::cImage(QObject *parent) :
+cImage::cImage(qint32 iID, QObject *parent) :
 	QObject(parent),
+	m_iID(iID),
 	m_szName(""),
 	m_lpDescription(new cTextDocument(parent))
 {
+}
+
+void cImage::setID(const qint32& iID)
+{
+	m_iID	= iID;
+}
+
+qint32 cImage::id()
+{
+	return(m_iID);
 }
 
 void cImage::setName(const QString& szName)

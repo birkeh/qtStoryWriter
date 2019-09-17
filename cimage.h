@@ -24,8 +24,29 @@ class cImage : public QObject
 {
 	Q_OBJECT
 public:
-	cImage(QObject* parent = nullptr);
+	/*!
+	 \brief
 
+	 \fn cImage
+	 \param iID
+	 \param parent
+	*/
+	cImage(qint32 iID = -1, QObject* parent = nullptr);
+
+	/*!
+	 \brief
+
+	 \fn setID
+	 \param iID
+	*/
+	void						setID(const qint32& iID);
+	/*!
+	 \brief
+
+	 \fn id
+	 \return qint32
+	*/
+	qint32						id();
 	/*!
 	 \brief
 
@@ -71,6 +92,7 @@ public:
 	*/
 	QPixmap			image();
 private:
+	qint32			m_iID;				/*!< TODO: describe */
 	QString			m_szName;			/*!< TODO: describe */
 	cTextDocument*	m_lpDescription;	/*!< TODO: describe */
 	QPixmap			m_image;			/*!< TODO: describe */
