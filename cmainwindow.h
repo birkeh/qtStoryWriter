@@ -115,6 +115,12 @@ public slots:
 	/*!
 	 \brief
 
+	 \fn onInitialize
+	*/
+	void				onInitialize();
+	/*!
+	 \brief
+
 	 \fn onLanguageChanged
 	*/
 	void				onLanguageChanged();
@@ -971,6 +977,13 @@ private:
 	 \param szFileName
 	*/
 	void				setCurrentFile(const QString& szFileName);
+
+	/*!
+	 \brief
+
+	 \fn fileOpen
+	*/
+	void				fileOpen(const QString& szFileName = QString());
 
 	/*!
 	 \brief

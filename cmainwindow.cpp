@@ -1042,6 +1042,20 @@ bool switchTranslator(QTranslator* lpTranslator, const QString& filename)
 	return(false);
 }
 
+void cMainWindow::onInitialize()
+{
+	QStringList	arguments	= QCoreApplication::arguments();
+
+	for(int x = 0;x < arguments.count();x++)
+	{
+		if(arguments[x].contains(".storyWrite"))
+		{
+			fileOpen(arguments[x]);
+			return;
+		}
+	}
+}
+
 void cMainWindow::onLanguageChanged()
 {
 	QSettings	settings;
@@ -1911,6 +1925,11 @@ void cMainWindow::onFileNew()
 
 void cMainWindow::onFileOpen()
 {
+	fileOpen();
+}
+
+void cMainWindow::fileOpen(const QString& szFileName)
+{
 	if(m_lpStoryBook)
 	{
 		if(m_bSomethingChanged)
@@ -1931,7 +1950,15 @@ void cMainWindow::onFileOpen()
 		}
 	}
 
-	QString	szProjectName	= getProjectLoadName();
+	QMessageBox::information(this, "Initialize", szFileName);
+
+	QString	szProjectName;
+
+	if(szFileName.isEmpty())
+		szProjectName	= getProjectLoadName();
+	else
+		szProjectName	= szFileName;
+
 	if(szProjectName.isEmpty())
 		return;
 
