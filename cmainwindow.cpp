@@ -1063,9 +1063,12 @@ void cMainWindow::onLanguageChanged()
 	QLocale		locale		= QLocale(szLanguage);
 
 	QLocale::setDefault(locale);
+
+	if(!m_lpTranslator)
+		return;
+
 	if(!switchTranslator(m_lpTranslator, QString("%1%2storyWriter_%3.qm").arg(localePath()).arg(QDir::separator()).arg(szLanguage)))
 		switchTranslator(m_lpTranslator, QString(":/locale/storyWriter_%1.qm").arg(szLanguage));
-//	switchTranslator(m_translatorQt, QString("qt_%1.qm").arg(szLanguage));
 }
 
 void cMainWindow::changeEvent(QEvent* event)

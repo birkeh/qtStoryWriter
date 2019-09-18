@@ -22,10 +22,11 @@
 
 
 #define SHOW_SPLASH
-
+#define DO_DEB
 
 void debugOut(const QString& message)
 {
+#ifdef DO_DEB
 	QFile		file("c:\\temp\\log.log");
 	file.open(QFile::WriteOnly | QFile::Text | QFile::Append);
 	QTextStream	out(&file);
@@ -33,6 +34,7 @@ void debugOut(const QString& message)
 	out << "\n";
 	file.flush();
 	file.close();
+#endif
 }
 
 int main(int argc, char *argv[])
