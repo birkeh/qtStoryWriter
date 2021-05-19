@@ -20,9 +20,9 @@ cBook::cBook(const QString &szTitle, QObject *parent) :
 	m_lpShortDescription(new cTextDocument(parent)),
 	m_lpDescription(new cTextDocument(parent)),
 	m_szAuthor(""),
-	m_startedAt(QDateTime(QDate(1, 1, 1))),
-	m_finishedAt(QDateTime(QDate(1, 1, 1))),
-	m_targetDate(QDateTime(QDate(1, 1, 1)))
+	m_startedAt(QDateTime(QDate(1, 1, 1).startOfDay())),
+	m_finishedAt(QDateTime(QDate(1, 1, 1).startOfDay())),
+	m_targetDate(QDateTime(QDate(1, 1, 1).startOfDay()))
 {
 }
 

@@ -94,7 +94,7 @@ void cTextDocument::printPreview(QPrinter* lpPrinter)
 #ifdef QT_NO_PRINTER
 	Q_UNUSED(lpPrinter);
 #else
-	lpPrinter->setPageSizeMM(QSizeF(210, 297));
+	lpPrinter->setPageSize(QPageSize(QSizeF(210, 297), QPageSize::Millimeter));
 	print(lpPrinter);
 #endif
 }

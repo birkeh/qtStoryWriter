@@ -19,6 +19,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = storyWriter
 TEMPLATE = app
 qtHaveModule(printsupport): QT += printsupport
+qtHaveModule(core5compat): QT += core5compat
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings

@@ -91,8 +91,8 @@ cStoryBook::cStoryBook(QObject *parent) :
 	m_iSceneAlign(ALIGN_left),
 	m_bPrintSceneDescription(true),
 	m_bPrintSceneText(true),
-	m_paperSize(QPagedPaintDevice::A4),
-	m_iPaperOrientation(QPrinter::Portrait),
+	m_paperSize(QPageSize::A4),
+	m_iPaperOrientation(QPageLayout::Portrait),
 	m_dLeftMargin(10),
 	m_dRightMargin(10),
 	m_dTopMargin(10),
@@ -345,7 +345,7 @@ bool cStoryBook::printDocument(QPrinter& printer)
 		file.close();
 	}
 
-	doc.setPageSize(printer.pageRect().size());
+	doc.setPageSize(printer.pageRect(QPrinter::Millimeter).size());
 	doc.print(&printer);
 
 	return(true);
@@ -353,11 +353,8 @@ bool cStoryBook::printDocument(QPrinter& printer)
 
 void cStoryBook::configPrinter(QPrinter& printer)
 {
-	printer.setPaperSize(paperSize());
-	printer.setOrientation(paperOrientation());
-
-	QMarginsF	marginsF(leftMargin(), topMargin(), rightMargin(), bottomMargin());
-	printer.setPageMargins(marginsF, unit());
+	QPageLayout layout(QPageSize(paperSize()), paperOrientation(), QMarginsF(leftMargin(), topMargin(), rightMargin(), bottomMargin()));
+	printer.setPageLayout(layout);
 }
 
 void cStoryBook::printBlock(QTextCursor& cursor, const QString& szText, const QString& szFont, const qint16& iFontSize, const ALIGN align, const bool& bold, const bool& italic, const bool& underline)
@@ -580,8 +577,8 @@ bool cStoryBook::createDatabase()
 	query.bindValue(":sceneAlign", ALIGN_left);
 	query.bindValue(":printSceneDescription", true);
 	query.bindValue(":printSceneText", true);
-	query.bindValue(":paperSize", QPagedPaintDevice::A4);
-	query.bindValue(":paperOrientation", QPrinter::Portrait);
+	query.bindValue(":paperSize", QPageSize::A4);
+	query.bindValue(":paperOrientation", QPageLayout::Portrait);
 	query.bindValue(":leftMargin", 10);
 	query.bindValue(":rightMargin", 10);
 	query.bindValue(":topMargin", 10);
@@ -1240,8 +1237,8 @@ bool cStoryBook::loadConfig()
 	m_iSceneAlign				= static_cast<ALIGN>(query.value("sceneAlign").toInt());
 	m_bPrintSceneDescription	= query.value("printSceneDescription").toBool();
 	m_bPrintSceneText			= query.value("printSceneText").toBool();
-	m_paperSize					= static_cast<QPagedPaintDevice::PageSize>(query.value("paperSize").toInt());
-	m_iPaperOrientation			= static_cast<QPrinter::Orientation>(query.value("paperOrientation").toInt());
+	m_paperSize					= static_cast<QPageSize::PageSizeId>(query.value("paperSize").toInt());
+	m_iPaperOrientation			= static_cast<QPageLayout::Orientation>(query.value("paperOrientation").toInt());
 	m_dLeftMargin				= query.value("leftMargin").toDouble();
 	m_dRightMargin				= query.value("rightMargin").toDouble();
 	m_dTopMargin				= query.value("topMargin").toDouble();
@@ -2384,22 +2381,22 @@ void cStoryBook::setPrintSceneText(const bool& value)
 	m_bPrintSceneText = value;
 }
 
-QPagedPaintDevice::PageSize cStoryBook::paperSize()
+QPageSize::PageSizeId cStoryBook::paperSize()
 {
 	return(m_paperSize);
 }
 
-void cStoryBook::setPaperSize(const QPagedPaintDevice::PageSize& value)
+void cStoryBook::setPaperSize(const QPageSize::PageSizeId& value)
 {
 	m_paperSize = value;
 }
 
-QPrinter::Orientation cStoryBook::paperOrientation()
+QPageLayout::Orientation cStoryBook::paperOrientation()
 {
 	return(m_iPaperOrientation);
 }
 
-void cStoryBook::setPaperOrientation(const QPrinter::Orientation& value)
+void cStoryBook::setPaperOrientation(const QPageLayout::Orientation& value)
 {
 	m_iPaperOrientation = value;
 }

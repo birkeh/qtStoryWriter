@@ -15,8 +15,8 @@ cPropertiesWindow::cPropertiesWindow(QWidget *parent) :
 	ui->setupUi(this);
 	ui->m_lpTab->setCurrentIndex(0);
 
-	QMap<QPagedPaintDevice::PageSize, QString>				paperLst	= paperList();
-	QMap<QPagedPaintDevice::PageSize, QString>::iterator	i;
+	QMap<QPageSize::PageSizeId, QString>				paperLst	= paperList();
+	QMap<QPageSize::PageSizeId, QString>::iterator	i;
 
 	for(i = paperLst.begin();i != paperLst.end();i++)
 		ui->m_lpPaperSize->addItem(i.value(), QVariant::fromValue((int)i.key()));
@@ -356,8 +356,8 @@ void cPropertiesWindow::setBook(cStoryBook *lpStoryBook)
 	ui->m_lpPrintSceneDescription->setChecked(lpStoryBook->printSceneDescription());
 	ui->m_lpPrintSceneText->setChecked(lpStoryBook->printSceneText());
 	ui->m_lpPaperSize->setCurrentText(paperName(lpStoryBook->paperSize()));
-	ui->m_lpOrientationPortrait->setChecked(lpStoryBook->paperOrientation() == QPrinter::Portrait);
-	ui->m_lpOrientationLandscape->setChecked(lpStoryBook->paperOrientation() == QPrinter::Landscape);
+	ui->m_lpOrientationPortrait->setChecked(lpStoryBook->paperOrientation() == QPageLayout::Portrait);
+	ui->m_lpOrientationLandscape->setChecked(lpStoryBook->paperOrientation() == QPageLayout::Landscape);
 	ui->m_lpUnit->setCurrentText(QString("%1").arg(lpStoryBook->unit()));
 	ui->m_lpMarginLeft->setValue(lpStoryBook->leftMargin());
 	ui->m_lpMarginRight->setValue(lpStoryBook->rightMargin());
@@ -953,14 +953,14 @@ void cPropertiesWindow::onPaperSizeChanged(const QString &text)
 void cPropertiesWindow::onOrientationPortraitChanged(bool checked)
 {
 	if(checked)
-		m_lpStoryBook->setPaperOrientation(QPrinter::Portrait);
+		m_lpStoryBook->setPaperOrientation(QPageLayout::Portrait);
 	m_lpMainWindow->somethingChanged();
 }
 
 void cPropertiesWindow::onOrientationLandscapeChanged(bool checked)
 {
 	if(checked)
-		m_lpStoryBook->setPaperOrientation(QPrinter::Landscape);
+		m_lpStoryBook->setPaperOrientation(QPageLayout::Landscape);
 	m_lpMainWindow->somethingChanged();
 }
 

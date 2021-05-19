@@ -16,6 +16,7 @@
 #include <QDebug>
 #include <QPrinter>
 #include <QPagedPaintDevice>
+#include <QPageSize>
 
 
 #ifdef __GNUC__
@@ -26,6 +27,9 @@
 	#define myDebug qDebug() << __FILE__ << "(" << __LINE__ << ") - " << __FUNCTION__ << ":"
 #endif
 
+
+#define TEXT_COLOR_ROLE			Qt::ForegroundRole
+#define BACKGROUND_COLOR_ROLE	Qt::BackgroundRole
 
 /*!
  \brief
@@ -96,22 +100,22 @@ QByteArray		textDocument2Blob(cTextDocument* lpTextDocument);
 */
 QString			localePath();
 
-QString paperName(QPagedPaintDevice::PageSize paperSize);
+QString paperName(QPageSize::PageSizeId paperSize);
 /*!
  \brief
 
  \fn paperKey
  \param szPaperSize
- \return QPagedPaintDevice::PageSize
+ \return QPageSize::PageSizeId
 */
-QPagedPaintDevice::PageSize paperKey(const QString& szPaperSize);
+QPageSize::PageSizeId paperKey(const QString& szPaperSize);
 /*!
  \brief
 
  \fn paperList
- \return QMap<QPagedPaintDevice::PageSize, QString>
+ \return QMap<QPageSize::PageSizeId, QString>
 */
-QMap<QPagedPaintDevice::PageSize, QString> paperList();
+QMap<QPageSize::PageSizeId, QString> paperList();
 
 /*!
  \brief

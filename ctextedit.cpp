@@ -149,7 +149,7 @@ void cTextEdit::onTextAlign(QAction *a)
 void cTextEdit::onTextFamily(const QString &f)
 {
 	QTextCharFormat	fmt;
-	fmt.setFontFamily(f);
+	fmt.setFontFamilies(QStringList() << f);
 	mergeFormatOnWordOrSelection(fmt);
 }
 

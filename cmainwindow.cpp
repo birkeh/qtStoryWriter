@@ -110,9 +110,11 @@ cMainWindow::cMainWindow(cSplashScreen *lpSplashScreen, QTranslator *lpTranslato
 	m_lpOldTextEdit(nullptr),
 	m_lpOptionsDialog(nullptr)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	qRegisterMetaTypeStreamOperators<cPart*>("cPart*");
 	qRegisterMetaTypeStreamOperators<cChapter*>("cChapter*");
 	qRegisterMetaTypeStreamOperators<cScene*>("cScene*");
+#endif
 
 	initUI();
 	createActions();
@@ -329,7 +331,7 @@ void cMainWindow::createFileActions()
 	const QIcon	exportPdfIcon	= QIcon::fromTheme("document-pdf");
 	m_lpFileExportPDFAction		= m_lpFileMenu->addAction(exportPdfIcon, tr("&Export PDF..."), this, &cMainWindow::onFilePrintPdf);
 	m_lpFileExportPDFAction->setPriority(QAction::LowPriority);
-	m_lpFileExportPDFAction->setShortcut(Qt::CTRL + Qt::Key_D);
+	m_lpFileExportPDFAction->setShortcut(Qt::CTRL | Qt::Key_D);
 	m_lpFileToolBar->addAction(m_lpFileExportPDFAction);
 
 	m_lpFileMenu->addSeparator();
@@ -350,7 +352,7 @@ void cMainWindow::createFileActions()
 	m_lpSeparatorRecent->setVisible(false);
 
 	m_lpFileQuitAction			= m_lpFileMenu->addAction(tr("&Quit"), this, &QWidget::close);
-	m_lpFileQuitAction->setShortcut(Qt::CTRL + Qt::Key_Q);
+	m_lpFileQuitAction->setShortcut(Qt::CTRL | Qt::Key_Q);
 }
 
 void cMainWindow::createEditActions()
@@ -512,7 +514,7 @@ void cMainWindow::createTextActions()
 
 	const QIcon boldIcon	= QIcon::fromTheme("format-text-bold");
 	m_lpTextBoldAction		= m_lpTextMenu->addAction(boldIcon, tr("&Bold"));
-	m_lpTextBoldAction->setShortcut(Qt::CTRL + Qt::Key_B);
+	m_lpTextBoldAction->setShortcut(Qt::CTRL | Qt::Key_B);
 	m_lpTextBoldAction->setPriority(QAction::LowPriority);
 	QFont	bold;
 	bold.setBold(true);
@@ -523,7 +525,7 @@ void cMainWindow::createTextActions()
 	const QIcon	italicIcon	= QIcon::fromTheme("format-text-italic");
 	m_lpTextItalicAction	= m_lpTextMenu->addAction(italicIcon, tr("&Italic"));
 	m_lpTextItalicAction->setPriority(QAction::LowPriority);
-	m_lpTextItalicAction->setShortcut(Qt::CTRL + Qt::Key_I);
+	m_lpTextItalicAction->setShortcut(Qt::CTRL | Qt::Key_I);
 	QFont	italic;
 	italic.setItalic(true);
 	m_lpTextItalicAction->setFont(italic);
@@ -532,7 +534,7 @@ void cMainWindow::createTextActions()
 
 	const QIcon	underlineIcon	= QIcon::fromTheme("format-text-underline");
 	m_lpTextUnderlineAction = m_lpTextMenu->addAction(underlineIcon, tr("&Underline"));
-	m_lpTextUnderlineAction->setShortcut(Qt::CTRL + Qt::Key_U);
+	m_lpTextUnderlineAction->setShortcut(Qt::CTRL | Qt::Key_U);
 	m_lpTextUnderlineAction->setPriority(QAction::LowPriority);
 	QFont underline;
 	underline.setUnderline(true);
@@ -544,22 +546,22 @@ void cMainWindow::createTextActions()
 
 	const QIcon	leftIcon	= QIcon::fromTheme("format-justify-left");
 	m_lpAlignLeftAction = new QAction(leftIcon, tr("&Left"), this);
-	m_lpAlignLeftAction->setShortcut(Qt::CTRL + Qt::Key_L);
+	m_lpAlignLeftAction->setShortcut(Qt::CTRL | Qt::Key_L);
 	m_lpAlignLeftAction->setCheckable(true);
 	m_lpAlignLeftAction->setPriority(QAction::LowPriority);
 	const QIcon	centerIcon	= QIcon::fromTheme("format-justify-center");
 	m_lpAlignCenterAction = new QAction(centerIcon, tr("C&enter"), this);
-	m_lpAlignCenterAction->setShortcut(Qt::CTRL + Qt::Key_E);
+	m_lpAlignCenterAction->setShortcut(Qt::CTRL | Qt::Key_E);
 	m_lpAlignCenterAction->setCheckable(true);
 	m_lpAlignCenterAction->setPriority(QAction::LowPriority);
 	const QIcon	rightIcon	= QIcon::fromTheme("format-justify-right");
 	m_lpAlignRightAction = new QAction(rightIcon, tr("&Right"), this);
-	m_lpAlignRightAction->setShortcut(Qt::CTRL + Qt::Key_R);
+	m_lpAlignRightAction->setShortcut(Qt::CTRL | Qt::Key_R);
 	m_lpAlignRightAction->setCheckable(true);
 	m_lpAlignRightAction->setPriority(QAction::LowPriority);
 	const QIcon	fillIcon	= QIcon::fromTheme("format-justify-fill");
 	m_lpAlignJustifyAction = new QAction(fillIcon, tr("&Justify"), this);
-	m_lpAlignJustifyAction->setShortcut(Qt::CTRL + Qt::Key_J);
+	m_lpAlignJustifyAction->setShortcut(Qt::CTRL | Qt::Key_J);
 	m_lpAlignJustifyAction->setCheckable(true);
 	m_lpAlignJustifyAction->setPriority(QAction::LowPriority);
 
@@ -961,8 +963,8 @@ void cMainWindow::prepareTextEdit(cTextEdit* lpTextEdit)
 
 	connect(m_lpAlignGroup,					&QActionGroup::triggered,		lpTextEdit,				&cTextEdit::onTextAlign);
 
-	connect(m_lpComboFont,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextFamily);
-	connect(m_lpComboSize,					QOverload<const QString &>::of(&QComboBox::activated),	lpTextEdit,	&cTextEdit::onTextSize);
+	connect(m_lpComboFont,					QOverload<const QString &>::of(&QComboBox::textActivated),	lpTextEdit,	&cTextEdit::onTextFamily);
+	connect(m_lpComboSize,					QOverload<const QString &>::of(&QComboBox::textActivated),	lpTextEdit,	&cTextEdit::onTextSize);
 
 	connect(lpTextEdit,						&cTextEdit::fontChanged,		this,					&cMainWindow::onFontChanged);
 	connect(lpTextEdit,						&cTextEdit::colorChanged,		this,					&cMainWindow::onColorChanged);
@@ -997,8 +999,8 @@ void cMainWindow::disconnectTextEdit()
 
 		disconnect(m_lpAlignGroup,				&QActionGroup::triggered,		m_lpOldTextEdit,		&cTextEdit::onTextAlign);
 
-		disconnect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextFamily);
-		disconnect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::activated),	m_lpOldTextEdit,	&cTextEdit::onTextSize);
+		disconnect(m_lpComboFont,				QOverload<const QString &>::of(&QComboBox::textActivated),	m_lpOldTextEdit,	&cTextEdit::onTextFamily);
+		disconnect(m_lpComboSize,				QOverload<const QString &>::of(&QComboBox::textActivated),	m_lpOldTextEdit,	&cTextEdit::onTextSize);
 
 		disconnect(m_lpOldTextEdit,				&cTextEdit::fontChanged,		this,					&cMainWindow::onFontChanged);
 		disconnect(m_lpOldTextEdit,				&cTextEdit::colorChanged,		this,					&cMainWindow::onColorChanged);
@@ -1952,8 +1954,6 @@ void cMainWindow::fileOpen(const QString& szFileName)
 			}
 		}
 	}
-
-	QMessageBox::information(this, "Initialize", szFileName);
 
 	QString	szProjectName;
 

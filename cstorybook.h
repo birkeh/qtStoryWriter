@@ -1074,31 +1074,31 @@ public:
 	 \brief
 
 	 \fn paperSize
-	 \return QPagedPaintDevice::PageSize
+	 \return QPageSize::PageSizeId
 	*/
-	QPagedPaintDevice::PageSize	paperSize();
+	QPageSize::PageSizeId	paperSize();
 	/*!
 	 \brief
 
 	 \fn setPaperSize
 	 \param value
 	*/
-	void						setPaperSize(const QPagedPaintDevice::PageSize& value);
+	void						setPaperSize(const QPageSize::PageSizeId& value);
 
 	/*!
 	 \brief
 
 	 \fn paperOrientation
-	 \return QPrinter::Orientation
+	 \return QPageLayout::Orientation
 	*/
-	QPrinter::Orientation		paperOrientation();
+	QPageLayout::Orientation		paperOrientation();
 	/*!
 	 \brief
 
 	 \fn setPaperOrientation
 	 \param value
 	*/
-	void						setPaperOrientation(const QPrinter::Orientation& value);
+	void						setPaperOrientation(const QPageLayout::Orientation& value);
 
 	/*!
 	 \brief
@@ -1238,8 +1238,8 @@ private:
 	ALIGN						m_iSceneAlign;				/*!< TODO: describe */
 	bool						m_bPrintSceneDescription;	/*!< TODO: describe */
 	bool						m_bPrintSceneText;			/*!< TODO: describe */
-	QPagedPaintDevice::PageSize	m_paperSize;				/*!< TODO: describe */
-	QPrinter::Orientation		m_iPaperOrientation;		/*!< TODO: describe */
+	QPageSize::PageSizeId	m_paperSize;				/*!< TODO: describe */
+	QPageLayout::Orientation		m_iPaperOrientation;		/*!< TODO: describe */
 	qreal						m_dLeftMargin;				/*!< TODO: describe */
 	qreal						m_dRightMargin;				/*!< TODO: describe */
 	qreal						m_dTopMargin;				/*!< TODO: describe */

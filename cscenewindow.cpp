@@ -33,19 +33,19 @@ cSceneWindow::cSceneWindow(QWidget *parent) :
 	ui->m_lpTab->setCurrentIndex(0);
 
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_init), cScene::STATE_init);
-	ui->m_lpState->setItemData(0, QBrush(cScene::stateColor(cScene::STATE_init)), Qt::TextColorRole);
+	ui->m_lpState->setItemData(0, QBrush(cScene::stateColor(cScene::STATE_init)), TEXT_COLOR_ROLE);
 
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_progress), cScene::STATE_progress);
-	ui->m_lpState->setItemData(1, QBrush(cScene::stateColor(cScene::STATE_progress)), Qt::BackgroundColorRole);
+	ui->m_lpState->setItemData(1, QBrush(cScene::stateColor(cScene::STATE_progress)), BACKGROUND_COLOR_ROLE);
 
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_delayed), cScene::STATE_delayed);
-	ui->m_lpState->setItemData(2, QBrush(cScene::stateColor(cScene::STATE_delayed)), Qt::BackgroundColorRole);
+	ui->m_lpState->setItemData(2, QBrush(cScene::stateColor(cScene::STATE_delayed)), BACKGROUND_COLOR_ROLE);
 
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_finished), cScene::STATE_finished);
-	ui->m_lpState->setItemData(3, QBrush(cScene::stateColor(cScene::STATE_finished)), Qt::BackgroundColorRole);
+	ui->m_lpState->setItemData(3, QBrush(cScene::stateColor(cScene::STATE_finished)), BACKGROUND_COLOR_ROLE);
 
 	ui->m_lpState->addItem(cScene::stateText(cScene::STATE_unknown), cScene::STATE_unknown);
-	ui->m_lpState->setItemData(4, QBrush(cScene::stateColor(cScene::STATE_unknown)), Qt::BackgroundColorRole);
+	ui->m_lpState->setItemData(4, QBrush(cScene::stateColor(cScene::STATE_unknown)), BACKGROUND_COLOR_ROLE);
 
 
 	connect(ui->m_lpCharacterShowDetails,	&QPushButton::clicked,					this,					&cSceneWindow::onCharacterShowDetails);
@@ -211,7 +211,7 @@ void cSceneWindow::onDescriptionChanged()
 
 void cSceneWindow::onStateChanged(int index)
 {
-	QBrush	brush	= qvariant_cast<QBrush>(ui->m_lpState->currentData(Qt::BackgroundColorRole));
+	QBrush	brush	= qvariant_cast<QBrush>(ui->m_lpState->currentData(BACKGROUND_COLOR_ROLE));
 	QColor	color	= brush.color();
 
 	ui->m_lpState->setStyleSheet(QString("background-color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue()));
